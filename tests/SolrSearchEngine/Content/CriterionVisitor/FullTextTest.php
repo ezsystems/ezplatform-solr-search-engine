@@ -11,7 +11,7 @@
 
 namespace eZ\SolrSearchEngine\Tests\SolrSearchEngine\Content\CriterionVisitor;
 
-use eZ\Publish\Core\Search\Solr\Tests\TestCase;
+use eZ\SolrSearchEngine\Tests\SolrSearchEngine\TestCase;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Search\Solr\Content\CriterionVisitor;
 
