@@ -13,12 +13,14 @@
         "ezsystems/ezpublish-kernel": "~6.0@dev"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.7"
+        "phpunit/phpunit": "~4.7",
+        "matthiasnoback/symfony-dependency-injection-test": "0.*"
     },
     "autoload": {
         "psr-4": {
             "eZ\\Bundle\\EzPublishSolrSearchEngineBundle\\": "bundle/EzPublishSolrSearchEngineBundle/",
-            "eZ\\Publish\\": "src/eZ/Publish/"
+            "eZ\\Publish\\": "src/eZ/Publish/",
+            "eZ\\SolrSearchEngine\\Tests\\": "tests/"
         }
     }
 }
