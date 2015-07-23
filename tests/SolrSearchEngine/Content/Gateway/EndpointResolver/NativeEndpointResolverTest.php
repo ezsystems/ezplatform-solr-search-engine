@@ -9,10 +9,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Search\Solr\Tests\Content\Gateway\EndpointResolver;
+namespace eZ\SolrSearchEngine\Tests\SolrSearchEngine\Content\Gateway\EndpointResolver;
 
 use eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointResolver\NativeEndpointResolver;
-use eZ\Publish\Core\Search\Solr\Tests\TestCase;
+use eZ\SolrSearchEngine\Tests\SolrSearchEngine\TestCase;
 use RuntimeException;
 
 /**
