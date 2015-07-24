@@ -9,7 +9,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\SolrSearchEngine\Tests\SolrSearchEngineBundle\DependencyInjection;
+namespace eZ\Bundle\EzPublishSolrSearchEngineBundle\Tests\DependencyInjection;
 
 use eZ\Bundle\EzPublishSolrSearchEngineBundle\DependencyInjection\EzPublishSolrSearchEngineExtension;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
