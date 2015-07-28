@@ -19,7 +19,7 @@ branches:
 before_script:
     - composer selfupdate
     - composer install --prefer-source
-    - if [ "$SOLR_VERSION" != "" ] ; then ./vendor/ezsystems/ezpublish-kernel/bin/.travis/init_solr.sh ; fi
+    - if [ "$SOLR_VERSION" != "" ] ; then ./bin/.travis/init_solr.sh ; fi
 
 script:
     - if [ "$SOLR_VERSION" = "" ] ; then php vendor/bin/phpunit --bootstrap tests/bootstrap.php -c $TEST_CONFIG ; fi
