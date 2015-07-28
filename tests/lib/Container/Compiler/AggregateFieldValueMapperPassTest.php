@@ -1,7 +1,7 @@
 <?php
 
 /**
- * File containing the AggregateFacetBuilderVisitorPassTest class.
+ * File containing the AggregateFieldValueMapperPassTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -9,21 +9,21 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Base\Tests\Container\Compiler\Search\Solr;
+namespace eZ\SolrSearchEngine\Tests\Container\Compiler;
 
-use eZ\Publish\Core\Base\Container\Compiler\Search\Solr\AggregateFacetBuilderVisitorPass;
+use eZ\Publish\Core\Base\Container\Compiler\Search\Solr\AggregateFieldValueMapperPass;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-class AggregateFacetBuilderVisitorPassTest extends AbstractCompilerPassTestCase
+class AggregateFieldValueMapperPassTest extends AbstractCompilerPassTestCase
 {
     protected function setUp()
     {
         parent::setUp();
         $this->setDefinition(
-            'ezpublish.search.solr.content.facet_builder_visitor.aggregate',
+            'ezpublish.search.solr.content.field_value_mapper.aggregate',
             new Definition()
         );
     }
@@ -36,21 +36,21 @@ class AggregateFacetBuilderVisitorPassTest extends AbstractCompilerPassTestCase
      */
     protected function registerCompilerPass(ContainerBuilder $container)
     {
-        $container->addCompilerPass(new AggregateFacetBuilderVisitorPass());
+        $container->addCompilerPass(new AggregateFieldValueMapperPass());
     }
 
-    public function testAddVisitor()
+    public function testAddMapper()
     {
         $serviceId = 'service_id';
         $def = new Definition();
-        $def->addTag('ezpublish.search.solr.content.facet_builder_visitor');
+        $def->addTag('ezpublish.search.solr.content.field_value_mapper');
         $this->setDefinition($serviceId, $def);
 
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.search.solr.content.facet_builder_visitor.aggregate',
-            'addVisitor',
+            'ezpublish.search.solr.content.field_value_mapper.aggregate',
+            'addMapper',
             array(new Reference($serviceId))
         );
     }
