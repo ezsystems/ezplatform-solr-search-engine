@@ -57,7 +57,7 @@ class LegacySolr extends Legacy
                 $settingsPath = __DIR__ . '/../../../../../../eZ/Publish/Core/settings/';
             } else {
                 // Else it should run from ezsystems/ezpublish-kernel
-                $configPath = __DIR__ . '/../../../../../config.php';
+                $configPath = __DIR__ . '/../../../../../../../../../../config.php';
                 $config = include $configPath;
                 $installDir = $config['install_dir'];
                 /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder */
