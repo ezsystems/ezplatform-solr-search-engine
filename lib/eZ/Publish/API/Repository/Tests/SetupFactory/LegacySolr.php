@@ -122,15 +122,10 @@ class LegacySolr extends Legacy
         $stmt->execute();
 
         $contentObjects = array();
-        $locations = array();
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $contentObjects[] = $persistenceHandler->contentHandler()->load(
                 $row['id'],
                 $row['current_version']
-            );
-            $locations = array_merge(
-                $locations,
-                $persistenceHandler->locationHandler()->loadLocationsByContent($row['id'])
             );
         }
 
@@ -138,13 +133,8 @@ class LegacySolr extends Legacy
         $contentSearchHandler = $searchHandler->contentSearchHandler();
         $contentSearchHandler->purgeIndex();
         $contentSearchHandler->setCommit(true);
-        /** @var \eZ\Publish\Core\Search\Elasticsearch\Content\Location\Handler $locationSearchHandler */
-        $locationSearchHandler = $searchHandler->locationSearchHandler();
-        $locationSearchHandler->purgeIndex();
-        $locationSearchHandler->setCommit(true);
 
         $contentSearchHandler->bulkIndexContent($contentObjects);
-        $locationSearchHandler->bulkIndexLocations($locations);
     }
 
     protected function getTestConfigurationFile()
