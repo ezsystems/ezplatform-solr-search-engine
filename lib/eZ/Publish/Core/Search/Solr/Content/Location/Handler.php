@@ -101,29 +101,6 @@ class Handler implements SearchHandlerInterface
      */
     public function indexLocation(Location $location)
     {
-        $this->bulkIndexLocations(array($location));
-    }
-
-    /**
-     * Indexes several content objects.
-     *
-     * @todo: This function and setCommit() is needed for Persistence\Solr for test speed but not part
-     *       of interface for the reason described in Solr\Content\Search\Gateway\Native::bulkIndexContent
-     *       Short: Bulk handling should be properly designed before added to the interface.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Location[] $locations
-     */
-    public function bulkIndexLocations(array $locations)
-    {
-        $documents = array();
-
-        foreach ($locations as $location) {
-            $documents[] = $this->mapper->mapLocation($location);
-        }
-
-        if (!empty($documents)) {
-            $this->gateway->bulkIndexDocuments($documents);
-        }
     }
 
     /**
@@ -133,7 +110,6 @@ class Handler implements SearchHandlerInterface
      */
     public function deleteLocation($locationId)
     {
-        $this->gateway->deleteByQuery("location_id:{$locationId}");
     }
 
     /**
@@ -143,7 +119,6 @@ class Handler implements SearchHandlerInterface
      */
     public function deleteContent($contentId)
     {
-        $this->gateway->deleteByQuery("content_id_id:{$contentId}");
     }
 
     /**
