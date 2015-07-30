@@ -19,11 +19,11 @@ return Symfony\CS\Config\Config::create()
     ])
     ->finder(
         Symfony\CS\Finder\DefaultFinder::create()
-            ->name('*.php')
             ->in(__DIR__)
             ->notPath('phpunit.xml')
             ->exclude([
                 'vendor',
             ])
+            ->files()->name('*.php')
     )
 ;
