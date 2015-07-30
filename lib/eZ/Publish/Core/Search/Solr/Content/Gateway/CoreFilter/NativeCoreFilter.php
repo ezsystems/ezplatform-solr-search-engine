@@ -22,7 +22,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointResolver;
 
 /**
- * Native core filter handles:.
+ * Native core filter handles:
  *
  * - search type (Content and Location)
  * - prioritized languages fallback
@@ -134,7 +134,7 @@ class NativeCoreFilter extends CoreFilter
      * @param string[] $languageCodes
      * @param bool $useAlwaysAvailable
      *
-     * @return string
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion
      */
     private function getCoreCriterion(array $languageCodes, $useAlwaysAvailable)
     {
