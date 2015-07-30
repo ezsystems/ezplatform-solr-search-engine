@@ -261,14 +261,14 @@ class Native extends Gateway
     {
         $documentMap = array();
         $mainTranslationsEndpoint = $this->endpointResolver->getMainLanguagesEndpoint();
-        $alwaysAvailableDocuments = array();
+        $mainTranslationsDocuments = array();
 
         foreach ($documents as $translationDocuments) {
             foreach ($translationDocuments as $document) {
                 $documentMap[$document->languageCode][] = $document;
 
                 if ($mainTranslationsEndpoint !== null && $document->isMainTranslation) {
-                    $alwaysAvailableDocuments[] = $this->getAlwaysAvailableDocument($document);
+                    $mainTranslationsDocuments[] = $this->getMainTranslationDocument($document);
                 }
             }
         }
@@ -282,10 +282,10 @@ class Native extends Gateway
             );
         }
 
-        if (!empty($alwaysAvailableDocuments)) {
+        if (!empty($mainTranslationsDocuments)) {
             $this->doBulkIndexDocuments(
                 $this->endpointRegistry->getEndpoint($mainTranslationsEndpoint),
-                $alwaysAvailableDocuments
+                $mainTranslationsDocuments
             );
         }
     }
@@ -297,7 +297,7 @@ class Native extends Gateway
      *
      * @return \eZ\Publish\SPI\Search\Document
      */
-    protected function getAlwaysAvailableDocument(Document $document)
+    protected function getMainTranslationDocument(Document $document)
     {
         // Clone to prevent mutation
         $document = clone $document;
