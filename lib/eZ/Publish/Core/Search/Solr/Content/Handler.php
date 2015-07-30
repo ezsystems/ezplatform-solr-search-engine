@@ -169,7 +169,7 @@ class Handler implements SearchHandlerInterface
      */
     public function indexContent(Content $content)
     {
-        $this->gateway->bulkIndexDocuments(array($this->mapper->mapContent($content)));
+        $this->gateway->bulkIndexDocuments(array($this->mapper->mapContentBlock($content)));
     }
 
     /**
@@ -186,7 +186,7 @@ class Handler implements SearchHandlerInterface
         $documents = array();
 
         foreach ($contentObjects as $content) {
-            $documents[] = $this->mapper->mapContent($content);
+            $documents[] = $this->mapper->mapContentBlock($content);
         }
 
         if (!empty($documents)) {
@@ -202,7 +202,9 @@ class Handler implements SearchHandlerInterface
      */
     public function deleteContent($contentId, $versionId = null)
     {
-        $this->gateway->deleteByQuery("content_id:{$contentId}");
+        $idPrefix = $this->mapper->generateContentDocumentId($contentId);
+
+        $this->gateway->deleteByQuery("_root_:content{$idPrefix}*");
     }
 
     /**
@@ -213,7 +215,9 @@ class Handler implements SearchHandlerInterface
      */
     public function deleteLocation($locationId, $contentId)
     {
-        $this->gateway->deleteByQuery("content_id:{$contentId}");
+        $idPrefix = $this->mapper->generateContentDocumentId($contentId);
+
+        $this->gateway->deleteByQuery("_root_:{$idPrefix}*");
 
         // TODO it seems this part of location deletion (not last location) misses integration tests
         try {
