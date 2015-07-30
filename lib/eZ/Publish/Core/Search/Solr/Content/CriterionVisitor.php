@@ -63,8 +63,8 @@ abstract class CriterionVisitor
         $endValue = '*';
         $endBrace = ']';
 
-        $start = $this->prepareValue($start);
-        $end = $this->prepareValue($end);
+        $start = '"' . $this->escapeQuote($this->toString($start), true) . '"';
+        $end = '"' . $this->escapeQuote($this->toString($end), true) . '"';
 
         switch ($operator) {
             case Operator::GT:
@@ -98,25 +98,37 @@ abstract class CriterionVisitor
     }
 
     /**
-     * Converts given $value to the appropriate Solr representation.
-     *
-     * The value will be converted to string representation and escaped if needed.
+     * Converts given $value to the appropriate Solr string representation.
      *
      * @param mixed $value
      *
      * @return string
      */
-    protected function prepareValue($value)
+    protected function toString($value)
     {
         switch (gettype($value)) {
             case 'boolean':
                 return ($value ? 'true' : 'false');
 
-            case 'string':
-                return '"' . preg_replace('/("|\\\)/', '\\\$1', $value) . '"';
-
             default:
                 return (string)$value;
         }
+    }
+
+    /**
+     * Escapes given $string for wrapping inside single or double quotes.
+     *
+     * Does not include quotes in the returned string, this needs to be done by the consumer code.
+     *
+     * @param string $string
+     * @param bool $doubleQuote
+     *
+     * @return string
+     */
+    protected function escapeQuote($string, $doubleQuote=false)
+    {
+        $pattern = ($doubleQuote ? '/("|\\\)/' : '/(\'|\\\)/');
+
+        return preg_replace($pattern, '\\\$1', $string);
     }
 }

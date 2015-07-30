@@ -52,7 +52,9 @@ class CustomFieldIn extends CriterionVisitor
         $values = (array)$criterion->value;
 
         foreach ($values as $value) {
-            $queries[] = $criterion->target . ':' . $this->prepareValue($value);
+            $preparedValue = $this->escapeQuote($this->toString($value), true);
+
+            $queries[] = $criterion->target . ':"' . $preparedValue . '"';
         }
 
         return '(' . implode(' OR ', $queries) . ')';

@@ -63,10 +63,10 @@ class FieldIn extends Field
 
         $queries = array();
         foreach ($criterion->value as $value) {
-            $preparedValue = $this->prepareValue($value);
+            $preparedValue = $this->escapeQuote($this->toString($value), true);
 
             foreach ($fieldNames as $name) {
-                $queries[] = $name . ':' . $preparedValue;
+                $queries[] = $name . ':"' . $preparedValue . '"';
             }
         }
 
