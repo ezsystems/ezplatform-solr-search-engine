@@ -85,15 +85,6 @@ services:
     ezpublish.search.solr.content.gateway:
         alias: ezpublish.search.solr.content.gateway.native
 
-    ezpublish.spi.search.solr.content_handler:
-        class: %ezpublish.spi.search.solr.content_handler.class%
-        arguments:
-            - @ezpublish.search.solr.content.gateway
-            - @ezpublish.spi.persistence.content_handler
-            - @ezpublish.search.solr.content.document_mapper
-            - @ezpublish.search.solr.result_extractor
-        lazy: true
-
     ezpublish.search.solr.location.gateway.native:
         class: %ezpublish.search.solr.content.gateway.native.class%
         arguments:
@@ -110,11 +101,12 @@ services:
     ezpublish.search.solr.location.gateway:
         alias: ezpublish.search.solr.location.gateway.native
 
-    ezpublish.spi.search.solr.location_handler:
-        class: %ezpublish.spi.search.solr.location_handler.class%
+    ezpublish.spi.search.solr.content_handler:
+        class: %ezpublish.spi.search.solr.content_handler.class%
         arguments:
+            - @ezpublish.search.solr.content.gateway
             - @ezpublish.search.solr.location.gateway
-            - @ezpublish.search.common.field_name_generator
+            - @ezpublish.spi.persistence.content_handler
             - @ezpublish.search.solr.content.document_mapper
             - @ezpublish.search.solr.result_extractor
         lazy: true
@@ -123,7 +115,6 @@ services:
         class: %ezpublish.spi.search.solr.class%
         arguments:
             - @ezpublish.spi.search.solr.content_handler
-            - @ezpublish.spi.search.solr.location_handler
         tags:
             - {name: ezpublish.searchEngine, alias: solr}
         lazy: true

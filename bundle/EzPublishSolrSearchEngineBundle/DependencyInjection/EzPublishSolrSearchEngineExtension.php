@@ -25,7 +25,6 @@ class EzPublishSolrSearchEngineExtension extends Extension
     const CONTENT_SEARCH_HANDLER_ID = 'ezpublish.spi.search.solr.content_handler';
     const CONTENT_SEARCH_GATEWAY_ID = 'ezpublish.search.solr.content.gateway.native';
     const CONTENT_ENDPOINT_RESOLVER_ID = 'ezpublish.search.solr.content.gateway.endpoint_resolver.native.content';
-    const LOCATION_SEARCH_HANDLER_ID = 'ezpublish.spi.search.solr.location_handler';
     const LOCATION_SEARCH_GATEWAY_ID = 'ezpublish.search.solr.location.gateway.native';
 
     /**
@@ -138,25 +137,19 @@ class EzPublishSolrSearchEngineExtension extends Extension
         $contentSearchGatewayId = self::CONTENT_SEARCH_GATEWAY_ID . ".$connectionName";
         $container->setDefinition($contentSearchGatewayId, $contentSearchGatewayDef);
 
-        // Content search handler
-        $contentSearchHandlerDefinition = new DefinitionDecorator(self::CONTENT_SEARCH_HANDLER_ID);
-        $contentSearchHandlerDefinition->replaceArgument(0, new Reference($contentSearchGatewayId));
-        $contentSearchHandlerId = self::CONTENT_SEARCH_HANDLER_ID . ".$connectionName";
-        $container->setDefinition($contentSearchHandlerId, $contentSearchHandlerDefinition);
-        $container->setParameter("$alias.connection.$connectionName.content_handler_id", $contentSearchHandlerId);
-
         // Location search gateway
         $locationSearchGatewayDef = new DefinitionDecorator(self::LOCATION_SEARCH_GATEWAY_ID);
         $locationSearchGatewayDef->replaceArgument(1, new Reference($contentEndpointResolverId));
         $locationSearchGatewayId = self::LOCATION_SEARCH_GATEWAY_ID . ".$connectionName";
         $container->setDefinition($locationSearchGatewayId, $locationSearchGatewayDef);
 
-        // Location search handler
-        $locationSearchHandlerDefinition = new DefinitionDecorator(self::LOCATION_SEARCH_HANDLER_ID);
-        $locationSearchHandlerDefinition->replaceArgument(0, new Reference($locationSearchGatewayId));
-        $locationSearchHandlerId = self::LOCATION_SEARCH_HANDLER_ID . ".$connectionName";
-        $container->setDefinition($locationSearchHandlerId, $locationSearchHandlerDefinition);
-        $container->setParameter("$alias.connection.$connectionName.location_handler_id", $locationSearchHandlerId);
+        // Content search handler
+        $contentSearchHandlerDefinition = new DefinitionDecorator(self::CONTENT_SEARCH_HANDLER_ID);
+        $contentSearchHandlerDefinition->replaceArgument(0, new Reference($contentSearchGatewayId));
+        $contentSearchHandlerDefinition->replaceArgument(1, new Reference($locationSearchGatewayId));
+        $contentSearchHandlerId = self::CONTENT_SEARCH_HANDLER_ID . ".$connectionName";
+        $container->setDefinition($contentSearchHandlerId, $contentSearchHandlerDefinition);
+        $container->setParameter("$alias.connection.$connectionName.content_handler_id", $contentSearchHandlerId);
     }
 
     /**

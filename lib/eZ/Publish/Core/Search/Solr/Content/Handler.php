@@ -17,6 +17,7 @@ use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
 use eZ\Publish\SPI\Search\Content\Handler as SearchHandlerInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
@@ -51,6 +52,13 @@ class Handler implements SearchHandlerInterface
     protected $gateway;
 
     /**
+     * Location locator gateway.
+     *
+     * @var \eZ\Publish\Core\Search\Solr\Content\Gateway
+     */
+    protected $locationGateway;
+
+    /**
      * Content handler.
      *
      * @var \eZ\Publish\SPI\Persistence\Content\Handler
@@ -75,17 +83,20 @@ class Handler implements SearchHandlerInterface
      * Creates a new content handler.
      *
      * @param \eZ\Publish\Core\Search\Solr\Content\Gateway $gateway
+     * @param \eZ\Publish\Core\Search\Solr\Content\Gateway $locationGateway
      * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
      * @param \eZ\Publish\Core\Search\Solr\Content\DocumentMapper $mapper
      * @param \eZ\Publish\Core\Search\Solr\Content\ResultExtractor $resultExtractor
      */
     public function __construct(
         Gateway $gateway,
+        Gateway $locationGateway,
         ContentHandler $contentHandler,
         DocumentMapper $mapper,
         ResultExtractor $resultExtractor
     ) {
         $this->gateway = $gateway;
+        $this->locationGateway = $locationGateway;
         $this->contentHandler = $contentHandler;
         $this->mapper = $mapper;
         $this->resultExtractor = $resultExtractor;
@@ -150,6 +161,25 @@ class Handler implements SearchHandlerInterface
     }
 
     /**
+     * Finds Locations for the given $query.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\LocationQuery $query
+     * @param array $fieldFilters - a map of filters for the returned fields.
+     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
+     */
+    public function findLocations(LocationQuery $query, array $fieldFilters = array())
+    {
+        $query->filter = $query->filter ?: new Criterion\MatchAll();
+        $query->query = $query->query ?: new Criterion\MatchAll();
+
+        return $this->resultExtractor->extract(
+            $this->locationGateway->find($query, $fieldFilters)
+        );
+    }
+
+    /**
      * Suggests a list of values for the given prefix.
      *
      * @param string $prefix
@@ -192,6 +222,17 @@ class Handler implements SearchHandlerInterface
         if (!empty($documents)) {
             $this->gateway->bulkIndexDocuments($documents);
         }
+    }
+
+    /**
+     * Indexes a Location in the index storage.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Location $location
+     */
+    public function indexLocation(Location $location)
+    {
+        // Does nothing: in this implementation Locations are indexed as
+        //               a part of Content document block
     }
 
     /**
