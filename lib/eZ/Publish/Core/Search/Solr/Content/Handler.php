@@ -204,7 +204,7 @@ class Handler implements SearchHandlerInterface
     {
         $idPrefix = $this->mapper->generateContentDocumentId($contentId);
 
-        $this->gateway->deleteByQuery("_root_:content{$idPrefix}*");
+        $this->gateway->deleteByQuery("_root_:{$idPrefix}*");
     }
 
     /**
