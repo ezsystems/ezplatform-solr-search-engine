@@ -71,12 +71,10 @@ class User extends FacetBuilderVisitor
      */
     public function visit(FacetBuilder $facetBuilder)
     {
-        return http_build_query(
-            array(
-                'facet.field' => 'creator_id',
-                'f.creator_id.facet.limit' => $facetBuilder->limit,
-                'f.creator_id.facet.mincount' => $facetBuilder->minCount,
-            )
+        return array(
+            'facet.field' => 'creator_id',
+            'f.creator_id.facet.limit' => $facetBuilder->limit,
+            'f.creator_id.facet.mincount' => $facetBuilder->minCount,
         );
     }
 }
