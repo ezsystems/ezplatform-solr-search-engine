@@ -15,6 +15,7 @@ matrix:
 branches:
     only:
         - master
+        - EZP-24649-nested-locations
 
 before_script:
     - composer selfupdate
