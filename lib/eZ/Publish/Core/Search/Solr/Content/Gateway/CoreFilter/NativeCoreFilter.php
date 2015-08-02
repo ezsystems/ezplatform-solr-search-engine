@@ -35,7 +35,6 @@ class NativeCoreFilter extends CoreFilter
      * Name of the Solr backend field holding document type identifier
      * ('content' or 'location').
      *
-     *
      * @var string
      */
     const FIELD_DOCUMENT_TYPE = 'document_type_id';
@@ -43,7 +42,6 @@ class NativeCoreFilter extends CoreFilter
     /**
      * Name of the Solr backend field holding list of all translation's Content
      * language codes.
-     *
      *
      * @var string
      */
@@ -53,7 +51,6 @@ class NativeCoreFilter extends CoreFilter
      * Name of the Solr backend field holding language code of the indexed
      * translation.
      *
-     *
      * @var string
      */
     const FIELD_LANGUAGE = 'meta_indexed_language_code_s';
@@ -61,7 +58,6 @@ class NativeCoreFilter extends CoreFilter
     /**
      * Name of the Solr backend field indicating if the indexed translation
      * is in the main language.
-     *
      *
      * @var string
      */
@@ -71,7 +67,6 @@ class NativeCoreFilter extends CoreFilter
      * Name of the Solr backend field indicating if the indexed translation
      * is always available.
      *
-     *
      * @var string
      */
     const FIELD_IS_ALWAYS_AVAILABLE = 'meta_indexed_is_main_translation_and_always_available_b';
@@ -79,7 +74,6 @@ class NativeCoreFilter extends CoreFilter
     /**
      * Name of the Solr backend field indicating if the indexed document is
      * located in the main translations index.
-     *
      *
      * @var string
      */
