@@ -71,12 +71,10 @@ class ContentType extends FacetBuilderVisitor
      */
     public function visit(FacetBuilder $facetBuilder)
     {
-        return http_build_query(
-            array(
-                'facet.field' => 'type_id',
-                'f.type_id.facet.limit' => $facetBuilder->limit,
-                'f.type_id.facet.mincount' => $facetBuilder->minCount,
-            )
+        return array(
+            'facet.field' => 'type_id',
+            'f.type_id.facet.limit' => $facetBuilder->limit,
+            'f.type_id.facet.mincount' => $facetBuilder->minCount,
         );
     }
 }

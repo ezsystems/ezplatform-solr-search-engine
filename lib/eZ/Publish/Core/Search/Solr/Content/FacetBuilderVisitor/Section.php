@@ -71,12 +71,10 @@ class Section extends FacetBuilderVisitor
      */
     public function visit(FacetBuilder $facetBuilder)
     {
-        return http_build_query(
-            array(
-                'facet.field' => 'section_id',
-                'f.section_id.facet.limit' => $facetBuilder->limit,
-                'f.section_id.facet.mincount' => $facetBuilder->minCount,
-            )
+        return array(
+            'facet.field' => 'section_id',
+            'f.section_id.facet.limit' => $facetBuilder->limit,
+            'f.section_id.facet.mincount' => $facetBuilder->minCount,
         );
     }
 }
