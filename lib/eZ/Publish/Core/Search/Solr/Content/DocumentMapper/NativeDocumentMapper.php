@@ -161,7 +161,7 @@ class NativeDocumentMapper implements DocumentMapper
             ),
             new Field(
                 'document_type',
-                'content',
+                self::DOCUMENT_TYPE_IDENTIFIER_CONTENT,
                 new FieldType\IdentifierField()
             ),
             new Field(
@@ -494,7 +494,7 @@ class NativeDocumentMapper implements DocumentMapper
             ),
             new Field(
                 'document_type',
-                'location',
+                self::DOCUMENT_TYPE_IDENTIFIER_LOCATION,
                 new FieldType\IdentifierField()
             ),
             new Field(

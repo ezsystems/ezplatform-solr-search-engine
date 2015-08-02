@@ -23,6 +23,20 @@ use eZ\Publish\SPI\Persistence\Content\Location;
 interface DocumentMapper
 {
     /**
+     * Identifier of Content documents
+     *
+     * @var string
+     */
+    const DOCUMENT_TYPE_IDENTIFIER_CONTENT = 'content';
+
+    /**
+     * Identifier of Location documents
+     *
+     * @var string
+     */
+    const DOCUMENT_TYPE_IDENTIFIER_LOCATION = 'location';
+
+    /**
      * Maps given Content and it's Locations to a collection of nested Documents,
      * one per translation.
      *
