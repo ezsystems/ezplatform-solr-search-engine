@@ -20,9 +20,7 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 abstract class Gateway
 {
     /**
-     * Finds content objects for the given query.
-     *
-     * @todo define structs for the field filters
+     * Returns search hits for the given query.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
      * @param array $fieldFilters - a map of filters for the returned fields.
@@ -30,7 +28,18 @@ abstract class Gateway
      *
      * @return mixed
      */
-    abstract public function find(Query $query, array $fieldFilters = array());
+    abstract public function findContent(Query $query, array $fieldFilters = array());
+
+    /**
+     * Returns search hits for the given query.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
+     * @param array $fieldFilters - a map of filters for the returned fields.
+     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
+     *
+     * @return mixed
+     */
+    abstract public function findLocations(Query $query, array $fieldFilters = array());
 
     /**
      * Indexes an array of documents.

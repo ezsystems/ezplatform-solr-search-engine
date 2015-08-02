@@ -11,12 +11,14 @@
 
 namespace eZ\Publish\Core\Search\Solr\Content\Gateway;
 
+use eZ\Publish\Core\Search\Solr\Content\DocumentMapper;
 use eZ\Publish\Core\Search\Solr\Content\Gateway;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\Core\Search\Common\FieldNameGenerator;
 use eZ\Publish\Core\Search\Solr\Content\CriterionVisitor;
 use eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor;
 use eZ\Publish\Core\Search\Solr\Content\FacetBuilderVisitor;
+use eZ\Publish\Core\Search\Solr\Content\QueryConverter;
 use eZ\Publish\Core\Search\Solr\Content\FieldValueMapper;
 use RuntimeException;
 use XmlWriter;
@@ -57,25 +59,18 @@ class Native extends Gateway
     protected $coreFilter;
 
     /**
-     * Query visitor.
+     * Content Query converter.
      *
-     * @var CriterionVisitor
+     * @var \eZ\Publish\Core\Search\Solr\Content\QueryConverter
      */
-    protected $criterionVisitor;
+    protected $contentQueryConverter;
 
     /**
-     * Sort clause visitor.
+     * Location Query converter.
      *
-     * @var SortClauseVisitor
+     * @var \eZ\Publish\Core\Search\Solr\Content\QueryConverter
      */
-    protected $sortClauseVisitor;
-
-    /**
-     * Facet builder visitor.
-     *
-     * @var FacetBuilderVisitor
-     */
-    protected $facetBuilderVisitor;
+    protected $locationQueryConverter;
 
     /**
      * Field value mapper.
@@ -103,9 +98,8 @@ class Native extends Gateway
      * @param \eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointResolver $endpointResolver
      * @param \eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointRegistry $endpointRegistry
      * @param \eZ\Publish\Core\Search\Solr\Content\Gateway\CoreFilter $coreFilter
-     * @param CriterionVisitor $criterionVisitor
-     * @param SortClauseVisitor $sortClauseVisitor
-     * @param FacetBuilderVisitor $facetBuilderVisitor
+     * @param \eZ\Publish\Core\Search\Solr\Content\QueryConverter $contentQueryConverter
+     * @param \eZ\Publish\Core\Search\Solr\Content\QueryConverter $locationQueryConverter
      * @param FieldValueMapper $fieldValueMapper
      * @param FieldNameGenerator $nameGenerator
      */
@@ -114,9 +108,8 @@ class Native extends Gateway
         EndpointResolver $endpointResolver,
         EndpointRegistry $endpointRegistry,
         CoreFilter $coreFilter,
-        CriterionVisitor $criterionVisitor,
-        SortClauseVisitor $sortClauseVisitor,
-        FacetBuilderVisitor $facetBuilderVisitor,
+        QueryConverter $contentQueryConverter,
+        QueryConverter $locationQueryConverter,
         FieldValueMapper $fieldValueMapper,
         FieldNameGenerator $nameGenerator
     ) {
@@ -124,51 +117,73 @@ class Native extends Gateway
         $this->endpointResolver = $endpointResolver;
         $this->endpointRegistry = $endpointRegistry;
         $this->coreFilter = $coreFilter;
-        $this->criterionVisitor = $criterionVisitor;
-        $this->sortClauseVisitor = $sortClauseVisitor;
-        $this->facetBuilderVisitor = $facetBuilderVisitor;
+        $this->contentQueryConverter = $contentQueryConverter;
+        $this->locationQueryConverter = $locationQueryConverter;
         $this->fieldValueMapper = $fieldValueMapper;
         $this->nameGenerator = $nameGenerator;
     }
 
     /**
-     * Finds content objects for the given query.
-     *
-     * @todo define structs for the field filters
+     * Returns search hits for the given query.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     * @param array $fieldFilters - a map of filters for the returned fields.
+     * @param array $languageSettings - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      *
      * @return mixed
      */
-    public function find(Query $query, array $fieldFilters = array())
+    public function findContent(Query $query, array $languageSettings = array())
     {
         $query = clone $query;
-
-        $this->coreFilter->apply($query, $fieldFilters);
-
-        $parameters = array(
-            'q' => $this->criterionVisitor->visit($query->query),
-            'fq' => $this->criterionVisitor->visit($query->filter),
-            'sort' => $this->getSortClauses($query->sortClauses),
-            'start' => $query->offset,
-            'rows' => $query->limit,
-            'fl' => '*,score,[shard]',
-            'wt' => 'json',
+        $this->coreFilter->apply(
+            $query,
+            $languageSettings,
+            DocumentMapper::DOCUMENT_TYPE_IDENTIFIER_CONTENT
         );
+        $parameters = $this->contentQueryConverter->convert($query);
 
-        $searchTargets = $this->getSearchTargets($fieldFilters);
+        return $this->internalFind($parameters, $languageSettings);
+    }
+
+    /**
+     * Returns search hits for the given query.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
+     * @param array $languageSettings - a map of filters for the returned fields.
+     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
+     *
+     * @return mixed
+     */
+    public function findLocations(Query $query, array $languageSettings = array())
+    {
+        $query = clone $query;
+        $this->coreFilter->apply(
+            $query,
+            $languageSettings,
+            DocumentMapper::DOCUMENT_TYPE_IDENTIFIER_LOCATION
+        );
+        $parameters = $this->locationQueryConverter->convert($query);
+
+        return $this->internalFind($parameters, $languageSettings);
+    }
+
+    /**
+     * Returns search hits for the given array of Solr query parameters.
+     *
+     * @param array $parameters
+     * @param array $languageSettings - a map of filters for the returned fields.
+     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
+     *
+     * @return mixed
+     */
+    protected function internalFind(array $parameters, array $languageSettings = array())
+    {
+        $searchTargets = $this->getSearchTargets($languageSettings);
         if (!empty($searchTargets)) {
             $parameters['shards'] = $searchTargets;
         }
 
-        $queryString = http_build_query($parameters);
-
-        $facets = $this->getFacets($query->facetBuilders);
-        if (!empty($facets)) {
-            $queryString .= "&facet=true&facet.sort=count&{$facets}";
-        }
+        $queryString = $this->generateQueryString($parameters);
 
         $response = $this->client->request(
             'GET',
@@ -182,7 +197,7 @@ class Native extends Gateway
         $result = json_decode($response->body);
 
         if (!isset($result->response)) {
-            throw new \Exception(
+            throw new RuntimeException(
                 '->response not set: ' . var_export(array($result, $parameters), true)
             );
         }
@@ -191,38 +206,21 @@ class Native extends Gateway
     }
 
     /**
-     * Converts an array of sort clause objects to a proper Solr representation.
+     * Generate URL-encoded query string.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
+     * Array markers, possibly added for the facet parameters,
+     * will be removed from the result.
      *
-     * @return string
-     */
-    protected function getSortClauses(array $sortClauses)
-    {
-        return implode(
-            ', ',
-            array_map(
-                array($this->sortClauseVisitor, 'visit'),
-                $sortClauses
-            )
-        );
-    }
-
-    /**
-     * Converts an array of facet builder objects to a proper Solr representation.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder[] $facetBuilders
+     * @param array $parameters
      *
      * @return string
      */
-    protected function getFacets(array $facetBuilders)
+    protected function generateQueryString(array $parameters)
     {
-        return implode(
-            '&',
-            array_map(
-                array($this->facetBuilderVisitor, 'visit'),
-                $facetBuilders
-            )
+        return preg_replace(
+            '/%5B[0-9]+%5D=/',
+            '=',
+            http_build_query($parameters)
         );
     }
 
