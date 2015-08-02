@@ -93,7 +93,7 @@ class NativeCoreFilter extends CoreFilter
         );
     }
 
-    public function apply(Query $query, array $languageSettings)
+    public function apply(Query $query, array $languageSettings, $documentTypeIdentifier)
     {
         $languages = (
             empty($languageSettings['languages']) ?
@@ -105,14 +105,9 @@ class NativeCoreFilter extends CoreFilter
             $languageSettings['useAlwaysAvailable'] === true
         );
 
-        $documentType = 'content';
-        if ($query instanceof LocationQuery) {
-            $documentType = 'location';
-        }
-
         $query->filter = new LogicalAnd(
             array(
-                new CustomField(self::FIELD_DOCUMENT_TYPE, Operator::EQ, $documentType),
+                new CustomField(self::FIELD_DOCUMENT_TYPE, Operator::EQ, $documentTypeIdentifier),
                 $query->filter,
                 $this->getCoreCriterion($languages, $useAlwaysAvailable),
             )
