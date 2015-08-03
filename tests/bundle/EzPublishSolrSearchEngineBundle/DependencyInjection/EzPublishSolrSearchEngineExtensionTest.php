@@ -251,7 +251,7 @@ class EzPublishSolrSearchEngineExtensionTest extends AbstractExtensionTestCase
         );
 
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
-            'ezpublish.search.solr.content.gateway.endpoint_resolver.native.content.connection1',
+            'ezpublish.search.solr.content.gateway.endpoint_resolver.connection1',
             0,
             array(
                 'endpoint1',
@@ -259,7 +259,7 @@ class EzPublishSolrSearchEngineExtensionTest extends AbstractExtensionTestCase
             )
         );
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
-            'ezpublish.search.solr.content.gateway.endpoint_resolver.native.content.connection1',
+            'ezpublish.search.solr.content.gateway.endpoint_resolver.connection1',
             1,
             array(
                 'cro-HR' => 'endpoint1',
@@ -268,20 +268,27 @@ class EzPublishSolrSearchEngineExtensionTest extends AbstractExtensionTestCase
             )
         );
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
-            'ezpublish.search.solr.content.gateway.endpoint_resolver.native.content.connection1',
+            'ezpublish.search.solr.content.gateway.endpoint_resolver.connection1',
             2,
             'endpoint4'
         );
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
-            'ezpublish.search.solr.content.gateway.endpoint_resolver.native.content.connection1',
+            'ezpublish.search.solr.content.gateway.endpoint_resolver.connection1',
             3,
             'endpoint5'
         );
         $this->assertContainerBuilderHasService(
-            'ezpublish.search.solr.content.gateway.native.connection1'
+            'ezpublish.search.solr.content.gateway.core_filter.connection1'
         );
         $this->assertContainerBuilderHasService(
-            'ezpublish.spi.search.solr.content_handler.connection1'
+            'ezpublish.search.solr.content.gateway.connection1'
+        );
+        $this->assertContainerBuilderHasService(
+            'ezpublish.spi.search.solr.connection1'
+        );
+        $this->assertContainerBuilderHasParameter(
+            'ez_search_engine_solr.connection.connection1.engine_id',
+            'ezpublish.spi.search.solr.connection1'
         );
     }
 
@@ -312,7 +319,7 @@ class EzPublishSolrSearchEngineExtensionTest extends AbstractExtensionTestCase
         );
 
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
-            'ezpublish.search.solr.content.gateway.endpoint_resolver.native.content.connection1',
+            'ezpublish.search.solr.content.gateway.endpoint_resolver.connection1',
             0,
             array(
                 'endpoint1',
@@ -322,7 +329,7 @@ class EzPublishSolrSearchEngineExtensionTest extends AbstractExtensionTestCase
             )
         );
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
-            'ezpublish.search.solr.content.gateway.endpoint_resolver.native.content.connection1',
+            'ezpublish.search.solr.content.gateway.endpoint_resolver.connection1',
             1,
             array(
                 'cro-HR' => 'endpoint1',
@@ -330,20 +337,27 @@ class EzPublishSolrSearchEngineExtensionTest extends AbstractExtensionTestCase
             )
         );
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
-            'ezpublish.search.solr.content.gateway.endpoint_resolver.native.content.connection1',
+            'ezpublish.search.solr.content.gateway.endpoint_resolver.connection1',
             2,
             'endpoint3'
         );
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
-            'ezpublish.search.solr.content.gateway.endpoint_resolver.native.content.connection1',
+            'ezpublish.search.solr.content.gateway.endpoint_resolver.connection1',
             3,
             'endpoint4'
         );
         $this->assertContainerBuilderHasService(
-            'ezpublish.search.solr.content.gateway.native.connection1'
+            'ezpublish.search.solr.content.gateway.core_filter.connection1'
         );
         $this->assertContainerBuilderHasService(
-            'ezpublish.spi.search.solr.content_handler.connection1'
+            'ezpublish.search.solr.content.gateway.connection1'
+        );
+        $this->assertContainerBuilderHasService(
+            'ezpublish.spi.search.solr.connection1'
+        );
+        $this->assertContainerBuilderHasParameter(
+            'ez_search_engine_solr.connection.connection1.engine_id',
+            'ezpublish.spi.search.solr.connection1'
         );
     }
 
@@ -374,7 +388,7 @@ class EzPublishSolrSearchEngineExtensionTest extends AbstractExtensionTestCase
         );
 
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
-            'ezpublish.search.solr.content.gateway.endpoint_resolver.native.content.connection1',
+            'ezpublish.search.solr.content.gateway.endpoint_resolver.connection1',
             0,
             array(
                 'endpoint1',
@@ -382,7 +396,7 @@ class EzPublishSolrSearchEngineExtensionTest extends AbstractExtensionTestCase
             )
         );
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
-            'ezpublish.search.solr.content.gateway.endpoint_resolver.native.content.connection1',
+            'ezpublish.search.solr.content.gateway.endpoint_resolver.connection1',
             1,
             array(
                 'cro-HR' => 'endpoint1',
@@ -390,20 +404,27 @@ class EzPublishSolrSearchEngineExtensionTest extends AbstractExtensionTestCase
             )
         );
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
-            'ezpublish.search.solr.content.gateway.endpoint_resolver.native.content.connection1',
+            'ezpublish.search.solr.content.gateway.endpoint_resolver.connection1',
             2,
             'endpoint2'
         );
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
-            'ezpublish.search.solr.content.gateway.endpoint_resolver.native.content.connection1',
+            'ezpublish.search.solr.content.gateway.endpoint_resolver.connection1',
             3,
             'endpoint2'
         );
         $this->assertContainerBuilderHasService(
-            'ezpublish.search.solr.content.gateway.native.connection1'
+            'ezpublish.search.solr.content.gateway.core_filter.connection1'
         );
         $this->assertContainerBuilderHasService(
-            'ezpublish.spi.search.solr.content_handler.connection1'
+            'ezpublish.search.solr.content.gateway.connection1'
+        );
+        $this->assertContainerBuilderHasService(
+            'ezpublish.spi.search.solr.connection1'
+        );
+        $this->assertContainerBuilderHasParameter(
+            'ez_search_engine_solr.connection.connection1.engine_id',
+            'ezpublish.spi.search.solr.connection1'
         );
     }
 
@@ -425,32 +446,39 @@ class EzPublishSolrSearchEngineExtensionTest extends AbstractExtensionTestCase
         );
 
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
-            'ezpublish.search.solr.content.gateway.endpoint_resolver.native.content.connection1',
+            'ezpublish.search.solr.content.gateway.endpoint_resolver.connection1',
             0,
             array(
                 'endpoint1',
             )
         );
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
-            'ezpublish.search.solr.content.gateway.endpoint_resolver.native.content.connection1',
+            'ezpublish.search.solr.content.gateway.endpoint_resolver.connection1',
             1,
             array()
         );
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
-            'ezpublish.search.solr.content.gateway.endpoint_resolver.native.content.connection1',
+            'ezpublish.search.solr.content.gateway.endpoint_resolver.connection1',
             2,
             'endpoint1'
         );
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
-            'ezpublish.search.solr.content.gateway.endpoint_resolver.native.content.connection1',
+            'ezpublish.search.solr.content.gateway.endpoint_resolver.connection1',
             3,
             null
         );
         $this->assertContainerBuilderHasService(
-            'ezpublish.search.solr.content.gateway.native.connection1'
+            'ezpublish.search.solr.content.gateway.core_filter.connection1'
         );
         $this->assertContainerBuilderHasService(
-            'ezpublish.spi.search.solr.content_handler.connection1'
+            'ezpublish.search.solr.content.gateway.connection1'
+        );
+        $this->assertContainerBuilderHasService(
+            'ezpublish.spi.search.solr.connection1'
+        );
+        $this->assertContainerBuilderHasParameter(
+            'ez_search_engine_solr.connection.connection1.engine_id',
+            'ezpublish.spi.search.solr.connection1'
         );
     }
 
@@ -474,32 +502,39 @@ class EzPublishSolrSearchEngineExtensionTest extends AbstractExtensionTestCase
         );
 
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
-            'ezpublish.search.solr.content.gateway.endpoint_resolver.native.content.connection1',
+            'ezpublish.search.solr.content.gateway.endpoint_resolver.connection1',
             0,
             array(
                 'endpoint1',
             )
         );
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
-            'ezpublish.search.solr.content.gateway.endpoint_resolver.native.content.connection1',
+            'ezpublish.search.solr.content.gateway.endpoint_resolver.connection1',
             1,
             array()
         );
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
-            'ezpublish.search.solr.content.gateway.endpoint_resolver.native.content.connection1',
+            'ezpublish.search.solr.content.gateway.endpoint_resolver.connection1',
             2,
             'endpoint1'
         );
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
-            'ezpublish.search.solr.content.gateway.endpoint_resolver.native.content.connection1',
+            'ezpublish.search.solr.content.gateway.endpoint_resolver.connection1',
             3,
             null
         );
         $this->assertContainerBuilderHasService(
-            'ezpublish.search.solr.content.gateway.native.connection1'
+            'ezpublish.search.solr.content.gateway.core_filter.connection1'
         );
         $this->assertContainerBuilderHasService(
-            'ezpublish.spi.search.solr.content_handler.connection1'
+            'ezpublish.search.solr.content.gateway.connection1'
+        );
+        $this->assertContainerBuilderHasService(
+            'ezpublish.spi.search.solr.connection1'
+        );
+        $this->assertContainerBuilderHasParameter(
+            'ez_search_engine_solr.connection.connection1.engine_id',
+            'ezpublish.spi.search.solr.connection1'
         );
     }
 }

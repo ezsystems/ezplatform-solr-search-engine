@@ -23,7 +23,7 @@ class AggregateSortClauseVisitorPassTest extends AbstractCompilerPassTestCase
     {
         parent::setUp();
         $this->setDefinition(
-            'ezpublish.search.solr.content.sort_clause_visitor.aggregate',
+            'ezpublish.search.solr.query.content.sort_clause_visitor.aggregate',
             new Definition()
         );
     }
@@ -43,13 +43,13 @@ class AggregateSortClauseVisitorPassTest extends AbstractCompilerPassTestCase
     {
         $serviceId = 'service_id';
         $def = new Definition();
-        $def->addTag('ezpublish.search.solr.content.sort_clause_visitor');
+        $def->addTag('ezpublish.search.solr.query.content.sort_clause_visitor');
         $this->setDefinition($serviceId, $def);
 
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.search.solr.content.sort_clause_visitor.aggregate',
+            'ezpublish.search.solr.query.content.sort_clause_visitor.aggregate',
             'addVisitor',
             array(new Reference($serviceId))
         );
