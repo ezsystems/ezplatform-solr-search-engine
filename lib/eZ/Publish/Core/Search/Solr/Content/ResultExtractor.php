@@ -11,6 +11,7 @@
 
 namespace eZ\Publish\Core\Search\Solr\Content;
 
+use eZ\Publish\Core\Search\Solr\Content\Query\FacetBuilderVisitor;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 

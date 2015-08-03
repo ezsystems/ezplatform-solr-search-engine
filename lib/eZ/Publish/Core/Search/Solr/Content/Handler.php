@@ -18,7 +18,6 @@ use eZ\Publish\SPI\Search\Content\Handler as SearchHandlerInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
-use eZ\Publish\Core\Search\Solr\Content\DocumentMapper\NativeDocumentMapper;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 

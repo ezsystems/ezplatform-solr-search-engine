@@ -14,7 +14,7 @@ namespace eZ\Publish\Core\Search\Solr\Content\ResultExtractor;
 use eZ\Publish\Core\Search\Solr\Content\ResultExtractor;
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
-use eZ\Publish\Core\Search\Solr\Content\FacetBuilderVisitor;
+use eZ\Publish\Core\Search\Solr\Content\Query\FacetBuilderVisitor;
 use RuntimeException;
 
 /**

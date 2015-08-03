@@ -15,7 +15,7 @@ parameters:
     ezpublish.spi.search.solr.content_handler.class: eZ\Publish\Core\Search\Solr\Content\Handler
     ezpublish.search.solr.content.document_mapper.native.class: eZ\Publish\Core\Search\Solr\Content\DocumentMapper\NativeDocumentMapper
     ezpublish.search.solr.result_extractor.loading.class: eZ\Publish\Core\Search\Solr\Content\ResultExtractor\LoadingResultExtractor
-    ezpublish.search.solr.content.query_converter.class: eZ\Publish\Core\Search\Solr\Content\QueryConverter\NativeQueryConverter
+    ezpublish.search.solr.content.query_converter.class: eZ\Publish\Core\Search\Solr\Content\Query\Common\QueryConverter\NativeQueryConverter
     ezpublish.spi.search.solr.location_handler.class: eZ\Publish\Core\Search\Solr\Content\Location\Handler
     # Endpoint resolver arguments must be set in order to be overrideable
     ezpublish.search.solr.content.entry_endpoints: []
@@ -65,7 +65,7 @@ services:
         arguments:
             - @ezpublish.spi.persistence.content_handler
             - @ezpublish.spi.persistence.location_handler
-            - @ezpublish.search.solr.content.facet_builder_visitor.aggregate
+            - @ezpublish.search.solr.query.content.facet_builder_visitor.aggregate
 
     ezpublish.search.solr.result_extractor:
         alias: ezpublish.search.solr.result_extractor.loading
@@ -73,16 +73,16 @@ services:
     ezpublish.search.solr.content.query_converter.content:
         class: %ezpublish.search.solr.content.query_converter.class%
         arguments:
-            - @ezpublish.search.solr.content.criterion_visitor.aggregate
-            - @ezpublish.search.solr.content.sort_clause_visitor.aggregate
-            - @ezpublish.search.solr.content.facet_builder_visitor.aggregate
+            - @ezpublish.search.solr.query.content.criterion_visitor.aggregate
+            - @ezpublish.search.solr.query.content.sort_clause_visitor.aggregate
+            - @ezpublish.search.solr.query.content.facet_builder_visitor.aggregate
 
     ezpublish.search.solr.content.query_converter.location:
         class: %ezpublish.search.solr.content.query_converter.class%
         arguments:
-            - @ezpublish.search.solr.location.criterion_visitor.aggregate
-            - @ezpublish.search.solr.location.sort_clause_visitor.aggregate
-            - @ezpublish.search.solr.location.facet_builder_visitor.aggregate
+            - @ezpublish.search.solr.query.location.criterion_visitor.aggregate
+            - @ezpublish.search.solr.query.location.sort_clause_visitor.aggregate
+            - @ezpublish.search.solr.query.location.facet_builder_visitor.aggregate
 
     ezpublish.search.solr.content.gateway.native:
         class: %ezpublish.search.solr.content.gateway.native.class%
