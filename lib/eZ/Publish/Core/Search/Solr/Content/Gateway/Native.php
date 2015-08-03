@@ -15,10 +15,7 @@ use eZ\Publish\Core\Search\Solr\Content\DocumentMapper;
 use eZ\Publish\Core\Search\Solr\Content\Gateway;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\Core\Search\Common\FieldNameGenerator;
-use eZ\Publish\Core\Search\Solr\Content\CriterionVisitor;
-use eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor;
-use eZ\Publish\Core\Search\Solr\Content\FacetBuilderVisitor;
-use eZ\Publish\Core\Search\Solr\Content\QueryConverter;
+use eZ\Publish\Core\Search\Solr\Content\Query\QueryConverter;
 use eZ\Publish\Core\Search\Solr\Content\FieldValueMapper;
 use RuntimeException;
 use XmlWriter;
@@ -61,14 +58,14 @@ class Native extends Gateway
     /**
      * Content Query converter.
      *
-     * @var \eZ\Publish\Core\Search\Solr\Content\QueryConverter
+     * @var \eZ\Publish\Core\Search\Solr\Content\Query\QueryConverter
      */
     protected $contentQueryConverter;
 
     /**
      * Location Query converter.
      *
-     * @var \eZ\Publish\Core\Search\Solr\Content\QueryConverter
+     * @var \eZ\Publish\Core\Search\Solr\Content\Query\QueryConverter
      */
     protected $locationQueryConverter;
 
@@ -98,8 +95,8 @@ class Native extends Gateway
      * @param \eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointResolver $endpointResolver
      * @param \eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointRegistry $endpointRegistry
      * @param \eZ\Publish\Core\Search\Solr\Content\Gateway\CoreFilter $coreFilter
-     * @param \eZ\Publish\Core\Search\Solr\Content\QueryConverter $contentQueryConverter
-     * @param \eZ\Publish\Core\Search\Solr\Content\QueryConverter $locationQueryConverter
+     * @param \eZ\Publish\Core\Search\Solr\Content\Query\QueryConverter $contentQueryConverter
+     * @param \eZ\Publish\Core\Search\Solr\Content\Query\QueryConverter $locationQueryConverter
      * @param FieldValueMapper $fieldValueMapper
      * @param FieldNameGenerator $nameGenerator
      */
