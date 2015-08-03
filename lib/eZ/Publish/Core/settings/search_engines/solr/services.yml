@@ -1,11 +1,11 @@
 parameters:
-    ezpublish.search.solr.content.gateway.client.http.stream.class: eZ\Publish\Core\Search\Solr\Content\Gateway\HttpClient\Stream
-    ezpublish.search.solr.query.common.criterion_visitor.aggregate.class: eZ\Publish\Core\Search\Solr\Content\Query\Common\CriterionVisitor\Aggregate
-    ezpublish.search.solr.query.common.sort_clause_visitor.aggregate.class: eZ\Publish\Core\Search\Solr\Content\Query\Common\SortClauseVisitor\Aggregate
-    ezpublish.search.solr.query.common.facet_builder_visitor.aggregate.class: eZ\Publish\Core\Search\Solr\Content\Query\Common\FacetBuilderVisitor\Aggregate
-    ezpublish.search.solr.content.field_value_mapper.aggregate.class: eZ\Publish\Core\Search\Solr\Content\FieldValueMapper\Aggregate
-    ezpublish.search.solr.content.field_name_generator.class: eZ\Publish\Core\Search\Solr\Content\FieldNameGenerator
-    ezpublish.search.solr.field_registry.class: eZ\Publish\Core\Search\Solr\Content\FieldRegistry
+    ezpublish.search.solr.content.gateway.client.http.stream.class: eZ\Publish\Core\Search\Solr\Gateway\HttpClient\Stream
+    ezpublish.search.solr.query.common.criterion_visitor.aggregate.class: eZ\Publish\Core\Search\Solr\Query\Common\CriterionVisitor\Aggregate
+    ezpublish.search.solr.query.common.sort_clause_visitor.aggregate.class: eZ\Publish\Core\Search\Solr\Query\Common\SortClauseVisitor\Aggregate
+    ezpublish.search.solr.query.common.facet_builder_visitor.aggregate.class: eZ\Publish\Core\Search\Solr\Query\Common\FacetBuilderVisitor\Aggregate
+    ezpublish.search.solr.content.field_value_mapper.aggregate.class: eZ\Publish\Core\Search\Solr\FieldValueMapper\Aggregate
+    ezpublish.search.solr.content.field_name_generator.class: eZ\Publish\Core\Search\Solr\FieldNameGenerator
+    ezpublish.search.solr.field_registry.class: eZ\Publish\Core\Search\Solr\FieldRegistry
 
 services:
     ezpublish.search.solr.content.gateway.client.http.stream:

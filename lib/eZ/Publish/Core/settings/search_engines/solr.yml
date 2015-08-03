@@ -8,15 +8,13 @@ imports:
 parameters:
     ezpublish.search.solr.connection.server: http://localhost:8983/solr/core0
     ezpublish.spi.search.solr.class: eZ\Publish\Core\Search\Solr\Handler
-    ezpublish.search.solr.content.gateway.native.class: eZ\Publish\Core\Search\Solr\Content\Gateway\Native
-    ezpublish.search.solr.content.gateway.endpoint_registry.class: eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointRegistry
-    ezpublish.search.solr.content.gateway.endpoint_resolver.native.class: eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointResolver\NativeEndpointResolver
-    ezpublish.search.solr.content.gateway.core_filter.native.class: eZ\Publish\Core\Search\Solr\Content\Gateway\CoreFilter\NativeCoreFilter
-    ezpublish.spi.search.solr.content_handler.class: eZ\Publish\Core\Search\Solr\Content\Handler
-    ezpublish.search.solr.content.document_mapper.native.class: eZ\Publish\Core\Search\Solr\Content\DocumentMapper\NativeDocumentMapper
-    ezpublish.search.solr.result_extractor.loading.class: eZ\Publish\Core\Search\Solr\Content\ResultExtractor\LoadingResultExtractor
-    ezpublish.search.solr.content.query_converter.class: eZ\Publish\Core\Search\Solr\Content\Query\Common\QueryConverter\NativeQueryConverter
-    ezpublish.spi.search.solr.location_handler.class: eZ\Publish\Core\Search\Solr\Content\Location\Handler
+    ezpublish.search.solr.content.gateway.native.class: eZ\Publish\Core\Search\Solr\Gateway\Native
+    ezpublish.search.solr.content.gateway.endpoint_registry.class: eZ\Publish\Core\Search\Solr\Gateway\EndpointRegistry
+    ezpublish.search.solr.content.gateway.endpoint_resolver.native.class: eZ\Publish\Core\Search\Solr\Gateway\EndpointResolver\NativeEndpointResolver
+    ezpublish.search.solr.content.gateway.core_filter.native.class: eZ\Publish\Core\Search\Solr\Gateway\CoreFilter\NativeCoreFilter
+    ezpublish.search.solr.content.document_mapper.native.class: eZ\Publish\Core\Search\Solr\DocumentMapper\NativeDocumentMapper
+    ezpublish.search.solr.result_extractor.loading.class: eZ\Publish\Core\Search\Solr\ResultExtractor\LoadingResultExtractor
+    ezpublish.search.solr.content.query_converter.class: eZ\Publish\Core\Search\Solr\Query\Common\QueryConverter\NativeQueryConverter
     # Endpoint resolver arguments must be set in order to be overrideable
     ezpublish.search.solr.content.entry_endpoints: []
     ezpublish.search.solr.content.cluster_endpoints: []
@@ -99,19 +97,13 @@ services:
     ezpublish.search.solr.content.gateway:
         alias: ezpublish.search.solr.content.gateway.native
 
-    ezpublish.spi.search.solr.content_handler:
-        class: %ezpublish.spi.search.solr.content_handler.class%
+    ezpublish.spi.search.solr:
+        class: %ezpublish.spi.search.solr.class%
         arguments:
             - @ezpublish.search.solr.content.gateway
             - @ezpublish.spi.persistence.content_handler
             - @ezpublish.search.solr.content.document_mapper
             - @ezpublish.search.solr.result_extractor
-        lazy: true
-
-    ezpublish.spi.search.solr:
-        class: %ezpublish.spi.search.solr.class%
-        arguments:
-            - @ezpublish.spi.search.solr.content_handler
         tags:
             - {name: ezpublish.searchEngine, alias: solr}
         lazy: true
