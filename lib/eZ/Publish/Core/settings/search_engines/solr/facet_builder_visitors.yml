@@ -1,7 +1,7 @@
 parameters:
-    ezpublish.search.solr.query.content.facet_builder_visitor.content_type.class: eZ\Publish\Core\Search\Solr\Content\Query\Content\FacetBuilderVisitor\ContentType
-    ezpublish.search.solr.query.content.facet_builder_visitor.section.class: eZ\Publish\Core\Search\Solr\Content\Query\Content\FacetBuilderVisitor\Section
-    ezpublish.search.solr.query.content.facet_builder_visitor.user.class: eZ\Publish\Core\Search\Solr\Content\Query\Content\FacetBuilderVisitor\User
+    ezpublish.search.solr.query.content.facet_builder_visitor.content_type.class: eZ\Publish\Core\Search\Solr\Query\Content\FacetBuilderVisitor\ContentType
+    ezpublish.search.solr.query.content.facet_builder_visitor.section.class: eZ\Publish\Core\Search\Solr\Query\Content\FacetBuilderVisitor\Section
+    ezpublish.search.solr.query.content.facet_builder_visitor.user.class: eZ\Publish\Core\Search\Solr\Query\Content\FacetBuilderVisitor\User
 
 services:
     ezpublish.search.solr.query.content.facet_builder_visitor.content_type:
