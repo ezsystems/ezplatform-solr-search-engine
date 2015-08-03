@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerAware;
 class SolrEngineFactory extends ContainerAware
 {
     /**
-     * @var RepositoryConfigurationProvider
+     * @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider
      */
     private $repositoryConfigurationProvider;
 
@@ -26,19 +26,12 @@ class SolrEngineFactory extends ContainerAware
      */
     private $defaultConnection;
 
-    /**
-     * @var string
-     */
-    private $searchEngineClass;
-
     public function __construct(
         RepositoryConfigurationProvider $repositoryConfigurationProvider,
-        $defaultConnection,
-        $searchEngineClass
+        $defaultConnection
     ) {
         $this->repositoryConfigurationProvider = $repositoryConfigurationProvider;
         $this->defaultConnection = $defaultConnection;
-        $this->searchEngineClass = $searchEngineClass;
     }
 
     public function buildEngine()
@@ -50,12 +43,10 @@ class SolrEngineFactory extends ContainerAware
             $connection = $repositoryConfig['search']['connection'];
         }
 
-        $contentHandlerId = $this->container->getParameter(
-            "ez_search_engine_solr.connection.$connection.content_handler_id"
+        $engineId = $this->container->getParameter(
+            "ez_search_engine_solr.connection.$connection.engine_id"
         );
 
-        return new $this->searchEngineClass(
-            $this->container->get($contentHandlerId)
-        );
+        return $this->container->get($engineId);
     }
 }

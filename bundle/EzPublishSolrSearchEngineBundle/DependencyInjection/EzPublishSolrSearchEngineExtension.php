@@ -21,11 +21,10 @@ use Symfony\Component\Config\FileLocator;
 
 class EzPublishSolrSearchEngineExtension extends Extension
 {
-    const MAIN_SEARCH_ENGINE_ID = 'ezpublish.spi.search.solr';
-    const CONTENT_SEARCH_HANDLER_ID = 'ezpublish.spi.search.solr.content_handler';
-    const CONTENT_SEARCH_GATEWAY_ID = 'ezpublish.search.solr.content.gateway.native';
-    const CONTENT_ENDPOINT_RESOLVER_ID = 'ezpublish.search.solr.content.gateway.endpoint_resolver.native.content';
-    const LOCATION_SEARCH_GATEWAY_ID = 'ezpublish.search.solr.location.gateway.native';
+    const ENGINE_ID = 'ezpublish.spi.search.solr';
+    const GATEWAY_ID = 'ezpublish.search.solr.content.gateway';
+    const CORE_FILTER_ID = 'ezpublish.search.solr.content.gateway.core_filter';
+    const ENDPOINT_RESOLVER_ID = 'ezpublish.search.solr.content.gateway.endpoint_resolver';
 
     /**
      * Endpoint class.
@@ -107,7 +106,7 @@ class EzPublishSolrSearchEngineExtension extends Extension
         }
 
         // Search engine itself, for given connection name
-        $searchEngineDef = $container->findDefinition(self::MAIN_SEARCH_ENGINE_ID);
+        $searchEngineDef = $container->findDefinition(self::ENGINE_ID);
         $searchEngineDef->setFactory([new Reference('ezpublish.solr.engine_factory'), 'buildEngine']);
     }
 
@@ -122,34 +121,34 @@ class EzPublishSolrSearchEngineExtension extends Extension
     {
         $alias = $this->getAlias();
 
-        // Content endpoint resolver
-        $contentEndpointResolverId = static::CONTENT_ENDPOINT_RESOLVER_ID . ".$connectionName";
-        $contentEndpointResolverDef = new DefinitionDecorator(self::CONTENT_ENDPOINT_RESOLVER_ID);
-        $contentEndpointResolverDef->replaceArgument(0, $connectionParams['entry_endpoints']['content']);
-        $contentEndpointResolverDef->replaceArgument(1, $connectionParams['cluster']['content']['translations']);
-        $contentEndpointResolverDef->replaceArgument(2, $connectionParams['cluster']['content']['default']);
-        $contentEndpointResolverDef->replaceArgument(3, $connectionParams['cluster']['content']['main_translations']);
-        $container->setDefinition($contentEndpointResolverId, $contentEndpointResolverDef);
+        // Endpoint resolver
+        $endpointResolverDefinition = new DefinitionDecorator(self::ENDPOINT_RESOLVER_ID);
+        $endpointResolverDefinition->replaceArgument(0, $connectionParams['entry_endpoints']['content']);
+        $endpointResolverDefinition->replaceArgument(1, $connectionParams['cluster']['content']['translations']);
+        $endpointResolverDefinition->replaceArgument(2, $connectionParams['cluster']['content']['default']);
+        $endpointResolverDefinition->replaceArgument(3, $connectionParams['cluster']['content']['main_translations']);
+        $endpointResolverId = static::ENDPOINT_RESOLVER_ID . ".$connectionName";
+        $container->setDefinition($endpointResolverId, $endpointResolverDefinition);
 
-        // Content search gateway
-        $contentSearchGatewayDef = new DefinitionDecorator(self::CONTENT_SEARCH_GATEWAY_ID);
-        $contentSearchGatewayDef->replaceArgument(1, new Reference($contentEndpointResolverId));
-        $contentSearchGatewayId = self::CONTENT_SEARCH_GATEWAY_ID . ".$connectionName";
-        $container->setDefinition($contentSearchGatewayId, $contentSearchGatewayDef);
+        // Core filter
+        $coreFilterDefinition = new DefinitionDecorator(self::CORE_FILTER_ID);
+        $coreFilterDefinition->replaceArgument(0, new Reference($endpointResolverId));
+        $coreFilterId = self::CORE_FILTER_ID . ".$connectionName";
+        $container->setDefinition($coreFilterId, $coreFilterDefinition);
 
-        // Location search gateway
-        $locationSearchGatewayDef = new DefinitionDecorator(self::LOCATION_SEARCH_GATEWAY_ID);
-        $locationSearchGatewayDef->replaceArgument(1, new Reference($contentEndpointResolverId));
-        $locationSearchGatewayId = self::LOCATION_SEARCH_GATEWAY_ID . ".$connectionName";
-        $container->setDefinition($locationSearchGatewayId, $locationSearchGatewayDef);
+        // Gateway
+        $gatewayDefinition = new DefinitionDecorator(self::GATEWAY_ID);
+        $gatewayDefinition->replaceArgument(1, new Reference($endpointResolverId));
+        $gatewayDefinition->replaceArgument(3, new Reference($coreFilterId));
+        $gatewayId = self::GATEWAY_ID . ".$connectionName";
+        $container->setDefinition($gatewayId, $gatewayDefinition);
 
-        // Content search handler
-        $contentSearchHandlerDefinition = new DefinitionDecorator(self::CONTENT_SEARCH_HANDLER_ID);
-        $contentSearchHandlerDefinition->replaceArgument(0, new Reference($contentSearchGatewayId));
-        $contentSearchHandlerDefinition->replaceArgument(1, new Reference($locationSearchGatewayId));
-        $contentSearchHandlerId = self::CONTENT_SEARCH_HANDLER_ID . ".$connectionName";
-        $container->setDefinition($contentSearchHandlerId, $contentSearchHandlerDefinition);
-        $container->setParameter("$alias.connection.$connectionName.content_handler_id", $contentSearchHandlerId);
+        // Engine
+        $engineDefinition = new DefinitionDecorator(self::ENGINE_ID);
+        $engineDefinition->replaceArgument(0, new Reference($gatewayId));
+        $engineId = self::ENGINE_ID . ".$connectionName";
+        $container->setDefinition($engineId, $engineDefinition);
+        $container->setParameter("$alias.connection.$connectionName.engine_id", $engineId);
     }
 
     /**
