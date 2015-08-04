@@ -23,7 +23,7 @@ class AggregateFieldValueMapperPassTest extends AbstractCompilerPassTestCase
     {
         parent::setUp();
         $this->setDefinition(
-            'ezpublish.search.solr.content.field_value_mapper.aggregate',
+            'ezpublish.search.solr.field_value_mapper.aggregate',
             new Definition()
         );
     }
@@ -43,13 +43,13 @@ class AggregateFieldValueMapperPassTest extends AbstractCompilerPassTestCase
     {
         $serviceId = 'service_id';
         $def = new Definition();
-        $def->addTag('ezpublish.search.solr.content.field_value_mapper');
+        $def->addTag('ezpublish.search.solr.field_value_mapper');
         $this->setDefinition($serviceId, $def);
 
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.search.solr.content.field_value_mapper.aggregate',
+            'ezpublish.search.solr.field_value_mapper.aggregate',
             'addMapper',
             array(new Reference($serviceId))
         );

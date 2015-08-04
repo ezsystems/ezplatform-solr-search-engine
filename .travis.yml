@@ -5,16 +5,17 @@ matrix:
         - php: 5.6
           env: TEST_CONFIG="phpunit.xml"
         - php: 5.4
-          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="4.10.4" CORES_SETUP="dedicated" SOLR_CORES="core0 core1 core2 core3" SOLR_CONFS="lib/eZ/Publish/Core/Search/Solr/Content/Resources/schema.xml"
+          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="4.10.4" CORES_SETUP="dedicated" SOLR_CORES="core0 core1 core2 core3" SOLR_CONFS="lib/eZ/Publish/Core/Search/Solr/Resources/schema.xml"
         - php: 5.5
-          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="4.10.4" CORES_SETUP="shared" SOLR_CORES="core0 core1 core2 core3" SOLR_CONFS="lib/eZ/Publish/Core/Search/Solr/Content/Resources/schema.xml"
+          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="4.10.4" CORES_SETUP="shared" SOLR_CORES="core0 core1 core2 core3" SOLR_CONFS="lib/eZ/Publish/Core/Search/Solr/Resources/schema.xml"
         - php: 5.6
-          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="4.10.4" CORES_SETUP="single" SOLR_CONFS="lib/eZ/Publish/Core/Search/Solr/Content/Resources/schema.xml"
+          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="4.10.4" CORES_SETUP="single" SOLR_CONFS="lib/eZ/Publish/Core/Search/Solr/Resources/schema.xml"
 
 # test only master (+ Pull requests)
 branches:
     only:
         - master
+        - EZP-24649-nested-locations
 
 before_script:
     - composer selfupdate

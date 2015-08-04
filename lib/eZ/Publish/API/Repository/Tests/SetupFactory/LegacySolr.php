@@ -129,12 +129,10 @@ class LegacySolr extends Legacy
             );
         }
 
-        /** @var \eZ\Publish\Core\Search\Solr\Content\Handler $contentSearchHandler */
-        $contentSearchHandler = $searchHandler->contentSearchHandler();
-        $contentSearchHandler->purgeIndex();
-        $contentSearchHandler->setCommit(true);
-
-        $contentSearchHandler->bulkIndexContent($contentObjects);
+        /** @var \eZ\Publish\Core\Search\Solr\Handler $searchHandler */
+        $searchHandler->purgeIndex();
+        $searchHandler->setCommit(true);
+        $searchHandler->bulkIndexContent($contentObjects);
     }
 
     protected function getTestConfigurationFile()

@@ -27,31 +27,31 @@ class AggregateCriterionVisitorPass implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         if (
-            !$container->hasDefinition('ezpublish.search.solr.content.criterion_visitor.aggregate') &&
-            !$container->hasDefinition('ezpublish.search.solr.location.criterion_visitor.aggregate')
+            !$container->hasDefinition('ezpublish.search.solr.query.content.criterion_visitor.aggregate') &&
+            !$container->hasDefinition('ezpublish.search.solr.query.location.criterion_visitor.aggregate')
         ) {
             return;
         }
 
-        if ($container->hasDefinition('ezpublish.search.solr.content.criterion_visitor.aggregate')) {
+        if ($container->hasDefinition('ezpublish.search.solr.query.content.criterion_visitor.aggregate')) {
             $aggregateContentCriterionVisitorDefinition = $container->getDefinition(
-                'ezpublish.search.solr.content.criterion_visitor.aggregate'
+                'ezpublish.search.solr.query.content.criterion_visitor.aggregate'
             );
 
             $visitors = $container->findTaggedServiceIds(
-                'ezpublish.search.solr.content.criterion_visitor'
+                'ezpublish.search.solr.query.content.criterion_visitor'
             );
 
             $this->addHandlers($aggregateContentCriterionVisitorDefinition, $visitors);
         }
 
-        if ($container->hasDefinition('ezpublish.search.solr.location.criterion_visitor.aggregate')) {
+        if ($container->hasDefinition('ezpublish.search.solr.query.location.criterion_visitor.aggregate')) {
             $aggregateLocationCriterionVisitorDefinition = $container->getDefinition(
-                'ezpublish.search.solr.location.criterion_visitor.aggregate'
+                'ezpublish.search.solr.query.location.criterion_visitor.aggregate'
             );
 
             $visitors = $container->findTaggedServiceIds(
-                'ezpublish.search.solr.location.criterion_visitor'
+                'ezpublish.search.solr.query.location.criterion_visitor'
             );
 
             $this->addHandlers($aggregateLocationCriterionVisitorDefinition, $visitors);
