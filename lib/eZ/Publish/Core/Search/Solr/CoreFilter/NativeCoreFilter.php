@@ -9,11 +9,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Search\Solr\Gateway\CoreFilter;
+namespace eZ\Publish\Core\Search\Solr\CoreFilter;
 
-use eZ\Publish\Core\Search\Solr\Gateway\CoreFilter;
+use eZ\Publish\Core\Search\Solr\CoreFilter;
 use eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalNot;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOr;
