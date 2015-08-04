@@ -11,7 +11,7 @@ parameters:
     ezpublish.search.solr.gateway.native.class: eZ\Publish\Core\Search\Solr\Gateway\Native
     ezpublish.search.solr.gateway.endpoint_registry.class: eZ\Publish\Core\Search\Solr\Gateway\EndpointRegistry
     ezpublish.search.solr.gateway.endpoint_resolver.native.class: eZ\Publish\Core\Search\Solr\Gateway\EndpointResolver\NativeEndpointResolver
-    ezpublish.search.solr.gateway.core_filter.native.class: eZ\Publish\Core\Search\Solr\Gateway\CoreFilter\NativeCoreFilter
+    ezpublish.search.solr.core_filter.native.class: eZ\Publish\Core\Search\Solr\CoreFilter\NativeCoreFilter
     ezpublish.search.solr.document_mapper.native.class: eZ\Publish\Core\Search\Solr\DocumentMapper\NativeDocumentMapper
     ezpublish.search.solr.result_extractor.loading.class: eZ\Publish\Core\Search\Solr\ResultExtractor\LoadingResultExtractor
     ezpublish.search.solr.query_converter.class: eZ\Publish\Core\Search\Solr\Query\Common\QueryConverter\NativeQueryConverter
@@ -36,13 +36,13 @@ services:
     ezpublish.search.solr.gateway.endpoint_resolver:
         alias: ezpublish.search.solr.gateway.endpoint_resolver.native
 
-    ezpublish.search.solr.gateway.core_filter.native:
-        class: %ezpublish.search.solr.gateway.core_filter.native.class%
+    ezpublish.search.solr.core_filter.native:
+        class: %ezpublish.search.solr.core_filter.native.class%
         arguments:
             - @ezpublish.search.solr.gateway.endpoint_resolver.native
 
-    ezpublish.search.solr.gateway.core_filter:
-        alias: ezpublish.search.solr.gateway.core_filter.native
+    ezpublish.search.solr.core_filter:
+        alias: ezpublish.search.solr.core_filter.native
 
     ezpublish.search.solr.document_mapper.native:
         class: %ezpublish.search.solr.document_mapper.native.class%
@@ -88,7 +88,6 @@ services:
             - @ezpublish.search.solr.gateway.client.http.stream
             - @ezpublish.search.solr.gateway.endpoint_resolver
             - @ezpublish.search.solr.gateway.endpoint_registry
-            - @ezpublish.search.solr.gateway.core_filter
             - @ezpublish.search.solr.query_converter.content
             - @ezpublish.search.solr.query_converter.location
             - @ezpublish.search.solr.field_value_mapper.aggregate
@@ -104,6 +103,7 @@ services:
             - @ezpublish.spi.persistence.content_handler
             - @ezpublish.search.solr.document_mapper
             - @ezpublish.search.solr.result_extractor
+            - @ezpublish.search.solr.core_filter
         tags:
             - {name: ezpublish.searchEngine, alias: solr}
         lazy: true

@@ -9,7 +9,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Search\Solr\Gateway;
+namespace eZ\Publish\Core\Search\Solr;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
 

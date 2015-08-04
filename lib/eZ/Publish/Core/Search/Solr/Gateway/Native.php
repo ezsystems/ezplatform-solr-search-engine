@@ -11,7 +11,6 @@
 
 namespace eZ\Publish\Core\Search\Solr\Gateway;
 
-use eZ\Publish\Core\Search\Solr\DocumentMapper;
 use eZ\Publish\Core\Search\Solr\Gateway;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\Core\Search\Common\FieldNameGenerator;
@@ -47,13 +46,6 @@ class Native extends Gateway
      * @var \eZ\Publish\Core\Search\Solr\Gateway\EndpointRegistry
      */
     protected $endpointRegistry;
-
-    /**
-     * Core filter service.
-     *
-     * @var \eZ\Publish\Core\Search\Solr\Gateway\CoreFilter
-     */
-    protected $coreFilter;
 
     /**
      * Content Query converter.
@@ -94,7 +86,6 @@ class Native extends Gateway
      * @param HttpClient $client
      * @param \eZ\Publish\Core\Search\Solr\Gateway\EndpointResolver $endpointResolver
      * @param \eZ\Publish\Core\Search\Solr\Gateway\EndpointRegistry $endpointRegistry
-     * @param \eZ\Publish\Core\Search\Solr\Gateway\CoreFilter $coreFilter
      * @param \eZ\Publish\Core\Search\Solr\Query\QueryConverter $contentQueryConverter
      * @param \eZ\Publish\Core\Search\Solr\Query\QueryConverter $locationQueryConverter
      * @param FieldValueMapper $fieldValueMapper
@@ -104,7 +95,6 @@ class Native extends Gateway
         HttpClient $client,
         EndpointResolver $endpointResolver,
         EndpointRegistry $endpointRegistry,
-        CoreFilter $coreFilter,
         QueryConverter $contentQueryConverter,
         QueryConverter $locationQueryConverter,
         FieldValueMapper $fieldValueMapper,
@@ -113,7 +103,6 @@ class Native extends Gateway
         $this->client = $client;
         $this->endpointResolver = $endpointResolver;
         $this->endpointRegistry = $endpointRegistry;
-        $this->coreFilter = $coreFilter;
         $this->contentQueryConverter = $contentQueryConverter;
         $this->locationQueryConverter = $locationQueryConverter;
         $this->fieldValueMapper = $fieldValueMapper;
@@ -131,12 +120,6 @@ class Native extends Gateway
      */
     public function findContent(Query $query, array $languageSettings = array())
     {
-        $query = clone $query;
-        $this->coreFilter->apply(
-            $query,
-            $languageSettings,
-            DocumentMapper::DOCUMENT_TYPE_IDENTIFIER_CONTENT
-        );
         $parameters = $this->contentQueryConverter->convert($query);
 
         return $this->internalFind($parameters, $languageSettings);
@@ -153,12 +136,6 @@ class Native extends Gateway
      */
     public function findLocations(Query $query, array $languageSettings = array())
     {
-        $query = clone $query;
-        $this->coreFilter->apply(
-            $query,
-            $languageSettings,
-            DocumentMapper::DOCUMENT_TYPE_IDENTIFIER_LOCATION
-        );
         $parameters = $this->locationQueryConverter->convert($query);
 
         return $this->internalFind($parameters, $languageSettings);

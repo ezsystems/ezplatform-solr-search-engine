@@ -73,23 +73,33 @@ class Handler implements SearchHandlerInterface
     protected $resultExtractor;
 
     /**
+     * Core filter service.
+     *
+     * @var \eZ\Publish\Core\Search\Solr\CoreFilter
+     */
+    protected $coreFilter;
+
+    /**
      * Creates a new content handler.
      *
      * @param \eZ\Publish\Core\Search\Solr\Gateway $gateway
      * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
      * @param \eZ\Publish\Core\Search\Solr\DocumentMapper $mapper
      * @param \eZ\Publish\Core\Search\Solr\ResultExtractor $resultExtractor
+     * @param \eZ\Publish\Core\Search\Solr\CoreFilter $coreFilter
      */
     public function __construct(
         Gateway $gateway,
         ContentHandler $contentHandler,
         DocumentMapper $mapper,
-        ResultExtractor $resultExtractor
+        ResultExtractor $resultExtractor,
+        CoreFilter $coreFilter
     ) {
         $this->gateway = $gateway;
         $this->contentHandler = $contentHandler;
         $this->mapper = $mapper;
         $this->resultExtractor = $resultExtractor;
+        $this->coreFilter = $coreFilter;
     }
 
     /**
@@ -107,8 +117,15 @@ class Handler implements SearchHandlerInterface
      */
     public function findContent(Query $query, array $fieldFilters = array())
     {
+        $query = clone $query;
         $query->filter = $query->filter ?: new Criterion\MatchAll();
         $query->query = $query->query ?: new Criterion\MatchAll();
+
+        $this->coreFilter->apply(
+            $query,
+            $fieldFilters,
+            DocumentMapper::DOCUMENT_TYPE_IDENTIFIER_CONTENT
+        );
 
         return $this->resultExtractor->extract(
             $this->gateway->findContent($query, $fieldFilters)
@@ -132,12 +149,21 @@ class Handler implements SearchHandlerInterface
      */
     public function findSingle(Criterion $filter, array $fieldFilters = array())
     {
-        $searchQuery = new Query();
-        $searchQuery->filter = $filter;
-        $searchQuery->query = new Criterion\MatchAll();
-        $searchQuery->offset = 0;
-        $searchQuery->limit = 1;
-        $result = $this->findContent($searchQuery, $fieldFilters);
+        $query = new Query();
+        $query->filter = $filter;
+        $query->query = new Criterion\MatchAll();
+        $query->offset = 0;
+        $query->limit = 1;
+
+        $this->coreFilter->apply(
+            $query,
+            $fieldFilters,
+            DocumentMapper::DOCUMENT_TYPE_IDENTIFIER_CONTENT
+        );
+
+        $result = $this->resultExtractor->extract(
+            $this->gateway->findContent($query, $fieldFilters)
+        );
 
         if (!$result->totalCount) {
             throw new NotFoundException('Content', "findSingle() found no content for given \$filter");
@@ -161,8 +187,15 @@ class Handler implements SearchHandlerInterface
      */
     public function findLocations(LocationQuery $query, array $fieldFilters = array())
     {
+        $query = clone $query;
         $query->filter = $query->filter ?: new Criterion\MatchAll();
         $query->query = $query->query ?: new Criterion\MatchAll();
+
+        $this->coreFilter->apply(
+            $query,
+            $fieldFilters,
+            DocumentMapper::DOCUMENT_TYPE_IDENTIFIER_LOCATION
+        );
 
         return $this->resultExtractor->extract(
             $this->gateway->findLocations($query, $fieldFilters)
