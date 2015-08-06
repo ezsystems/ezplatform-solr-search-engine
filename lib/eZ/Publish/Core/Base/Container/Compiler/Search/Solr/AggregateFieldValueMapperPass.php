@@ -25,15 +25,15 @@ class AggregateFieldValueMapperPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('ezpublish.search.solr.content.field_value_mapper.aggregate')) {
+        if (!$container->hasDefinition('ezpublish.search.solr.field_value_mapper.aggregate')) {
             return;
         }
 
         $aggregateFieldValueMapperDefinition = $container->getDefinition(
-            'ezpublish.search.solr.content.field_value_mapper.aggregate'
+            'ezpublish.search.solr.field_value_mapper.aggregate'
         );
 
-        foreach ($container->findTaggedServiceIds('ezpublish.search.solr.content.field_value_mapper') as $id => $attributes) {
+        foreach ($container->findTaggedServiceIds('ezpublish.search.solr.field_value_mapper') as $id => $attributes) {
             $aggregateFieldValueMapperDefinition->addMethodCall(
                 'addMapper',
                 array(
