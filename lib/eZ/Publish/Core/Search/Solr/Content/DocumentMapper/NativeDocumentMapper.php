@@ -82,7 +82,7 @@ class NativeDocumentMapper implements DocumentMapper
     protected $fieldNameGenerator;
 
     /**
-     * Creates a new content handler.
+     * Creates a new document mapper.
      *
      * @param \eZ\Publish\Core\Search\Common\FieldRegistry $fieldRegistry
      * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
@@ -117,15 +117,18 @@ class NativeDocumentMapper implements DocumentMapper
      *
      * @return \eZ\Publish\SPI\Search\Document[]
      */
-    public function mapContent(Content $content)
+    public function mapContentBlock(Content $content)
     {
         $locations = $this->locationHandler->loadLocationsByContent($content->versionInfo->contentInfo->id);
         $section = $this->sectionHandler->load($content->versionInfo->contentInfo->sectionId);
         $mainLocation = null;
         $isSomeLocationVisible = false;
         $locationData = array();
+        $locationFields = array();
 
         foreach ($locations as $location) {
+            $locationFields[$location->id] = $this->mapLocationFields($location, $content, $section);
+
             $locationData['ids'][] = $location->id;
             $locationData['parent_ids'][] = $location->parentId;
             $locationData['remote_ids'][] = $location->remoteId;
@@ -331,17 +334,18 @@ class NativeDocumentMapper implements DocumentMapper
         $documents = array();
 
         foreach ($fieldSets as $languageCode => $translationFields) {
-            $translationFields[] = new Field(
+            $metaFields = array();
+            $metaFields[] = new Field(
                 'meta_indexed_language_code',
                 $languageCode,
                 new FieldType\StringField()
             );
-            $translationFields[] = new Field(
+            $metaFields[] = new Field(
                 'meta_indexed_is_main_translation',
                 ($languageCode === $content->versionInfo->contentInfo->mainLanguageCode),
                 new FieldType\BooleanField()
             );
-            $translationFields[] = new Field(
+            $metaFields[] = new Field(
                 'meta_indexed_is_main_translation_and_always_available',
                 (
                     ($languageCode === $content->versionInfo->contentInfo->mainLanguageCode) &&
@@ -350,16 +354,39 @@ class NativeDocumentMapper implements DocumentMapper
                 new FieldType\BooleanField()
             );
 
+            $translationLocationDocuments = array();
+            foreach ($locations as $location) {
+                $translationLocationDocuments[] = new Document(
+                    array(
+                        "id" => $this->generateLocationDocumentId($location->id, $languageCode),
+                        'fields' => array_merge(
+                            $locationFields[$location->id],
+                            isset($translationFields['regular']) ? $translationFields['regular'] : array(),
+                            $metaFields
+                        ),
+                    )
+                );
+            }
+
             $isMainTranslation = ($content->versionInfo->contentInfo->mainLanguageCode === $languageCode);
             $alwaysAvailable = ($isMainTranslation && $content->versionInfo->contentInfo->alwaysAvailable);
 
             $documents[] = new Document(
                 array(
-                    'id' => $this->generateContentDocumentId($content, $languageCode),
+                    'id' => $this->generateContentDocumentId(
+                        $content->versionInfo->contentInfo->id,
+                        $languageCode
+                    ),
                     'languageCode' => $languageCode,
                     'alwaysAvailable' => $alwaysAvailable,
                     'isMainTranslation' => $isMainTranslation,
-                    'fields' => array_merge($fields, $translationFields),
+                    'fields' => array_merge(
+                        $fields,
+                        isset($translationFields['regular']) ? $translationFields['regular'] : array(),
+                        isset($translationFields['fulltext']) ? $translationFields['fulltext'] : array(),
+                        $metaFields
+                    ),
+                    'documents' => $translationLocationDocuments,
                 )
             );
         }
@@ -368,39 +395,49 @@ class NativeDocumentMapper implements DocumentMapper
     }
 
     /**
-     * Generates the Solr backend document id for Content object.
+     * Generates the Solr backend document ID for Content object.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content $content
-     * @param string $languageCode
+     * If $language code is not provided, the method will return prefix of the IDs
+     * of all Content's documents (there will be one document per translation).
+     * The above is useful when targeting all Content's documents, without
+     * the knowledge of it's translations.
      *
-     * @return string
-     */
-    protected function generateContentDocumentId(Content $content, $languageCode)
-    {
-        return strtolower("content{$content->versionInfo->contentInfo->id}{$languageCode}");
-    }
-
-    /**
-     * Generates the Solr backend document id for Content object.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Location $location
-     * @param string $languageCode
+     * @param int|string $contentId
+     * @param null|string $languageCode
      *
      * @return string
      */
-    protected function generateLocationDocumentId(Location $location, $languageCode)
+    public function generateContentDocumentId($contentId, $languageCode = null)
     {
-        return strtolower("location{$location->id}{$languageCode}");
+        return strtolower("content{$contentId}{$languageCode}");
     }
 
     /**
-     * Maps given Content to a Document.
+     * Generates the Solr backend document ID for Location object.
+     *
+     * If $language code is not provided, the method will return prefix of the IDs
+     * of all Location's documents (there will be one document per translation).
+     * The above is useful when targeting all Location's documents, without
+     * the knowledge of it's Content's translations.
+     *
+     * @param int|string $locationId
+     * @param null|string $languageCode
+     *
+     * @return string
+     */
+    public function generateLocationDocumentId($locationId, $languageCode = null)
+    {
+        return strtolower("location{$locationId}{$languageCode}");
+    }
+
+    /**
+     * Maps given Content fields to a map Document fields.
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
      * @param \eZ\Publish\SPI\Persistence\Content\Type $contentType
      * @param bool $indexFulltext
      *
-     * @return \eZ\Publish\SPI\Search\Field[][]
+     * @return \eZ\Publish\SPI\Search\Field[][][]
      */
     protected function mapContentFields(
         Content $content,
@@ -423,7 +460,7 @@ class NativeDocumentMapper implements DocumentMapper
                         continue;
                     }
 
-                    $fieldSets[$field->languageCode][] = new Field(
+                    $fieldSets[$field->languageCode]['regular'][] = new Field(
                         $name = $this->fieldNameGenerator->getName(
                             $indexField->name,
                             $fieldDefinition->identifier,
@@ -434,7 +471,7 @@ class NativeDocumentMapper implements DocumentMapper
                     );
 
                     if ($indexFulltext && $indexField->type instanceof FieldType\StringField) {
-                        $fieldSets[$field->languageCode][] = new Field(
+                        $fieldSets[$field->languageCode]['fulltext'][] = new Field(
                             $name . '_fulltext',
                             $indexField->value,
                             new FieldType\TextField()
@@ -447,12 +484,8 @@ class NativeDocumentMapper implements DocumentMapper
         return $fieldSets;
     }
 
-    public function mapLocation(Location $location)
+    protected function mapLocationFields(Location $location, Content $content, Section $section)
     {
-        $contentInfo = $this->contentHandler->loadContentInfo($location->contentId);
-        $content = $this->contentHandler->load($location->contentId, $contentInfo->currentVersionNo);
-        $section = $this->sectionHandler->load($content->versionInfo->contentInfo->sectionId);
-
         $fields = array(
             new Field(
                 'location',
@@ -519,9 +552,11 @@ class NativeDocumentMapper implements DocumentMapper
         // UserGroups and Users are Content, but permissions cascade is achieved through
         // Locations hierarchy. We index all ancestor Location Content ids of all
         // Locations of an owner.
-        $ancestorLocationsContentIds = $this->getAncestorLocationsContentIds($contentInfo->ownerId);
+        $ancestorLocationsContentIds = $this->getAncestorLocationsContentIds(
+            $content->versionInfo->contentInfo->ownerId
+        );
         // Add owner user id as it can also be considered as user group.
-        $ancestorLocationsContentIds[] = $contentInfo->ownerId;
+        $ancestorLocationsContentIds[] = $content->versionInfo->contentInfo->ownerId;
         $fields[] = new Field(
             'content_owner_user_group',
             $ancestorLocationsContentIds,
@@ -616,47 +651,7 @@ class NativeDocumentMapper implements DocumentMapper
             new FieldType\MultipleIdentifierField()
         );
 
-        $contentType = $this->contentTypeHandler->load(
-            $content->versionInfo->contentInfo->contentTypeId
-        );
-        $fieldSets = $this->mapContentFields($content, $contentType, false);
-        $documents = array();
-
-        foreach ($fieldSets as $languageCode => $translationFields) {
-            $translationFields[] = new Field(
-                'meta_indexed_language_code',
-                $languageCode,
-                new FieldType\StringField()
-            );
-            $translationFields[] = new Field(
-                'meta_indexed_is_main_translation',
-                ($languageCode === $content->versionInfo->contentInfo->mainLanguageCode),
-                new FieldType\BooleanField()
-            );
-            $translationFields[] = new Field(
-                'meta_indexed_is_main_translation_and_always_available',
-                (
-                    ($languageCode === $content->versionInfo->contentInfo->mainLanguageCode) &&
-                    $content->versionInfo->contentInfo->alwaysAvailable
-                ),
-                new FieldType\BooleanField()
-            );
-
-            $isMainTranslation = ($content->versionInfo->contentInfo->mainLanguageCode === $languageCode);
-            $alwaysAvailable = ($isMainTranslation && $content->versionInfo->contentInfo->alwaysAvailable);
-
-            $documents[] = new Document(
-                array(
-                    'id' => $this->generateLocationDocumentId($location, $languageCode),
-                    'languageCode' => $languageCode,
-                    'alwaysAvailable' => $alwaysAvailable,
-                    'isMainTranslation' => $isMainTranslation,
-                    'fields' => array_merge($fields, $translationFields),
-                )
-            );
-        }
-
-        return $documents;
+        return $fields;
     }
 
     /**

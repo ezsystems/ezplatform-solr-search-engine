@@ -27,7 +27,6 @@ class EzPublishSolrSearchEngineExtension extends Extension
     const CONTENT_ENDPOINT_RESOLVER_ID = 'ezpublish.search.solr.content.gateway.endpoint_resolver.native.content';
     const LOCATION_SEARCH_HANDLER_ID = 'ezpublish.spi.search.solr.location_handler';
     const LOCATION_SEARCH_GATEWAY_ID = 'ezpublish.search.solr.location.gateway.native';
-    const LOCATION_ENDPOINT_RESOLVER_ID = 'ezpublish.search.solr.content.gateway.endpoint_resolver.native.location';
 
     /**
      * Endpoint class.
@@ -146,18 +145,9 @@ class EzPublishSolrSearchEngineExtension extends Extension
         $container->setDefinition($contentSearchHandlerId, $contentSearchHandlerDefinition);
         $container->setParameter("$alias.connection.$connectionName.content_handler_id", $contentSearchHandlerId);
 
-        // Location endpoint resolver
-        $locationEndpointResolverId = static::LOCATION_ENDPOINT_RESOLVER_ID . ".$connectionName";
-        $locationEndpointResolverDef = new DefinitionDecorator(self::CONTENT_ENDPOINT_RESOLVER_ID);
-        $locationEndpointResolverDef->replaceArgument(0, $connectionParams['entry_endpoints']['location']);
-        $locationEndpointResolverDef->replaceArgument(1, $connectionParams['cluster']['location']['translations']);
-        $locationEndpointResolverDef->replaceArgument(2, $connectionParams['cluster']['location']['default']);
-        $locationEndpointResolverDef->replaceArgument(3, $connectionParams['cluster']['location']['main_translations']);
-        $container->setDefinition($locationEndpointResolverId, $locationEndpointResolverDef);
-
         // Location search gateway
         $locationSearchGatewayDef = new DefinitionDecorator(self::LOCATION_SEARCH_GATEWAY_ID);
-        $locationSearchGatewayDef->replaceArgument(1, new Reference($locationEndpointResolverId));
+        $locationSearchGatewayDef->replaceArgument(1, new Reference($contentEndpointResolverId));
         $locationSearchGatewayId = self::LOCATION_SEARCH_GATEWAY_ID . ".$connectionName";
         $container->setDefinition($locationSearchGatewayId, $locationSearchGatewayDef);
 

@@ -261,14 +261,14 @@ class Native extends Gateway
     {
         $documentMap = array();
         $mainTranslationsEndpoint = $this->endpointResolver->getMainLanguagesEndpoint();
-        $alwaysAvailableDocuments = array();
+        $mainTranslationsDocuments = array();
 
         foreach ($documents as $translationDocuments) {
             foreach ($translationDocuments as $document) {
                 $documentMap[$document->languageCode][] = $document;
 
                 if ($mainTranslationsEndpoint !== null && $document->isMainTranslation) {
-                    $alwaysAvailableDocuments[] = $this->getAlwaysAvailableDocument($document);
+                    $mainTranslationsDocuments[] = $this->getMainTranslationDocument($document);
                 }
             }
         }
@@ -282,10 +282,10 @@ class Native extends Gateway
             );
         }
 
-        if (!empty($alwaysAvailableDocuments)) {
+        if (!empty($mainTranslationsDocuments)) {
             $this->doBulkIndexDocuments(
                 $this->endpointRegistry->getEndpoint($mainTranslationsEndpoint),
-                $alwaysAvailableDocuments
+                $mainTranslationsDocuments
             );
         }
     }
@@ -297,10 +297,11 @@ class Native extends Gateway
      *
      * @return \eZ\Publish\SPI\Search\Document
      */
-    protected function getAlwaysAvailableDocument(Document $document)
+    protected function getMainTranslationDocument(Document $document)
     {
         // Clone to prevent mutation
         $document = clone $document;
+        $subDocuments = array();
 
         $document->id .= 'mt';
         $document->fields[] = new Field(
@@ -308,6 +309,23 @@ class Native extends Gateway
             true,
             new FieldType\BooleanField()
         );
+
+        foreach ($document->documents as $subDocument)
+        {
+            // Clone to prevent mutation
+            $subDocument = clone $subDocument;
+
+            $subDocument->id .= 'mt';
+            $subDocument->fields[] = new Field(
+                'meta_indexed_main_translation',
+                true,
+                new FieldType\BooleanField()
+            );
+
+            $subDocuments[] = $subDocument;
+        }
+
+        $document->documents = $subDocuments;
 
         return $document;
     }
@@ -446,6 +464,10 @@ class Native extends Gateway
 
         foreach ($document->fields as $field) {
             $this->writeField($xmlWriter, $field);
+        }
+
+        foreach ($document->documents as $subDocument) {
+            $this->writeDocument($xmlWriter, $subDocument);
         }
 
         $xmlWriter->endElement();
