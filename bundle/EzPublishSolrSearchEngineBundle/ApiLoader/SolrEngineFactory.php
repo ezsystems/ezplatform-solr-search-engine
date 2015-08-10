@@ -26,12 +26,19 @@ class SolrEngineFactory extends ContainerAware
      */
     private $defaultConnection;
 
+    /**
+     * @var string
+     */
+    private $searchEngineClass;
+
     public function __construct(
         RepositoryConfigurationProvider $repositoryConfigurationProvider,
-        $defaultConnection
+        $defaultConnection,
+        $searchEngineClass
     ) {
         $this->repositoryConfigurationProvider = $repositoryConfigurationProvider;
         $this->defaultConnection = $defaultConnection;
+        $this->searchEngineClass = $searchEngineClass;
     }
 
     public function buildEngine()
@@ -43,10 +50,12 @@ class SolrEngineFactory extends ContainerAware
             $connection = $repositoryConfig['search']['connection'];
         }
 
-        $engineId = $this->container->getParameter(
-            "ez_search_engine_solr.connection.$connection.engine_id"
+        return new $this->searchEngineClass(
+            $this->container->get("ez_search_engine_solr.connection.$connection.gateway_id"),
+            $this->container->get("ezpublish.spi.persistence.content_handler"),
+            $this->container->get("ezpublish.search.solr.document_mapper"),
+            $this->container->get("ezpublish.search.solr.result_extractor"),
+            $this->container->get("ez_search_engine_solr.connection.$connection.core_filter_id")
         );
-
-        return $this->container->get($engineId);
     }
 }

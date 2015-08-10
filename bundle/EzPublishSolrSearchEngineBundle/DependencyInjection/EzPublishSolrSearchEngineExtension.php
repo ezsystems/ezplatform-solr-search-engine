@@ -21,18 +21,51 @@ use Symfony\Component\Config\FileLocator;
 
 class EzPublishSolrSearchEngineExtension extends Extension
 {
+    /**
+     * Main Solr search handler service ID.
+     *
+     * @var string
+     */
     const ENGINE_ID = 'ezpublish.spi.search.solr';
-    const GATEWAY_ID = 'ezpublish.search.solr.content.gateway';
-    const CORE_FILTER_ID = 'ezpublish.search.solr.content.gateway.core_filter';
-    const ENDPOINT_RESOLVER_ID = 'ezpublish.search.solr.content.gateway.endpoint_resolver';
+
+    /**
+     * Configured core gateway service ID.
+     *
+     * Not using service alias since alias can't be passed for decoration.
+     *
+     * @var string
+     */
+    const GATEWAY_ID = 'ezpublish.search.solr.gateway.native';
+
+    /**
+     * Configured core filter service ID.
+     *
+     * Not using service alias since alias can't be passed for decoration.
+     *
+     * @var string
+     */
+    const CORE_FILTER_ID = 'ezpublish.search.solr.core_filter.native';
+
+    /**
+     * Configured core endpoint resolver service ID.
+     *
+     * Not using service alias since alias can't be passed for decoration.
+     *
+     * @var string
+     */
+    const ENDPOINT_RESOLVER_ID = 'ezpublish.search.solr.gateway.endpoint_resolver.native';
 
     /**
      * Endpoint class.
+     *
+     * @var string
      */
-    const ENDPOINT_CLASS = 'eZ\\Publish\\Core\\Search\\Solr\\Content\\Gateway\\Endpoint';
+    const ENDPOINT_CLASS = 'eZ\\Publish\\Core\\Search\\Solr\\Gateway\\Endpoint';
 
     /**
      * Endpoint service tag.
+     *
+     * @var string
      */
     const ENDPOINT_TAG = 'ezpublish.search.solr.endpoint';
 
@@ -127,28 +160,20 @@ class EzPublishSolrSearchEngineExtension extends Extension
         $endpointResolverDefinition->replaceArgument(1, $connectionParams['cluster']['content']['translations']);
         $endpointResolverDefinition->replaceArgument(2, $connectionParams['cluster']['content']['default']);
         $endpointResolverDefinition->replaceArgument(3, $connectionParams['cluster']['content']['main_translations']);
-        $endpointResolverId = static::ENDPOINT_RESOLVER_ID . ".$connectionName";
+        $endpointResolverId = "$alias.connection.$connectionName.endpoint_resolver_id";
         $container->setDefinition($endpointResolverId, $endpointResolverDefinition);
 
         // Core filter
         $coreFilterDefinition = new DefinitionDecorator(self::CORE_FILTER_ID);
         $coreFilterDefinition->replaceArgument(0, new Reference($endpointResolverId));
-        $coreFilterId = self::CORE_FILTER_ID . ".$connectionName";
+        $coreFilterId = "$alias.connection.$connectionName.core_filter_id";
         $container->setDefinition($coreFilterId, $coreFilterDefinition);
 
         // Gateway
         $gatewayDefinition = new DefinitionDecorator(self::GATEWAY_ID);
         $gatewayDefinition->replaceArgument(1, new Reference($endpointResolverId));
-        $gatewayDefinition->replaceArgument(3, new Reference($coreFilterId));
-        $gatewayId = self::GATEWAY_ID . ".$connectionName";
+        $gatewayId = "$alias.connection.$connectionName.gateway_id";
         $container->setDefinition($gatewayId, $gatewayDefinition);
-
-        // Engine
-        $engineDefinition = new DefinitionDecorator(self::ENGINE_ID);
-        $engineDefinition->replaceArgument(0, new Reference($gatewayId));
-        $engineId = self::ENGINE_ID . ".$connectionName";
-        $container->setDefinition($engineId, $engineDefinition);
-        $container->setParameter("$alias.connection.$connectionName.engine_id", $engineId);
     }
 
     /**
