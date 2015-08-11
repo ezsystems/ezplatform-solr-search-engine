@@ -23,7 +23,7 @@ abstract class ResultExtractor
     /**
      * Facet builder visitor.
      *
-     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\FacetBuilderVisitor
+     * @var \eZ\Publish\Core\Search\Solr\Query\FacetBuilderVisitor
      */
     protected $facetBuilderVisitor;
 

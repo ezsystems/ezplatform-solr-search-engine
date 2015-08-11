@@ -17,8 +17,8 @@ use eZ\Publish\Core\Search\Solr\Query\FacetBuilderVisitor;
 use RuntimeException;
 
 /**
- * The Loading Extractor extracts the value object from the Elasticsearch search hit data
- * by loading it from the database.
+ * The Loading Result Extractor extracts the value object from the Solr search hit data
+ * by loading it from the persistence.
  */
 class LoadingResultExtractor extends ResultExtractor
 {
