@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Search\Solr\Query\Location\CriterionVisitor\Location;
 
 use eZ\Publish\Core\Search\Solr\Query\CriterionVisitor;

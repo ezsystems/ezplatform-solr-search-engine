@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\SolrSearchEngine\Tests\Container\Compiler;
 
 use eZ\Publish\Core\Base\Container\Compiler\Search\Solr\AggregateFacetBuilderVisitorPass;

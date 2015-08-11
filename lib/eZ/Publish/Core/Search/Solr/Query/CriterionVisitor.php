@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Search\Solr\Query;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -125,7 +124,7 @@ abstract class CriterionVisitor
      *
      * @return string
      */
-    protected function escapeQuote($string, $doubleQuote=false)
+    protected function escapeQuote($string, $doubleQuote = false)
     {
         $pattern = ($doubleQuote ? '/("|\\\)/' : '/(\'|\\\)/');
 

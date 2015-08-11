@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishSolrSearchEngineBundle\ApiLoader;
 
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider;
@@ -52,9 +51,9 @@ class SolrEngineFactory extends ContainerAware
 
         return new $this->searchEngineClass(
             $this->container->get("ez_search_engine_solr.connection.$connection.gateway_id"),
-            $this->container->get("ezpublish.spi.persistence.content_handler"),
-            $this->container->get("ezpublish.search.solr.document_mapper"),
-            $this->container->get("ezpublish.search.solr.result_extractor"),
+            $this->container->get('ezpublish.spi.persistence.content_handler'),
+            $this->container->get('ezpublish.search.solr.document_mapper'),
+            $this->container->get('ezpublish.search.solr.result_extractor'),
             $this->container->get("ez_search_engine_solr.connection.$connection.core_filter_id")
         );
     }

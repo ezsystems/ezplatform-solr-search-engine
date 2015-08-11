@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Search\Solr\Query\Common\FacetBuilderVisitor;
 
 use eZ\Publish\Core\Search\Solr\Query\FacetBuilderVisitor;

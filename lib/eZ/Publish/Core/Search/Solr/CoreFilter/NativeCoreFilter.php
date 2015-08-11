@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Search\Solr\CoreFilter;
 
 use eZ\Publish\Core\Search\Solr\CoreFilter;
@@ -21,7 +20,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\Core\Search\Solr\Gateway\EndpointResolver;
 
 /**
- * Native core filter handles:
+ * Native core filter handles:.
  *
  * - search type (Content and Location)
  * - prioritized languages fallback

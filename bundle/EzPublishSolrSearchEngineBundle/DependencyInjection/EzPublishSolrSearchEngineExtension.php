@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishSolrSearchEngineBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\Definition;

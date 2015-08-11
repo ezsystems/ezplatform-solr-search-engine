@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishSolrSearchEngineBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;

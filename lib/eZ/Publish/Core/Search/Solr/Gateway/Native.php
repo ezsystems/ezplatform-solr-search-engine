@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Search\Solr\Gateway;
 
 use eZ\Publish\Core\Search\Solr\Gateway;
@@ -282,8 +281,7 @@ class Native extends Gateway
             new FieldType\BooleanField()
         );
 
-        foreach ($document->documents as $subDocument)
-        {
+        foreach ($document->documents as $subDocument) {
             // Clone to prevent mutation
             $subDocument = clone $subDocument;
 

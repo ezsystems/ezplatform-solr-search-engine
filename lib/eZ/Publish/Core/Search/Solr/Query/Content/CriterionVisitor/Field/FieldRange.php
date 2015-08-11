@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Search\Solr\Query\Content\CriterionVisitor\Field;
 
 use eZ\Publish\Core\Search\Solr\Query\CriterionVisitor;
@@ -66,7 +65,7 @@ class FieldRange extends Field
 
         if (empty($fieldNames)) {
             throw new InvalidArgumentException(
-                "\$criterion->target",
+                '$criterion->target',
                 "No searchable fields found for the given criterion target '{$criterion->target}'."
             );
         }
