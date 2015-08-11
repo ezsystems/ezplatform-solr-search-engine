@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\SolrSearchEngine\Tests\Search;
 
 /**

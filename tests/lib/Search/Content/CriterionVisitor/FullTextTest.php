@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\SolrSearchEngine\Tests\Search\Content\CriterionVisitor;
 
 use eZ\SolrSearchEngine\Tests\Search\TestCase;

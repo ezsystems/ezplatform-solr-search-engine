@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Search\Solr\Query\Content\CriterionVisitor\CustomField;
 
 use eZ\Publish\Core\Search\Solr\Query\CriterionVisitor;

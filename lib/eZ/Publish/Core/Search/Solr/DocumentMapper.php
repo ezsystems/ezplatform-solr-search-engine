@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Search\Solr;
 
 use eZ\Publish\SPI\Persistence\Content;
@@ -23,14 +22,14 @@ use eZ\Publish\SPI\Persistence\Content\Location;
 interface DocumentMapper
 {
     /**
-     * Identifier of Content documents
+     * Identifier of Content documents.
      *
      * @var string
      */
     const DOCUMENT_TYPE_IDENTIFIER_CONTENT = 'content';
 
     /**
-     * Identifier of Location documents
+     * Identifier of Location documents.
      *
      * @var string
      */

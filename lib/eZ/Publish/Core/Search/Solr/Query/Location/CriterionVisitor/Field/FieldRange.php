@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Search\Solr\Query\Location\CriterionVisitor\Field;
 
 use eZ\Publish\Core\Search\Solr\Query\Content\CriterionVisitor\Field\FieldRange as ContentFieldRange;

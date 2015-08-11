@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Search\Solr\Query\Content\CriterionVisitor\MapLocation;
 
 use eZ\Publish\Core\Search\Solr\Query\Content\CriterionVisitor\MapLocation;
@@ -62,7 +61,7 @@ class MapLocationDistanceIn extends MapLocation
 
         if (empty($fieldNames)) {
             throw new InvalidArgumentException(
-                "\$criterion->target",
+                '$criterion->target',
                 "No searchable fields found for the given criterion target '{$criterion->target}'."
             );
         }

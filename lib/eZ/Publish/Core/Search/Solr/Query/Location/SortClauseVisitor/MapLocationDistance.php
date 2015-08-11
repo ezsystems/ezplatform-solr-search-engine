@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Search\Solr\Query\Location\SortClauseVisitor;
 
 use eZ\Publish\Core\Search\Solr\Query\Content\SortClauseVisitor\MapLocationDistance as ContentMapLocationDistance;

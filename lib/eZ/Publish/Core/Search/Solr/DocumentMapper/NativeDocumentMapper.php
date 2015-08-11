@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Search\Solr\DocumentMapper;
 
 use eZ\Publish\Core\Search\Solr\DocumentMapper;
@@ -358,7 +357,7 @@ class NativeDocumentMapper implements DocumentMapper
             foreach ($locations as $location) {
                 $translationLocationDocuments[] = new Document(
                     array(
-                        "id" => $this->generateLocationDocumentId($location->id, $languageCode),
+                        'id' => $this->generateLocationDocumentId($location->id, $languageCode),
                         'fields' => array_merge(
                             $locationFields[$location->id],
                             isset($translationFields['regular']) ? $translationFields['regular'] : array(),

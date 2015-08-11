@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Search\Solr\ResultExtractor;
 
 use eZ\Publish\Core\Search\Solr\ResultExtractor;

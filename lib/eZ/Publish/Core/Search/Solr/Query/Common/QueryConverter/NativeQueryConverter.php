@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Search\Solr\Query\Common\QueryConverter;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
@@ -54,8 +53,7 @@ class NativeQueryConverter extends QueryConverter
         CriterionVisitor $criterionVisitor,
         SortClauseVisitor $sortClauseVisitor,
         FacetBuilderVisitor $facetBuilderVisitor
-    )
-    {
+    ) {
         $this->criterionVisitor = $criterionVisitor;
         $this->sortClauseVisitor = $sortClauseVisitor;
         $this->facetBuilderVisitor = $facetBuilderVisitor;
