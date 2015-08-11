@@ -169,9 +169,9 @@ class NativeDocumentMapper implements DocumentMapper
                 new FieldType\IdentifierField()
             ),
             new Field(
-                'version',
+                'version_no',
                 $content->versionInfo->versionNo,
-                new FieldType\IdentifierField()
+                new FieldType\IntegerField()
             ),
             new Field(
                 'status',
@@ -573,9 +573,9 @@ class NativeDocumentMapper implements DocumentMapper
             new FieldType\IdentifierField()
         );
         $fields[] = new Field(
-            'content_version',
+            'content_version_no',
             $content->versionInfo->versionNo,
-            new FieldType\IdentifierField()
+            new FieldType\IntegerField()
         );
         $fields[] = new Field(
             'content_status',
