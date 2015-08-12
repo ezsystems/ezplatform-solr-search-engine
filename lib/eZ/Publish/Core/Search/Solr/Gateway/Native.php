@@ -75,11 +75,6 @@ class Native extends Gateway
     protected $nameGenerator;
 
     /**
-     * @var bool
-     */
-    protected $commit = true;
-
-    /**
      * Construct from HTTP client.
      *
      * @param HttpClient $client
@@ -310,8 +305,7 @@ class Native extends Gateway
         $result = $this->client->request(
             'POST',
             $endpoint,
-            '/update?' .
-            ($this->commit ? 'softCommit=true&' : '') . 'wt=json',
+            '/update?wt=json',
             new Message(
                 array(
                     'Content-Type' => 'text/xml',
@@ -340,8 +334,7 @@ class Native extends Gateway
             $this->client->request(
                 'POST',
                 $this->endpointRegistry->getEndpoint($endpointName),
-                '/update?' .
-                ($this->commit ? 'softCommit=true&' : '') . 'wt=json',
+                '/update?wt=json',
                 new Message(
                     array(
                         'Content-Type' => 'text/xml',
@@ -378,8 +371,7 @@ class Native extends Gateway
         $this->client->request(
             'POST',
             $endpoint,
-            '/update?' .
-            ($this->commit ? 'softCommit=true&' : '') . 'wt=json',
+            '/update?wt=json',
             new Message(
                 array(
                     'Content-Type' => 'text/xml',
@@ -390,11 +382,40 @@ class Native extends Gateway
     }
 
     /**
-     * @param bool $commit
+     * Commits the data to the Solr index, making it available for search.
+     *
+     * This will perform Solr 'soft commit', which means there is no guarantee that data
+     * is actually written to the stable storage, it is only made available for search.
+     * Passing true will also write the data to the safe storage, ensuring durability.
+     *
+     * @param bool $flush
      */
-    public function setCommit($commit)
+    public function commit($flush = false)
     {
-        $this->commit = !!$commit;
+        $payload = $flush ?
+            '<commit/>' :
+            '<commit softCommit="true"/>';
+
+        foreach ($this->endpointResolver->getEndpoints() as $endpointName) {
+            $result = $this->client->request(
+                'POST',
+                $this->endpointRegistry->getEndpoint($endpointName),
+                '/update',
+                new Message(
+                    array(
+                        'Content-Type' => 'text/xml',
+                    ),
+                    $payload
+                )
+            );
+
+            if ($result->headers['status'] !== 200) {
+                throw new RuntimeException(
+                    'Wrong HTTP status received from Solr: ' .
+                    $result->headers['status'] . var_export($result, true)
+                );
+            }
+        }
     }
 
     /**

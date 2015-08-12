@@ -130,8 +130,8 @@ class LegacySolr extends Legacy
 
         /** @var \eZ\Publish\Core\Search\Solr\Handler $searchHandler */
         $searchHandler->purgeIndex();
-        $searchHandler->setCommit(true);
         $searchHandler->bulkIndexContent($contentObjects);
+        $searchHandler->commit();
     }
 
     protected function getTestConfigurationFile()
