@@ -10,7 +10,7 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "ezsystems/ezpublish-kernel": "dev-rename-matched-translation"
+        "ezsystems/ezpublish-kernel": "~6.0@dev"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.7",
