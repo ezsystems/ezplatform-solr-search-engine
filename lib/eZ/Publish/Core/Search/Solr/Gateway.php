@@ -63,11 +63,13 @@ abstract class Gateway
     abstract public function purgeIndex();
 
     /**
-     * Set if index/delete actions should commit or if several actions is to be expected.
+     * Commits the data to the Solr index, making it available for search.
      *
-     * This should be set to false before group of actions and true before the last one
+     * This will perform Solr 'soft commit', which means there is no guarantee that data
+     * is actually written to the stable storage, it is only made available for search.
+     * Passing true will also write the data to the safe storage, ensuring durability.
      *
-     * @param bool $commit
+     * @param bool $flush
      */
-    abstract public function setCommit($commit);
+    abstract public function commit($flush = false);
 }
