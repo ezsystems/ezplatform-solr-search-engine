@@ -60,7 +60,6 @@ EOT
         $stmt->execute();
 
         /** @var \eZ\Publish\Core\Search\Solr\Handler $searchHandler */
-        $searchHandler->setCommit(true);
         $searchHandler->purgeIndex();
 
         $output->writeln('Indexing Content...');
@@ -89,6 +88,9 @@ EOT
 
             $progress->advance($k);
         } while (($i += $bulkCount) < $totalCount);
+
+        // Make changes available for search
+        $searchHandler->commit();
 
         $progress->finish();
     }
