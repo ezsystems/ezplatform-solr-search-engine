@@ -132,7 +132,6 @@ class NativeDocumentMapper implements DocumentMapper
             $locationData['parent_ids'][] = $location->parentId;
             $locationData['remote_ids'][] = $location->remoteId;
             $locationData['path_strings'][] = $location->pathString;
-            $locationData['depths'][] = $location->depth;
 
             if ($location->id == $content->versionInfo->contentInfo->mainLocationId) {
                 $mainLocation = $location;
@@ -270,11 +269,6 @@ class NativeDocumentMapper implements DocumentMapper
                 'location_path_string',
                 $locationData['path_strings'],
                 new FieldType\MultipleIdentifierField()
-            );
-            $fields[] = new Field(
-                'location_depth',
-                $locationData['depths'],
-                new FieldType\MultipleIntegerField()
             );
         }
 

@@ -3,9 +3,6 @@ parameters:
     ezpublish.search.solr.query.content.sort_clause_visitor.content_id.class: eZ\Publish\Core\Search\Solr\Query\Content\SortClauseVisitor\ContentId
     ezpublish.search.solr.query.content.sort_clause_visitor.content_name.class: eZ\Publish\Core\Search\Solr\Query\Content\SortClauseVisitor\ContentName
     ezpublish.search.solr.query.content.sort_clause_visitor.field.class: eZ\Publish\Core\Search\Solr\Query\Content\SortClauseVisitor\Field
-    ezpublish.search.solr.query.content.sort_clause_visitor.location_path_string.class: eZ\Publish\Core\Search\Solr\Query\Content\SortClauseVisitor\LocationPathString
-    ezpublish.search.solr.query.content.sort_clause_visitor.location_depth.class: eZ\Publish\Core\Search\Solr\Query\Content\SortClauseVisitor\LocationDepth
-    ezpublish.search.solr.query.content.sort_clause_visitor.location_priority.class: eZ\Publish\Core\Search\Solr\Query\Content\SortClauseVisitor\LocationPriority
     ezpublish.search.solr.query.content.sort_clause_visitor.section_identifier.class: eZ\Publish\Core\Search\Solr\Query\Content\SortClauseVisitor\SectionIdentifier
     ezpublish.search.solr.query.content.sort_clause_visitor.section_name.class: eZ\Publish\Core\Search\Solr\Query\Content\SortClauseVisitor\SectionName
     ezpublish.search.solr.query.content.sort_clause_visitor.date_published.class: eZ\Publish\Core\Search\Solr\Query\Content\SortClauseVisitor\DatePublished
@@ -43,21 +40,6 @@ services:
         class: %ezpublish.search.solr.query.content.sort_clause_visitor.field.class%
         arguments:
             - @ezpublish.search.common.field_name_resolver
-        tags:
-            - {name: ezpublish.search.solr.query.content.sort_clause_visitor}
-
-    ezpublish.search.solr.query.content.sort_clause_visitor.location_path_string:
-        class: %ezpublish.search.solr.query.content.sort_clause_visitor.location_path_string.class%
-        tags:
-            - {name: ezpublish.search.solr.query.content.sort_clause_visitor}
-
-    ezpublish.search.solr.query.content.sort_clause_visitor.location_depth:
-        class: %ezpublish.search.solr.query.content.sort_clause_visitor.location_depth.class%
-        tags:
-            - {name: ezpublish.search.solr.query.content.sort_clause_visitor}
-
-    ezpublish.search.solr.query.content.sort_clause_visitor.location_priority:
-        class: %ezpublish.search.solr.query.content.sort_clause_visitor.location_priority.class%
         tags:
             - {name: ezpublish.search.solr.query.content.sort_clause_visitor}
 
