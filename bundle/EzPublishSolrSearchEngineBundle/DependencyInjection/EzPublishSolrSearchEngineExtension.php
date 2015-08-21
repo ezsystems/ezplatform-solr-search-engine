@@ -155,10 +155,10 @@ class EzPublishSolrSearchEngineExtension extends Extension
 
         // Endpoint resolver
         $endpointResolverDefinition = new DefinitionDecorator(self::ENDPOINT_RESOLVER_ID);
-        $endpointResolverDefinition->replaceArgument(0, $connectionParams['entry_endpoints']['content']);
-        $endpointResolverDefinition->replaceArgument(1, $connectionParams['cluster']['content']['translations']);
-        $endpointResolverDefinition->replaceArgument(2, $connectionParams['cluster']['content']['default']);
-        $endpointResolverDefinition->replaceArgument(3, $connectionParams['cluster']['content']['main_translations']);
+        $endpointResolverDefinition->replaceArgument(0, $connectionParams['entry_endpoints']);
+        $endpointResolverDefinition->replaceArgument(1, $connectionParams['mapping']['translations']);
+        $endpointResolverDefinition->replaceArgument(2, $connectionParams['mapping']['default']);
+        $endpointResolverDefinition->replaceArgument(3, $connectionParams['mapping']['main_translations']);
         $endpointResolverId = "$alias.connection.$connectionName.endpoint_resolver_id";
         $container->setDefinition($endpointResolverId, $endpointResolverDefinition);
 
