@@ -227,9 +227,17 @@ class Handler implements SearchHandlerInterface
     /**
      * Indexes several content objects.
      *
-     * @todo: This function and setCommit() is needed for Persistence\Solr for test speed but not part
-     *       of interface for the reason described in Solr\Content\Search\Gateway\Native::bulkIndexContent
-     *       Short: Bulk handling should be properly designed before added to the interface.
+     * Notes:
+     * - Does not force a commit on solr, depends on solr config, use {@see commit()} if you need that.
+     * - On large amounts of data make sure to iterate with several calls to this function with a limited
+     *   set of content objects, amount you have memory for depends on server, size of objects, & PHP version.
+     *
+     * @todo: This method, {@see purgeIndex}, & {@see commit()} is needed for being able to bulk index content.
+     *       However it is not added to an official SPI interface yet as we anticipate adding a bulkIndexDocument
+     *       using eZ\Publish\SPI\Search\Document instead of bulkIndexContent based on Content objects. However
+     *       that won't be added until we have several stable or close to stable advance search engines to make
+     *       sure we match the features of these. 
+     *       See also {@see Solr\Content\Search\Gateway\Native::bulkIndexContent} for further Solr specific info.
      *
      * @param \eZ\Publish\SPI\Persistence\Content[] $contentObjects
      */
@@ -296,7 +304,7 @@ class Handler implements SearchHandlerInterface
     /**
      * Purges all contents from the index.
      *
-     * @todo: Make this public API?
+     * @see bulkIndexContent() For info on why this is not on an SPI Interface yet.
      */
     public function purgeIndex()
     {
@@ -310,6 +318,8 @@ class Handler implements SearchHandlerInterface
      * is actually written to the stable storage, it is only made available for search.
      * Passing true will also write the data to the safe storage, ensuring durability.
      *
+     * @see bulkIndexContent() For info on why this is not on an SPI Interface yet.
+     * 
      * @param bool $flush
      */
     public function commit($flush = false)
