@@ -218,10 +218,13 @@ class Native extends Gateway
      *
      * Documents are given as an array of the array of documents. The array of documents
      * holds documents for all translations of the particular entity.
+     * 
+     * Notes:
+     * - Does not force a commit on solr, depends on solr config, use {@commit} if you need that.
+     * - On large amounts of data make sure to iterate with several calls to this function with a limited
+     *   set of documents, amount you have memory for depends on server, size of documents, & PHP version.
      *
      * @param \eZ\Publish\SPI\Search\Document[][] $documents
-     *
-     * @todo $documents should be generated more on demand then this and sent to Solr in chunks before final commit
      */
     public function bulkIndexDocuments(array $documents)
     {
