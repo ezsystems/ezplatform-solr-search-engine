@@ -374,13 +374,12 @@ services:
         tags:
             - {name: ezpublish.search.solr.query.location.criterion_visitor}
 
-    # We don't support fulltext Location search out of the box
-    #ezpublish.search.solr.query.location.criterion_visitor.full_text:
-    #    class: %ezpublish.search.solr.query.location.criterion_visitor.full_text.class%
-    #    arguments:
-    #        - @ezpublish.search.common.field_name_resolver
-    #    tags:
-    #        - {name: ezpublish.search.solr.query.location.criterion_visitor}
+    ezpublish.search.solr.query.location.criterion_visitor.full_text:
+        class: %ezpublish.search.solr.query.location.criterion_visitor.full_text.class%
+        arguments:
+            - @ezpublish.search.common.field_name_resolver
+        tags:
+            - {name: ezpublish.search.solr.query.location.criterion_visitor}
 
     ezpublish.search.solr.query.location.criterion_visitor.custom_field_in:
         class: %ezpublish.search.solr.query.location.criterion_visitor.custom_field_in.class%
