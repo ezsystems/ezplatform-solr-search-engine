@@ -31,8 +31,7 @@ class StringMapper extends FieldValueMapper
     {
         return
             $field->type instanceof FieldType\StringField ||
-            $field->type instanceof FieldType\TextField ||
-            $field->type instanceof FieldType\HtmlField;
+            $field->type instanceof FieldType\TextField;
     }
 
     /**
