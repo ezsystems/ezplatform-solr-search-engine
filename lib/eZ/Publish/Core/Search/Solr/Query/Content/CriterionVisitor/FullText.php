@@ -83,8 +83,7 @@ class FullText extends CriterionVisitor
             }
         }
 
-        // @todo somethings fishy
-        return '(' . implode(
+        return '((' . implode(
             ') OR (',
             array_map(
                 function ($search) use ($criterion) {
@@ -96,6 +95,6 @@ class FullText extends CriterionVisitor
                 },
                 $queries
             )
-        ) . ')';
+        ) . '))';
     }
 }
