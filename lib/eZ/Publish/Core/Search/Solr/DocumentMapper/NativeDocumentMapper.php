@@ -323,7 +323,7 @@ class NativeDocumentMapper implements DocumentMapper
             new FieldType\MultipleIdentifierField()
         );
 
-        $fieldSets = $this->mapContentFields($content, $contentType, true);
+        $fieldSets = $this->mapContentFields($content, $contentType);
         $documents = array();
 
         foreach ($fieldSets as $languageCode => $translationFields) {
@@ -428,15 +428,11 @@ class NativeDocumentMapper implements DocumentMapper
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
      * @param \eZ\Publish\SPI\Persistence\Content\Type $contentType
-     * @param bool $indexFulltext
      *
      * @return \eZ\Publish\SPI\Search\Field[][][]
      */
-    protected function mapContentFields(
-        Content $content,
-        ContentType $contentType,
-        $indexFulltext
-    ) {
+    protected function mapContentFields(Content $content, ContentType $contentType)
+    {
         $fieldSets = array();
 
         foreach ($content->fields as $field) {
@@ -462,14 +458,6 @@ class NativeDocumentMapper implements DocumentMapper
                         $indexField->value,
                         $indexField->type
                     );
-
-                    if ($indexFulltext && $indexField->type instanceof FieldType\StringField) {
-                        $fieldSets[$field->languageCode]['fulltext'][] = new Field(
-                            $name . '_fulltext',
-                            $indexField->value,
-                            new FieldType\TextField()
-                        );
-                    }
                 }
             }
         }

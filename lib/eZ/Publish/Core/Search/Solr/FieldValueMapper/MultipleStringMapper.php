@@ -11,7 +11,7 @@
 namespace eZ\Publish\Core\Search\Solr\FieldValueMapper;
 
 use eZ\Publish\SPI\Search\Field;
-use eZ\Publish\SPI\Search\FieldType\MultipleStringField;
+use eZ\Publish\SPI\Search\FieldType;
 
 /**
  * Maps raw document field values to something Solr can index.
@@ -27,7 +27,9 @@ class MultipleStringMapper extends StringMapper
      */
     public function canMap(Field $field)
     {
-        return $field->type instanceof MultipleStringField;
+        return
+            $field->type instanceof FieldType\MultipleStringField ||
+            $field->type instanceof FieldType\FullTextField;
     }
 
     /**
