@@ -13,6 +13,7 @@ namespace eZ\Publish\Core\Search\Solr\FieldValueMapper;
 use eZ\Publish\Core\Search\Solr\FieldValueMapper;
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\FieldType;
+use DOMDocument;
 
 /**
  * Maps raw document field values to something Solr can index.
@@ -55,6 +56,10 @@ class StringMapper extends FieldValueMapper
     protected function convert($value)
     {
         // Remove non-printables
-        return preg_replace('([\x00-\x09\x0B\x0C\x1E\x1F]+)', '', (string)$value);
+        return preg_replace(
+            '([\x00-\x09\x0B\x0C\x1E\x1F]+)',
+            '',
+            (string)($value instanceof DOMDocument ? $value->saveXML() : $value)
+        );
     }
 }
