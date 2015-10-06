@@ -436,6 +436,13 @@ class NativeDocumentMapper implements DocumentMapper
         $fieldSets = array();
 
         foreach ($content->fields as $field) {
+            if (!isset($fieldSets[$field->languageCode])) {
+                $fieldSets[$field->languageCode] = array(
+                    'regular' => array(),
+                    'fulltext' => array(),
+                );
+            }
+
             foreach ($contentType->fieldDefinitions as $fieldDefinition) {
                 if ($fieldDefinition->id !== $field->fieldDefinitionId) {
                     continue;
@@ -447,13 +454,6 @@ class NativeDocumentMapper implements DocumentMapper
                 foreach ($indexFields as $indexField) {
                     if ($indexField->value === null) {
                         continue;
-                    }
-
-                    if (!isset($fieldSets[$field->languageCode])) {
-                        $fieldSets[$field->languageCode] = array(
-                            'regular' => array(),
-                            'fulltext' => array(),
-                        );
                     }
 
                     $documentField = new Field(
