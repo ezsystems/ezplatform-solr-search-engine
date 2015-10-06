@@ -354,7 +354,7 @@ class NativeDocumentMapper implements DocumentMapper
                         'id' => $this->generateLocationDocumentId($location->id, $languageCode),
                         'fields' => array_merge(
                             $locationFields[$location->id],
-                            isset($translationFields['regular']) ? $translationFields['regular'] : array(),
+                            $translationFields['regular'],
                             $metaFields
                         ),
                     )
@@ -375,8 +375,8 @@ class NativeDocumentMapper implements DocumentMapper
                     'isMainTranslation' => $isMainTranslation,
                     'fields' => array_merge(
                         $fields,
-                        isset($translationFields['regular']) ? $translationFields['regular'] : array(),
-                        isset($translationFields['fulltext']) ? $translationFields['fulltext'] : array(),
+                        $translationFields['regular'],
+                        $translationFields['fulltext'],
                         $metaFields
                     ),
                     'documents' => $translationLocationDocuments,
@@ -449,7 +449,14 @@ class NativeDocumentMapper implements DocumentMapper
                         continue;
                     }
 
-                    $fieldSets[$field->languageCode]['regular'][] = new Field(
+                    if (!isset($fieldSets[$field->languageCode])) {
+                        $fieldSets[$field->languageCode] = array(
+                            'regular' => array(),
+                            'fulltext' => array(),
+                        );
+                    }
+
+                    $documentField = new Field(
                         $name = $this->fieldNameGenerator->getName(
                             $indexField->name,
                             $fieldDefinition->identifier,
@@ -458,6 +465,12 @@ class NativeDocumentMapper implements DocumentMapper
                         $indexField->value,
                         $indexField->type
                     );
+
+                    if ($documentField->type instanceof FieldType\FullTextField) {
+                        $fieldSets[$field->languageCode]['fulltext'][] = $documentField;
+                    } else {
+                        $fieldSets[$field->languageCode]['regular'][] = $documentField;
+                    }
                 }
             }
         }
