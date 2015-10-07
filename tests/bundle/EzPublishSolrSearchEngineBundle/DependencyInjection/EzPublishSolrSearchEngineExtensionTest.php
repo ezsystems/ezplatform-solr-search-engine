@@ -10,7 +10,7 @@
  */
 namespace eZ\Bundle\EzPublishSolrSearchEngineBundle\Tests\DependencyInjection;
 
-use eZ\Bundle\EzPublishSolrSearchEngineBundle\DependencyInjection\EzPublishSolrSearchEngineExtension;
+use EzSystems\SolrSearchEngineBundle\DependencyInjection\EzSystemsSolrSearchEngineExtension;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Symfony\Component\Yaml\Yaml;
 
@@ -23,7 +23,7 @@ class EzPublishSolrSearchEngineExtensionTest extends AbstractExtensionTestCase
 
     protected function setUp()
     {
-        $this->extension = new EzPublishSolrSearchEngineExtension();
+        $this->extension = new EzSystemsSolrSearchEngineExtension();
 
         parent::setUp();
     }

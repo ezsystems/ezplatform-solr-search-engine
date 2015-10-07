@@ -8,7 +8,7 @@
  *
  * @version //autogentag//
  */
-namespace eZ\Bundle\EzPublishSolrSearchEngineBundle\Command;
+namespace EzSystems\SolrSearchEngineBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;

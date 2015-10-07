@@ -8,7 +8,7 @@
  *
  * @version //autogentag//
  */
-namespace eZ\Bundle\EzPublishSolrSearchEngineBundle\DependencyInjection;
+namespace EzSystems\SolrSearchEngineBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Config\FileLocator;
 
-class EzPublishSolrSearchEngineExtension extends Extension
+class EzSystemsSolrSearchEngineExtension extends Extension
 {
     /**
      * Main Solr search handler service ID.
@@ -91,7 +91,7 @@ class EzPublishSolrSearchEngineExtension extends Extension
         // Loading configuration from Core/settings
         $loader = new YamlFileLoader(
             $container,
-            new FileLocator(__DIR__ . '/../../../lib/eZ/Publish/Core/settings')
+            new FileLocator(__DIR__ . '/../../lib/eZ/Publish/Core/settings')
         );
         $loader->load('search_engines/solr.yml');
 

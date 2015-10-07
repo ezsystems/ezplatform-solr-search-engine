@@ -8,7 +8,7 @@
  *
  * @version //autogentag//
  */
-namespace eZ\Bundle\EzPublishSolrSearchEngineBundle;
+namespace EzSystems\SolrSearchEngineBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -20,7 +20,7 @@ use eZ\Publish\Core\Base\Container\Compiler\Search\Solr\EndpointRegistryPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\FieldRegistryPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\SignalSlotPass;
 
-class EzPublishSolrSearchEngineBundle extends Bundle
+class EzSystemsSolrSearchEngineBundle extends Bundle
 {
     public function build(ContainerBuilder $container)
     {
@@ -39,7 +39,7 @@ class EzPublishSolrSearchEngineBundle extends Bundle
     public function getContainerExtension()
     {
         if (!isset($this->extension)) {
-            $this->extension = new DependencyInjection\EzPublishSolrSearchEngineExtension();
+            $this->extension = new DependencyInjection\EzSystemsSolrSearchEngineExtension();
         }
 
         return $this->extension;

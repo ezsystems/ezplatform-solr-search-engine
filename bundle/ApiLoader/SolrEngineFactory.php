@@ -8,7 +8,7 @@
  *
  * @version //autogentag//
  */
-namespace eZ\Bundle\EzPublishSolrSearchEngineBundle\ApiLoader;
+namespace EzSystems\SolrSearchEngineBundle\ApiLoader;
 
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider;
 use Symfony\Component\DependencyInjection\ContainerAware;

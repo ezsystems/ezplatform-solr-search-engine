@@ -19,11 +19,11 @@
     },
     "autoload": {
         "psr-4": {
-            "eZ\\Bundle\\EzPublishSolrSearchEngineBundle\\": "bundle/EzPublishSolrSearchEngineBundle/",
+            "EzSystems\\SolrSearchEngineBundle\\": "bundle/",
             "eZ\\Publish\\API\\Repository\\Tests\\SetupFactory\\": "lib/eZ/Publish/API/Repository/Tests/SetupFactory/",
             "eZ\\Publish\\Core\\Search\\Solr\\": "lib/eZ/Publish/Core/Search/Solr/",
             "eZ\\Publish\\Core\\Base\\Container\\Compiler\\Search\\Solr\\": "lib/eZ/Publish/Core/Base/Container/Compiler/Search/Solr",
-            "eZ\\SolrSearchEngineBundle\\Tests\\": "tests/bundle",
+            "EzSystems\\SolrSearchEngineBundle\\Tests\\": "tests/bundle",
             "eZ\\SolrSearchEngine\\Tests\\": "tests/lib"
         }
     },
