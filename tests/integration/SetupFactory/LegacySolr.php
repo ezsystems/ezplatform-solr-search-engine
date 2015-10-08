@@ -46,14 +46,14 @@ class LegacySolr extends Legacy
     public function getServiceContainer()
     {
         if (!isset(self::$serviceContainer)) {
-            $configPath = __DIR__ . '/../../../../../../../vendor/ezsystems/ezpublish-kernel/config.php';
+            $configPath = __DIR__ . '/../../../vendor/ezsystems/ezpublish-kernel/config.php';
             if (file_exists($configPath)) {
                 // If executed from ezsystems/ezplatform-solr-search-engine
                 $config = include $configPath;
                 $installDir = $config['install_dir'];
                 /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder */
                 $containerBuilder = include $config['container_builder_path'];
-                $settingsPath = __DIR__ . '/../../../../../../eZ/Publish/Core/settings/';
+                $settingsPath = __DIR__ . '/../../../lib/eZ/Publish/Core/settings/';
             } else {
                 // Else it should run from ezsystems/ezpublish-kernel
                 $configPath = __DIR__ . '/../../../../../../../../../../config.php';
