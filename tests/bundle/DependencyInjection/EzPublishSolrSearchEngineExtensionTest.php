@@ -8,7 +8,7 @@
  *
  * @version //autogentag//
  */
-namespace eZ\Bundle\EzPublishSolrSearchEngineBundle\Tests\DependencyInjection;
+namespace EzSystems\SolrSearchEngineBundle\Tests\DependencyInjection;
 
 use EzSystems\SolrSearchEngineBundle\DependencyInjection\EzSystemsSolrSearchEngineExtension;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
@@ -17,7 +17,7 @@ use Symfony\Component\Yaml\Yaml;
 class EzPublishSolrSearchEngineExtensionTest extends AbstractExtensionTestCase
 {
     /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension
+     * @var \EzSystems\SolrSearchEngineBundle\DependencyInjection\EzSystemsSolrSearchEngineExtension
      */
     private $extension;
 

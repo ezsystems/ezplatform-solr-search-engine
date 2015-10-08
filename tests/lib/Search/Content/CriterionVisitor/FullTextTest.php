@@ -8,9 +8,9 @@
  *
  * @version //autogentag//
  */
-namespace eZ\SolrSearchEngine\Tests\Search\Content\CriterionVisitor;
+namespace EzSystems\SolrSearchEngine\Tests\Search\Content\CriterionVisitor;
 
-use eZ\SolrSearchEngine\Tests\Search\TestCase;
+use EzSystems\SolrSearchEngine\Tests\Search\TestCase;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Search\Solr\Query;
 

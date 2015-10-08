@@ -8,7 +8,7 @@
  *
  * @version //autogentag//
  */
-namespace eZ\SolrSearchEngine\Tests\Search;
+namespace EzSystems\SolrSearchEngine\Tests\Search;
 
 /**
  * Base test case for Solr related tests.

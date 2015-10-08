@@ -24,7 +24,7 @@
             "eZ\\Publish\\Core\\Search\\Solr\\": "lib/eZ/Publish/Core/Search/Solr/",
             "eZ\\Publish\\Core\\Base\\Container\\Compiler\\Search\\Solr\\": "lib/eZ/Publish/Core/Base/Container/Compiler/Search/Solr",
             "EzSystems\\SolrSearchEngineBundle\\Tests\\": "tests/bundle",
-            "eZ\\SolrSearchEngine\\Tests\\": "tests/lib"
+            "EzSystems\\SolrSearchEngine\\Tests\\": "tests/lib"
         }
     },
     "extra": {
