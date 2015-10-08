@@ -91,7 +91,7 @@ class EzSystemsSolrSearchEngineExtension extends Extension
         // Loading configuration from Core/settings
         $loader = new YamlFileLoader(
             $container,
-            new FileLocator(__DIR__ . '/../../lib/eZ/Publish/Core/settings')
+            new FileLocator(__DIR__ . '/../../lib/settings')
         );
         $loader->load('search_engines/solr.yml');
 

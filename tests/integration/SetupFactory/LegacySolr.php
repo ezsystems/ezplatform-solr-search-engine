@@ -53,7 +53,7 @@ class LegacySolr extends Legacy
                 $installDir = $config['install_dir'];
                 /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder */
                 $containerBuilder = include $config['container_builder_path'];
-                $settingsPath = __DIR__ . '/../../../lib/eZ/Publish/Core/settings/';
+                $settingsPath = __DIR__ . '/../../../lib/settings/';
             } else {
                 // Else it should run from ezsystems/ezpublish-kernel
                 $configPath = __DIR__ . '/../../../../../../../../../../config.php';
@@ -61,7 +61,7 @@ class LegacySolr extends Legacy
                 $installDir = $config['install_dir'];
                 /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder */
                 $containerBuilder = include $config['container_builder_path'];
-                $settingsPath = $installDir . '/vendor/ezsystems/ezplatform-solr-search-engine/lib/eZ/Publish/Core/settings/';
+                $settingsPath = $installDir . '/vendor/ezsystems/ezplatform-solr-search-engine/lib/settings/';
             }
 
             $solrLoader = new YamlFileLoader($containerBuilder, new FileLocator($settingsPath));
