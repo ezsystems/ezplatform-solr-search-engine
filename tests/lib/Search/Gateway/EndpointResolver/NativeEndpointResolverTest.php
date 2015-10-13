@@ -8,7 +8,7 @@
  *
  * @version //autogentag//
  */
-namespace EzSystems\SolrSearchEngine\Tests\Search\Content\Gateway\EndpointResolver;
+namespace EzSystems\SolrSearchEngine\Tests\Search\Gateway\EndpointResolver;
 
 use eZ\Publish\Core\Search\Solr\Gateway\EndpointResolver\NativeEndpointResolver;
 use EzSystems\SolrSearchEngine\Tests\Search\TestCase;

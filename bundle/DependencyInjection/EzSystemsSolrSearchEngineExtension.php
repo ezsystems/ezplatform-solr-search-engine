@@ -88,10 +88,10 @@ class EzSystemsSolrSearchEngineExtension extends Extension
         $configuration = $this->getConfiguration($configs, $container);
         $config = $this->processConfiguration($configuration, $configs);
 
-        // Loading configuration from Core/settings
+        // Loading configuration from Core/Search/Solr/config
         $loader = new YamlFileLoader(
             $container,
-            new FileLocator(__DIR__ . '/../../lib/settings')
+            new FileLocator(__DIR__ . '/../../lib/config')
         );
         $loader->load('search_engines/solr.yml');
 

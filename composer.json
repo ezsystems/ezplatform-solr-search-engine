@@ -21,8 +21,7 @@
         "psr-4": {
             "EzSystems\\SolrSearchEngineBundle\\": "bundle",
             "eZ\\Publish\\API\\Repository\\Tests\\": "tests/integration",
-            "eZ\\Publish\\Core\\Search\\Solr\\": "lib/Search/Solr",
-            "eZ\\Publish\\Core\\Base\\Container\\Compiler\\Search\\Solr\\": "lib/Base/Container/Compiler/Search/Solr",
+            "eZ\\Publish\\Core\\Search\\Solr\\": "lib",
             "EzSystems\\SolrSearchEngineBundle\\Tests\\": "tests/bundle",
             "EzSystems\\SolrSearchEngine\\Tests\\": "tests/lib"
         }

@@ -11,7 +11,8 @@
 namespace eZ\Publish\API\Repository\Tests\SetupFactory;
 
 use eZ\Publish\Core\Base\ServiceContainer;
-use eZ\Publish\Core\Base\Container\Compiler;
+use eZ\Publish\Core\Base\Container\Compiler as BaseCompiler;
+use eZ\Publish\Core\Search\Solr\Container\Compiler;
 use PDO;
 use RuntimeException;
 use eZ\Publish\API\Repository\Tests\SearchServiceTranslationLanguageFallbackTest;
@@ -53,7 +54,7 @@ class LegacySolr extends Legacy
                 $installDir = $config['install_dir'];
                 /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder */
                 $containerBuilder = include $config['container_builder_path'];
-                $settingsPath = __DIR__ . '/../../../lib/settings/';
+                $settingsPath = __DIR__ . '/../../../lib/config/';
             } else {
                 // Else it should run from ezsystems/ezpublish-kernel
                 $configPath = __DIR__ . '/../../../../../../config.php';
@@ -61,20 +62,20 @@ class LegacySolr extends Legacy
                 $installDir = $config['install_dir'];
                 /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder */
                 $containerBuilder = include $config['container_builder_path'];
-                $settingsPath = $installDir . '/vendor/ezsystems/ezplatform-solr-search-engine/lib/settings/';
+                $settingsPath = $installDir . '/vendor/ezsystems/ezplatform-solr-search-engine/lib/config/';
             }
 
             $solrLoader = new YamlFileLoader($containerBuilder, new FileLocator($settingsPath));
             $solrLoader->load('search_engines/solr.yml');
             $solrLoader->load($this->getTestConfigurationFile());
 
-            $containerBuilder->addCompilerPass(new Compiler\Search\Solr\AggregateCriterionVisitorPass());
-            $containerBuilder->addCompilerPass(new Compiler\Search\Solr\AggregateFacetBuilderVisitorPass());
-            $containerBuilder->addCompilerPass(new Compiler\Search\Solr\AggregateFieldValueMapperPass());
-            $containerBuilder->addCompilerPass(new Compiler\Search\Solr\AggregateSortClauseVisitorPass());
-            $containerBuilder->addCompilerPass(new Compiler\Search\Solr\EndpointRegistryPass());
-            $containerBuilder->addCompilerPass(new Compiler\Search\FieldRegistryPass());
-            $containerBuilder->addCompilerPass(new Compiler\Search\SignalSlotPass());
+            $containerBuilder->addCompilerPass(new Compiler\AggregateCriterionVisitorPass());
+            $containerBuilder->addCompilerPass(new Compiler\AggregateFacetBuilderVisitorPass());
+            $containerBuilder->addCompilerPass(new Compiler\AggregateFieldValueMapperPass());
+            $containerBuilder->addCompilerPass(new Compiler\AggregateSortClauseVisitorPass());
+            $containerBuilder->addCompilerPass(new Compiler\EndpointRegistryPass());
+            $containerBuilder->addCompilerPass(new BaseCompiler\Search\FieldRegistryPass());
+            $containerBuilder->addCompilerPass(new BaseCompiler\Search\SignalSlotPass());
 
             $containerBuilder->setParameter(
                 'legacy_dsn',
