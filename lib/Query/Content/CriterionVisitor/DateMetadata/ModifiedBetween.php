@@ -8,10 +8,10 @@
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\Search\Solr\Query\Content\CriterionVisitor\DateMetadata;
+namespace EzSystems\SolrSearchEngine\Query\Content\CriterionVisitor\DateMetadata;
 
-use eZ\Publish\Core\Search\Solr\Query\Content\CriterionVisitor\DateMetadata;
-use eZ\Publish\Core\Search\Solr\Query\CriterionVisitor;
+use EzSystems\SolrSearchEngine\Query\Content\CriterionVisitor\DateMetadata;
+use EzSystems\SolrSearchEngine\Query\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 

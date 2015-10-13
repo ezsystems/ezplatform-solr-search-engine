@@ -8,13 +8,13 @@
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\Search\Solr\Query\Common\QueryConverter;
+namespace EzSystems\SolrSearchEngine\Query\Common\QueryConverter;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\Core\Search\Solr\Query\QueryConverter;
-use eZ\Publish\Core\Search\Solr\Query\CriterionVisitor;
-use eZ\Publish\Core\Search\Solr\Query\SortClauseVisitor;
-use eZ\Publish\Core\Search\Solr\Query\FacetBuilderVisitor;
+use EzSystems\SolrSearchEngine\Query\QueryConverter;
+use EzSystems\SolrSearchEngine\Query\CriterionVisitor;
+use EzSystems\SolrSearchEngine\Query\SortClauseVisitor;
+use EzSystems\SolrSearchEngine\Query\FacetBuilderVisitor;
 
 /**
  * Native implementation of Query Converter.
@@ -24,30 +24,30 @@ class NativeQueryConverter extends QueryConverter
     /**
      * Query visitor.
      *
-     * @var \eZ\Publish\Core\Search\Solr\Query\CriterionVisitor
+     * @var \EzSystems\SolrSearchEngine\Query\CriterionVisitor
      */
     protected $criterionVisitor;
 
     /**
      * Sort clause visitor.
      *
-     * @var \eZ\Publish\Core\Search\Solr\Query\SortClauseVisitor
+     * @var \EzSystems\SolrSearchEngine\Query\SortClauseVisitor
      */
     protected $sortClauseVisitor;
 
     /**
      * Facet builder visitor.
      *
-     * @var \eZ\Publish\Core\Search\Solr\Query\FacetBuilderVisitor
+     * @var \EzSystems\SolrSearchEngine\Query\FacetBuilderVisitor
      */
     protected $facetBuilderVisitor;
 
     /**
      * Construct from visitors.
      *
-     * @param \eZ\Publish\Core\Search\Solr\Query\CriterionVisitor $criterionVisitor
-     * @param \eZ\Publish\Core\Search\Solr\Query\SortClauseVisitor $sortClauseVisitor
-     * @param \eZ\Publish\Core\Search\Solr\Query\FacetBuilderVisitor $facetBuilderVisitor
+     * @param \EzSystems\SolrSearchEngine\Query\CriterionVisitor $criterionVisitor
+     * @param \EzSystems\SolrSearchEngine\Query\SortClauseVisitor $sortClauseVisitor
+     * @param \EzSystems\SolrSearchEngine\Query\FacetBuilderVisitor $facetBuilderVisitor
      */
     public function __construct(
         CriterionVisitor $criterionVisitor,

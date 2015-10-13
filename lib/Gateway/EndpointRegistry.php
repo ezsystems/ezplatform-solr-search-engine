@@ -8,7 +8,7 @@
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\Search\Solr\Gateway;
+namespace EzSystems\SolrSearchEngine\Gateway;
 
 use OutOfBoundsException;
 
@@ -27,7 +27,7 @@ class EndpointRegistry
     /**
      * Construct from optional array of Endpoints.
      *
-     * @param \eZ\Publish\Core\Search\Solr\Gateway\Endpoint[] $endpoints
+     * @param \EzSystems\SolrSearchEngine\Gateway\Endpoint[] $endpoints
      */
     public function __construct(array $endpoints = array())
     {
@@ -40,7 +40,7 @@ class EndpointRegistry
      * Registers $endpoint with $name.
      *
      * @param string $name
-     * @param \eZ\Publish\Core\Search\Solr\Gateway\Endpoint $endpoint
+     * @param \EzSystems\SolrSearchEngine\Gateway\Endpoint $endpoint
      */
     public function registerEndpoint($name, Endpoint $endpoint)
     {
@@ -52,7 +52,7 @@ class EndpointRegistry
      *
      * @param string $name
      *
-     * @return \eZ\Publish\Core\Search\Solr\Gateway\Endpoint
+     * @return \EzSystems\SolrSearchEngine\Gateway\Endpoint
      */
     public function getEndpoint($name)
     {

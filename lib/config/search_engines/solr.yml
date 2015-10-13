@@ -7,14 +7,14 @@ imports:
 
 parameters:
     ezpublish.search.solr.connection.server: http://localhost:8983/solr/core0
-    ezpublish.spi.search.solr.class: eZ\Publish\Core\Search\Solr\Handler
-    ezpublish.search.solr.gateway.native.class: eZ\Publish\Core\Search\Solr\Gateway\Native
-    ezpublish.search.solr.gateway.endpoint_registry.class: eZ\Publish\Core\Search\Solr\Gateway\EndpointRegistry
-    ezpublish.search.solr.gateway.endpoint_resolver.native.class: eZ\Publish\Core\Search\Solr\Gateway\EndpointResolver\NativeEndpointResolver
-    ezpublish.search.solr.core_filter.native.class: eZ\Publish\Core\Search\Solr\CoreFilter\NativeCoreFilter
-    ezpublish.search.solr.document_mapper.native.class: eZ\Publish\Core\Search\Solr\DocumentMapper\NativeDocumentMapper
-    ezpublish.search.solr.result_extractor.native.class: eZ\Publish\Core\Search\Solr\ResultExtractor\NativeResultExtractor
-    ezpublish.search.solr.query_converter.class: eZ\Publish\Core\Search\Solr\Query\Common\QueryConverter\NativeQueryConverter
+    ezpublish.spi.search.solr.class: EzSystems\SolrSearchEngine\Handler
+    ezpublish.search.solr.gateway.native.class: EzSystems\SolrSearchEngine\Gateway\Native
+    ezpublish.search.solr.gateway.endpoint_registry.class: EzSystems\SolrSearchEngine\Gateway\EndpointRegistry
+    ezpublish.search.solr.gateway.endpoint_resolver.native.class: EzSystems\SolrSearchEngine\Gateway\EndpointResolver\NativeEndpointResolver
+    ezpublish.search.solr.core_filter.native.class: EzSystems\SolrSearchEngine\CoreFilter\NativeCoreFilter
+    ezpublish.search.solr.document_mapper.native.class: EzSystems\SolrSearchEngine\DocumentMapper\NativeDocumentMapper
+    ezpublish.search.solr.result_extractor.native.class: EzSystems\SolrSearchEngine\ResultExtractor\NativeResultExtractor
+    ezpublish.search.solr.query_converter.class: EzSystems\SolrSearchEngine\Query\Common\QueryConverter\NativeQueryConverter
     # Endpoint resolver arguments must be set in order to be overrideable
     ezpublish.search.solr.entry_endpoints: []
     ezpublish.search.solr.cluster_endpoints: []

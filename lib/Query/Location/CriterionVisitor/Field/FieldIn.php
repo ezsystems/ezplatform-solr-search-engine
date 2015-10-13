@@ -8,9 +8,9 @@
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\Search\Solr\Query\Location\CriterionVisitor\Field;
+namespace EzSystems\SolrSearchEngine\Query\Location\CriterionVisitor\Field;
 
-use eZ\Publish\Core\Search\Solr\Query\Content\CriterionVisitor\Field\FieldIn as ContentFieldIn;
+use EzSystems\SolrSearchEngine\Query\Content\CriterionVisitor\Field\FieldIn as ContentFieldIn;
 
 /**
  * Visits the Field criterion.

@@ -8,9 +8,9 @@
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\Search\Solr\FieldValueMapper;
+namespace EzSystems\SolrSearchEngine\FieldValueMapper;
 
-use eZ\Publish\Core\Search\Solr\FieldValueMapper;
+use EzSystems\SolrSearchEngine\FieldValueMapper;
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\FieldType;
 use DOMDocument;

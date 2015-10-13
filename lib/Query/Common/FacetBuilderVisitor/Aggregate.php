@@ -8,9 +8,9 @@
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\Search\Solr\Query\Common\FacetBuilderVisitor;
+namespace EzSystems\SolrSearchEngine\Query\Common\FacetBuilderVisitor;
 
-use eZ\Publish\Core\Search\Solr\Query\FacetBuilderVisitor;
+use EzSystems\SolrSearchEngine\Query\FacetBuilderVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 
@@ -22,14 +22,14 @@ class Aggregate extends FacetBuilderVisitor
     /**
      * Array of available visitors.
      *
-     * @var \eZ\Publish\Core\Search\Solr\Query\FacetBuilderVisitor[]
+     * @var \EzSystems\SolrSearchEngine\Query\FacetBuilderVisitor[]
      */
     protected $visitors = array();
 
     /**
      * Construct from optional visitor array.
      *
-     * @param \eZ\Publish\Core\Search\Solr\Query\FacetBuilderVisitor[] $visitors
+     * @param \EzSystems\SolrSearchEngine\Query\FacetBuilderVisitor[] $visitors
      */
     public function __construct(array $visitors = array())
     {
@@ -41,7 +41,7 @@ class Aggregate extends FacetBuilderVisitor
     /**
      * Adds visitor.
      *
-     * @param \eZ\Publish\Core\Search\Solr\Query\FacetBuilderVisitor $visitor
+     * @param \EzSystems\SolrSearchEngine\Query\FacetBuilderVisitor $visitor
      */
     public function addVisitor(FacetBuilderVisitor $visitor)
     {

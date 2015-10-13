@@ -8,9 +8,9 @@
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\Search\Solr\DocumentMapper;
+namespace EzSystems\SolrSearchEngine\DocumentMapper;
 
-use eZ\Publish\Core\Search\Solr\DocumentMapper;
+use EzSystems\SolrSearchEngine\DocumentMapper;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Type as ContentType;
 use eZ\Publish\SPI\Persistence\Content\Location;

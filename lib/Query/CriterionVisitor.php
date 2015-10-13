@@ -8,7 +8,7 @@
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\Search\Solr\Query;
+namespace EzSystems\SolrSearchEngine\Query;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;

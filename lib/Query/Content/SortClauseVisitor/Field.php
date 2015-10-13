@@ -8,9 +8,9 @@
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\Search\Solr\Query\Content\SortClauseVisitor;
+namespace EzSystems\SolrSearchEngine\Query\Content\SortClauseVisitor;
 
-use eZ\Publish\Core\Search\Solr\Query\SortClauseVisitor;
+use EzSystems\SolrSearchEngine\Query\SortClauseVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\Core\Search\Common\FieldNameResolver;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;

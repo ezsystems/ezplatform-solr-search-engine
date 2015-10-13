@@ -8,9 +8,9 @@
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\Search\Solr\FieldValueMapper;
+namespace EzSystems\SolrSearchEngine\FieldValueMapper;
 
-use eZ\Publish\Core\Search\Solr\FieldValueMapper;
+use EzSystems\SolrSearchEngine\FieldValueMapper;
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 
@@ -22,14 +22,14 @@ class Aggregate extends FieldValueMapper
     /**
      * Array of available mappers.
      *
-     * @var \eZ\Publish\Core\Search\Solr\FieldValueMapper[]
+     * @var \EzSystems\SolrSearchEngine\FieldValueMapper[]
      */
     protected $mappers = array();
 
     /**
      * COnstruct from optional mapper array.
      *
-     * @param \eZ\Publish\Core\Search\Solr\FieldValueMapper[] $mappers
+     * @param \EzSystems\SolrSearchEngine\FieldValueMapper[] $mappers
      */
     public function __construct(array $mappers = array())
     {
@@ -41,7 +41,7 @@ class Aggregate extends FieldValueMapper
     /**
      * Adds mapper.
      *
-     * @param \eZ\Publish\Core\Search\Solr\FieldValueMapper $mapper
+     * @param \EzSystems\SolrSearchEngine\FieldValueMapper $mapper
      */
     public function addMapper(FieldValueMapper $mapper)
     {

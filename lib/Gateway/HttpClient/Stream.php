@@ -8,11 +8,11 @@
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\Search\Solr\Gateway\HttpClient;
+namespace EzSystems\SolrSearchEngine\Gateway\HttpClient;
 
-use eZ\Publish\Core\Search\Solr\Gateway\HttpClient;
-use eZ\Publish\Core\Search\Solr\Gateway\Message;
-use eZ\Publish\Core\Search\Solr\Gateway\Endpoint;
+use EzSystems\SolrSearchEngine\Gateway\HttpClient;
+use EzSystems\SolrSearchEngine\Gateway\Message;
+use EzSystems\SolrSearchEngine\Gateway\Endpoint;
 
 /**
  * Simple PHP stream based HTTP client.
@@ -25,7 +25,7 @@ class Stream implements HttpClient
      * Returns the result from the remote server.
      *
      * @param string $method
-     * @param \eZ\Publish\Core\Search\Solr\Gateway\Endpoint $endpoint
+     * @param \EzSystems\SolrSearchEngine\Gateway\Endpoint $endpoint
      * @param string $path
      * @param Message $message
      *
@@ -91,8 +91,8 @@ class Stream implements HttpClient
      *
      * Merged with the default values.
      *
-     * @param \eZ\Publish\Core\Search\Solr\Gateway\Message $message
-     * @param \eZ\Publish\Core\Search\Solr\Gateway\Endpoint $endpoint
+     * @param \EzSystems\SolrSearchEngine\Gateway\Message $message
+     * @param \EzSystems\SolrSearchEngine\Gateway\Endpoint $endpoint
      *
      * @return string
      */

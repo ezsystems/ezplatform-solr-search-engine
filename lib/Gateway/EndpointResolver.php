@@ -8,7 +8,7 @@
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\Search\Solr\Gateway;
+namespace EzSystems\SolrSearchEngine\Gateway;
 
 /**
  * Endpoint resolver resolves Solr backend endpoints.
@@ -18,7 +18,7 @@ interface EndpointResolver
     /**
      * Returns name of the Endpoint used as entry point for distributed search.
      *
-     * @return \eZ\Publish\Core\Search\Solr\Gateway\Endpoint
+     * @return \EzSystems\SolrSearchEngine\Gateway\Endpoint
      */
     public function getEntryEndpoint();
 

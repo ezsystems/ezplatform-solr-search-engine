@@ -8,9 +8,9 @@
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\Search\Solr\Query\Content\CriterionVisitor;
+namespace EzSystems\SolrSearchEngine\Query\Content\CriterionVisitor;
 
-use eZ\Publish\Core\Search\Solr\Query\CriterionVisitor;
+use EzSystems\SolrSearchEngine\Query\CriterionVisitor;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;

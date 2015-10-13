@@ -12,7 +12,7 @@ namespace eZ\Publish\API\Repository\Tests\SetupFactory;
 
 use eZ\Publish\Core\Base\ServiceContainer;
 use eZ\Publish\Core\Base\Container\Compiler as BaseCompiler;
-use eZ\Publish\Core\Search\Solr\Container\Compiler;
+use EzSystems\SolrSearchEngine\Container\Compiler;
 use PDO;
 use RuntimeException;
 use eZ\Publish\API\Repository\Tests\SearchServiceTranslationLanguageFallbackTest;
@@ -129,7 +129,7 @@ class LegacySolr extends Legacy
             );
         }
 
-        /** @var \eZ\Publish\Core\Search\Solr\Handler $searchHandler */
+        /** @var \EzSystems\SolrSearchEngine\Handler $searchHandler */
         $searchHandler->purgeIndex();
         $searchHandler->bulkIndexContent($contentObjects);
         $searchHandler->commit();

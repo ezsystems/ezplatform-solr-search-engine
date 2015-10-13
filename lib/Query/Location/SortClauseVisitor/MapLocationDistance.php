@@ -8,9 +8,9 @@
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\Search\Solr\Query\Location\SortClauseVisitor;
+namespace EzSystems\SolrSearchEngine\Query\Location\SortClauseVisitor;
 
-use eZ\Publish\Core\Search\Solr\Query\Content\SortClauseVisitor\MapLocationDistance as ContentMapLocationDistance;
+use EzSystems\SolrSearchEngine\Query\Content\SortClauseVisitor\MapLocationDistance as ContentMapLocationDistance;
 
 /**
  * Visits the sortClause tree into a Solr query.

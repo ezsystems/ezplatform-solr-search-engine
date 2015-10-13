@@ -8,7 +8,7 @@
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\Search\Solr;
+namespace EzSystems\SolrSearchEngine;
 
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Location;

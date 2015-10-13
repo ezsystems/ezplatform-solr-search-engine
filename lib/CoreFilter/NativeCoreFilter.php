@@ -8,16 +8,16 @@
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\Search\Solr\CoreFilter;
+namespace EzSystems\SolrSearchEngine\CoreFilter;
 
-use eZ\Publish\Core\Search\Solr\CoreFilter;
+use EzSystems\SolrSearchEngine\CoreFilter;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalNot;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOr;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\CustomField;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
-use eZ\Publish\Core\Search\Solr\Gateway\EndpointResolver;
+use EzSystems\SolrSearchEngine\Gateway\EndpointResolver;
 
 /**
  * Native core filter handles:.

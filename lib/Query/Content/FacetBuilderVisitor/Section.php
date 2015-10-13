@@ -8,9 +8,9 @@
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\Search\Solr\Query\Content\FacetBuilderVisitor;
+namespace EzSystems\SolrSearchEngine\Query\Content\FacetBuilderVisitor;
 
-use eZ\Publish\Core\Search\Solr\Query\FacetBuilderVisitor;
+use EzSystems\SolrSearchEngine\Query\FacetBuilderVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
 use eZ\Publish\API\Repository\Values\Content\Search\Facet;
 

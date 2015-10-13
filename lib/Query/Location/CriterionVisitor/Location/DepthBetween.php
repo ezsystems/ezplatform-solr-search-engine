@@ -8,9 +8,9 @@
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\Search\Solr\Query\Location\CriterionVisitor\Location;
+namespace EzSystems\SolrSearchEngine\Query\Location\CriterionVisitor\Location;
 
-use eZ\Publish\Core\Search\Solr\Query\CriterionVisitor;
+use EzSystems\SolrSearchEngine\Query\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 
@@ -43,7 +43,7 @@ class DepthBetween extends CriterionVisitor
      * Map field value to a proper Solr representation.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param \eZ\Publish\Core\Search\Solr\Query\CriterionVisitor $subVisitor
+     * @param \EzSystems\SolrSearchEngine\Query\CriterionVisitor $subVisitor
      *
      * @return string
      */

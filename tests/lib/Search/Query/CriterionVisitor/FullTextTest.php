@@ -12,12 +12,12 @@ namespace EzSystems\SolrSearchEngine\Tests\Search\Query\CriterionVisitor;
 
 use EzSystems\SolrSearchEngine\Tests\Search\TestCase;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\Core\Search\Solr\Query;
+use EzSystems\SolrSearchEngine\Query;
 
 /**
  * Test case for FullText criterion visitor.
  *
- * @covers \eZ\Publish\Core\Search\Solr\Content\CriterionVisitor\FullText
+ * @covers \EzSystems\SolrSearchEngine\Content\CriterionVisitor\FullText
  */
 class FullTextTest extends TestCase
 {

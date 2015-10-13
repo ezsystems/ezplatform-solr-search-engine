@@ -8,12 +8,12 @@
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\Search\Solr\ResultExtractor;
+namespace EzSystems\SolrSearchEngine\ResultExtractor;
 
-use eZ\Publish\Core\Search\Solr\ResultExtractor;
+use EzSystems\SolrSearchEngine\ResultExtractor;
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
-use eZ\Publish\Core\Search\Solr\Query\FacetBuilderVisitor;
+use EzSystems\SolrSearchEngine\Query\FacetBuilderVisitor;
 use RuntimeException;
 
 /**

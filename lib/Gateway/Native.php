@@ -8,13 +8,13 @@
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\Search\Solr\Gateway;
+namespace EzSystems\SolrSearchEngine\Gateway;
 
-use eZ\Publish\Core\Search\Solr\Gateway;
+use EzSystems\SolrSearchEngine\Gateway;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\Core\Search\Common\FieldNameGenerator;
-use eZ\Publish\Core\Search\Solr\Query\QueryConverter;
-use eZ\Publish\Core\Search\Solr\FieldValueMapper;
+use EzSystems\SolrSearchEngine\Query\QueryConverter;
+use EzSystems\SolrSearchEngine\FieldValueMapper;
 use RuntimeException;
 use XmlWriter;
 use eZ\Publish\SPI\Search\Field;
@@ -35,28 +35,28 @@ class Native extends Gateway
     protected $client;
 
     /**
-     * @var \eZ\Publish\Core\Search\Solr\Gateway\EndpointResolver
+     * @var \EzSystems\SolrSearchEngine\Gateway\EndpointResolver
      */
     protected $endpointResolver;
 
     /**
      * Endpoint registry service.
      *
-     * @var \eZ\Publish\Core\Search\Solr\Gateway\EndpointRegistry
+     * @var \EzSystems\SolrSearchEngine\Gateway\EndpointRegistry
      */
     protected $endpointRegistry;
 
     /**
      * Content Query converter.
      *
-     * @var \eZ\Publish\Core\Search\Solr\Query\QueryConverter
+     * @var \EzSystems\SolrSearchEngine\Query\QueryConverter
      */
     protected $contentQueryConverter;
 
     /**
      * Location Query converter.
      *
-     * @var \eZ\Publish\Core\Search\Solr\Query\QueryConverter
+     * @var \EzSystems\SolrSearchEngine\Query\QueryConverter
      */
     protected $locationQueryConverter;
 
@@ -78,10 +78,10 @@ class Native extends Gateway
      * Construct from HTTP client.
      *
      * @param HttpClient $client
-     * @param \eZ\Publish\Core\Search\Solr\Gateway\EndpointResolver $endpointResolver
-     * @param \eZ\Publish\Core\Search\Solr\Gateway\EndpointRegistry $endpointRegistry
-     * @param \eZ\Publish\Core\Search\Solr\Query\QueryConverter $contentQueryConverter
-     * @param \eZ\Publish\Core\Search\Solr\Query\QueryConverter $locationQueryConverter
+     * @param \EzSystems\SolrSearchEngine\Gateway\EndpointResolver $endpointResolver
+     * @param \EzSystems\SolrSearchEngine\Gateway\EndpointRegistry $endpointRegistry
+     * @param \EzSystems\SolrSearchEngine\Query\QueryConverter $contentQueryConverter
+     * @param \EzSystems\SolrSearchEngine\Query\QueryConverter $locationQueryConverter
      * @param FieldValueMapper $fieldValueMapper
      * @param FieldNameGenerator $nameGenerator
      */
@@ -299,7 +299,7 @@ class Native extends Gateway
     }
 
     /**
-     * @param \eZ\Publish\Core\Search\Solr\Gateway\Endpoint $endpoint
+     * @param \EzSystems\SolrSearchEngine\Gateway\Endpoint $endpoint
      * @param \eZ\Publish\SPI\Search\Document[] $documents
      */
     protected function doBulkIndexDocuments(Endpoint $endpoint, array $documents)

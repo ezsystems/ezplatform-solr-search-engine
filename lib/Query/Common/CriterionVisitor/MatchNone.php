@@ -6,9 +6,9 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\Core\Search\Solr\Query\Common\CriterionVisitor;
+namespace EzSystems\SolrSearchEngine\Query\Common\CriterionVisitor;
 
-use eZ\Publish\Core\Search\Solr\Query\CriterionVisitor;
+use EzSystems\SolrSearchEngine\Query\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**

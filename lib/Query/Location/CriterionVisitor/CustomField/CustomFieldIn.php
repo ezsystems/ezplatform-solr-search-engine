@@ -8,9 +8,9 @@
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\Search\Solr\Query\Location\CriterionVisitor\CustomField;
+namespace EzSystems\SolrSearchEngine\Query\Location\CriterionVisitor\CustomField;
 
-use eZ\Publish\Core\Search\Solr\Query\Content\CriterionVisitor\CustomField\CustomFieldIn as ContentCustomFieldIn;
+use EzSystems\SolrSearchEngine\Query\Content\CriterionVisitor\CustomField\CustomFieldIn as ContentCustomFieldIn;
 
 /**
  * Visits the CustomField criterion with IN, EQ or CONTAINS operator.

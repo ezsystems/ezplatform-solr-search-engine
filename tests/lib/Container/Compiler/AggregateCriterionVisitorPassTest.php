@@ -10,7 +10,7 @@
  */
 namespace EzSystems\SolrSearchEngine\Tests\Container\Compiler;
 
-use eZ\Publish\Core\Search\Solr\Container\Compiler\AggregateCriterionVisitorPass;
+use EzSystems\SolrSearchEngine\Container\Compiler\AggregateCriterionVisitorPass;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;

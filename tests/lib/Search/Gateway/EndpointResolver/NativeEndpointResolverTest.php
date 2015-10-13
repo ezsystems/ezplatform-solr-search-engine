@@ -10,7 +10,7 @@
  */
 namespace EzSystems\SolrSearchEngine\Tests\Search\Gateway\EndpointResolver;
 
-use eZ\Publish\Core\Search\Solr\Gateway\EndpointResolver\NativeEndpointResolver;
+use EzSystems\SolrSearchEngine\Gateway\EndpointResolver\NativeEndpointResolver;
 use EzSystems\SolrSearchEngine\Tests\Search\TestCase;
 use RuntimeException;
 

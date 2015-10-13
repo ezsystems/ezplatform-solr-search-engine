@@ -8,9 +8,9 @@
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\Search\Solr\Query\Content\CriterionVisitor;
+namespace EzSystems\SolrSearchEngine\Query\Content\CriterionVisitor;
 
-use eZ\Publish\Core\Search\Solr\Query\CriterionVisitor;
+use EzSystems\SolrSearchEngine\Query\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 
@@ -35,7 +35,7 @@ class Visibility extends CriterionVisitor
      * Map field value to a proper Solr representation.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param \eZ\Publish\Core\Search\Solr\Query\CriterionVisitor $subVisitor
+     * @param \EzSystems\SolrSearchEngine\Query\CriterionVisitor $subVisitor
      *
      * @return string
      */
