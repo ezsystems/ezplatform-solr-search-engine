@@ -8,9 +8,9 @@
  *
  * @version //autogentag//
  */
-namespace EzSystems\SolrSearchEngine\Query\Location\SortClauseVisitor;
+namespace EzSystems\EzPlatformSolrSearchEngine\Query\Location\SortClauseVisitor;
 
-use EzSystems\SolrSearchEngine\Query\Content\SortClauseVisitor\Field as ContentField;
+use EzSystems\EzPlatformSolrSearchEngine\Query\Content\SortClauseVisitor\Field as ContentField;
 
 /**
  * Visits the sortClause tree into a Solr query.

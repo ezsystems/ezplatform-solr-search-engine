@@ -8,9 +8,9 @@
  *
  * @version //autogentag//
  */
-namespace EzSystems\SolrSearchEngine\Query\Location\CriterionVisitor\CustomField;
+namespace EzSystems\EzPlatformSolrSearchEngine\Query\Location\CriterionVisitor\CustomField;
 
-use EzSystems\SolrSearchEngine\Query\Content\CriterionVisitor\CustomField\CustomFieldRange as ContentCustomFieldRange;
+use EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor\CustomField\CustomFieldRange as ContentCustomFieldRange;
 
 /**
  * Visits the CustomField criterion with LT, LTE, GT, GTE or BETWEEN operator.

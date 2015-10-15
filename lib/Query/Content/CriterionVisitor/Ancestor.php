@@ -8,9 +8,9 @@
  *
  * @version //autogentag//
  */
-namespace EzSystems\SolrSearchEngine\Query\Content\CriterionVisitor;
+namespace EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor;
 
-use EzSystems\SolrSearchEngine\Query\CriterionVisitor;
+use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Ancestor as AncestorCriterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 

@@ -8,13 +8,13 @@
  *
  * @version //autogentag//
  */
-namespace EzSystems\SolrSearchEngine\Query\Common\QueryConverter;
+namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\QueryConverter;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
-use EzSystems\SolrSearchEngine\Query\QueryConverter;
-use EzSystems\SolrSearchEngine\Query\CriterionVisitor;
-use EzSystems\SolrSearchEngine\Query\SortClauseVisitor;
-use EzSystems\SolrSearchEngine\Query\FacetBuilderVisitor;
+use EzSystems\EzPlatformSolrSearchEngine\Query\QueryConverter;
+use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
+use EzSystems\EzPlatformSolrSearchEngine\Query\SortClauseVisitor;
+use EzSystems\EzPlatformSolrSearchEngine\Query\FacetBuilderVisitor;
 
 /**
  * Native implementation of Query Converter.
@@ -24,30 +24,30 @@ class NativeQueryConverter extends QueryConverter
     /**
      * Query visitor.
      *
-     * @var \EzSystems\SolrSearchEngine\Query\CriterionVisitor
+     * @var \EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor
      */
     protected $criterionVisitor;
 
     /**
      * Sort clause visitor.
      *
-     * @var \EzSystems\SolrSearchEngine\Query\SortClauseVisitor
+     * @var \EzSystems\EzPlatformSolrSearchEngine\Query\SortClauseVisitor
      */
     protected $sortClauseVisitor;
 
     /**
      * Facet builder visitor.
      *
-     * @var \EzSystems\SolrSearchEngine\Query\FacetBuilderVisitor
+     * @var \EzSystems\EzPlatformSolrSearchEngine\Query\FacetBuilderVisitor
      */
     protected $facetBuilderVisitor;
 
     /**
      * Construct from visitors.
      *
-     * @param \EzSystems\SolrSearchEngine\Query\CriterionVisitor $criterionVisitor
-     * @param \EzSystems\SolrSearchEngine\Query\SortClauseVisitor $sortClauseVisitor
-     * @param \EzSystems\SolrSearchEngine\Query\FacetBuilderVisitor $facetBuilderVisitor
+     * @param \EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor $criterionVisitor
+     * @param \EzSystems\EzPlatformSolrSearchEngine\Query\SortClauseVisitor $sortClauseVisitor
+     * @param \EzSystems\EzPlatformSolrSearchEngine\Query\FacetBuilderVisitor $facetBuilderVisitor
      */
     public function __construct(
         CriterionVisitor $criterionVisitor,

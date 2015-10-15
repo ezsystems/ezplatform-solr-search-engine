@@ -8,9 +8,9 @@
  *
  * @version //autogentag//
  */
-namespace EzSystems\SolrSearchEngine\Query\Content\CriterionVisitor;
+namespace EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor;
 
-use EzSystems\SolrSearchEngine\Query\CriterionVisitor;
+use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 use Exception;
 
 /**

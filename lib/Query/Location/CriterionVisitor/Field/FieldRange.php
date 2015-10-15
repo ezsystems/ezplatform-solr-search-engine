@@ -8,9 +8,9 @@
  *
  * @version //autogentag//
  */
-namespace EzSystems\SolrSearchEngine\Query\Location\CriterionVisitor\Field;
+namespace EzSystems\EzPlatformSolrSearchEngine\Query\Location\CriterionVisitor\Field;
 
-use EzSystems\SolrSearchEngine\Query\Content\CriterionVisitor\Field\FieldRange as ContentFieldRange;
+use EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor\Field\FieldRange as ContentFieldRange;
 
 /**
  * Visits the Field criterion.

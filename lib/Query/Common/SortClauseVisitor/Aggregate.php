@@ -8,9 +8,9 @@
  *
  * @version //autogentag//
  */
-namespace EzSystems\SolrSearchEngine\Query\Common\SortClauseVisitor;
+namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\SortClauseVisitor;
 
-use EzSystems\SolrSearchEngine\Query\SortClauseVisitor;
+use EzSystems\EzPlatformSolrSearchEngine\Query\SortClauseVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 
@@ -22,14 +22,14 @@ class Aggregate extends SortClauseVisitor
     /**
      * Array of available visitors.
      *
-     * @var \EzSystems\SolrSearchEngine\Query\SortClauseVisitor[]
+     * @var \EzSystems\EzPlatformSolrSearchEngine\Query\SortClauseVisitor[]
      */
     protected $visitors = array();
 
     /**
      * Construct from optional visitor array.
      *
-     * @param \EzSystems\SolrSearchEngine\Query\SortClauseVisitor[] $visitors
+     * @param \EzSystems\EzPlatformSolrSearchEngine\Query\SortClauseVisitor[] $visitors
      */
     public function __construct(array $visitors = array())
     {
@@ -41,7 +41,7 @@ class Aggregate extends SortClauseVisitor
     /**
      * Adds visitor.
      *
-     * @param \EzSystems\SolrSearchEngine\Query\SortClauseVisitor $visitor
+     * @param \EzSystems\EzPlatformSolrSearchEngine\Query\SortClauseVisitor $visitor
      */
     public function addVisitor(SortClauseVisitor $visitor)
     {

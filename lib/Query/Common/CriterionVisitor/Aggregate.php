@@ -8,9 +8,9 @@
  *
  * @version //autogentag//
  */
-namespace EzSystems\SolrSearchEngine\Query\Common\CriterionVisitor;
+namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor;
 
-use EzSystems\SolrSearchEngine\Query\CriterionVisitor;
+use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 
@@ -22,14 +22,14 @@ class Aggregate extends CriterionVisitor
     /**
      * Array of available visitors.
      *
-     * @var \EzSystems\SolrSearchEngine\Query\CriterionVisitor[]
+     * @var \EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor[]
      */
     protected $visitors = array();
 
     /**
      * Construct from optional visitor array.
      *
-     * @param \EzSystems\SolrSearchEngine\Query\CriterionVisitor[] $visitors
+     * @param \EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor[] $visitors
      */
     public function __construct(array $visitors = array())
     {
@@ -41,7 +41,7 @@ class Aggregate extends CriterionVisitor
     /**
      * Adds visitor.
      *
-     * @param \EzSystems\SolrSearchEngine\Query\CriterionVisitor $visitor
+     * @param \EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor $visitor
      */
     public function addVisitor(CriterionVisitor $visitor)
     {
@@ -66,7 +66,7 @@ class Aggregate extends CriterionVisitor
      * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param \EzSystems\SolrSearchEngine\Query\CriterionVisitor $subVisitor
+     * @param \EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor $subVisitor
      *
      * @return string
      */

@@ -8,7 +8,7 @@
  *
  * @version //autogentag//
  */
-namespace EzSystems\SolrSearchEngine\Gateway;
+namespace EzSystems\EzPlatformSolrSearchEngine\Gateway;
 
 /**
  * Interface for Http Client implementations.
@@ -21,11 +21,11 @@ interface HttpClient
      * Returns the result from the remote server.
      *
      * @param string $method
-     * @param \EzSystems\SolrSearchEngine\Gateway\Endpoint $endpoint
+     * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\Endpoint $endpoint
      * @param string $path
-     * @param \EzSystems\SolrSearchEngine\Gateway\Message $message
+     * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\Message $message
      *
-     * @return \EzSystems\SolrSearchEngine\Gateway\Message
+     * @return \EzSystems\EzPlatformSolrSearchEngine\Gateway\Message
      */
     public function request($method, Endpoint $endpoint, $path, Message $message = null);
 }

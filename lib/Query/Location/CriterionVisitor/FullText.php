@@ -8,10 +8,10 @@
  *
  * @version //autogentag//
  */
-namespace EzSystems\SolrSearchEngine\Query\Location\CriterionVisitor;
+namespace EzSystems\EzPlatformSolrSearchEngine\Query\Location\CriterionVisitor;
 
-use EzSystems\SolrSearchEngine\Query\Content\CriterionVisitor\FullText as ContentFullText;
-use EzSystems\SolrSearchEngine\Query\CriterionVisitor;
+use EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor\FullText as ContentFullText;
+use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
@@ -23,7 +23,7 @@ class FullText extends ContentFullText
      * Map field value to a proper Solr representation.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param \EzSystems\SolrSearchEngine\Query\CriterionVisitor $subVisitor
+     * @param \EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor $subVisitor
      *
      * @return string
      */

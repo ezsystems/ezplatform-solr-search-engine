@@ -8,10 +8,10 @@
  *
  * @version //autogentag//
  */
-namespace EzSystems\SolrSearchEngine\Query\Content\CriterionVisitor\Field;
+namespace EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor\Field;
 
-use EzSystems\SolrSearchEngine\Query\CriterionVisitor;
-use EzSystems\SolrSearchEngine\Query\Content\CriterionVisitor\Field;
+use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
+use EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor\Field;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;

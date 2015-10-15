@@ -8,7 +8,7 @@
  *
  * @version //autogentag//
  */
-namespace EzSystems\SolrSearchEngine;
+namespace EzSystems\EzPlatformSolrSearchEngine;
 
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Location;
@@ -46,7 +46,7 @@ class Handler implements SearchHandlerInterface
     /**
      * Content locator gateway.
      *
-     * @var \EzSystems\SolrSearchEngine\Gateway
+     * @var \EzSystems\EzPlatformSolrSearchEngine\Gateway
      */
     protected $gateway;
 
@@ -60,32 +60,32 @@ class Handler implements SearchHandlerInterface
     /**
      * Document mapper.
      *
-     * @var \EzSystems\SolrSearchEngine\DocumentMapper
+     * @var \EzSystems\EzPlatformSolrSearchEngine\DocumentMapper
      */
     protected $mapper;
 
     /**
      * Result extractor.
      *
-     * @var \EzSystems\SolrSearchEngine\ResultExtractor
+     * @var \EzSystems\EzPlatformSolrSearchEngine\ResultExtractor
      */
     protected $resultExtractor;
 
     /**
      * Core filter service.
      *
-     * @var \EzSystems\SolrSearchEngine\CoreFilter
+     * @var \EzSystems\EzPlatformSolrSearchEngine\CoreFilter
      */
     protected $coreFilter;
 
     /**
      * Creates a new content handler.
      *
-     * @param \EzSystems\SolrSearchEngine\Gateway $gateway
+     * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway $gateway
      * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
-     * @param \EzSystems\SolrSearchEngine\DocumentMapper $mapper
-     * @param \EzSystems\SolrSearchEngine\ResultExtractor $resultExtractor
-     * @param \EzSystems\SolrSearchEngine\CoreFilter $coreFilter
+     * @param \EzSystems\EzPlatformSolrSearchEngine\DocumentMapper $mapper
+     * @param \EzSystems\EzPlatformSolrSearchEngine\ResultExtractor $resultExtractor
+     * @param \EzSystems\EzPlatformSolrSearchEngine\CoreFilter $coreFilter
      */
     public function __construct(
         Gateway $gateway,

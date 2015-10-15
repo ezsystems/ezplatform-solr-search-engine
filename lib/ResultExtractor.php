@@ -8,9 +8,9 @@
  *
  * @version //autogentag//
  */
-namespace EzSystems\SolrSearchEngine;
+namespace EzSystems\EzPlatformSolrSearchEngine;
 
-use EzSystems\SolrSearchEngine\Query\FacetBuilderVisitor;
+use EzSystems\EzPlatformSolrSearchEngine\Query\FacetBuilderVisitor;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 
@@ -23,7 +23,7 @@ abstract class ResultExtractor
     /**
      * Facet builder visitor.
      *
-     * @var \EzSystems\SolrSearchEngine\Query\FacetBuilderVisitor
+     * @var \EzSystems\EzPlatformSolrSearchEngine\Query\FacetBuilderVisitor
      */
     protected $facetBuilderVisitor;
 

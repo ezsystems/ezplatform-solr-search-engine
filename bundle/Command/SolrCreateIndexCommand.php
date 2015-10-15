@@ -60,7 +60,7 @@ EOT
         $stmt = $query->prepare();
         $stmt->execute();
 
-        /** @var \EzSystems\SolrSearchEngine\Handler $searchHandler */
+        /** @var \EzSystems\EzPlatformSolrSearchEngine\Handler $searchHandler */
         $searchHandler->purgeIndex();
 
         $output->writeln('Indexing Content...');

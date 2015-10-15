@@ -12,11 +12,11 @@ namespace EzSystems\EzPlatformSolrSearchEngineBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use EzSystems\SolrSearchEngine\Container\Compiler\AggregateCriterionVisitorPass;
-use EzSystems\SolrSearchEngine\Container\Compiler\AggregateFacetBuilderVisitorPass;
-use EzSystems\SolrSearchEngine\Container\Compiler\AggregateFieldValueMapperPass;
-use EzSystems\SolrSearchEngine\Container\Compiler\AggregateSortClauseVisitorPass;
-use EzSystems\SolrSearchEngine\Container\Compiler\EndpointRegistryPass;
+use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler\AggregateCriterionVisitorPass;
+use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler\AggregateFacetBuilderVisitorPass;
+use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler\AggregateFieldValueMapperPass;
+use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler\AggregateSortClauseVisitorPass;
+use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler\EndpointRegistryPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\FieldRegistryPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\SignalSlotPass;
 

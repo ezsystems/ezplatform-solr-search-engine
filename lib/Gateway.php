@@ -8,7 +8,7 @@
  *
  * @version //autogentag//
  */
-namespace EzSystems\SolrSearchEngine;
+namespace EzSystems\EzPlatformSolrSearchEngine;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
 

@@ -8,7 +8,7 @@
  *
  * @version //autogentag//
  */
-namespace EzSystems\SolrSearchEngine\Gateway\HttpClient;
+namespace EzSystems\EzPlatformSolrSearchEngine\Gateway\HttpClient;
 
 use RuntimeException;
 

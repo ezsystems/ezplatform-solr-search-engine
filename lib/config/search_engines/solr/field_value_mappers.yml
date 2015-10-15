@@ -1,16 +1,16 @@
 parameters:
-    ezpublish.search.solr.field_value_mapper.identifier.class: EzSystems\SolrSearchEngine\FieldValueMapper\IdentifierMapper
-    ezpublish.search.solr.field_value_mapper.multiple_identifier.class: EzSystems\SolrSearchEngine\FieldValueMapper\MultipleIdentifierMapper
-    ezpublish.search.solr.field_value_mapper.string.class: EzSystems\SolrSearchEngine\FieldValueMapper\StringMapper
-    ezpublish.search.solr.field_value_mapper.multiple_string.class: EzSystems\SolrSearchEngine\FieldValueMapper\MultipleStringMapper
-    ezpublish.search.solr.field_value_mapper.integer.class: EzSystems\SolrSearchEngine\FieldValueMapper\IntegerMapper
-    ezpublish.search.solr.field_value_mapper.multiple_integer.class: EzSystems\SolrSearchEngine\FieldValueMapper\MultipleIntegerMapper
-    ezpublish.search.solr.field_value_mapper.float.class: EzSystems\SolrSearchEngine\FieldValueMapper\FloatMapper
-    ezpublish.search.solr.field_value_mapper.date.class: EzSystems\SolrSearchEngine\FieldValueMapper\DateMapper
-    ezpublish.search.solr.field_value_mapper.price.class: EzSystems\SolrSearchEngine\FieldValueMapper\PriceMapper
-    ezpublish.search.solr.field_value_mapper.boolean.class: EzSystems\SolrSearchEngine\FieldValueMapper\BooleanMapper
-    ezpublish.search.solr.field_value_mapper.multiple_boolean.class: EzSystems\SolrSearchEngine\FieldValueMapper\MultipleBooleanMapper
-    ezpublish.search.solr.field_value_mapper.geo_location.class: EzSystems\SolrSearchEngine\FieldValueMapper\GeoLocationMapper
+    ezpublish.search.solr.field_value_mapper.identifier.class: EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper\IdentifierMapper
+    ezpublish.search.solr.field_value_mapper.multiple_identifier.class: EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper\MultipleIdentifierMapper
+    ezpublish.search.solr.field_value_mapper.string.class: EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper\StringMapper
+    ezpublish.search.solr.field_value_mapper.multiple_string.class: EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper\MultipleStringMapper
+    ezpublish.search.solr.field_value_mapper.integer.class: EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper\IntegerMapper
+    ezpublish.search.solr.field_value_mapper.multiple_integer.class: EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper\MultipleIntegerMapper
+    ezpublish.search.solr.field_value_mapper.float.class: EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper\FloatMapper
+    ezpublish.search.solr.field_value_mapper.date.class: EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper\DateMapper
+    ezpublish.search.solr.field_value_mapper.price.class: EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper\PriceMapper
+    ezpublish.search.solr.field_value_mapper.boolean.class: EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper\BooleanMapper
+    ezpublish.search.solr.field_value_mapper.multiple_boolean.class: EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper\MultipleBooleanMapper
+    ezpublish.search.solr.field_value_mapper.geo_location.class: EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper\GeoLocationMapper
 
 services:
     ezpublish.search.solr.field_value_mapper.identifier:

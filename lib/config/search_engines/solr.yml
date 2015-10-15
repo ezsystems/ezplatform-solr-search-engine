@@ -7,14 +7,14 @@ imports:
 
 parameters:
     ezpublish.search.solr.connection.server: http://localhost:8983/solr/core0
-    ezpublish.spi.search.solr.class: EzSystems\SolrSearchEngine\Handler
-    ezpublish.search.solr.gateway.native.class: EzSystems\SolrSearchEngine\Gateway\Native
-    ezpublish.search.solr.gateway.endpoint_registry.class: EzSystems\SolrSearchEngine\Gateway\EndpointRegistry
-    ezpublish.search.solr.gateway.endpoint_resolver.native.class: EzSystems\SolrSearchEngine\Gateway\EndpointResolver\NativeEndpointResolver
-    ezpublish.search.solr.core_filter.native.class: EzSystems\SolrSearchEngine\CoreFilter\NativeCoreFilter
-    ezpublish.search.solr.document_mapper.native.class: EzSystems\SolrSearchEngine\DocumentMapper\NativeDocumentMapper
-    ezpublish.search.solr.result_extractor.native.class: EzSystems\SolrSearchEngine\ResultExtractor\NativeResultExtractor
-    ezpublish.search.solr.query_converter.class: EzSystems\SolrSearchEngine\Query\Common\QueryConverter\NativeQueryConverter
+    ezpublish.spi.search.solr.class: EzSystems\EzPlatformSolrSearchEngine\Handler
+    ezpublish.search.solr.gateway.native.class: EzSystems\EzPlatformSolrSearchEngine\Gateway\Native
+    ezpublish.search.solr.gateway.endpoint_registry.class: EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointRegistry
+    ezpublish.search.solr.gateway.endpoint_resolver.native.class: EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointResolver\NativeEndpointResolver
+    ezpublish.search.solr.core_filter.native.class: EzSystems\EzPlatformSolrSearchEngine\CoreFilter\NativeCoreFilter
+    ezpublish.search.solr.document_mapper.native.class: EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\NativeDocumentMapper
+    ezpublish.search.solr.result_extractor.native.class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\NativeResultExtractor
+    ezpublish.search.solr.query_converter.class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\QueryConverter\NativeQueryConverter
     # Endpoint resolver arguments must be set in order to be overrideable
     ezpublish.search.solr.entry_endpoints: []
     ezpublish.search.solr.cluster_endpoints: []

@@ -8,9 +8,9 @@
  *
  * @version //autogentag//
  */
-namespace EzSystems\SolrSearchEngine\ResultExtractor;
+namespace EzSystems\EzPlatformSolrSearchEngine\ResultExtractor;
 
-use EzSystems\SolrSearchEngine\ResultExtractor;
+use EzSystems\EzPlatformSolrSearchEngine\ResultExtractor;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use RuntimeException;

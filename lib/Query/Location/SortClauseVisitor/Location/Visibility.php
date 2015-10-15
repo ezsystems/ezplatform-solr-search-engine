@@ -8,9 +8,9 @@
  *
  * @version //autogentag//
  */
-namespace EzSystems\SolrSearchEngine\Query\Location\SortClauseVisitor\Location;
+namespace EzSystems\EzPlatformSolrSearchEngine\Query\Location\SortClauseVisitor\Location;
 
-use EzSystems\SolrSearchEngine\Query\SortClauseVisitor;
+use EzSystems\EzPlatformSolrSearchEngine\Query\SortClauseVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 
 /**

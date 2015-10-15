@@ -8,7 +8,7 @@
  *
  * @version //autogentag//
  */
-namespace EzSystems\SolrSearchEngine\FieldValueMapper;
+namespace EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper;
 
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\FieldType;

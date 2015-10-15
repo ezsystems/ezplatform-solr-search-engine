@@ -19,7 +19,7 @@
     },
     "autoload": {
         "psr-4": {
-            "EzSystems\\SolrSearchEngine\\": "lib",
+            "EzSystems\\EzPlatformSolrSearchEngine\\": "lib",
             "EzSystems\\SolrSearchEngine\\Tests\\": "tests/lib",
             "eZ\\Publish\\API\\Repository\\Tests\\": "tests/integration",
             "EzSystems\\EzPlatformSolrSearchEngineBundle\\": "bundle",
