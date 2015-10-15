@@ -55,7 +55,8 @@ class LegacySetupFactory extends CoreLegacySetupFactory
                 $installDir = $config['install_dir'];
                 /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder */
                 $containerBuilder = include $config['container_builder_path'];
-                $settingsPath = __DIR__ . '/../../../lib/config/';
+                $settingsPath = __DIR__ . '/../../../lib/Resources/config/container/';
+                $testSettingsPath = __DIR__ . '/../../../tests/lib/Resources/config/';
             } else {
                 // Else it should run from ezsystems/ezpublish-kernel
                 $configPath = __DIR__ . '/../../../../../../config.php';
@@ -63,12 +64,15 @@ class LegacySetupFactory extends CoreLegacySetupFactory
                 $installDir = $config['install_dir'];
                 /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder */
                 $containerBuilder = include $config['container_builder_path'];
-                $settingsPath = $installDir . '/vendor/ezsystems/ezplatform-solr-search-engine/lib/config/';
+                $settingsPath = $installDir . '/vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/container/';
+                $testSettingsPath = $installDir . '/vendor/ezsystems/ezplatform-solr-search-engine/tests/lib/Resources/config/';
             }
 
             $solrLoader = new YamlFileLoader($containerBuilder, new FileLocator($settingsPath));
-            $solrLoader->load('search_engines/solr.yml');
-            $solrLoader->load($this->getTestConfigurationFile());
+            $solrLoader->load('solr.yml');
+
+            $solrTestLoader = new YamlFileLoader($containerBuilder, new FileLocator($testSettingsPath));
+            $solrTestLoader->load($this->getTestConfigurationFile());
 
             $containerBuilder->addCompilerPass(new Compiler\AggregateCriterionVisitorPass());
             $containerBuilder->addCompilerPass(new Compiler\AggregateFacetBuilderVisitorPass());
@@ -142,11 +146,11 @@ class LegacySetupFactory extends CoreLegacySetupFactory
 
         switch ($coresSetup) {
             case SearchServiceTranslationLanguageFallbackTest::SETUP_DEDICATED:
-                return 'tests/solr/multicore_dedicated.yml';
+                return 'multicore_dedicated.yml';
             case SearchServiceTranslationLanguageFallbackTest::SETUP_SHARED:
-                return 'tests/solr/multicore_shared.yml';
+                return 'multicore_shared.yml';
             case SearchServiceTranslationLanguageFallbackTest::SETUP_SINGLE:
-                return 'tests/solr/single_core.yml';
+                return 'single_core.yml';
         }
 
         throw new RuntimeException("Backend cores setup '{$coresSetup}' is not handled");

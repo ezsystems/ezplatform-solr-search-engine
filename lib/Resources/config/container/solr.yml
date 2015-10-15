@@ -1,9 +1,9 @@
 imports:
-    - {resource: search_engines/solr/criterion_visitors.yml}
-    - {resource: search_engines/solr/facet_builder_visitors.yml}
-    - {resource: search_engines/solr/field_value_mappers.yml}
-    - {resource: search_engines/solr/services.yml}
-    - {resource: search_engines/solr/sort_clause_visitors.yml}
+    - {resource: solr/criterion_visitors.yml}
+    - {resource: solr/facet_builder_visitors.yml}
+    - {resource: solr/field_value_mappers.yml}
+    - {resource: solr/services.yml}
+    - {resource: solr/sort_clause_visitors.yml}
 
 parameters:
     ezpublish.search.solr.connection.server: http://localhost:8983/solr/core0
