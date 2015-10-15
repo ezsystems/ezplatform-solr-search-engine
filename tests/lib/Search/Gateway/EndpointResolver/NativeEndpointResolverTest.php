@@ -8,10 +8,10 @@
  *
  * @version //autogentag//
  */
-namespace EzSystems\SolrSearchEngine\Tests\Search\Gateway\EndpointResolver;
+namespace EzSystems\EzPlatformSolrSearchEngine\Tests\Search\Gateway\EndpointResolver;
 
 use EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointResolver\NativeEndpointResolver;
-use EzSystems\SolrSearchEngine\Tests\Search\TestCase;
+use EzSystems\EzPlatformSolrSearchEngine\Tests\Search\TestCase;
 use RuntimeException;
 
 /**

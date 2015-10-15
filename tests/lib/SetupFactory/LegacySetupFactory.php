@@ -8,8 +8,9 @@
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\API\Repository\Tests\SetupFactory;
+namespace EzSystems\EzPlatformSolrSearchEngine\Tests\SetupFactory;
 
+use eZ\Publish\API\Repository\Tests\SetupFactory\Legacy as CoreLegacySetupFactory;
 use eZ\Publish\Core\Base\ServiceContainer;
 use eZ\Publish\Core\Base\Container\Compiler as BaseCompiler;
 use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler;
@@ -20,10 +21,10 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Config\FileLocator;
 
 /**
- * A Test Factory is used to setup the infrastructure for a tests, based on a
- * specific repository implementation to test.
+ * Used to setup the infrastructure for Repository Public API integration tests,
+ * based on Repository with Legacy Storage Engine implementation.
  */
-class LegacySolr extends Legacy
+class LegacySetupFactory extends CoreLegacySetupFactory
 {
     /**
      * Returns a configured repository for testing.
