@@ -1,5 +1,5 @@
 parameters:
-    ezpublish.solr.engine_factory.class: EzSystems\SolrSearchEngineBundle\ApiLoader\SolrEngineFactory
+    ezpublish.solr.engine_factory.class: EzSystems\EzPlatformSolrSearchEngineBundle\ApiLoader\SolrEngineFactory
     ez_search_engine_solr.default_connection: ~
 
 services:

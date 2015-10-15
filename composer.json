@@ -22,7 +22,7 @@
             "EzSystems\\SolrSearchEngine\\": "lib",
             "EzSystems\\SolrSearchEngine\\Tests\\": "tests/lib",
             "eZ\\Publish\\API\\Repository\\Tests\\": "tests/integration",
-            "EzSystems\\SolrSearchEngineBundle\\": "bundle",
+            "EzSystems\\EzPlatformSolrSearchEngineBundle\\": "bundle",
             "EzSystems\\SolrSearchEngineBundle\\Tests\\": "tests/bundle"
         }
     },

@@ -8,22 +8,22 @@
  *
  * @version //autogentag//
  */
-namespace EzSystems\SolrSearchEngineBundle\Tests\DependencyInjection;
+namespace EzSystems\EzPlatformSolrSearchEngineBundle\Tests\DependencyInjection;
 
-use EzSystems\SolrSearchEngineBundle\DependencyInjection\EzSystemsSolrSearchEngineExtension;
+use EzSystems\EzPlatformSolrSearchEngineBundle\DependencyInjection\EzSystemsEzPlatformSolrSearchEngineExtension;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Symfony\Component\Yaml\Yaml;
 
-class EzPublishSolrSearchEngineExtensionTest extends AbstractExtensionTestCase
+class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtensionTestCase
 {
     /**
-     * @var \EzSystems\SolrSearchEngineBundle\DependencyInjection\EzSystemsSolrSearchEngineExtension
+     * @var \EzSystems\EzPlatformSolrSearchEngineBundle\DependencyInjection\EzSystemsEzPlatformSolrSearchEngineExtension
      */
     private $extension;
 
     protected function setUp()
     {
-        $this->extension = new EzSystemsSolrSearchEngineExtension();
+        $this->extension = new EzSystemsEzPlatformSolrSearchEngineExtension();
 
         parent::setUp();
     }
