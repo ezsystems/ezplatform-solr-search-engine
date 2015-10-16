@@ -1,0 +1,148 @@
+parameters:
+    # Content search
+    ezpublish.search.solr.query.content.sort_clause_visitor.content_id.class: EzSystems\EzPlatformSolrSearchEngine\Query\Content\SortClauseVisitor\ContentId
+    ezpublish.search.solr.query.content.sort_clause_visitor.content_name.class: EzSystems\EzPlatformSolrSearchEngine\Query\Content\SortClauseVisitor\ContentName
+    ezpublish.search.solr.query.content.sort_clause_visitor.field.class: EzSystems\EzPlatformSolrSearchEngine\Query\Content\SortClauseVisitor\Field
+    ezpublish.search.solr.query.content.sort_clause_visitor.section_identifier.class: EzSystems\EzPlatformSolrSearchEngine\Query\Content\SortClauseVisitor\SectionIdentifier
+    ezpublish.search.solr.query.content.sort_clause_visitor.section_name.class: EzSystems\EzPlatformSolrSearchEngine\Query\Content\SortClauseVisitor\SectionName
+    ezpublish.search.solr.query.content.sort_clause_visitor.date_published.class: EzSystems\EzPlatformSolrSearchEngine\Query\Content\SortClauseVisitor\DatePublished
+    ezpublish.search.solr.query.content.sort_clause_visitor.date_modified.class: EzSystems\EzPlatformSolrSearchEngine\Query\Content\SortClauseVisitor\DateModified
+    ezpublish.search.solr.query.content.sort_clause_visitor.map_location_distance.class: EzSystems\EzPlatformSolrSearchEngine\Query\Content\SortClauseVisitor\MapLocationDistance
+    # Location search
+    ezpublish.search.solr.query.location.sort_clause_visitor.content_id.class: EzSystems\EzPlatformSolrSearchEngine\Query\Location\SortClauseVisitor\ContentId
+    ezpublish.search.solr.query.location.sort_clause_visitor.content_name.class: EzSystems\EzPlatformSolrSearchEngine\Query\Location\SortClauseVisitor\ContentName
+    ezpublish.search.solr.query.location.sort_clause_visitor.date_published.class: EzSystems\EzPlatformSolrSearchEngine\Query\Location\SortClauseVisitor\DatePublished
+    ezpublish.search.solr.query.location.sort_clause_visitor.date_modified.class: EzSystems\EzPlatformSolrSearchEngine\Query\Location\SortClauseVisitor\DateModified
+    ezpublish.search.solr.query.location.sort_clause_visitor.field.class: EzSystems\EzPlatformSolrSearchEngine\Query\Location\SortClauseVisitor\Field
+    ezpublish.search.solr.query.location.sort_clause_visitor.section_identifier.class: EzSystems\EzPlatformSolrSearchEngine\Query\Location\SortClauseVisitor\SectionIdentifier
+    ezpublish.search.solr.query.location.sort_clause_visitor.section_name.class: EzSystems\EzPlatformSolrSearchEngine\Query\Location\SortClauseVisitor\SectionName
+    ezpublish.search.solr.query.location.sort_clause_visitor.depth.class: EzSystems\EzPlatformSolrSearchEngine\Query\Location\SortClauseVisitor\Location\Depth
+    ezpublish.search.solr.query.location.sort_clause_visitor.id.class: EzSystems\EzPlatformSolrSearchEngine\Query\Location\SortClauseVisitor\Location\Id
+    ezpublish.search.solr.query.location.sort_clause_visitor.is_main_location.class: EzSystems\EzPlatformSolrSearchEngine\Query\Location\SortClauseVisitor\Location\IsMainLocation
+    ezpublish.search.solr.query.location.sort_clause_visitor.path.class: EzSystems\EzPlatformSolrSearchEngine\Query\Location\SortClauseVisitor\Location\Path
+    ezpublish.search.solr.query.location.sort_clause_visitor.priority.class: EzSystems\EzPlatformSolrSearchEngine\Query\Location\SortClauseVisitor\Location\Priority
+    ezpublish.search.solr.query.location.sort_clause_visitor.visibility.class: EzSystems\EzPlatformSolrSearchEngine\Query\Location\SortClauseVisitor\Location\Visibility
+    ezpublish.search.solr.query.location.sort_clause_visitor.map_location_distance.class: EzSystems\EzPlatformSolrSearchEngine\Query\Location\SortClauseVisitor\MapLocationDistance
+
+services:
+    # Content search
+    ezpublish.search.solr.query.content.sort_clause_visitor.content_id:
+        class: %ezpublish.search.solr.query.content.sort_clause_visitor.content_id.class%
+        tags:
+            - {name: ezpublish.search.solr.query.content.sort_clause_visitor}
+
+    ezpublish.search.solr.query.content.sort_clause_visitor.content_name:
+        class: %ezpublish.search.solr.query.content.sort_clause_visitor.content_name.class%
+        tags:
+            - {name: ezpublish.search.solr.query.content.sort_clause_visitor}
+
+    ezpublish.search.solr.query.content.sort_clause_visitor.field:
+        class: %ezpublish.search.solr.query.content.sort_clause_visitor.field.class%
+        arguments:
+            - @ezpublish.search.common.field_name_resolver
+        tags:
+            - {name: ezpublish.search.solr.query.content.sort_clause_visitor}
+
+    ezpublish.search.solr.query.content.sort_clause_visitor.section_identifier:
+        class: %ezpublish.search.solr.query.content.sort_clause_visitor.section_identifier.class%
+        tags:
+            - {name: ezpublish.search.solr.query.content.sort_clause_visitor}
+
+    ezpublish.search.solr.query.content.sort_clause_visitor.section_name:
+        class: %ezpublish.search.solr.query.content.sort_clause_visitor.section_name.class%
+        tags:
+            - {name: ezpublish.search.solr.query.content.sort_clause_visitor}
+
+    ezpublish.search.solr.query.content.sort_clause_visitor.date_published:
+        class: %ezpublish.search.solr.query.content.sort_clause_visitor.date_published.class%
+        tags:
+            - {name: ezpublish.search.solr.query.content.sort_clause_visitor}
+
+    ezpublish.search.solr.query.content.sort_clause_visitor.date_modified:
+        class: %ezpublish.search.solr.query.content.sort_clause_visitor.date_modified.class%
+        tags:
+            - {name: ezpublish.search.solr.query.content.sort_clause_visitor}
+
+    ezpublish.search.solr.query.content.sort_clause_visitor.map_location_distance:
+        class: %ezpublish.search.solr.query.content.sort_clause_visitor.map_location_distance.class%
+        arguments:
+            - @ezpublish.search.common.field_name_resolver
+            - 'value_location'
+        tags:
+            - {name: ezpublish.search.solr.query.content.sort_clause_visitor}
+
+    # Location search
+    ezpublish.search.solr.query.location.sort_clause_visitor.content_id:
+        class: %ezpublish.search.solr.query.location.sort_clause_visitor.content_id.class%
+        tags:
+            - {name: ezpublish.search.solr.query.location.sort_clause_visitor}
+
+    ezpublish.search.solr.query.location.sort_clause_visitor.content_name:
+        class: %ezpublish.search.solr.query.location.sort_clause_visitor.content_name.class%
+        tags:
+            - {name: ezpublish.search.solr.query.location.sort_clause_visitor}
+
+    ezpublish.search.solr.query.location.sort_clause_visitor.date_published:
+        class: %ezpublish.search.solr.query.location.sort_clause_visitor.date_published.class%
+        tags:
+            - {name: ezpublish.search.solr.query.location.sort_clause_visitor}
+
+    ezpublish.search.solr.query.location.sort_clause_visitor.date_modified:
+        class: %ezpublish.search.solr.query.location.sort_clause_visitor.date_modified.class%
+        tags:
+            - {name: ezpublish.search.solr.query.location.sort_clause_visitor}
+
+    ezpublish.search.solr.query.location.sort_clause_visitor.field:
+        class: %ezpublish.search.solr.query.location.sort_clause_visitor.field.class%
+        arguments:
+            - @ezpublish.search.common.field_name_resolver
+        tags:
+            - {name: ezpublish.search.solr.query.location.sort_clause_visitor}
+
+    ezpublish.search.solr.query.location.sort_clause_visitor.section_identifier:
+        class: %ezpublish.search.solr.query.location.sort_clause_visitor.section_identifier.class%
+        tags:
+            - {name: ezpublish.search.solr.query.location.sort_clause_visitor}
+
+    ezpublish.search.solr.query.location.sort_clause_visitor.section_name:
+        class: %ezpublish.search.solr.query.location.sort_clause_visitor.section_name.class%
+        tags:
+            - {name: ezpublish.search.solr.query.location.sort_clause_visitor}
+
+    ezpublish.search.solr.query.location.sort_clause_visitor.depth:
+        class: %ezpublish.search.solr.query.location.sort_clause_visitor.depth.class%
+        tags:
+            - {name: ezpublish.search.solr.query.location.sort_clause_visitor}
+
+    ezpublish.search.solr.query.location.sort_clause_visitor.id:
+        class: %ezpublish.search.solr.query.location.sort_clause_visitor.id.class%
+        tags:
+            - {name: ezpublish.search.solr.query.location.sort_clause_visitor}
+
+    ezpublish.search.solr.query.location.sort_clause_visitor.is_main_location:
+        class: %ezpublish.search.solr.query.location.sort_clause_visitor.is_main_location.class%
+        tags:
+            - {name: ezpublish.search.solr.query.location.sort_clause_visitor}
+
+    ezpublish.search.solr.query.location.sort_clause_visitor.path:
+        class: %ezpublish.search.solr.query.location.sort_clause_visitor.path.class%
+        tags:
+            - {name: ezpublish.search.solr.query.location.sort_clause_visitor}
+
+    ezpublish.search.solr.query.location.sort_clause_visitor.priority:
+        class: %ezpublish.search.solr.query.location.sort_clause_visitor.priority.class%
+        tags:
+            - {name: ezpublish.search.solr.query.location.sort_clause_visitor}
+
+    ezpublish.search.solr.query.location.sort_clause_visitor.visibility:
+        class: %ezpublish.search.solr.query.location.sort_clause_visitor.visibility.class%
+        tags:
+            - {name: ezpublish.search.solr.query.location.sort_clause_visitor}
+
+    ezpublish.search.solr.query.location.sort_clause_visitor.map_location_distance:
+        class: %ezpublish.search.solr.query.location.sort_clause_visitor.map_location_distance.class%
+        arguments:
+            - @ezpublish.search.common.field_name_resolver
+            - 'value_location'
+        tags:
+            - {name: ezpublish.search.solr.query.location.sort_clause_visitor}

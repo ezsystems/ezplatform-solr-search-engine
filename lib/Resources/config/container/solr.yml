@@ -1,0 +1,107 @@
+imports:
+    - {resource: solr/criterion_visitors.yml}
+    - {resource: solr/facet_builder_visitors.yml}
+    - {resource: solr/field_value_mappers.yml}
+    - {resource: solr/services.yml}
+    - {resource: solr/sort_clause_visitors.yml}
+
+parameters:
+    ezpublish.search.solr.connection.server: http://localhost:8983/solr/core0
+    ezpublish.spi.search.solr.class: EzSystems\EzPlatformSolrSearchEngine\Handler
+    ezpublish.search.solr.gateway.native.class: EzSystems\EzPlatformSolrSearchEngine\Gateway\Native
+    ezpublish.search.solr.gateway.endpoint_registry.class: EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointRegistry
+    ezpublish.search.solr.gateway.endpoint_resolver.native.class: EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointResolver\NativeEndpointResolver
+    ezpublish.search.solr.core_filter.native.class: EzSystems\EzPlatformSolrSearchEngine\CoreFilter\NativeCoreFilter
+    ezpublish.search.solr.document_mapper.native.class: EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\NativeDocumentMapper
+    ezpublish.search.solr.result_extractor.native.class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\NativeResultExtractor
+    ezpublish.search.solr.query_converter.class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\QueryConverter\NativeQueryConverter
+    # Endpoint resolver arguments must be set in order to be overrideable
+    ezpublish.search.solr.entry_endpoints: []
+    ezpublish.search.solr.cluster_endpoints: []
+    ezpublish.search.solr.default_endpoint: null
+    ezpublish.search.solr.main_translations_endpoint: null
+
+services:
+    ezpublish.search.solr.gateway.endpoint_registry:
+        class: %ezpublish.search.solr.gateway.endpoint_registry.class%
+
+    ezpublish.search.solr.gateway.endpoint_resolver.native:
+        class: %ezpublish.search.solr.gateway.endpoint_resolver.native.class%
+        arguments:
+            - %ezpublish.search.solr.entry_endpoints%
+            - %ezpublish.search.solr.cluster_endpoints%
+            - %ezpublish.search.solr.default_endpoint%
+            - %ezpublish.search.solr.main_translations_endpoint%
+
+    ezpublish.search.solr.gateway.endpoint_resolver:
+        alias: ezpublish.search.solr.gateway.endpoint_resolver.native
+
+    ezpublish.search.solr.core_filter.native:
+        class: %ezpublish.search.solr.core_filter.native.class%
+        arguments:
+            - @ezpublish.search.solr.gateway.endpoint_resolver.native
+
+    ezpublish.search.solr.core_filter:
+        alias: ezpublish.search.solr.core_filter.native
+
+    ezpublish.search.solr.document_mapper.native:
+        class: %ezpublish.search.solr.document_mapper.native.class%
+        arguments:
+            - @ezpublish.search.common.field_registry
+            - @ezpublish.spi.persistence.content_handler
+            - @ezpublish.spi.persistence.location_handler
+            - @ezpublish.spi.persistence.content_type_handler
+            - @ezpublish.spi.persistence.object_state_handler
+            - @ezpublish.spi.persistence.section_handler
+            - @ezpublish.search.common.field_name_generator
+
+    ezpublish.search.solr.document_mapper:
+        alias: ezpublish.search.solr.document_mapper.native
+
+    ezpublish.search.solr.result_extractor.native:
+        class: %ezpublish.search.solr.result_extractor.native.class%
+        arguments:
+            - @ezpublish.search.solr.query.content.facet_builder_visitor.aggregate
+
+    ezpublish.search.solr.result_extractor:
+        alias: ezpublish.search.solr.result_extractor.native
+
+    ezpublish.search.solr.query_converter.content:
+        class: %ezpublish.search.solr.query_converter.class%
+        arguments:
+            - @ezpublish.search.solr.query.content.criterion_visitor.aggregate
+            - @ezpublish.search.solr.query.content.sort_clause_visitor.aggregate
+            - @ezpublish.search.solr.query.content.facet_builder_visitor.aggregate
+
+    ezpublish.search.solr.query_converter.location:
+        class: %ezpublish.search.solr.query_converter.class%
+        arguments:
+            - @ezpublish.search.solr.query.location.criterion_visitor.aggregate
+            - @ezpublish.search.solr.query.location.sort_clause_visitor.aggregate
+            - @ezpublish.search.solr.query.location.facet_builder_visitor.aggregate
+
+    ezpublish.search.solr.gateway.native:
+        class: %ezpublish.search.solr.gateway.native.class%
+        arguments:
+            - @ezpublish.search.solr.gateway.client.http.stream
+            - @ezpublish.search.solr.gateway.endpoint_resolver
+            - @ezpublish.search.solr.gateway.endpoint_registry
+            - @ezpublish.search.solr.query_converter.content
+            - @ezpublish.search.solr.query_converter.location
+            - @ezpublish.search.solr.field_value_mapper.aggregate
+            - @ezpublish.search.common.field_name_generator
+
+    ezpublish.search.solr.gateway:
+        alias: ezpublish.search.solr.gateway.native
+
+    ezpublish.spi.search.solr:
+        class: %ezpublish.spi.search.solr.class%
+        arguments:
+            - @ezpublish.search.solr.gateway
+            - @ezpublish.spi.persistence.content_handler
+            - @ezpublish.search.solr.document_mapper
+            - @ezpublish.search.solr.result_extractor
+            - @ezpublish.search.solr.core_filter
+        tags:
+            - {name: ezpublish.searchEngine, alias: solr}
+        lazy: true
