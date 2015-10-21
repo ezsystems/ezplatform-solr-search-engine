@@ -57,15 +57,23 @@ class LegacySetupFactory extends CoreLegacySetupFactory
                 $containerBuilder = include $config['container_builder_path'];
                 $settingsPath = __DIR__ . '/../../../lib/Resources/config/container/';
                 $testSettingsPath = __DIR__ . '/../../../tests/lib/Resources/config/';
-            } else {
-                // Else it should run from ezsystems/ezpublish-kernel
-                $configPath = __DIR__ . '/../../../../../../config.php';
+            } elseif (file_exists($configPath = __DIR__ . '/../../../../../../config.php')) {
+                // If executed from ezsystems/ezpublish-kernel
                 $config = include $configPath;
                 $installDir = $config['install_dir'];
                 /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder */
                 $containerBuilder = include $config['container_builder_path'];
                 $settingsPath = $installDir . '/vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/container/';
                 $testSettingsPath = $installDir . '/vendor/ezsystems/ezplatform-solr-search-engine/tests/lib/Resources/config/';
+            } else {
+                // Else it should run from external repository
+                $configPath = __DIR__ . '/../../../../../../vendor/ezsystems/ezpublish-kernel/config.php';
+                $config = include $configPath;
+                $installDir = $config['install_dir'];
+                /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder */
+                $containerBuilder = include $config['container_builder_path'];
+                $settingsPath = __DIR__ . '/../../../lib/Resources/config/container/';
+                $testSettingsPath = __DIR__ . '/../../../tests/lib/Resources/config/';
             }
 
             $solrLoader = new YamlFileLoader($containerBuilder, new FileLocator($settingsPath));
@@ -81,6 +89,8 @@ class LegacySetupFactory extends CoreLegacySetupFactory
             $containerBuilder->addCompilerPass(new Compiler\EndpointRegistryPass());
             $containerBuilder->addCompilerPass(new BaseCompiler\Search\FieldRegistryPass());
             $containerBuilder->addCompilerPass(new BaseCompiler\Search\SignalSlotPass());
+
+            $this->externalBuildContainer($containerBuilder);
 
             $containerBuilder->setParameter(
                 'legacy_dsn',
