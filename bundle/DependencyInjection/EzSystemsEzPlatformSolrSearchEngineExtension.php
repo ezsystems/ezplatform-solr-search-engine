@@ -59,7 +59,7 @@ class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
      *
      * @var string
      */
-    const ENDPOINT_CLASS = 'eZ\\Publish\\Core\\Search\\Solr\\Gateway\\Endpoint';
+    const ENDPOINT_CLASS = 'EzSystems\\EzPlatformSolrSearchEngine\\Gateway\\Endpoint';
 
     /**
      * Endpoint service tag.
