@@ -15,6 +15,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
+use EzSystems\EzPlatformSolrSearchEngine\Handler as SolrSearchEngineHandler;
+use RuntimeException;
 use PDO;
 
 class SolrCreateIndexCommand extends ContainerAwareCommand
@@ -36,10 +38,17 @@ EOT
     {
         $bulkCount = $input->getArgument('bulk_count');
 
-        /** @var \eZ\Publish\SPI\Persistence\Handler $persistenceHandler */
-        $persistenceHandler = $this->getContainer()->get('ezpublish.api.persistence_handler');
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandler */
         $searchHandler = $this->getContainer()->get('ezpublish.spi.search');
+        if (!$searchHandler instanceof SolrSearchEngineHandler) {
+            throw new RuntimeException(
+                'Expected to find Solr Search Engine but found something else. ' .
+                "Did you forget to configure the repository with 'solr' search engine?"
+            );
+        }
+
+        /** @var \eZ\Publish\SPI\Persistence\Handler $persistenceHandler */
+        $persistenceHandler = $this->getContainer()->get('ezpublish.api.persistence_handler');
         /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler $databaseHandler */
         $databaseHandler = $this->getContainer()->get('ezpublish.connection');
 
