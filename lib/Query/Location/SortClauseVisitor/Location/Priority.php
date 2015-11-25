@@ -39,6 +39,6 @@ class Priority extends SortClauseVisitor
      */
     public function visit(SortClause $sortClause)
     {
-        return 'priority_id' . $this->getDirection($sortClause);
+        return 'priority_i' . $this->getDirection($sortClause);
     }
 }
