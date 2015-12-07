@@ -108,6 +108,8 @@ abstract class CriterionVisitor
         switch (gettype($value)) {
             case 'boolean':
                 return ($value ? 'true' : 'false');
+            case 'double':
+                return sprintf('%F', $value);
 
             default:
                 return (string)$value;

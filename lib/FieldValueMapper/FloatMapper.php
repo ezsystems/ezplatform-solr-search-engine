@@ -40,6 +40,19 @@ class FloatMapper extends FieldValueMapper
      */
     public function map(Field $field)
     {
-        return (float)$field->value;
+        return $this->fixupFloat($field->value);
+    }
+
+    /**
+     * Convert to a proper Solr representation.
+     *
+     * @param mixed $value
+     *
+     * @return string
+     */
+    protected function fixupFloat($value)
+    {
+        // This will force the '.' as decimal separator and not depend on the locale
+        return sprintf('%F', (float)$value);
     }
 }
