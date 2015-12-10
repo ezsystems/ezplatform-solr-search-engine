@@ -28,6 +28,7 @@ parameters:
     ezpublish.search.solr.query.content.criterion_visitor.map_location_distance_in.class: EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor\MapLocation\MapLocationDistanceIn
     ezpublish.search.solr.query.content.criterion_visitor.map_location_distance_range.class: EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor\MapLocation\MapLocationDistanceRange
     ezpublish.search.solr.query.content.criterion_visitor.field_in.class: EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor\Field\FieldIn
+    ezpublish.search.solr.query.content.criterion_visitor.field_relation.class: EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor\Field\FieldRelation
     ezpublish.search.solr.query.content.criterion_visitor.field_range.class: EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor\Field\FieldRange
     ezpublish.search.solr.query.content.criterion_visitor.visibility.class: EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor\Visibility
     ezpublish.search.solr.query.content.criterion_visitor.custom_field_in.class: EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor\CustomField\CustomFieldIn
@@ -220,6 +221,13 @@ services:
 
     ezpublish.search.solr.query.content.criterion_visitor.field_in:
         class: %ezpublish.search.solr.query.content.criterion_visitor.field_in.class%
+        arguments:
+            - @ezpublish.search.common.field_name_resolver
+        tags:
+            - {name: ezpublish.search.solr.query.content.criterion_visitor}
+
+    ezpublish.search.solr.query.content.criterion_visitor.field_relation:
+        class: %ezpublish.search.solr.query.content.criterion_visitor.field_relation.class%
         arguments:
             - @ezpublish.search.common.field_name_resolver
         tags:
