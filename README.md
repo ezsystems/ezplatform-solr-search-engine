@@ -17,3 +17,45 @@ Other search features such as Faceting, Highlighting, .., not supported by the S
 
 For how to Install see:
 https://doc.ez.no/display/EZP/Solr+Search+Engine+Bundle
+
+
+
+### Testing locally
+
+1. Setup this repository locally
+```bash
+git clone git@github.com:ezsystems/ezplatform-solr-search-engine.git solr
+cd solr
+composer install
+```
+
+At this point you should be able to run unit tests:
+```bash
+php vendor/bin/phpunit --bootstrap tests/bootstrap.php
+```
+
+2. Get & extract [Solr 4.10.4](http://archive.apache.org/dist/lucene/solr/4.10.4/solr-4.10.4.tgz)
+
+3. Configure Solr *(single core)*
+
+*See .travis.yml and bin/.travis/init_solr.sh for multi core setups*
+
+```bash
+cp -R lib/Resources/config/solr/* solr-4.10.4/example/solr/collection1/conf
+```
+
+4. Start Solr
+
+*In this case in seperate terminal for debug use*
+
+```bash
+cd solr-4.10.4/example
+java -Djetty.port=8983 -jar start.jar
+```
+
+5. Run integration tests
+
+```bash
+export CORES_SETUP="single"
+php -d memory_limit=-1 vendor/bin/phpunit --bootstrap tests/bootstrap.php -vc vendor/ezsystems/ezpublish-kernel/phpunit-integration-legacy-solr.xml
+```
