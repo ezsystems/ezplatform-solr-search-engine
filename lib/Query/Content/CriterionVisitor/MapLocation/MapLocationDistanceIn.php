@@ -69,7 +69,7 @@ class MapLocationDistanceIn extends MapLocation
         $queries = array();
         foreach ($criterion->value as $value) {
             foreach ($fieldNames as $name) {
-                $queries[] = "geodist({$name},{$location->latitude},{$location->longitude}):{$value}";
+                $queries[] = sprintf('geodist(%s,%F,%F):%s', $name, $location->latitude, $location->longitude, $value);
             }
         }
 
