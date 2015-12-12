@@ -44,6 +44,6 @@ class GeoLocationMapper extends FieldValueMapper
             return null;
         }
 
-        return $field->value['latitude'] . ',' . $field->value['longitude'];
+        return sprintf('%F,%F', $field->value['latitude'], $field->value['longitude']);
     }
 }
