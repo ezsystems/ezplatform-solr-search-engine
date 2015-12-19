@@ -15,8 +15,9 @@ Other search features such as Faceting, Highlighting, .., not supported by the S
 
 ## Install
 
-For how to Install see:
-https://doc.ez.no/display/EZP/Solr+Search+Engine+Bundle
+For how to install and configure see:
+- eZ Platform: https://doc.ez.no/display/TECHDOC/Solr+Bundle
+- eZ Publish Platform 5.4.x: https://doc.ez.no/display/EZP/Solr+Search+Engine+Bundle
 
 
 
