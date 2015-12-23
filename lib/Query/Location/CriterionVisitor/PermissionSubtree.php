@@ -33,6 +33,6 @@ class PermissionSubtree extends CriterionVisitor
     public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null)
     {
         $subtrees = $criterion->value;
-        return 'path_string_id:['.implode('* ', $subtrees).'*]';
+        return 'path_string_id:[' . implode('* ', $subtrees) . '*]';
     }
 }
