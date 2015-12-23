@@ -50,6 +50,7 @@ parameters:
     ezpublish.search.solr.query.location.criterion_visitor.object_state_id_in.class: EzSystems\EzPlatformSolrSearchEngine\Query\Location\CriterionVisitor\ObjectStateIdIn
     ezpublish.search.solr.query.location.criterion_visitor.location_remote_id_in.class: EzSystems\EzPlatformSolrSearchEngine\Query\Location\CriterionVisitor\LocationRemoteIdIn
     ezpublish.search.solr.query.location.criterion_visitor.modified_in.class: EzSystems\EzPlatformSolrSearchEngine\Query\Location\CriterionVisitor\DateMetadata\ModifiedIn
+    ezpublish.search.solr.query.location.criterion_visitor.permission_subtree.class: EzSystems\EzPlatformSolrSearchEngine\Query\Location\CriterionVisitor\PermissionSubtree
     ezpublish.search.solr.query.location.criterion_visitor.published_in.class: EzSystems\EzPlatformSolrSearchEngine\Query\Location\CriterionVisitor\DateMetadata\PublishedIn
     ezpublish.search.solr.query.location.criterion_visitor.modified_between.class: EzSystems\EzPlatformSolrSearchEngine\Query\Location\CriterionVisitor\DateMetadata\ModifiedBetween
     ezpublish.search.solr.query.location.criterion_visitor.published_between.class: EzSystems\EzPlatformSolrSearchEngine\Query\Location\CriterionVisitor\DateMetadata\PublishedBetween
@@ -367,6 +368,11 @@ services:
 
     ezpublish.search.solr.query.location.criterion_visitor.is_main_location:
         class: %ezpublish.search.solr.query.location.criterion_visitor.is_main_location.class%
+        tags:
+            - {name: ezpublish.search.solr.query.location.criterion_visitor}
+
+    ezpublish.search.solr.query.location.criterion_visitor.permission_subtree:
+        class: %ezpublish.search.solr.query.location.criterion_visitor.permission_subtree.class%
         tags:
             - {name: ezpublish.search.solr.query.location.criterion_visitor}
 
