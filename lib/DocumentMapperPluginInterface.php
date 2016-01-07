@@ -25,10 +25,10 @@ interface DocumentMapperPluginInterface
      * If it returns true, createExtensionFields() is called respectively,
      * otherwise this plugin is ignored.
      *
-     * @param Type $Type
+     * @param Type $type
      * @return bool
      */
-    public function canExtend(Type $Type);
+    public function canExtend(Type $type);
 
     /**
      * This is called for every indexed content object and language.
@@ -38,9 +38,9 @@ interface DocumentMapperPluginInterface
      * and to distinguish them from standard fields.
      *
      * @param Content $content
-     * @param Type $Type
+     * @param Type $type
      * @param string $languageCode
      * @return Field[]
      */
-    public function createExtensionFields(Content $content, Type $Type, $languageCode);
+    public function createExtensionFields(Content $content, Type $type, $languageCode);
 }
