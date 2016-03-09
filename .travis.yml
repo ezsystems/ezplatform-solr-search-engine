@@ -18,6 +18,9 @@ branches:
 
 before_script:
     - composer selfupdate
+    - phpenv config-rm xdebug.ini
+    # Avoid issues on composer install since we pull in both legacy and platform stack
+    - echo "memory_limit=-1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
     - composer install --prefer-dist
     - if [ "$SOLR_VERSION" != "" ] ; then ./bin/.travis/init_solr.sh ; fi
 
