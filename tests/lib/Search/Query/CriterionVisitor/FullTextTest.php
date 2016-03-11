@@ -21,11 +21,12 @@ use EzSystems\EzPlatformSolrSearchEngine\Query;
  */
 class FullTextTest extends TestCase
 {
-    protected function getFullTextCriterionVisitor(array $fieldNames = array())
+    protected function getFullTextCriterionVisitor(array $fieldTypes = array())
     {
+        $fieldNames = array_keys($fieldTypes);
         $fieldNameResolver = $this->getMock(
             '\\eZ\\Publish\\Core\\Search\\Common\\FieldNameResolver',
-            array('getFieldNames'),
+            array('getFieldNames', 'getFieldTypes'),
             array(),
             '',
             false
@@ -40,6 +41,17 @@ class FullTextTest extends TestCase
             )
             ->will(
                 $this->returnValue($fieldNames)
+            );
+
+        $fieldNameResolver
+            ->expects($this->any())
+            ->method('getFieldTypes')
+            ->with(
+                $this->isInstanceOf('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion'),
+                $this->isType('string')
+            )
+            ->will(
+                $this->returnValue($fieldTypes)
             );
 
         return new Query\Content\CriterionVisitor\FullText($fieldNameResolver);
@@ -72,7 +84,13 @@ class FullTextTest extends TestCase
 
     public function testVisitBoost()
     {
-        $visitor = $this->getFullTextCriterionVisitor(array('title_1_s', 'title_2_s'));
+        $ftTextLine = new \eZ\Publish\Core\FieldType\TextLine\SearchField();
+        $visitor = $this->getFullTextCriterionVisitor(
+            array(
+                'title_1_s' => $ftTextLine,
+                'title_2_s' => $ftTextLine,
+            )
+        );
 
         $criterion = new Criterion\FullText('Hello');
         $criterion->boost = array('title' => 2);
@@ -100,8 +118,13 @@ class FullTextTest extends TestCase
 
     public function testVisitFuzzyBoost()
     {
-        $visitor = $this->getFullTextCriterionVisitor(array('title_1_s', 'title_2_s'));
-
+        $ftTextLine = new \eZ\Publish\Core\FieldType\TextLine\SearchField();
+        $visitor = $this->getFullTextCriterionVisitor(
+            array(
+                'title_1_s' => $ftTextLine,
+                'title_2_s' => $ftTextLine,
+            )
+        );
         $criterion = new Criterion\FullText('Hello');
         $criterion->fuzziness = .5;
         $criterion->boost = array('title' => 2);
