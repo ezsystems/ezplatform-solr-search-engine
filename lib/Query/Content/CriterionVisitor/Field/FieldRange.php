@@ -51,27 +51,27 @@ class FieldRange extends Field
      */
     public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null)
     {
-        $value = (array)$criterion->value;
-        $start = $value[0];
-        $end = isset($value[1]) ? $value[1] : null;
+        $searchFields = $this->getSearchFields($criterion);
 
-        if (($criterion->operator === Operator::LT) ||
-             ($criterion->operator === Operator::LTE)) {
-            $end = $start;
-            $start = null;
-        }
-
-        $fieldNames = $this->getFieldNames($criterion, $criterion->target);
-
-        if (empty($fieldNames)) {
+        if (empty($searchFields)) {
             throw new InvalidArgumentException(
                 '$criterion->target',
                 "No searchable fields found for the given criterion target '{$criterion->target}'."
             );
         }
 
+        $value = (array)$criterion->value;
         $queries = array();
-        foreach ($fieldNames as $name) {
+        foreach ($searchFields as $name => $fieldType) {
+            $start = $this->mapSearchFieldValue($fieldType, $value[0]);
+            $end = isset($value[1]) ? $this->mapSearchFieldvalue($fieldType, $value[1]) : null;
+
+            if (($criterion->operator === Operator::LT) ||
+                  ($criterion->operator === Operator::LTE)) {
+                $end = $start;
+                $start = null;
+            }
+
             $queries[] = $name . ':' . $this->getRange($criterion->operator, $start, $end);
         }
 

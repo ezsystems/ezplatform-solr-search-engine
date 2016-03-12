@@ -52,14 +52,14 @@ class MapLocationDistanceIn extends MapLocation
         $location = $criterion->valueData;
         $criterion->value = (array)$criterion->value;
 
-        $fieldNames = $this->getFieldNames(
+        $searchFields = $this->getSearchFields(
             $criterion,
             $criterion->target,
             $this->fieldTypeIdentifier,
             $this->fieldName
         );
 
-        if (empty($fieldNames)) {
+        if (empty($searchFields)) {
             throw new InvalidArgumentException(
                 '$criterion->target',
                 "No searchable fields found for the given criterion target '{$criterion->target}'."
@@ -68,7 +68,7 @@ class MapLocationDistanceIn extends MapLocation
 
         $queries = array();
         foreach ($criterion->value as $value) {
-            foreach ($fieldNames as $name) {
+            foreach ($searchFields as $name => $fieldType) {
                 $queries[] = sprintf('geodist(%s,%F,%F):%s', $name, $location->latitude, $location->longitude, $value);
             }
         }

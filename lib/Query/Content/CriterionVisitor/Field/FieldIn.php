@@ -49,9 +49,9 @@ class FieldIn extends Field
      */
     public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null)
     {
-        $fieldNames = $this->getFieldNames($criterion, $criterion->target);
+        $searchFields = $this->getSearchFields($criterion);
 
-        if (empty($fieldNames)) {
+        if (empty($searchFields)) {
             throw new InvalidArgumentException(
                 '$criterion->target',
                 "No searchable fields found for the given criterion target '{$criterion->target}'."
@@ -59,12 +59,12 @@ class FieldIn extends Field
         }
 
         $criterion->value = (array)$criterion->value;
-
         $queries = array();
-        foreach ($criterion->value as $value) {
-            $preparedValue = $this->escapeQuote($this->toString($value), true);
 
-            foreach ($fieldNames as $name) {
+        foreach ($searchFields as $name => $fieldType) {
+            foreach ($criterion->value as $value) {
+                $preparedValue = $this->escapeQuote($this->mapSearchFieldValue($fieldType, $value), true);
+
                 $queries[] = $name . ':"' . $preparedValue . '"';
             }
         }
