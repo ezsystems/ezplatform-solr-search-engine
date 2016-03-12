@@ -7,12 +7,12 @@ services:
     ezpublish.search.solr.query.content.facet_builder_visitor.content_type:
         class: %ezpublish.search.solr.query.content.facet_builder_visitor.content_type.class%
         tags:
-            - {name: ezpublish.search.solr.content.facet_builder_visitor}
+            - {name: ezpublish.search.solr.query.content.facet_builder_visitor}
 
     ezpublish.search.solr.query.content.facet_builder_visitor.section:
         class: %ezpublish.search.solr.query.content.facet_builder_visitor.section.class%
         tags:
-            - {name: ezpublish.search.solr.content.facet_builder_visitor}
+            - {name: ezpublish.search.solr.query.content.facet_builder_visitor}
 
     ezpublish.search.solr.query.content.facet_builder_visitor.user:
         class: %ezpublish.search.solr.query.content.facet_builder_visitor.user.class%
