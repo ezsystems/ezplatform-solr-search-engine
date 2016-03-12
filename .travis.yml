@@ -1,8 +1,12 @@
+## Run on trusty environment as solr dies all the time on containers after travis move to gce
+sudo: required
+dist: trusty
+
 language: php
 
 matrix:
     include:
-        - php: 5.6
+        - php: 7.0
           env: TEST_CONFIG="phpunit.xml"
         - php: 5.4
           env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="4.10.4" CORES_SETUP="dedicated" SOLR_CONFS="lib/Resources/config/solr/schema.xml lib/Resources/config/solr/custom-fields-types.xml lib/Resources/config/solr/language-fieldtypes.xml" SOLR_CORES="core0 core1 core2 core3"
@@ -17,11 +21,11 @@ branches:
         - master
 
 before_script:
-    - composer selfupdate
     - phpenv config-rm xdebug.ini
-    # Avoid issues on composer install since we pull in both legacy and platform stack
+    - travis_retry composer selfupdate
+    # Avoid memory issues on composer install
     - echo "memory_limit=-1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
-    - composer install --prefer-dist
+    - travis_retry composer update --prefer-dist --prefer-stable --no-interaction
     - if [ "$SOLR_VERSION" != "" ] ; then ./bin/.travis/init_solr.sh ; fi
 
 script:
