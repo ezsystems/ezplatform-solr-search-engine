@@ -25,6 +25,7 @@ use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandler
 use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandler;
 use eZ\Publish\Core\Search\Common\FieldRegistry;
 use eZ\Publish\Core\Search\Common\FieldNameGenerator;
+use EzSystems\EzPlatformSolrSearchEngine\DocumentMapperPluginInterface;
 
 /**
  * NativeDocumentMapper maps Solr backend documents per Content translation.
@@ -81,6 +82,11 @@ class NativeDocumentMapper implements DocumentMapper
     protected $fieldNameGenerator;
 
     /**
+     * @var DocumentMapperPluginInterface[]
+     */
+    protected $mapperPlugins;
+
+    /**
      * Creates a new document mapper.
      *
      * @param \eZ\Publish\Core\Search\Common\FieldRegistry $fieldRegistry
@@ -107,6 +113,17 @@ class NativeDocumentMapper implements DocumentMapper
         $this->objectStateHandler = $objectStateHandler;
         $this->sectionHandler = $sectionHandler;
         $this->fieldNameGenerator = $fieldNameGenerator;
+        $this->mapperPlugins = array();
+    }
+
+    /**
+     * Injection of plugin service instances.
+     *
+     * @param DocumentMapperPluginInterface $pluginService
+     */
+    public function addPlugin(DocumentMapperPluginInterface $pluginService)
+    {
+        $this->mapperPlugins[] = $pluginService;
     }
 
     /**
@@ -364,6 +381,16 @@ class NativeDocumentMapper implements DocumentMapper
             $isMainTranslation = ($content->versionInfo->contentInfo->mainLanguageCode === $languageCode);
             $alwaysAvailable = ($isMainTranslation && $content->versionInfo->contentInfo->alwaysAvailable);
 
+            $extensionFields = array();
+            foreach ($this->mapperPlugins as $plugin) {
+                if ($plugin->canExtend($contentType)) {
+                    $extensionFields = array_merge(
+                        $extensionFields,
+                        $plugin->createExtensionFields($content, $contentType, $languageCode)
+                    );
+                }
+            }
+
             $documents[] = new Document(
                 array(
                     'id' => $this->generateContentDocumentId(
@@ -377,6 +404,7 @@ class NativeDocumentMapper implements DocumentMapper
                         $fields,
                         $translationFields['regular'],
                         $translationFields['fulltext'],
+                        $extensionFields,
                         $metaFields
                     ),
                     'documents' => $translationLocationDocuments,
