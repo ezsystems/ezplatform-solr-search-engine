@@ -44,9 +44,9 @@ class FullText extends CriterionVisitor
      *
      * @return array
      */
-    protected function getFieldNames(Criterion $criterion, $fieldDefinitionIdentifier)
+    protected function getSearchFields(Criterion $criterion, $fieldDefinitionIdentifier)
     {
-        return $this->fieldNameResolver->getFieldNames($criterion, $fieldDefinitionIdentifier);
+        return $this->fieldNameResolver->getFieldTypes($criterion, $fieldDefinitionIdentifier);
     }
 
     /**
@@ -76,9 +76,9 @@ class FullText extends CriterionVisitor
         );
 
         foreach ($criterion->boost as $field => $boost) {
-            $fieldNames = $this->getFieldNames($criterion, $field);
+            $searchFields = $this->getSearchFields($criterion, $field);
 
-            foreach ($fieldNames as $name) {
+            foreach ($searchFields as $name => $fieldType) {
                 $queries[] = $name . ':' . $criterion->value . '^' . $boost;
             }
         }
