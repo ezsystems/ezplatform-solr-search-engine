@@ -15,6 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler\AggregateCriterionVisitorPass;
 use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler\AggregateFacetBuilderVisitorPass;
 use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler\AggregateSortClauseVisitorPass;
+use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler\DocumentFieldMapperPass;
 use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler\EndpointRegistryPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\AggregateFieldValueMapperPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\FieldRegistryPass;
@@ -26,6 +27,12 @@ class EzSystemsEzPlatformSolrSearchEngineBundle extends Bundle
     {
         parent::build($container);
 
+        $container->addCompilerPass(new DocumentFieldMapperPass\Block());
+        $container->addCompilerPass(new DocumentFieldMapperPass\BlockTranslation());
+        $container->addCompilerPass(new DocumentFieldMapperPass\Content());
+        $container->addCompilerPass(new DocumentFieldMapperPass\ContentTranslation());
+        $container->addCompilerPass(new DocumentFieldMapperPass\Location());
+        $container->addCompilerPass(new DocumentFieldMapperPass\LocationTranslation());
         $container->addCompilerPass(new AggregateCriterionVisitorPass());
         $container->addCompilerPass(new AggregateFacetBuilderVisitorPass());
         $container->addCompilerPass(new AggregateSortClauseVisitorPass());
