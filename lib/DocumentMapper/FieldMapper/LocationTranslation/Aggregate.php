@@ -53,14 +53,14 @@ class Aggregate extends LocationTranslation
 
     public function mapFields(Location $location, $languageCode)
     {
-        $fields = [[]];
+        $fields = [];
 
         foreach ($this->mappers as $mapper) {
             if ($mapper->accept($location, $languageCode)) {
-                $fields[] = $mapper->mapFields($location, $languageCode);
+                $fields = array_merge($fields, $mapper->mapFields($location, $languageCode));
             }
         }
 
-        return array_merge(...$fields);
+        return $fields;
     }
 }

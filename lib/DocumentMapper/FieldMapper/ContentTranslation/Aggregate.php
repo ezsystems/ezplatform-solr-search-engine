@@ -53,14 +53,14 @@ class Aggregate extends ContentTranslation
 
     public function mapFields(Content $content, $languageCode)
     {
-        $fields = [[]];
+        $fields = [];
 
         foreach ($this->mappers as $mapper) {
             if ($mapper->accept($content, $languageCode)) {
-                $fields[] = $mapper->mapFields($content, $languageCode);
+                $fields = array_merge($fields, $mapper->mapFields($content, $languageCode));
             }
         }
 
-        return array_merge(...$fields);
+        return $fields;
     }
 }

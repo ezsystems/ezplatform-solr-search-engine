@@ -53,14 +53,14 @@ class Aggregate extends ContentMapper
 
     public function mapFields(Content $content)
     {
-        $fields = [[]];
+        $fields = [];
 
         foreach ($this->mappers as $mapper) {
             if ($mapper->accept($content)) {
-                $fields[] = $mapper->mapFields($content);
+                $fields = array_merge($fields, $mapper->mapFields($content));
             }
         }
 
-        return array_merge(...$fields);
+        return $fields;
     }
 }
