@@ -82,6 +82,12 @@ class LegacySetupFactory extends CoreLegacySetupFactory
             $solrTestLoader = new YamlFileLoader($containerBuilder, new FileLocator($testSettingsPath));
             $solrTestLoader->load($this->getTestConfigurationFile());
 
+            $containerBuilder->addCompilerPass(new Compiler\DocumentFieldMapperPass\Block());
+            $containerBuilder->addCompilerPass(new Compiler\DocumentFieldMapperPass\BlockTranslation());
+            $containerBuilder->addCompilerPass(new Compiler\DocumentFieldMapperPass\Content());
+            $containerBuilder->addCompilerPass(new Compiler\DocumentFieldMapperPass\ContentTranslation());
+            $containerBuilder->addCompilerPass(new Compiler\DocumentFieldMapperPass\Location());
+            $containerBuilder->addCompilerPass(new Compiler\DocumentFieldMapperPass\LocationTranslation());
             $containerBuilder->addCompilerPass(new Compiler\AggregateCriterionVisitorPass());
             $containerBuilder->addCompilerPass(new Compiler\AggregateFacetBuilderVisitorPass());
             $containerBuilder->addCompilerPass(new Compiler\AggregateFieldValueMapperPass());
