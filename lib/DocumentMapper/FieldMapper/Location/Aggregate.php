@@ -53,14 +53,14 @@ class Aggregate extends LocationMapper
 
     public function mapFields(Location $location)
     {
-        $fields = [[]];
+        $fields = [];
 
         foreach ($this->mappers as $mapper) {
             if ($mapper->accept($location)) {
-                $fields[] = $mapper->mapFields($location);
+                $fields = array_merge($fields, $mapper->mapFields($location));
             }
         }
 
-        return array_merge(...$fields);
+        return $fields;
     }
 }
