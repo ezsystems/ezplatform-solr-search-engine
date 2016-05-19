@@ -48,6 +48,8 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
     cp -R lib/Resources/config/solr/* solr-4.10.4/example/solr/collection1/conf
     ```
 
+    Solr Bundle does not commit changes directly on repository update, which can lead to issues of content not showing up in the index. You can control this by adjusting autoSoftCommit (visibility of change to search index) and autoCommit (hard commit, for durability and replication) values in solrconfig.xml.
+
 4. Start Solr
 
     *Note: In this case in seperate terminal for debug use*
