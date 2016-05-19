@@ -62,14 +62,14 @@ class MapLocationDistanceRange extends MapLocation
             $start = null;
         }
 
-        $fieldNames = $this->getFieldNames(
+        $searchFields = $this->getSearchFields(
             $criterion,
             $criterion->target,
             $this->fieldTypeIdentifier,
             $this->fieldName
         );
 
-        if (empty($fieldNames)) {
+        if (empty($searchFields)) {
             throw new InvalidArgumentException(
                 '$criterion->target',
                 "No searchable fields found for the given criterion target '{$criterion->target}'."
@@ -80,7 +80,7 @@ class MapLocationDistanceRange extends MapLocation
         $location = $criterion->valueData;
 
         $queries = array();
-        foreach ($fieldNames as $name) {
+        foreach ($searchFields as $name => $fieldType) {
             // @todo in future it should become possible to specify ranges directly on the filter (donut shape)
             $query = sprintf('{!geofilt sfield=%s pt=%F,%F d=%s}', $name, $location->latitude, $location->longitude, $end);
             if ($start !== null) {
