@@ -62,7 +62,7 @@ class FieldRelation extends Field
         $queries = array();
         foreach ($searchFields as $name => $fieldType) {
             foreach ($criterion->value as $value) {
-                $preparedValues = (array)$this->mapSearchFieldvalue($fieldType, $value);
+                $preparedValues = (array)$this->mapSearchFieldvalue($value, $fieldType);
                 foreach ($preparedValues as $prepValue) {
                     $queries[] = $name . ':"' . $this->escapeQuote($prepValue, true) . '"';
                 }

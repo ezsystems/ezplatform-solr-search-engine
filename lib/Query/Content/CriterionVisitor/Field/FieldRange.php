@@ -63,8 +63,8 @@ class FieldRange extends Field
         $value = (array)$criterion->value;
         $queries = array();
         foreach ($searchFields as $name => $fieldType) {
-            $start = $this->mapSearchFieldValue($fieldType, $value[0]);
-            $end = isset($value[1]) ? $this->mapSearchFieldvalue($fieldType, $value[1]) : null;
+            $start = $this->mapSearchFieldValue($value[0], $fieldType);
+            $end = isset($value[1]) ? $this->mapSearchFieldvalue($value[1], $fieldType) : null;
 
             if (($criterion->operator === Operator::LT) ||
                   ($criterion->operator === Operator::LTE)) {

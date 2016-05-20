@@ -15,7 +15,7 @@ use EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper;
 use eZ\Publish\Core\Search\Common\FieldNameResolver;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Search\Field as SearchField;
-use eZ\Publish\SPI\FieldType\Indexable;
+use eZ\Publish\SPI\Search\FieldType;
 
 /**
  * Visits the Field criterion.
@@ -64,26 +64,20 @@ abstract class Field extends CriterionVisitor
     /**
      * Map search field value to solr value using FieldValueMapper.
      *
-     * @param eZ\Publish\SPI\FieldType\Indexable $searchFieldType
      * @param mixed $value
      *
+     * @param \eZ\Publish\SPI\Search\FieldType $searchFieldType
      * @return mixed
      */
-    protected function mapSearchFieldValue(Indexable $searchFieldType, $value)
+    protected function mapSearchFieldValue($value, FieldType $searchFieldType = null)
     {
-        $definition = $searchFieldType->getIndexDefinition();
-        if ($searchFieldType instanceof \eZ\Publish\Core\FieldType\Selection\SearchField) {
-            $matchField = 'selected_option_value';
-        } else {
-            $matchField = $searchFieldType->getDefaultMatchField();
+        if (null === $searchFieldType) {
+            return $value;
         }
 
-        $fieldType = $definition[$matchField];
-        // convert core fieldtype search into a SPI/Search/Field to use in FieldValueMapper
-        $searchField = new SearchField('field', $value, $fieldType);
+        $searchField = new SearchField('field', $value, $searchFieldType);
+        $value = (array)$this->fieldValueMapper->map($searchField);
 
-        $value = $this->fieldValueMapper->map($searchField);
-
-        return current((array)$value);
+        return current($value);
     }
 }
