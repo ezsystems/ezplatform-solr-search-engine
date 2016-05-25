@@ -286,19 +286,41 @@ class Handler implements SearchHandlerInterface
      */
     public function deleteLocation($locationId, $contentId)
     {
-        $idPrefix = $this->mapper->generateContentDocumentId($contentId);
+        // 1. Update (reindex) all Content in the subtree with additional Location(s) outside of it
+        $query = new Query(
+            [
+                'filter' => new Criterion\LogicalAnd(
+                    [
+                        new Criterion\CustomField('location_path_string_mid', Criterion\Operator::EQ, "/.*\\/{$locationId}\\/.*/"),
+                        new Criterion\CustomField('location_path_string_mid', Criterion\Operator::EQ, "/@&amp;~(.*\\/{$locationId}\\/.*)/")
+                    ]
+                ),
+                'query' => new Criterion\MatchAll(),
+                'limit' => 100,
+                'offset' => 0,
+            ]
+        );
 
-        $this->gateway->deleteByQuery("_root_:{$idPrefix}*");
+        $searchResult = $this->resultExtractor->extract(
+            $this->gateway->findAllSomething($query)
+        );
 
-        // TODO it seems this part of location deletion (not last location) misses integration tests
-        try {
-            $contentInfo = $this->contentHandler->loadContentInfo($contentId);
-        } catch (NotFoundException $e) {
-            return;
+        $contentItems = [];
+
+        foreach ($searchResult->searchHits as $searchHit) {
+            try {
+                $contentInfo = $this->contentHandler->loadContentInfo($searchHit->valueObject->id);
+            } catch (NotFoundException $e) {
+                continue;
+            }
+
+            $contentItems[] = $this->contentHandler->load($contentInfo->id, $contentInfo->currentVersionNo);
         }
 
-        $content = $this->contentHandler->load($contentId, $contentInfo->currentVersionNo);
-        $this->bulkIndexContent(array($content));
+        $this->bulkIndexContent($contentItems);
+
+        // 2. Delete all Content in the subtree with no other Location(s) outside of it
+        $this->gateway->deleteByQuery("location_path_string_mid:/.*\\/{$locationId}\\/.*/ AND NOT location_path_string_mid:/@&amp;~(.*\\/{$locationId}\\/.*)/");
     }
 
     /**

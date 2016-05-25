@@ -40,6 +40,8 @@ abstract class Gateway
      */
     abstract public function findLocations(Query $query, array $fieldFilters = array());
 
+    abstract public function findAllSomething(Query $query);
+
     /**
      * Indexes an array of documents.
      *

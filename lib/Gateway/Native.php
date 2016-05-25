@@ -173,6 +173,37 @@ class Native extends Gateway
         return $result;
     }
 
+    public function findAllSomething(Query $query)
+    {
+        $parameters = $this->contentQueryConverter->convert($query);
+
+        $searchTargets = $this->endpointResolver->getEndpoints();
+        if (!empty($searchTargets)) {
+            $parameters['shards'] = $searchTargets;
+        }
+
+        $queryString = $this->generateQueryString($parameters);
+
+        $response = $this->client->request(
+            'GET',
+            $this->endpointRegistry->getEndpoint(
+                $this->endpointResolver->getEntryEndpoint()
+            ),
+            "/select?{$queryString}"
+        );
+
+        // @todo: Error handling?
+        $result = json_decode($response->body);
+
+        if (!isset($result->response)) {
+            throw new RuntimeException(
+                '->response not set: ' . var_export(array($result, $parameters), true)
+            );
+        }
+
+        return $result;
+    }
+
     /**
      * Generate URL-encoded query string.
      *
