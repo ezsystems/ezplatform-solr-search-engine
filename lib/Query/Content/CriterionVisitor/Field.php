@@ -35,8 +35,6 @@ abstract class Field extends CriterionVisitor
     protected $fieldValueMapper;
 
     /**
-     * Create from content type handler and field registry.
-     *
      * @param \eZ\Publish\Core\Search\Common\FieldNameResolver $fieldNameResolver
      * @param \EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper $fieldValueMapper
      */
@@ -51,7 +49,7 @@ abstract class Field extends CriterionVisitor
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *
-     * @return array array of field types indexed by name.
+     * @return \eZ\Publish\SPI\Search\FieldType[] Array of field types indexed by name.
      */
     protected function getSearchFields(Criterion $criterion)
     {
@@ -65,8 +63,8 @@ abstract class Field extends CriterionVisitor
      * Map search field value to solr value using FieldValueMapper.
      *
      * @param mixed $value
-     *
      * @param \eZ\Publish\SPI\Search\FieldType $searchFieldType
+     *
      * @return mixed
      */
     protected function mapSearchFieldValue($value, FieldType $searchFieldType = null)
