@@ -53,9 +53,18 @@ class CustomFieldIn extends CriterionVisitor
         foreach ($values as $value) {
             $preparedValue = $this->escapeQuote($this->toString($value), true);
 
-            $queries[] = $criterion->target . ':"' . $preparedValue . '"';
+            if ($this->isRegExp($preparedValue)) {
+                $queries[] = $criterion->target . ':' . $preparedValue;
+            } else {
+                $queries[] = $criterion->target . ':"' . $preparedValue . '"';
+            }
         }
 
         return '(' . implode(' OR ', $queries) . ')';
+    }
+
+    private function isRegExp($preparedValue)
+    {
+        return preg_match('#^/.*/$#', $preparedValue);
     }
 }
