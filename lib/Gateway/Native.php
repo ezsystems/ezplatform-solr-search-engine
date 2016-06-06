@@ -151,9 +151,7 @@ class Native extends Gateway
             $parameters['shards'] = $searchTargets;
         }
 
-        $queryString = $this->generateQueryString($parameters);
-
-        return $this->search($queryString, $parameters);
+        return $this->search($parameters);
     }
 
     public function searchAllEndpoints(Query $query)
@@ -165,9 +163,7 @@ class Native extends Gateway
             $parameters['shards'] = $searchTargets;
         }
 
-        $queryString = $this->generateQueryString($parameters);
-
-        return $this->search($queryString, $parameters);
+        return $this->search($parameters);
     }
 
     /**
@@ -540,12 +536,14 @@ class Native extends Gateway
     /**
      * Perform request to client to search for records with query string.
      *
-     * @param string $queryString
      * @param array $parameters
+     *
      * @return mixed
      */
-    protected function search($queryString, array $parameters)
+    protected function search(array $parameters)
     {
+        $queryString = $this->generateQueryString($parameters);
+
         $response = $this->client->request(
             'GET',
             $this->endpointRegistry->getEndpoint(

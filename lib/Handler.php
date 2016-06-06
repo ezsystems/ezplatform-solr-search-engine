@@ -208,8 +208,6 @@ class Handler implements SearchHandlerInterface
      * @param string[] $fieldPaths
      * @param int $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
-     *
-     * @throws \Exception
      */
     public function suggest($prefix, $fieldPaths = array(), $limit = 10, Criterion $filter = null)
     {
