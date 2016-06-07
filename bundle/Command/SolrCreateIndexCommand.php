@@ -15,6 +15,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use EzSystems\EzPlatformSolrSearchEngine\Handler as SolrSearchEngineHandler;
 use RuntimeException;
 use PDO;
@@ -78,6 +79,8 @@ EOT
         $progress = $this->getHelperSet()->get('progress');
         $progress->start($output, $totalCount);
         $i = 0;
+        $logger = $this->getContainer()->get('logger');
+        /* @var \Psr\Log\LoggerInterface $logger */
         do {
             $contentObjects = array();
 
@@ -85,11 +88,17 @@ EOT
                 if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     break;
                 }
-
-                $contentObjects[] = $persistenceHandler->contentHandler()->load(
-                    $row['id'],
-                    $row['current_version']
-                );
+                try {
+                    $contentObjects[] = $persistenceHandler->contentHandler()->load(
+                        $row['id'],
+                        $row['current_version']
+                    );
+                } catch (NotFoundException $e) {
+                    $progress->clear();
+                    $output->write("\r"); // get rid of padding (side effect of displaying progress bar)
+                    $logger->warning("Could not load current version of Content with id ${row['id']}, so skipped for indexing. Full exception: " . $e->getMessage());
+                    $progress->display();
+                }
             }
 
             if (!empty($contentObjects)) {
