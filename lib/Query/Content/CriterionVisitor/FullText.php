@@ -72,14 +72,14 @@ class FullText extends CriterionVisitor
     public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null)
     {
         $queries = array(
-            'text:' . $criterion->value,
+            'text:' . $this->escapeQuote($criterion->value),
         );
 
         foreach ($criterion->boost as $field => $boost) {
             $searchFields = $this->getSearchFields($criterion, $field);
 
             foreach ($searchFields as $name => $fieldType) {
-                $queries[] = $name . ':' . $criterion->value . '^' . $boost;
+                $queries[] = $name . ':' . $this->escapeQuote($criterion->value) . '^' . $boost;
             }
         }
 
