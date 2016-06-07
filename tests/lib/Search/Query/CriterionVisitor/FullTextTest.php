@@ -118,11 +118,11 @@ class FullTextTest extends TestCase
 
     public function testVisitFuzzyBoost()
     {
-        $ftTextLine = new \eZ\Publish\Core\FieldType\TextLine\SearchField();
+        $stringField = new \eZ\Publish\SPI\Search\FieldType\StringField();
         $visitor = $this->getFullTextCriterionVisitor(
             array(
-                'title_1_s' => $ftTextLine,
-                'title_2_s' => $ftTextLine,
+                'title_1_s' => $stringField,
+                'title_2_s' => $stringField,
             )
         );
         $criterion = new Criterion\FullText('Hello');
