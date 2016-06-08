@@ -56,7 +56,7 @@ abstract class MapLocation extends CriterionVisitor
     }
 
     /**
-     * Get field names.
+     * Get array of search fields.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param string $fieldDefinitionIdentifier
@@ -65,13 +65,13 @@ abstract class MapLocation extends CriterionVisitor
      *
      * @return array
      */
-    protected function getFieldNames(
+    protected function getSearchFields(
         Criterion $criterion,
         $fieldDefinitionIdentifier,
         $fieldTypeIdentifier = null,
         $name = null
     ) {
-        return $this->fieldNameResolver->getFieldNames(
+        return $this->fieldNameResolver->getFieldTypes(
             $criterion,
             $fieldDefinitionIdentifier,
             $fieldTypeIdentifier,

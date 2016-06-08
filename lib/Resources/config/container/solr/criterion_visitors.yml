@@ -223,6 +223,7 @@ services:
         class: %ezpublish.search.solr.query.content.criterion_visitor.field_in.class%
         arguments:
             - @ezpublish.search.common.field_name_resolver
+            - @ezpublish.search.solr.field_value_mapper.aggregate
         tags:
             - {name: ezpublish.search.solr.query.content.criterion_visitor}
 
@@ -230,6 +231,7 @@ services:
         class: %ezpublish.search.solr.query.content.criterion_visitor.field_relation.class%
         arguments:
             - @ezpublish.search.common.field_name_resolver
+            - @ezpublish.search.solr.field_value_mapper.aggregate
         tags:
             - {name: ezpublish.search.solr.query.content.criterion_visitor}
 
@@ -237,6 +239,7 @@ services:
         class: %ezpublish.search.solr.query.content.criterion_visitor.field_range.class%
         arguments:
             - @ezpublish.search.common.field_name_resolver
+            - @ezpublish.search.solr.field_value_mapper.aggregate
         tags:
             - {name: ezpublish.search.solr.query.content.criterion_visitor}
 
@@ -384,6 +387,7 @@ services:
         class: %ezpublish.search.solr.query.location.criterion_visitor.field_in.class%
         arguments:
             - @ezpublish.search.common.field_name_resolver
+            - @ezpublish.search.solr.field_value_mapper.aggregate
         tags:
             - {name: ezpublish.search.solr.query.location.criterion_visitor}
 
@@ -391,6 +395,7 @@ services:
         class: %ezpublish.search.solr.query.location.criterion_visitor.field_range.class%
         arguments:
             - @ezpublish.search.common.field_name_resolver
+            - @ezpublish.search.solr.field_value_mapper.aggregate
         tags:
             - {name: ezpublish.search.solr.query.location.criterion_visitor}
 
