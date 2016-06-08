@@ -151,26 +151,19 @@ class Native extends Gateway
             $parameters['shards'] = $searchTargets;
         }
 
-        $queryString = $this->generateQueryString($parameters);
+        return $this->search($parameters);
+    }
 
-        $response = $this->client->request(
-            'GET',
-            $this->endpointRegistry->getEndpoint(
-                $this->endpointResolver->getEntryEndpoint()
-            ),
-            "/select?{$queryString}"
-        );
+    public function searchAllEndpoints(Query $query)
+    {
+        $parameters = $this->contentQueryConverter->convert($query);
 
-        // @todo: Error handling?
-        $result = json_decode($response->body);
-
-        if (!isset($result->response)) {
-            throw new RuntimeException(
-                '->response not set: ' . var_export(array($result, $parameters), true)
-            );
+        $searchTargets = $this->getAllSearchTargets();
+        if (!empty($searchTargets)) {
+            $parameters['shards'] = $searchTargets;
         }
 
-        return $result;
+        return $this->search($parameters);
     }
 
     /**
@@ -185,11 +178,15 @@ class Native extends Gateway
      */
     protected function generateQueryString(array $parameters)
     {
-        return preg_replace(
+        $removedArrayCharacters = preg_replace(
             '/%5B[0-9]+%5D=/',
             '=',
             http_build_query($parameters)
         );
+
+        $removedDuplicatedEscapingForUrlPath = str_replace('%5C%5C%2F', '%5C%2F', $removedArrayCharacters);
+
+        return $removedDuplicatedEscapingForUrlPath;
     }
 
     /**
@@ -211,6 +208,24 @@ class Native extends Gateway
         }
 
         return implode(',', $shards);
+    }
+
+    /**
+     * Returns all search targets without language constraint.
+     *
+     * @return string
+     */
+    protected function getAllSearchTargets()
+    {
+        $shards = [];
+        $searchTargets = $this->endpointResolver->getEndpoints();
+        if (!empty($searchTargets)) {
+            foreach ($searchTargets as $endpointName) {
+                $shards[] = $this->endpointRegistry->getEndpoint($endpointName)->getIdentifier();
+            }
+        }
+
+        return  implode(',', $shards);
     }
 
     /**
@@ -516,5 +531,36 @@ class Native extends Gateway
             $xmlWriter->text($value);
             $xmlWriter->endElement();
         }
+    }
+
+    /**
+     * Perform request to client to search for records with query string.
+     *
+     * @param array $parameters
+     *
+     * @return mixed
+     */
+    protected function search(array $parameters)
+    {
+        $queryString = $this->generateQueryString($parameters);
+
+        $response = $this->client->request(
+            'GET',
+            $this->endpointRegistry->getEndpoint(
+                $this->endpointResolver->getEntryEndpoint()
+            ),
+            "/select?{$queryString}"
+        );
+
+        // @todo: Error handling?
+        $result = json_decode($response->body);
+
+        if (!isset($result->response)) {
+            throw new RuntimeException(
+                '->response not set: ' . var_export(array($result, $parameters), true)
+            );
+        }
+
+        return $result;
     }
 }

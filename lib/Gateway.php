@@ -41,6 +41,14 @@ abstract class Gateway
     abstract public function findLocations(Query $query, array $fieldFilters = array());
 
     /**
+     * Returns all search hits for given query, that will be performed on all endpoints.
+     *
+     * @param Query $query
+     * @return mixed
+     */
+    abstract public function searchAllEndpoints(Query $query);
+
+    /**
      * Indexes an array of documents.
      *
      * Documents are given as an array of the array of documents. The array of documents

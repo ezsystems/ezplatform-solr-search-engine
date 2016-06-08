@@ -236,7 +236,7 @@ class Handler implements SearchHandlerInterface
      *       However it is not added to an official SPI interface yet as we anticipate adding a bulkIndexDocument
      *       using eZ\Publish\SPI\Search\Document instead of bulkIndexContent based on Content objects. However
      *       that won't be added until we have several stable or close to stable advance search engines to make
-     *       sure we match the features of these. 
+     *       sure we match the features of these.
      *       See also {@see Solr\Content\Search\Gateway\Native::bulkIndexContent} for further Solr specific info.
      *
      * @param \eZ\Publish\SPI\Persistence\Content[] $contentObjects
@@ -286,19 +286,8 @@ class Handler implements SearchHandlerInterface
      */
     public function deleteLocation($locationId, $contentId)
     {
-        $idPrefix = $this->mapper->generateContentDocumentId($contentId);
-
-        $this->gateway->deleteByQuery("_root_:{$idPrefix}*");
-
-        // TODO it seems this part of location deletion (not last location) misses integration tests
-        try {
-            $contentInfo = $this->contentHandler->loadContentInfo($contentId);
-        } catch (NotFoundException $e) {
-            return;
-        }
-
-        $content = $this->contentHandler->load($contentId, $contentInfo->currentVersionNo);
-        $this->bulkIndexContent(array($content));
+        $this->deleteAllItemsWithoutAdditionalLocation($locationId);
+        $this->updateAllElementsWithAdditionalLocation($locationId);
     }
 
     /**
@@ -319,11 +308,104 @@ class Handler implements SearchHandlerInterface
      * Passing true will also write the data to the safe storage, ensuring durability.
      *
      * @see bulkIndexContent() For info on why this is not on an SPI Interface yet.
-     * 
+     *
      * @param bool $flush
      */
     public function commit($flush = false)
     {
         $this->gateway->commit($flush);
+    }
+
+    /**
+     * @param $locationId
+     */
+    protected function deleteAllItemsWithoutAdditionalLocation($locationId)
+    {
+        $query = $this->prepareQuery();
+        $query->filter = new Criterion\LogicalAnd(
+            [
+                $this->allItemsWithinLocation($locationId),
+                new Criterion\LogicalNot($this->allItemsWithinLocationWithAdditionalLocation($locationId)),
+            ]
+        );
+
+        $searchResult = $this->resultExtractor->extract(
+            $this->gateway->searchAllEndpoints($query)
+        );
+
+        foreach ($searchResult->searchHits as $hit) {
+            $idPrefix = $this->mapper->generateContentDocumentId($hit->valueObject->id);
+            $this->gateway->deleteByQuery("_root_:{$idPrefix}*");
+        }
+    }
+
+    /**
+     * @param $locationId
+     */
+    protected function updateAllElementsWithAdditionalLocation($locationId)
+    {
+        $query = $this->prepareQuery();
+        $query->filter = new Criterion\LogicalAnd(
+            [
+                $this->allItemsWithinLocation($locationId),
+                $this->allItemsWithinLocationWithAdditionalLocation($locationId),
+            ]
+        );
+
+        $searchResult = $this->resultExtractor->extract(
+            $this->gateway->searchAllEndpoints($query)
+        );
+
+        $contentItems = [];
+        foreach ($searchResult->searchHits as $searchHit) {
+            try {
+                $contentInfo = $this->contentHandler->loadContentInfo($searchHit->valueObject->id);
+            } catch (NotFoundException $e) {
+                continue;
+            }
+
+            $contentItems[] = $this->contentHandler->load($contentInfo->id, $contentInfo->currentVersionNo);
+        }
+
+        $this->bulkIndexContent($contentItems);
+    }
+
+    /**
+     * Prepare standard query for delete purpose.
+     *
+     * @return Query
+     */
+    protected function prepareQuery()
+    {
+        return new Query(
+            [
+                'query' => new Criterion\MatchAll(),
+                'limit' => 1000,
+                'offset' => 0,
+            ]
+        );
+    }
+
+    /**
+     * @param int $locationId
+     * @return Criterion\CustomField
+     */
+    protected function allItemsWithinLocation($locationId)
+    {
+        return new Criterion\CustomField('location_path_string_mid', Criterion\Operator::EQ,
+            "/.*\\/{$locationId}\\/.*/");
+    }
+
+    /**
+     * @param int $locationId
+     * @return Criterion\CustomField
+     */
+    protected function allItemsWithinLocationWithAdditionalLocation($locationId)
+    {
+        return new Criterion\CustomField(
+            'location_path_string_mid',
+            Criterion\Operator::EQ,
+            "/@&~(.*\\/{$locationId}\\/.*)/"
+        );
     }
 }
