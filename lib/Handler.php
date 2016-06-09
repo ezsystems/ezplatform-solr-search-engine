@@ -246,7 +246,11 @@ class Handler implements SearchHandlerInterface
         $documents = array();
 
         foreach ($contentObjects as $content) {
-            $documents[] = $this->mapper->mapContentBlock($content);
+            try {
+                $documents[] = $this->mapper->mapContentBlock($content);
+            } catch (NotFoundException $ex) {
+                // ignore content objects without assigned state id
+            }
         }
 
         if (!empty($documents)) {
