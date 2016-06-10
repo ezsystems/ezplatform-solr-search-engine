@@ -1,15 +1,15 @@
 parameters:
-    ezpublish.search.solr.field_value_mapper.identifier.class: EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper\IdentifierMapper
-    ezpublish.search.solr.field_value_mapper.multiple_identifier.class: EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper\MultipleIdentifierMapper
+    ezpublish.search.solr.field_value_mapper.identifier.class: eZ\Publish\Core\Search\Common\FieldValueMapper\IdentifierMapper
+    ezpublish.search.solr.field_value_mapper.multiple_identifier.class: eZ\Publish\Core\Search\Common\FieldValueMapper\MultipleIdentifierMapper
     ezpublish.search.solr.field_value_mapper.string.class: EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper\StringMapper
     ezpublish.search.solr.field_value_mapper.multiple_string.class: EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper\MultipleStringMapper
-    ezpublish.search.solr.field_value_mapper.integer.class: EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper\IntegerMapper
-    ezpublish.search.solr.field_value_mapper.multiple_integer.class: EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper\MultipleIntegerMapper
+    ezpublish.search.solr.field_value_mapper.integer.class: eZ\Publish\Core\Search\Common\FieldValueMapper\IntegerMapper
+    ezpublish.search.solr.field_value_mapper.multiple_integer.class: eZ\Publish\Core\Search\Common\FieldValueMapper\MultipleIntegerMapper
     ezpublish.search.solr.field_value_mapper.float.class: EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper\FloatMapper
     ezpublish.search.solr.field_value_mapper.date.class: EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper\DateMapper
-    ezpublish.search.solr.field_value_mapper.price.class: EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper\PriceMapper
-    ezpublish.search.solr.field_value_mapper.boolean.class: EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper\BooleanMapper
-    ezpublish.search.solr.field_value_mapper.multiple_boolean.class: EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper\MultipleBooleanMapper
+    ezpublish.search.solr.field_value_mapper.price.class: eZ\Publish\Core\Search\Common\FieldValueMapper\PriceMapper
+    ezpublish.search.solr.field_value_mapper.boolean.class: eZ\Publish\Core\Search\Common\FieldValueMapper\BooleanMapper
+    ezpublish.search.solr.field_value_mapper.multiple_boolean.class: eZ\Publish\Core\Search\Common\FieldValueMapper\MultipleBooleanMapper
     ezpublish.search.solr.field_value_mapper.geo_location.class: EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper\GeoLocationMapper
 
 services:

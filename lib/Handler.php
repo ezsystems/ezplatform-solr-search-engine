@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace EzSystems\EzPlatformSolrSearchEngine;
 
@@ -240,6 +238,7 @@ class Handler implements SearchHandlerInterface
      *       See also {@see Solr\Content\Search\Gateway\Native::bulkIndexContent} for further Solr specific info.
      *
      * @param \eZ\Publish\SPI\Persistence\Content[] $contentObjects
+     * @deprecated since 1.1, use {@see generateDocument()} and {@see bulkIndexDocuments()} pair instead.
      */
     public function bulkIndexContent(array $contentObjects)
     {

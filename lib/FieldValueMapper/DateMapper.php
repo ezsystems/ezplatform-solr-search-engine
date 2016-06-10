@@ -5,14 +5,11 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper;
 
-use EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper;
+use eZ\Publish\Core\Search\Common\FieldValueMapper\BaseDateMapper;
 use eZ\Publish\SPI\Search\Field;
-use eZ\Publish\SPI\Search\FieldType;
 use DateTime;
 use InvalidArgumentException;
 use Exception;
@@ -20,20 +17,8 @@ use Exception;
 /**
  * Maps raw document field values to something Solr can index.
  */
-class DateMapper extends FieldValueMapper
+class DateMapper extends BaseDateMapper
 {
-    /**
-     * Check if field can be mapped.
-     *
-     * @param Field $field
-     *
-     * @return mixed
-     */
-    public function canMap(Field $field)
-    {
-        return $field->type instanceof FieldType\DateField;
-    }
-
     /**
      * Map field value to a proper Solr representation.
      *

@@ -5,48 +5,31 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper;
 
-use eZ\Publish\SPI\Search\Field;
-use eZ\Publish\SPI\Search\FieldType;
+use eZ\Publish\Core\Search\Common\FieldValueMapper\BaseMultipleStringMapper;
+use DOMDocument;
 
 /**
  * Maps raw document field values to something Solr can index.
  */
-class MultipleStringMapper extends StringMapper
+class MultipleStringMapper extends BaseMultipleStringMapper
 {
     /**
-     * Check if field can be mapped.
+     * Convert to a proper Solr representation.
      *
-     * @param Field $field
+     * @param mixed $value
      *
-     * @return bool
+     * @return string
      */
-    public function canMap(Field $field)
+    protected function convert($value)
     {
-        return
-            $field->type instanceof FieldType\MultipleStringField ||
-            $field->type instanceof FieldType\FullTextField;
-    }
-
-    /**
-     * Map field value to a proper Solr representation.
-     *
-     * @param Field $field
-     *
-     * @return array
-     */
-    public function map(Field $field)
-    {
-        $values = array();
-
-        foreach ((array)$field->value as $value) {
-            $values[] = $this->convert($value);
-        }
-
-        return $values;
+        // Remove non-printable characters
+        return preg_replace(
+            '([\x00-\x09\x0B\x0C\x1E\x1F]+)',
+            '',
+            (string)($value instanceof DOMDocument ? $value->saveXML() : $value)
+        );
     }
 }
