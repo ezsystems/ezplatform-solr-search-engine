@@ -11,6 +11,7 @@
 namespace EzSystems\EzPlatformSolrSearchEngineBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Helper\ProgressHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
@@ -37,6 +38,8 @@ EOT
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->logger = $this->getContainer()->get('logger');
+
         $bulkCount = $input->getArgument('bulk_count');
 
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandler */
@@ -79,8 +82,6 @@ EOT
         $progress = $this->getHelperSet()->get('progress');
         $progress->start($output, $totalCount);
         $i = 0;
-        $logger = $this->getContainer()->get('logger');
-        /* @var \Psr\Log\LoggerInterface $logger */
         do {
             $contentObjects = array();
 
@@ -94,15 +95,23 @@ EOT
                         $row['current_version']
                     );
                 } catch (NotFoundException $e) {
-                    $progress->clear();
-                    $output->write("\r"); // get rid of padding (side effect of displaying progress bar)
-                    $logger->warning("Could not load current version of Content with id ${row['id']}, so skipped for indexing. Full exception: " . $e->getMessage());
-                    $progress->display();
+                    $this->logWarning($output, $progress, "Could not load current version of Content with id ${row['id']}, so skipped for indexing. Full exception: " . $e->getMessage());
                 }
             }
 
-            if (!empty($contentObjects)) {
-                $searchHandler->bulkIndexContent($contentObjects);
+            $documents = [];
+
+            foreach ($contentObjects as $content) {
+                try {
+                    $documents[] = $searchHandler->generateDocument($content);
+                } catch (NotFoundException $e) {
+                    // Ignore content objects that have some sort of missing data on it
+                    $this->logWarning($output, $progress, 'Content with id ' . $content->versionInfo->id . ' has missing data, so skipped for indexing. Full exception: ' . $e->getMessage());
+                }
+            }
+
+            if (!empty($documents)) {
+                $searchHandler->bulkIndexDocuments($documents);
             }
 
             $progress->advance($k);
@@ -113,4 +122,24 @@ EOT
 
         $progress->finish();
     }
+
+    /**
+     * Log warning while progress helper is running.
+     *
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \Symfony\Component\Console\Helper\ProgressHelper $progress
+     * @param $message
+     */
+    private function logWarning(OutputInterface $output, ProgressHelper $progress, $message)
+    {
+        $progress->clear();
+        $output->write("\r"); // get rid of padding (side effect of displaying progress bar)
+        $this->logger->warning($message);
+        $progress->display();
+    }
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
 }
