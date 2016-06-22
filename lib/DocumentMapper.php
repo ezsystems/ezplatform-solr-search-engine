@@ -5,13 +5,12 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace EzSystems\EzPlatformSolrSearchEngine;
 
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Location;
+use eZ\Publish\Core\Search\Common\DocumentMapper as CommonDocumentMapper;
 
 /**
  * Mapper maps Content and Location objects to a Document objects, representing a
@@ -19,7 +18,7 @@ use eZ\Publish\SPI\Persistence\Content\Location;
  *
  * Note that custom implementations might need to be accompanied by custom schema.
  */
-interface DocumentMapper
+abstract class DocumentMapper extends CommonDocumentMapper
 {
     /**
      * Identifier of Content documents.
@@ -36,18 +35,6 @@ interface DocumentMapper
     const DOCUMENT_TYPE_IDENTIFIER_LOCATION = 'location';
 
     /**
-     * Maps given Content and it's Locations to a collection of nested Documents,
-     * one per translation.
-     *
-     * Each Content Document contains nested Documents representing it's Locations.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content $content
-     *
-     * @return \eZ\Publish\SPI\Search\Document[]
-     */
-    public function mapContentBlock(Content $content);
-
-    /**
      * Generates the Solr backend document ID for Content object.
      *
      * If $language code is not provided, the method will return prefix of the IDs
@@ -60,7 +47,7 @@ interface DocumentMapper
      *
      * @return string
      */
-    public function generateContentDocumentId($contentId, $languageCode = null);
+    abstract public function generateContentDocumentId($contentId, $languageCode = null);
 
     /**
      * Generates the Solr backend document ID for Location object.
@@ -75,5 +62,5 @@ interface DocumentMapper
      *
      * @return string
      */
-    public function generateLocationDocumentId($locationId, $languageCode = null);
+    abstract public function generateLocationDocumentId($locationId, $languageCode = null);
 }

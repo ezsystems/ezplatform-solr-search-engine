@@ -5,13 +5,11 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor;
 
 use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
-use EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper;
+use eZ\Publish\Core\Search\Common\FieldValueMapper;
 use eZ\Publish\Core\Search\Common\FieldNameResolver;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Search\Field as SearchField;
@@ -30,13 +28,13 @@ abstract class Field extends CriterionVisitor
     protected $fieldNameResolver;
 
     /**
-     * @var \EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper
+     * @var \eZ\Publish\Core\Search\Common\FieldValueMapper
      */
     protected $fieldValueMapper;
 
     /**
      * @param \eZ\Publish\Core\Search\Common\FieldNameResolver $fieldNameResolver
-     * @param \EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper $fieldValueMapper
+     * @param \eZ\Publish\Core\Search\Common\FieldValueMapper $fieldValueMapper
      */
     public function __construct(FieldNameResolver $fieldNameResolver, FieldValueMapper $fieldValueMapper)
     {

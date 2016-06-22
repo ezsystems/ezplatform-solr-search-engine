@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\DocumentMapper;
 
@@ -18,97 +16,12 @@ use eZ\Publish\SPI\Persistence\Content\Section;
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\Document;
 use eZ\Publish\SPI\Search\FieldType;
-use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
-use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
-use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
-use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandler;
-use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandler;
-use eZ\Publish\Core\Search\Common\FieldRegistry;
-use eZ\Publish\Core\Search\Common\FieldNameGenerator;
 
 /**
  * NativeDocumentMapper maps Solr backend documents per Content translation.
  */
-class NativeDocumentMapper implements DocumentMapper
+class NativeDocumentMapper extends DocumentMapper
 {
-    /**
-     * Field registry.
-     *
-     * @var \eZ\Publish\Core\Search\Common\FieldRegistry
-     */
-    protected $fieldRegistry;
-
-    /**
-     * Content handler.
-     *
-     * @var \eZ\Publish\SPI\Persistence\Content\Handler
-     */
-    protected $contentHandler;
-
-    /**
-     * Location handler.
-     *
-     * @var \eZ\Publish\SPI\Persistence\Content\Location\Handler
-     */
-    protected $locationHandler;
-
-    /**
-     * Content type handler.
-     *
-     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
-     */
-    protected $contentTypeHandler;
-
-    /**
-     * Object state handler.
-     *
-     * @var \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler
-     */
-    protected $objectStateHandler;
-
-    /**
-     * Section handler.
-     *
-     * @var \eZ\Publish\SPI\Persistence\Content\Section\Handler
-     */
-    protected $sectionHandler;
-
-    /**
-     * Field name generator.
-     *
-     * @var \eZ\Publish\Core\Search\Common\FieldNameGenerator
-     */
-    protected $fieldNameGenerator;
-
-    /**
-     * Creates a new document mapper.
-     *
-     * @param \eZ\Publish\Core\Search\Common\FieldRegistry $fieldRegistry
-     * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
-     * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
-     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler $objectStateHandler
-     * @param \eZ\Publish\SPI\Persistence\Content\Section\Handler $sectionHandler
-     * @param \eZ\Publish\Core\Search\Common\FieldNameGenerator $fieldNameGenerator
-     */
-    public function __construct(
-        FieldRegistry $fieldRegistry,
-        ContentHandler $contentHandler,
-        LocationHandler $locationHandler,
-        ContentTypeHandler $contentTypeHandler,
-        ObjectStateHandler $objectStateHandler,
-        SectionHandler $sectionHandler,
-        FieldNameGenerator $fieldNameGenerator
-    ) {
-        $this->fieldRegistry = $fieldRegistry;
-        $this->contentHandler = $contentHandler;
-        $this->locationHandler = $locationHandler;
-        $this->contentTypeHandler = $contentTypeHandler;
-        $this->objectStateHandler = $objectStateHandler;
-        $this->sectionHandler = $sectionHandler;
-        $this->fieldNameGenerator = $fieldNameGenerator;
-    }
-
     /**
      * Maps given Content to a Document.
      *
@@ -646,61 +559,5 @@ class NativeDocumentMapper implements DocumentMapper
         );
 
         return $fields;
-    }
-
-    /**
-     * Returns Content ids of all ancestor Locations of all Locations
-     * of a Content with given $contentId.
-     *
-     * Used to determine user groups of a user with $contentId.
-     *
-     * @param int|string $contentId
-     *
-     * @return array
-     */
-    protected function getAncestorLocationsContentIds($contentId)
-    {
-        $locations = $this->locationHandler->loadLocationsByContent($contentId);
-        $ancestorLocationContentIds = array();
-        $ancestorLocationIds = array();
-
-        foreach ($locations as $location) {
-            $locationIds = explode('/', trim($location->pathString, '/'));
-            // Remove Location of Content with $contentId
-            array_pop($locationIds);
-            // Remove Root Location id (id==1 in legacy DB)
-            array_shift($locationIds);
-
-            $ancestorLocationIds = array_merge($ancestorLocationIds, $locationIds);
-        }
-
-        foreach (array_unique($ancestorLocationIds) as $locationId) {
-            $location = $this->locationHandler->load($locationId);
-
-            $ancestorLocationContentIds[$location->contentId] = true;
-        }
-
-        return array_keys($ancestorLocationContentIds);
-    }
-
-    /**
-     * Returns an array of object state ids of a Content with given $contentId.
-     *
-     * @param int|string $contentId
-     *
-     * @return array
-     */
-    protected function getObjectStateIds($contentId)
-    {
-        $objectStateIds = array();
-
-        foreach ($this->objectStateHandler->loadAllGroups() as $objectStateGroup) {
-            $objectStateIds[] = $this->objectStateHandler->getContentState(
-                $contentId,
-                $objectStateGroup->id
-            )->id;
-        }
-
-        return $objectStateIds;
     }
 }

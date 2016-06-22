@@ -5,32 +5,17 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper;
 
-use EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper;
-use eZ\Publish\SPI\Search\FieldType\FloatField;
+use eZ\Publish\Core\Search\Common\FieldValueMapper\BaseFloatMapper;
 use eZ\Publish\SPI\Search\Field;
 
 /**
  * Maps raw document field values to something Solr can index.
  */
-class FloatMapper extends FieldValueMapper
+class FloatMapper extends BaseFloatMapper
 {
-    /**
-     * Check if field can be mapped.
-     *
-     * @param Field $field
-     *
-     * @return bool
-     */
-    public function canMap(Field $field)
-    {
-        return $field->type instanceof FloatField;
-    }
-
     /**
      * Map field value to a proper Solr representation.
      *
