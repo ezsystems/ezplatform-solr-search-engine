@@ -3,7 +3,6 @@ parameters:
     ezpublish.search.solr.query.common.criterion_visitor.aggregate.class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\Aggregate
     ezpublish.search.solr.query.common.sort_clause_visitor.aggregate.class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\SortClauseVisitor\Aggregate
     ezpublish.search.solr.query.common.facet_builder_visitor.aggregate.class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\FacetBuilderVisitor\Aggregate
-    ezpublish.search.solr.field_value_mapper.aggregate.class: EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper\Aggregate
 
 services:
     ezpublish.search.solr.gateway.client.http.stream:
@@ -23,11 +22,6 @@ services:
     # are registered to this one using compilation pass
     ezpublish.search.solr.query.content.facet_builder_visitor.aggregate:
         class: %ezpublish.search.solr.query.common.facet_builder_visitor.aggregate.class%
-
-    # Note: services tagged with 'ezpublish.search.solr.field_value_mapper'
-    # are registered to this one using compilation pass
-    ezpublish.search.solr.field_value_mapper.aggregate:
-        class: %ezpublish.search.solr.field_value_mapper.aggregate.class%
 
     # Note: services tagged with 'ezpublish.search.solr.query.location.criterion_visitor'
     # are registered to this one using compilation pass
