@@ -24,10 +24,5 @@
             "EzSystems\\EzPlatformSolrSearchEngineBundle\\": "bundle",
             "EzSystems\\EzPlatformSolrSearchEngineBundle\\Tests\\": "tests/bundle"
         }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0.x-dev"
-        }
     }
 }
