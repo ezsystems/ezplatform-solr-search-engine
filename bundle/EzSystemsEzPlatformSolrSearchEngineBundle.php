@@ -17,6 +17,7 @@ use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler\AggregateFacetBuilde
 use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler\AggregateFieldValueMapperPass;
 use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler\AggregateSortClauseVisitorPass;
 use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler\EndpointRegistryPass;
+use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler\DocumentFieldMapperPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\FieldRegistryPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\SignalSlotPass;
 
@@ -26,6 +27,12 @@ class EzSystemsEzPlatformSolrSearchEngineBundle extends Bundle
     {
         parent::build($container);
 
+        $container->addCompilerPass(new DocumentFieldMapperPass\Block());
+        $container->addCompilerPass(new DocumentFieldMapperPass\BlockTranslation());
+        $container->addCompilerPass(new DocumentFieldMapperPass\Content());
+        $container->addCompilerPass(new DocumentFieldMapperPass\ContentTranslation());
+        $container->addCompilerPass(new DocumentFieldMapperPass\Location());
+        $container->addCompilerPass(new DocumentFieldMapperPass\LocationTranslation());
         $container->addCompilerPass(new AggregateCriterionVisitorPass());
         $container->addCompilerPass(new AggregateFacetBuilderVisitorPass());
         $container->addCompilerPass(new AggregateFieldValueMapperPass());
