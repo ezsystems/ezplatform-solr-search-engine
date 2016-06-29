@@ -50,11 +50,13 @@ abstract class ResultExtractor
         );
 
         if (isset($data->facet_counts)) {
-            foreach ($data->facet_counts->facet_fields as $field => $facet) {
-                $result->facets[] = $this->facetBuilderVisitor->map(
-                    $field,
-                    $facet
-                );
+            foreach ($data->facet_counts as $facetCounts) {
+                foreach ($facetCounts as $field => $facet) {
+                    $result->facets[] = $this->facetBuilderVisitor->map(
+                        $field,
+                        (array)$facet
+                    );
+                }
             }
         }
 
