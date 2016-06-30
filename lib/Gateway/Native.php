@@ -14,7 +14,7 @@ use EzSystems\EzPlatformSolrSearchEngine\Gateway;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\Core\Search\Common\FieldNameGenerator;
 use EzSystems\EzPlatformSolrSearchEngine\Query\QueryConverter;
-use EzSystems\EzPlatformSolrSearchEngine\FieldValueMapper;
+use eZ\Publish\Core\Search\Common\FieldValueMapper;
 use RuntimeException;
 use XmlWriter;
 use eZ\Publish\SPI\Search\Field;
@@ -63,7 +63,7 @@ class Native extends Gateway
     /**
      * Field value mapper.
      *
-     * @var FieldValueMapper
+     * @var \eZ\Publish\Core\Search\Common\FieldValueMapper
      */
     protected $fieldValueMapper;
 
@@ -82,8 +82,8 @@ class Native extends Gateway
      * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointRegistry $endpointRegistry
      * @param \EzSystems\EzPlatformSolrSearchEngine\Query\QueryConverter $contentQueryConverter
      * @param \EzSystems\EzPlatformSolrSearchEngine\Query\QueryConverter $locationQueryConverter
-     * @param FieldValueMapper $fieldValueMapper
-     * @param FieldNameGenerator $nameGenerator
+     * @param \eZ\Publish\Core\Search\Common\FieldValueMapper $fieldValueMapper
+     * @param \eZ\Publish\Core\Search\Common\FieldNameGenerator $nameGenerator
      */
     public function __construct(
         HttpClient $client,
@@ -233,7 +233,7 @@ class Native extends Gateway
      *
      * Documents are given as an array of the array of documents. The array of documents
      * holds documents for all translations of the particular entity.
-     * 
+     *
      * Notes:
      * - Does not force a commit on solr, depends on solr config, use {@commit} if you need that.
      * - On large amounts of data make sure to iterate with several calls to this function with a limited

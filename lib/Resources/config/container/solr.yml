@@ -1,7 +1,6 @@
 imports:
     - {resource: solr/criterion_visitors.yml}
     - {resource: solr/facet_builder_visitors.yml}
-    - {resource: solr/field_value_mappers.yml}
     - {resource: solr/services.yml}
     - {resource: solr/sort_clause_visitors.yml}
 
@@ -88,7 +87,7 @@ services:
             - @ezpublish.search.solr.gateway.endpoint_registry
             - @ezpublish.search.solr.query_converter.content
             - @ezpublish.search.solr.query_converter.location
-            - @ezpublish.search.solr.field_value_mapper.aggregate
+            - @ezpublish.search.common.field_value_mapper.aggregate
             - @ezpublish.search.common.field_name_generator
 
     ezpublish.search.solr.gateway:
