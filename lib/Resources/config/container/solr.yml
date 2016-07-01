@@ -3,6 +3,7 @@ imports:
     - {resource: solr/facet_builder_visitors.yml}
     - {resource: solr/services.yml}
     - {resource: solr/sort_clause_visitors.yml}
+    - {resource: solr/slots.yml}
 
 parameters:
     ezpublish.search.solr.connection.server: http://localhost:8983/solr/core0
