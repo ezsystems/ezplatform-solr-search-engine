@@ -1,3 +1,6 @@
+imports:
+    - {resource: common.yml}
+
 parameters:
     # Redefining default field type classes with the implementation that defines the type
     # as searchable. Needed in order to test searching wiht Solr engine.

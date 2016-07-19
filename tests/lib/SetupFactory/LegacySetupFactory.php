@@ -88,7 +88,7 @@ class LegacySetupFactory extends CoreLegacySetupFactory
             $containerBuilder->addCompilerPass(new Compiler\EndpointRegistryPass());
             $containerBuilder->addCompilerPass(new BaseCompiler\Search\AggregateFieldValueMapperPass());
             $containerBuilder->addCompilerPass(new BaseCompiler\Search\FieldRegistryPass());
-            $containerBuilder->addCompilerPass(new BaseCompiler\Search\SignalSlotPass());
+            $containerBuilder->addCompilerPass(new BaseCompiler\Search\SearchEngineSignalSlotPass('solr'));
 
             $this->externalBuildContainer($containerBuilder);
 

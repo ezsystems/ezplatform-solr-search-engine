@@ -1,0 +1,9 @@
+parameters:
+    ezpublish.signalslot.signal_dispatcher.factory.class: eZ\Publish\Core\Base\Container\ApiLoader\SignalSlot\SignalDispatcherFactory
+
+services:
+    ezpublish.signalslot.signal_dispatcher.factory:
+        class: %ezpublish.signalslot.signal_dispatcher.factory.class%
+        arguments:
+            - "%ezpublish.signalslot.signal_dispatcher.class%"
+            - "solr"

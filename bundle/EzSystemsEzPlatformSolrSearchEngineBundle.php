@@ -18,7 +18,7 @@ use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler\AggregateSortClauseV
 use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler\EndpointRegistryPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\AggregateFieldValueMapperPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\FieldRegistryPass;
-use eZ\Publish\Core\Base\Container\Compiler\Search\SignalSlotPass;
+use eZ\Publish\Core\Base\Container\Compiler\Search\SearchEngineSignalSlotPass;
 
 class EzSystemsEzPlatformSolrSearchEngineBundle extends Bundle
 {
@@ -33,7 +33,7 @@ class EzSystemsEzPlatformSolrSearchEngineBundle extends Bundle
 
         $container->addCompilerPass(new AggregateFieldValueMapperPass());
         $container->addCompilerPass(new FieldRegistryPass());
-        $container->addCompilerPass(new SignalSlotPass());
+        $container->addCompilerPass(new SearchEngineSignalSlotPass('solr'));
     }
 
     public function getContainerExtension()
