@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace EzSystems\EzPlatformSolrSearchEngine;
 
@@ -19,6 +17,11 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\SPI\Search\IndexerDataProvider;
+use eZ\Publish\SPI\Search\Indexing;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * The Content Search handler retrieves sets of of Content objects, based on a
@@ -41,7 +44,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
  * content objects based on criteria, which could not be converted in to
  * database statements.
  */
-class Handler implements SearchHandlerInterface
+class Handler implements SearchHandlerInterface, Indexing
 {
     /**
      * Content locator gateway.
@@ -437,5 +440,75 @@ class Handler implements SearchHandlerInterface
     public function bulkIndexDocuments(array $documents)
     {
         $this->gateway->bulkIndexDocuments($documents);
+    }
+
+    /**
+     * Create search engine index.
+     *
+     * @param $bulkCount
+     * @param \eZ\Publish\SPI\Search\IndexerDataProvider $dataProvider
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \Psr\Log\LoggerInterface $logger
+     */
+    public function createSearchIndex(
+        $bulkCount,
+        IndexerDataProvider $dataProvider,
+        OutputInterface $output,
+        LoggerInterface $logger
+    ) {
+        $this->purgeIndex();
+
+        $totalCount = $dataProvider->getPublishedContentCount();
+
+        /* @var \Symfony\Component\Console\Helper\ProgressBar $progress */
+        $progress = new ProgressBar($output);
+        $progress->start($totalCount);
+
+        $contentCurrentVersionIds = $dataProvider->getContentObjects();
+
+        $i = 0;
+        do {
+            $contentObjects = array();
+
+            for ($k = 0; $k <= $bulkCount; ++$k) {
+                $row = $contentCurrentVersionIds->current();
+                // check if there is data
+                if ($row === null) {
+                    break;
+                }
+                try {
+                    $contentObjects[] = $dataProvider->loadContentObjectVersion(
+                        $row['id'],
+                        $row['current_version']
+                    );
+                } catch (NotFoundException $e) {
+                    $progress->clear();
+                    $logger->warning("Could not load current version of Content with id ${row['id']}, so skipped for indexing. Full exception: " . $e->getMessage());
+                    $progress->display();
+                }
+            }
+
+            $documents = [];
+            foreach ($contentObjects as $content) {
+                try {
+                    $documents[] = $this->generateDocument($content);
+                } catch (NotFoundException $e) {
+                    $progress->clear();
+                    $logger->warning('Content with id ' . $content->versionInfo->id . ' has missing data, so skipped for indexing. Full exception: ' . $e->getMessage());
+                    $progress->display();
+                }
+            }
+
+            if (!empty($documents)) {
+                $this->bulkIndexDocuments($documents);
+            }
+
+            $progress->advance($k);
+        } while (($i += $bulkCount) < $totalCount);
+
+        // Make changes available for search
+        $this->commit();
+
+        $progress->finish();
     }
 }
