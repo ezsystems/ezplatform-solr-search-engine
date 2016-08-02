@@ -71,12 +71,12 @@ class NativeQueryConverter extends QueryConverter
             'fl' => '*,score,[shard]',
             'wt' => 'json',
         );
-		
-		// use solr param q when search with fulltext query value
+
+        // use solr param q when search with fulltext query value
         if (is_null($query->query->value)) {
             $params['q.alt'] = $this->criterionVisitor->visit($query->query);
         } else {
-			// solr q param enable suggestions in response
+            // solr q param enable suggestions in response
             $params['q'] = $this->criterionVisitor->visit($query->query);
         }
 
