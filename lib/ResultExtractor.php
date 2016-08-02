@@ -48,7 +48,7 @@ abstract class ResultExtractor
                 'totalCount' => $data->response->numFound,
                 'spellSuggestion' => property_exists($data, 'spellcheck')
                     ? $data->spellcheck->suggestions
-                    : NULL,
+                    : null,
             )
         );
 
