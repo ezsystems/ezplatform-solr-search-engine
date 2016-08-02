@@ -46,7 +46,7 @@ abstract class ResultExtractor
                 'time' => $data->responseHeader->QTime / 1000,
                 'maxScore' => $data->response->maxScore,
                 'totalCount' => $data->response->numFound,
-                'spellSuggestion' => $data->spellcheck->suggestions
+                'spellSuggestion' => $data->spellcheck->suggestions,
             )
         );
 
