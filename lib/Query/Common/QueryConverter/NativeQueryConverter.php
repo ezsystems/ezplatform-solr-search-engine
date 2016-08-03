@@ -73,7 +73,7 @@ class NativeQueryConverter extends QueryConverter
         );
 
         // use solr param q when search with fulltext query value
-        if (is_null($query->query->value)) {
+        if (null === $query->query->value) {
             $params['q.alt'] = $this->criterionVisitor->visit($query->query);
         } else {
             // solr q param enable suggestions in response
