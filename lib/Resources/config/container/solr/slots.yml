@@ -20,7 +20,7 @@ parameters:
 
 services:
     ezpublish.search.solr.slot:
-        class: %ezpublish.search.solr.slot.class%
+        class: "%ezpublish.search.solr.slot.class%"
         abstract: true
         arguments:
             - "@ezpublish.api.inner_repository"
@@ -29,102 +29,102 @@ services:
 
     ezpublish.search.solr.slot.publish_version:
         parent: ezpublish.search.solr.slot
-        class: %ezpublish.search.solr.slot.publish_version.class%
+        class: "%ezpublish.search.solr.slot.publish_version.class%"
         tags:
             - {name: ezpublish.search.solr.slot, signal: ContentService\PublishVersionSignal}
 
     ezpublish.search.solr.slot.copy_content:
         parent: ezpublish.search.solr.slot
-        class: %ezpublish.search.solr.slot.copy_content.class%
+        class: "%ezpublish.search.solr.slot.copy_content.class%"
         tags:
             - {name: ezpublish.search.solr.slot, signal: ContentService\CopyContentSignal}
 
     ezpublish.search.solr.slot.delete_content:
         parent: ezpublish.search.solr.slot
-        class: %ezpublish.search.solr.slot.delete_content.class%
+        class: "%ezpublish.search.solr.slot.delete_content.class%"
         tags:
             - {name: ezpublish.search.solr.slot, signal: ContentService\DeleteContentSignal}
 
     ezpublish.search.solr.slot.delete_version:
         parent: ezpublish.search.solr.slot
-        class: %ezpublish.search.solr.slot.delete_version.class%
+        class: "%ezpublish.search.solr.slot.delete_version.class%"
         tags:
             - {name: ezpublish.search.solr.slot, signal: ContentService\DeleteVersionSignal}
 
     ezpublish.search.solr.slot.create_location:
         parent: ezpublish.search.solr.slot
-        class: %ezpublish.search.solr.slot.create_location.class%
+        class: "%ezpublish.search.solr.slot.create_location.class%"
         tags:
             - {name: ezpublish.search.solr.slot, signal: LocationService\CreateLocationSignal}
 
     ezpublish.search.solr.slot.update_location:
         parent: ezpublish.search.solr.slot
-        class: %ezpublish.search.solr.slot.update_location.class%
+        class: "%ezpublish.search.solr.slot.update_location.class%"
         tags:
             - {name: ezpublish.search.solr.slot, signal: LocationService\UpdateLocationSignal}
 
     ezpublish.search.solr.slot.delete_location:
         parent: ezpublish.search.solr.slot
-        class: %ezpublish.search.solr.slot.delete_location.class%
+        class: "%ezpublish.search.solr.slot.delete_location.class%"
         tags:
             - {name: ezpublish.search.solr.slot, signal: LocationService\DeleteLocationSignal}
 
     ezpublish.search.solr.slot.create_user:
         parent: ezpublish.search.solr.slot
-        class: %ezpublish.search.solr.slot.create_user.class%
+        class: "%ezpublish.search.solr.slot.create_user.class%"
         tags:
             - {name: ezpublish.search.solr.slot, signal: UserService\CreateUserSignal}
 
     ezpublish.search.solr.slot.create_user_group:
         parent: ezpublish.search.solr.slot
-        class: %ezpublish.search.solr.slot.create_user_group.class%
+        class: "%ezpublish.search.solr.slot.create_user_group.class%"
         tags:
             - {name: ezpublish.search.solr.slot, signal: UserService\CreateUserGroupSignal}
 
     ezpublish.search.solr.slot.move_user_group:
         parent: ezpublish.search.solr.slot
-        class: %ezpublish.search.solr.slot.move_user_group.class%
+        class: "%ezpublish.search.solr.slot.move_user_group.class%"
         tags:
             - {name: ezpublish.search.solr.slot, signal: UserService\MoveUserGroupSignal}
 
     ezpublish.search.solr.slot.copy_subtree:
         parent: ezpublish.search.solr.slot
-        class: %ezpublish.search.solr.slot.copy_subtree.class%
+        class: "%ezpublish.search.solr.slot.copy_subtree.class%"
         tags:
             - {name: ezpublish.search.solr.slot, signal: LocationService\CopySubtreeSignal}
 
     ezpublish.search.solr.slot.move_subtree:
         parent: ezpublish.search.solr.slot
-        class: %ezpublish.search.solr.slot.move_subtree.class%
+        class: "%ezpublish.search.solr.slot.move_subtree.class%"
         tags:
             - {name: ezpublish.search.solr.slot, signal: LocationService\MoveSubtreeSignal}
 
     ezpublish.search.solr.slot.trash:
         parent: ezpublish.search.solr.slot
-        class: %ezpublish.search.solr.slot.trash.class%
+        class: "%ezpublish.search.solr.slot.trash.class%"
         tags:
             - {name: ezpublish.search.solr.slot, signal: TrashService\TrashSignal}
 
     ezpublish.search.solr.slot.recover:
         parent: ezpublish.search.solr.slot
-        class: %ezpublish.search.solr.slot.recover.class%
+        class: "%ezpublish.search.solr.slot.recover.class%"
         tags:
             - {name: ezpublish.search.solr.slot, signal: TrashService\RecoverSignal}
 
     ezpublish.search.solr.slot.hide_location:
         parent: ezpublish.search.solr.slot
-        class: %ezpublish.search.solr.slot.hide_location.class%
+        class: "%ezpublish.search.solr.slot.hide_location.class%"
         tags:
             - {name: ezpublish.search.solr.slot, signal: LocationService\HideLocationSignal}
 
     ezpublish.search.solr.slot.unhide_location:
         parent: ezpublish.search.solr.slot
-        class: %ezpublish.search.solr.slot.unhide_location.class%
+        class: "%ezpublish.search.solr.slot.unhide_location.class%"
         tags:
             - {name: ezpublish.search.solr.slot, signal: LocationService\UnhideLocationSignal}
 
     ezpublish.search.solr.slot.set_content_state:
         parent: ezpublish.search.solr.slot
-        class: %ezpublish.search.solr.slot.set_content_state.class%
+        class: "%ezpublish.search.solr.slot.set_content_state.class%"
         tags:
             - {name: ezpublish.search.solr.slot, signal: ObjectStateService\SetContentStateSignal}
