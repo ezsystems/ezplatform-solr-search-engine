@@ -23,13 +23,13 @@ parameters:
 
 services:
     ezpublish.cache_pool.spi.cache.decorator:
-        class: %ezpublish.cache_pool.spi.cache.decorator.class%
+        class: "%ezpublish.cache_pool.spi.cache.decorator.class%"
 
     ezpublish.spi.search_engine:
         alias: ezpublish.spi.search.solr
 
     ezpublish.search.solr.endpoint.endpoint0:
-        class: %ezpublish.solr.endpoint.class%
+        class: "%ezpublish.solr.endpoint.class%"
         arguments:
             -
                 scheme: http

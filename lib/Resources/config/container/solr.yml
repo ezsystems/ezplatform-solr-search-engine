@@ -23,21 +23,21 @@ parameters:
 
 services:
     ezpublish.search.solr.gateway.endpoint_registry:
-        class: %ezpublish.search.solr.gateway.endpoint_registry.class%
+        class: "%ezpublish.search.solr.gateway.endpoint_registry.class%"
 
     ezpublish.search.solr.gateway.endpoint_resolver.native:
-        class: %ezpublish.search.solr.gateway.endpoint_resolver.native.class%
+        class: "%ezpublish.search.solr.gateway.endpoint_resolver.native.class%"
         arguments:
-            - %ezpublish.search.solr.entry_endpoints%
-            - %ezpublish.search.solr.cluster_endpoints%
-            - %ezpublish.search.solr.default_endpoint%
-            - %ezpublish.search.solr.main_translations_endpoint%
+            - "%ezpublish.search.solr.entry_endpoints%"
+            - "%ezpublish.search.solr.cluster_endpoints%"
+            - "%ezpublish.search.solr.default_endpoint%"
+            - "%ezpublish.search.solr.main_translations_endpoint%"
 
     ezpublish.search.solr.gateway.endpoint_resolver:
         alias: ezpublish.search.solr.gateway.endpoint_resolver.native
 
     ezpublish.search.solr.core_filter.native:
-        class: %ezpublish.search.solr.core_filter.native.class%
+        class: "%ezpublish.search.solr.core_filter.native.class%"
         arguments:
             - "@ezpublish.search.solr.gateway.endpoint_resolver.native"
 
@@ -45,7 +45,7 @@ services:
         alias: ezpublish.search.solr.core_filter.native
 
     ezpublish.search.solr.document_mapper.native:
-        class: %ezpublish.search.solr.document_mapper.native.class%
+        class: "%ezpublish.search.solr.document_mapper.native.class%"
         arguments:
             - "@ezpublish.search.common.field_registry"
             - "@ezpublish.spi.persistence.content_handler"
@@ -59,7 +59,7 @@ services:
         alias: ezpublish.search.solr.document_mapper.native
 
     ezpublish.search.solr.result_extractor.native:
-        class: %ezpublish.search.solr.result_extractor.native.class%
+        class: "%ezpublish.search.solr.result_extractor.native.class%"
         arguments:
             - "@ezpublish.search.solr.query.content.facet_builder_visitor.aggregate"
 
@@ -67,21 +67,21 @@ services:
         alias: ezpublish.search.solr.result_extractor.native
 
     ezpublish.search.solr.query_converter.content:
-        class: %ezpublish.search.solr.query_converter.class%
+        class: "%ezpublish.search.solr.query_converter.class%"
         arguments:
             - "@ezpublish.search.solr.query.content.criterion_visitor.aggregate"
             - "@ezpublish.search.solr.query.content.sort_clause_visitor.aggregate"
             - "@ezpublish.search.solr.query.content.facet_builder_visitor.aggregate"
 
     ezpublish.search.solr.query_converter.location:
-        class: %ezpublish.search.solr.query_converter.class%
+        class: "%ezpublish.search.solr.query_converter.class%"
         arguments:
             - "@ezpublish.search.solr.query.location.criterion_visitor.aggregate"
             - "@ezpublish.search.solr.query.location.sort_clause_visitor.aggregate"
             - "@ezpublish.search.solr.query.location.facet_builder_visitor.aggregate"
 
     ezpublish.search.solr.gateway.native:
-        class: %ezpublish.search.solr.gateway.native.class%
+        class: "%ezpublish.search.solr.gateway.native.class%"
         arguments:
             - "@ezpublish.search.solr.gateway.client.http.stream"
             - "@ezpublish.search.solr.gateway.endpoint_resolver"
@@ -95,7 +95,7 @@ services:
         alias: ezpublish.search.solr.gateway.native
 
     ezpublish.spi.search.solr:
-        class: %ezpublish.spi.search.solr.class%
+        class: "%ezpublish.spi.search.solr.class%"
         arguments:
             - "@ezpublish.search.solr.gateway"
             - "@ezpublish.spi.persistence.content_handler"
