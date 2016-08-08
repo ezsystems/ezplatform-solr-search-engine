@@ -5,6 +5,9 @@
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          syntaxCheck="true">
+    <php>
+        <ini name="error_reporting" value="-1" />
+    </php>
     <testsuites>
         <testsuite name="Solr search engine tests">
             <directory suffix="Test.php">./tests/</directory>
