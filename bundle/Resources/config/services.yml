@@ -4,10 +4,10 @@ parameters:
 
 services:
     ezpublish.solr.engine_factory:
-        class: %ezpublish.solr.engine_factory.class%
+        class: "%ezpublish.solr.engine_factory.class%"
         arguments:
-            - @ezpublish.api.repository_configuration_provider
-            - %ez_search_engine_solr.default_connection%
-            - %ezpublish.spi.search.solr.class%
+            - "@ezpublish.api.repository_configuration_provider"
+            - "%ez_search_engine_solr.default_connection%"
+            - "%ezpublish.spi.search.solr.class%"
         calls:
-            - [setContainer, [@service_container]]
+            - [setContainer, ["@service_container"]]

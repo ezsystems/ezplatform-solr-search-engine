@@ -30,13 +30,13 @@ parameters:
 
 services:
     ezpublish.cache_pool.spi.cache.decorator:
-        class: %ezpublish.cache_pool.spi.cache.decorator.class%
+        class: "%ezpublish.cache_pool.spi.cache.decorator.class%"
 
     ezpublish.spi.search_engine:
         alias: ezpublish.spi.search.solr
 
     ezpublish.search.solr.endpoint.endpoint0:
-        class: %ezpublish.solr.endpoint.class%
+        class: "%ezpublish.solr.endpoint.class%"
         arguments:
             -
                 scheme: http
@@ -48,7 +48,7 @@ services:
             - {name: ezpublish.search.solr.endpoint, alias: endpoint0}
 
     ezpublish.search.solr.endpoint.endpoint1:
-        class: %ezpublish.solr.endpoint.class%
+        class: "%ezpublish.solr.endpoint.class%"
         arguments:
             -
                 scheme: http
@@ -60,7 +60,7 @@ services:
             - {name: ezpublish.search.solr.endpoint, alias: endpoint1}
 
     ezpublish.search.solr.endpoint.endpoint2:
-        class: %ezpublish.solr.endpoint.class%
+        class: "%ezpublish.solr.endpoint.class%"
         arguments:
             -
                 scheme: http
@@ -72,7 +72,7 @@ services:
             - {name: ezpublish.search.solr.endpoint, alias: endpoint2}
 
     ezpublish.search.solr.endpoint.endpoint3:
-        class: %ezpublish.solr.endpoint.class%
+        class: "%ezpublish.solr.endpoint.class%"
         arguments:
             -
                 scheme: http
