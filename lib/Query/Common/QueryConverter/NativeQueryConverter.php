@@ -63,7 +63,6 @@ class NativeQueryConverter extends QueryConverter
     {
         $params = array(
             'defType' => 'edismax',
-            'q.alt' => $this->criterionVisitor->visit($query->query),
             'fq' => $this->criterionVisitor->visit($query->filter),
             'sort' => $this->getSortClauses($query->sortClauses),
             'start' => $query->offset,
