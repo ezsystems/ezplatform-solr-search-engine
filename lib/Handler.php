@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace EzSystems\EzPlatformSolrSearchEngine;
 
@@ -19,6 +17,8 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\SPI\Search\IndexerDataProvider;
+use eZ\Publish\SPI\Search\Indexing;
 
 /**
  * The Content Search handler retrieves sets of of Content objects, based on a
@@ -41,7 +41,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
  * content objects based on criteria, which could not be converted in to
  * database statements.
  */
-class Handler implements SearchHandlerInterface
+class Handler implements SearchHandlerInterface, Indexing
 {
     /**
      * Content locator gateway.
@@ -437,5 +437,77 @@ class Handler implements SearchHandlerInterface
     public function bulkIndexDocuments(array $documents)
     {
         $this->gateway->bulkIndexDocuments($documents);
+    }
+
+    /**
+     * Create search engine index.
+     *
+     * @param $bulkCount
+     * @param \eZ\Publish\SPI\Search\IndexerDataProvider $dataProvider
+     * @param callable $onOutput
+     * @param callable $onBatchStarted
+     * @param callable $onBatchFinished
+     * @param callable $onBulkProcessed
+     * @param callable $onError
+     */
+    public function createSearchIndex(
+        $bulkCount,
+        IndexerDataProvider $dataProvider,
+        callable $onOutput,
+        callable $onBatchStarted,
+        callable $onBatchFinished,
+        callable $onBulkProcessed,
+        callable $onError
+    ) {
+        $this->purgeIndex();
+
+        $totalCount = $dataProvider->getPublishedContentCount();
+
+        //Indexing Content
+        $onOutput('Indexing Content...');
+
+        $onBatchStarted($totalCount);
+
+        $contentCurrentVersionIds = $dataProvider->getContentObjects();
+
+        $i = 0;
+        do {
+            $contentObjects = array();
+
+            for ($k = 0; $k <= $bulkCount; ++$k) {
+                $row = $contentCurrentVersionIds->current();
+                // check if there is data
+                if ($row === null) {
+                    break;
+                }
+                try {
+                    $contentObjects[] = $dataProvider->loadContentObjectVersion(
+                        $row['id'],
+                        $row['current_version']
+                    );
+                } catch (NotFoundException $e) {
+                    $onError("Could not load current version of Content with id ${row['id']}, so skipped for indexing. Full exception: " . $e->getMessage());
+                }
+            }
+
+            $documents = [];
+            foreach ($contentObjects as $content) {
+                try {
+                    $documents[] = $this->generateDocument($content);
+                } catch (NotFoundException $e) {
+                    $onError('Content with id ' . $content->versionInfo->id . ' has missing data, so skipped for indexing. Full exception: ' . $e->getMessage());
+                }
+            }
+
+            if (!empty($documents)) {
+                $this->bulkIndexDocuments($documents);
+            }
+            $onBulkProcessed($k);
+        } while (($i += $bulkCount) < $totalCount);
+
+        // Make changes available for search
+        $this->commit();
+
+        $onBatchFinished();
     }
 }
