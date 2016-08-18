@@ -19,9 +19,6 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\SPI\Search\IndexerDataProvider;
 use eZ\Publish\SPI\Search\Indexing;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\Console\Helper\ProgressBar;
-use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * The Content Search handler retrieves sets of of Content objects, based on a
@@ -447,22 +444,29 @@ class Handler implements SearchHandlerInterface, Indexing
      *
      * @param $bulkCount
      * @param \eZ\Publish\SPI\Search\IndexerDataProvider $dataProvider
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param callable $onOutput
+     * @param callable $onBatchStarted
+     * @param callable $onBatchFinished
+     * @param callable $onBulkProcessed
+     * @param callable $onError
      */
     public function createSearchIndex(
         $bulkCount,
         IndexerDataProvider $dataProvider,
-        OutputInterface $output,
-        LoggerInterface $logger
+        callable $onOutput,
+        callable $onBatchStarted,
+        callable $onBatchFinished,
+        callable $onBulkProcessed,
+        callable $onError
     ) {
         $this->purgeIndex();
 
         $totalCount = $dataProvider->getPublishedContentCount();
 
-        /* @var \Symfony\Component\Console\Helper\ProgressBar $progress */
-        $progress = new ProgressBar($output);
-        $progress->start($totalCount);
+        //Indexing Content
+        $onOutput('Indexing Content...');
+
+        $onBatchStarted($totalCount);
 
         $contentCurrentVersionIds = $dataProvider->getContentObjects();
 
@@ -482,9 +486,7 @@ class Handler implements SearchHandlerInterface, Indexing
                         $row['current_version']
                     );
                 } catch (NotFoundException $e) {
-                    $progress->clear();
-                    $logger->warning("Could not load current version of Content with id ${row['id']}, so skipped for indexing. Full exception: " . $e->getMessage());
-                    $progress->display();
+                    $onError("Could not load current version of Content with id ${row['id']}, so skipped for indexing. Full exception: " . $e->getMessage());
                 }
             }
 
@@ -493,22 +495,19 @@ class Handler implements SearchHandlerInterface, Indexing
                 try {
                     $documents[] = $this->generateDocument($content);
                 } catch (NotFoundException $e) {
-                    $progress->clear();
-                    $logger->warning('Content with id ' . $content->versionInfo->id . ' has missing data, so skipped for indexing. Full exception: ' . $e->getMessage());
-                    $progress->display();
+                    $onError('Content with id ' . $content->versionInfo->id . ' has missing data, so skipped for indexing. Full exception: ' . $e->getMessage());
                 }
             }
 
             if (!empty($documents)) {
                 $this->bulkIndexDocuments($documents);
             }
-
-            $progress->advance($k);
+            $onBulkProcessed($k);
         } while (($i += $bulkCount) < $totalCount);
 
         // Make changes available for search
         $this->commit();
 
-        $progress->finish();
+        $onBatchFinished();
     }
 }
