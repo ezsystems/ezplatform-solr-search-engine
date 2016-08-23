@@ -11,10 +11,13 @@
 namespace EzSystems\EzPlatformSolrSearchEngineBundle\ApiLoader;
 
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider;
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-class SolrEngineFactory extends ContainerAware
+class SolrEngineFactory implements ContainerAwareInterface
 {
+    use ContainerAwareTrait;
+
     /**
      * @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider
      */
