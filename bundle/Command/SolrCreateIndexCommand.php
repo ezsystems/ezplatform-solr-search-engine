@@ -11,7 +11,7 @@
 namespace EzSystems\EzPlatformSolrSearchEngineBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Helper\ProgressHelper;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
@@ -79,8 +79,8 @@ EOT
         $output->writeln('Indexing Content...');
 
         /** @var \Symfony\Component\Console\Helper\ProgressHelper $progress */
-        $progress = $this->getHelperSet()->get('progress');
-        $progress->start($output, $totalCount);
+        $progress = new ProgressBar($output);
+        $progress->start($totalCount);
         $i = 0;
         do {
             $contentObjects = array();
@@ -121,19 +121,19 @@ EOT
         $searchHandler->commit();
 
         $progress->finish();
+        $output->writeln('');
     }
 
     /**
      * Log warning while progress helper is running.
      *
      * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param \Symfony\Component\Console\Helper\ProgressHelper $progress
+     * @param \Symfony\Component\Console\Helper\ProgressBar $progress
      * @param $message
      */
-    private function logWarning(OutputInterface $output, ProgressHelper $progress, $message)
+    private function logWarning(OutputInterface $output, ProgressBar $progress, $message)
     {
         $progress->clear();
-        $output->write("\r"); // get rid of padding (side effect of displaying progress bar)
         $this->logger->warning($message);
         $progress->display();
     }
