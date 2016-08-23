@@ -19,10 +19,11 @@ matrix:
         - php: 5.6
           env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="4.10.4" CORES_SETUP="single"    SOLR_CONFS="lib/Resources/config/solr/schema.xml lib/Resources/config/solr/custom-fields-types.xml lib/Resources/config/solr/language-fieldtypes.xml"
 
-# test only master (+ Pull requests)
+# test only master and stable branches (+ Pull requests against those)
 branches:
     only:
         - master
+        - /^\d.\d+$/
 
 before_script:
     - phpenv config-rm xdebug.ini
