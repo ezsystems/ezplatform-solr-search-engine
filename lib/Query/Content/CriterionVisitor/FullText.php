@@ -109,7 +109,7 @@ class FullText extends CriterionVisitor
         foreach ($this->tokenizeString($criterion->value) as $token) {
             // Escaping special characters as fuzziness can't be applied to a phrase (quoted string)
             $tokenEscaped = $this->escapeTerm($token);
-            $tokens[] = "+{$tokenEscaped}{$fuzziness}";
+            $tokens[] = "{$tokenEscaped}{$fuzziness}";
         }
 
         return implode(' ', $tokens);
