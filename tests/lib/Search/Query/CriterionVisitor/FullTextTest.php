@@ -10,14 +10,16 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Tests\Search\Query\CriterionVisitor;
 
-use EzSystems\EzPlatformSolrSearchEngine\Tests\Search\TestCase;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\Core\FieldType\TextLine\SearchField;
+use eZ\Publish\SPI\Search\FieldType\StringField;
+use EzSystems\EzPlatformSolrSearchEngine\Tests\Search\TestCase;
 use EzSystems\EzPlatformSolrSearchEngine\Query;
 
 /**
  * Test case for FullText criterion visitor.
  *
- * @covers \EzSystems\EzPlatformSolrSearchEngine\Content\CriterionVisitor\FullText
+ * @covers \EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor\FullText
  */
 class FullTextTest extends TestCase
 {
@@ -64,7 +66,19 @@ class FullTextTest extends TestCase
         $criterion = new Criterion\FullText('Hello');
 
         $this->assertEquals(
-            '((text:Hello))',
+            '(text:(Hello))',
+            $visitor->visit($criterion)
+        );
+    }
+
+    public function testVisitSimpleMultipleWords()
+    {
+        $visitor = $this->getFullTextCriterionVisitor();
+
+        $criterion = new Criterion\FullText('Hello World');
+
+        $this->assertEquals(
+            '(text:(Hello World))',
             $visitor->visit($criterion)
         );
     }
@@ -77,14 +91,27 @@ class FullTextTest extends TestCase
         $criterion->fuzziness = .5;
 
         $this->assertEquals(
-            '((text:Hello~0.5))',
+            '(text:(Hello~0.5))',
+            $visitor->visit($criterion)
+        );
+    }
+
+    public function testVisitFuzzyMultipleWords()
+    {
+        $visitor = $this->getFullTextCriterionVisitor();
+
+        $criterion = new Criterion\FullText('Hello World');
+        $criterion->fuzziness = .5;
+
+        $this->assertEquals(
+            '(text:(Hello~0.5 World~0.5))',
             $visitor->visit($criterion)
         );
     }
 
     public function testVisitBoost()
     {
-        $ftTextLine = new \eZ\Publish\Core\FieldType\TextLine\SearchField();
+        $ftTextLine = new SearchField();
         $visitor = $this->getFullTextCriterionVisitor(
             array(
                 'title_1_s' => $ftTextLine,
@@ -96,7 +123,26 @@ class FullTextTest extends TestCase
         $criterion->boost = array('title' => 2);
 
         $this->assertEquals(
-            '((text:Hello) OR (title_1_s:Hello^2) OR (title_2_s:Hello^2))',
+            '(text:(Hello) OR title_1_s:(Hello)^2 OR title_2_s:(Hello)^2)',
+            $visitor->visit($criterion)
+        );
+    }
+
+    public function testVisitBoostMultipleWords()
+    {
+        $ftTextLine = new SearchField();
+        $visitor = $this->getFullTextCriterionVisitor(
+            array(
+                'title_1_s' => $ftTextLine,
+                'title_2_s' => $ftTextLine,
+            )
+        );
+
+        $criterion = new Criterion\FullText('Hello World');
+        $criterion->boost = array('title' => 2);
+
+        $this->assertEquals(
+            '(text:(Hello World) OR title_1_s:(Hello World)^2 OR title_2_s:(Hello World)^2)',
             $visitor->visit($criterion)
         );
     }
@@ -111,14 +157,29 @@ class FullTextTest extends TestCase
         );
 
         $this->assertEquals(
-            '((text:Hello))',
+            '(text:(Hello))',
+            $visitor->visit($criterion)
+        );
+    }
+
+    public function testVisitBoostUnknownFieldMultipleWords()
+    {
+        $visitor = $this->getFullTextCriterionVisitor();
+
+        $criterion = new Criterion\FullText('Hello World');
+        $criterion->boost = array(
+            'unknown_field' => 2,
+        );
+
+        $this->assertEquals(
+            '(text:(Hello World))',
             $visitor->visit($criterion)
         );
     }
 
     public function testVisitFuzzyBoost()
     {
-        $stringField = new \eZ\Publish\SPI\Search\FieldType\StringField();
+        $stringField = new StringField();
         $visitor = $this->getFullTextCriterionVisitor(
             array(
                 'title_1_s' => $stringField,
@@ -130,7 +191,26 @@ class FullTextTest extends TestCase
         $criterion->boost = array('title' => 2);
 
         $this->assertEquals(
-            '((text:Hello~0.5) OR (title_1_s:Hello^2~0.5) OR (title_2_s:Hello^2~0.5))',
+            '(text:(Hello~0.5) OR title_1_s:(Hello~0.5)^2 OR title_2_s:(Hello~0.5)^2)',
+            $visitor->visit($criterion)
+        );
+    }
+
+    public function testVisitFuzzyBoostMultipleWords()
+    {
+        $stringField = new StringField();
+        $visitor = $this->getFullTextCriterionVisitor(
+            array(
+                'title_1_s' => $stringField,
+                'title_2_s' => $stringField,
+            )
+        );
+        $criterion = new Criterion\FullText('Hello World');
+        $criterion->fuzziness = .5;
+        $criterion->boost = array('title' => 2);
+
+        $this->assertEquals(
+            '(text:(Hello~0.5 World~0.5) OR title_1_s:(Hello~0.5 World~0.5)^2 OR title_2_s:(Hello~0.5 World~0.5)^2)',
             $visitor->visit($criterion)
         );
     }

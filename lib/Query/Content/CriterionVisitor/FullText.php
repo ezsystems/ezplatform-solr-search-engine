@@ -13,6 +13,7 @@ namespace EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor;
 use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 use eZ\Publish\Core\Search\Common\FieldNameResolver;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\FullText as FullTextCriterion;
 
 /**
  * Visits the FullText criterion.
@@ -58,7 +59,7 @@ class FullText extends CriterionVisitor
      */
     public function canVisit(Criterion $criterion)
     {
-        return $criterion instanceof Criterion\FullText;
+        return $criterion instanceof FullTextCriterion;
     }
 
     /**
@@ -71,30 +72,76 @@ class FullText extends CriterionVisitor
      */
     public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null)
     {
-        $queries = array(
-            'text:' . $this->escapeQuote($criterion->value),
-        );
+        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\FullText $criterion */
+        $string = $this->prepareSearchString($criterion);
+        $queries = [];
+
+        $queries[] = "text:({$string})";
 
         foreach ($criterion->boost as $field => $boost) {
             $searchFields = $this->getSearchFields($criterion, $field);
 
             foreach ($searchFields as $name => $fieldType) {
-                $queries[] = $name . ':' . $this->escapeQuote($criterion->value) . '^' . $boost;
+                $queries[] = "{$name}:({$string})^{$boost}";
             }
         }
 
-        return '((' . implode(
-            ') OR (',
-            array_map(
-                function ($search) use ($criterion) {
-                    return $search . (
-                        $criterion->fuzziness < 1 ?
-                            sprintf('~%.1f', $criterion->fuzziness) :
-                            ''
-                        );
-                },
-                $queries
-            )
-        ) . '))';
+        return '(' . implode(' OR ', $queries) . ')';
+    }
+
+    /**
+     * Prepares full-text search string.
+     *
+     * Preparing includes escaping special characters and applying fuzziness to tokens.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion\FullText $criterion
+     *
+     * @return string
+     */
+    private function prepareSearchString(FullTextCriterion $criterion)
+    {
+        $tokens = [];
+        $fuzziness = '';
+        if ($criterion->fuzziness < 1) {
+            $fuzziness = sprintf('~%.1f', $criterion->fuzziness);
+        }
+
+        foreach ($this->tokenizeString($criterion->value) as $token) {
+            // Escaping special characters as fuzziness can't be applied to a phrase (quoted string)
+            $tokenEscaped = $this->escapeTerm($token);
+            $tokens[] = "{$tokenEscaped}{$fuzziness}";
+        }
+
+        return implode(' ', $tokens);
+    }
+
+    /**
+     * Tokenize string.
+     *
+     * @param string $string
+     *
+     * @return string[]
+     */
+    private function tokenizeString($string)
+    {
+        return array_filter(array_map('trim', preg_split('(\\p{Z})u', $string)));
+    }
+
+    /**
+     * Escape a term.
+     *
+     * We don't escape a wildcard.
+     *
+     * @link http://lucene.apache.org/core/5_0_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#Escaping_Special_Characters
+     *
+     * @param string $input
+     *
+     * @return string
+     */
+    private function escapeTerm($input)
+    {
+        $pattern = '/(\+|-|&&|\|\||!|\(|\)|\{|}|\[|]|\^|"|~|\?|:|\/|\\\)/';
+
+        return preg_replace($pattern, '\\\$1', $input);
     }
 }
