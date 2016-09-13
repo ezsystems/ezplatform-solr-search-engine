@@ -11,7 +11,7 @@
     ],
     "require": {
         "php": "~5.5|~7.0",
-        "ezsystems/ezpublish-kernel": "^6.5@dev"
+        "ezsystems/ezpublish-kernel": "dev-EZP-26141_fix_multitoken_fulltext"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.7",
