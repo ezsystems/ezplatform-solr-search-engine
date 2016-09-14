@@ -41,6 +41,9 @@ EOT
         $this->logger = $this->getContainer()->get('logger');
 
         $bulkCount = $input->getArgument('bulk_count');
+        if (!is_numeric($bulkCount) || (int)$bulkCount < 1) {
+            throw new RuntimeException("'bulk_count' argument should be > 0, got '{$bulkCount}'");
+        }
 
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandler */
         $searchHandler = $this->getContainer()->get('ezpublish.spi.search');
@@ -85,7 +88,7 @@ EOT
         do {
             $contentObjects = array();
 
-            for ($k = 0; $k <= $bulkCount; ++$k) {
+            for ($k = 0; $k < $bulkCount; ++$k) {
                 if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     break;
                 }
