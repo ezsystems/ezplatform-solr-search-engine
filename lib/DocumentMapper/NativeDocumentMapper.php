@@ -13,7 +13,6 @@ namespace EzSystems\EzPlatformSolrSearchEngine\DocumentMapper;
 use EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\Content as ContentFieldMapper;
 use EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\ContentTranslation as ContentTranslationFieldMapper;
 use EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\Location as LocationFieldMapper;
-use EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\LocationTranslation as LocationTranslationFieldMapper;
 use EzSystems\EzPlatformSolrSearchEngine\DocumentMapper;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Type as ContentType;
@@ -59,11 +58,6 @@ class NativeDocumentMapper implements DocumentMapper
      * @var \EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\Location
      */
     private $locationFieldMapper;
-
-    /**
-     * @var \EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\LocationTranslation
-     */
-    private $locationTranslationFieldMapper;
 
     /**
      * Field registry.
@@ -122,7 +116,6 @@ class NativeDocumentMapper implements DocumentMapper
      * @param \EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\Content $contentFieldMapper
      * @param \EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\ContentTranslation $contentTranslationFieldMapper
      * @param \EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\Location $locationFieldMapper
-     * @param \EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\LocationTranslation $locationTranslationFieldMapper
      * @param \eZ\Publish\Core\Search\Common\FieldRegistry $fieldRegistry
      * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
@@ -137,7 +130,6 @@ class NativeDocumentMapper implements DocumentMapper
         ContentFieldMapper $contentFieldMapper,
         ContentTranslationFieldMapper $contentTranslationFieldMapper,
         LocationFieldMapper $locationFieldMapper,
-        LocationTranslationFieldMapper $locationTranslationFieldMapper,
         FieldRegistry $fieldRegistry,
         ContentHandler $contentHandler,
         LocationHandler $locationHandler,
@@ -151,7 +143,6 @@ class NativeDocumentMapper implements DocumentMapper
         $this->contentFieldMapper = $contentFieldMapper;
         $this->contentTranslationFieldMapper = $contentTranslationFieldMapper;
         $this->locationFieldMapper = $locationFieldMapper;
-        $this->locationTranslationFieldMapper = $locationTranslationFieldMapper;
         $this->fieldRegistry = $fieldRegistry;
         $this->contentHandler = $contentHandler;
         $this->locationHandler = $locationHandler;
@@ -413,11 +404,6 @@ class NativeDocumentMapper implements DocumentMapper
 
             $translationLocationDocuments = array();
             foreach ($locations as $location) {
-                $locationTranslationFields = $this->getLocationTranslationFields(
-                    $location,
-                    $languageCode
-                );
-
                 $translationLocationDocuments[] = new Document(
                     array(
                         'id' => $this->generateLocationDocumentId($location->id, $languageCode),
@@ -427,8 +413,7 @@ class NativeDocumentMapper implements DocumentMapper
                             $metaFields,
                             $blockFields,
                             $locationFieldsMap[$location->id],
-                            $blockTranslationFields,
-                            $locationTranslationFields
+                            $blockTranslationFields
                         ),
                     )
                 );
@@ -881,26 +866,6 @@ class NativeDocumentMapper implements DocumentMapper
 
         if ($this->locationFieldMapper->accept($location)) {
             $fields = $this->locationFieldMapper->mapFields($location);
-        }
-
-        return $fields;
-    }
-
-    /**
-     * Returns an array of fields for the given $location and $languageCode, to be added to
-     * the corresponding Location document.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Location $location
-     * @param string $languageCode
-     *
-     * @return \eZ\Publish\SPI\Search\Field[]
-     */
-    private function getLocationTranslationFields(Location $location, $languageCode)
-    {
-        $fields = [];
-
-        if ($this->locationTranslationFieldMapper->accept($location, $languageCode)) {
-            $fields = $this->locationTranslationFieldMapper->mapFields($location, $languageCode);
         }
 
         return $fields;

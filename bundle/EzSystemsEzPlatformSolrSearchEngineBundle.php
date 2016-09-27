@@ -32,7 +32,6 @@ class EzSystemsEzPlatformSolrSearchEngineBundle extends Bundle
         $container->addCompilerPass(new DocumentFieldMapperPass\Content());
         $container->addCompilerPass(new DocumentFieldMapperPass\ContentTranslation());
         $container->addCompilerPass(new DocumentFieldMapperPass\Location());
-        $container->addCompilerPass(new DocumentFieldMapperPass\LocationTranslation());
         $container->addCompilerPass(new AggregateCriterionVisitorPass());
         $container->addCompilerPass(new AggregateFacetBuilderVisitorPass());
         $container->addCompilerPass(new AggregateSortClauseVisitorPass());

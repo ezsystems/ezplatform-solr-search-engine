@@ -8,7 +8,6 @@ parameters:
     ezpublish.search.solr.document_field_mapper.content.class: EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\Content\Aggregate
     ezpublish.search.solr.document_field_mapper.content_translation.class: EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\ContentTranslation\Aggregate
     ezpublish.search.solr.document_field_mapper.location.class: EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\Location\Aggregate
-    ezpublish.search.solr.document_field_mapper.location_translation.class: EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\LocationTranslation\Aggregate
 
 services:
     ezpublish.search.solr.gateway.client.http.stream:
@@ -68,8 +67,3 @@ services:
     # are registered to this one using compilation pass
     ezpublish.search.solr.document_field_mapper.location:
         class: '%ezpublish.search.solr.document_field_mapper.location.class%'
-
-    # Note: services tagged with 'ezpublish.search.solr.document_field_mapper.location_translation'
-    # are registered to this one using compilation pass
-    ezpublish.search.solr.document_field_mapper.location_translation:
-        class: '%ezpublish.search.solr.document_field_mapper.location_translation.class%'
