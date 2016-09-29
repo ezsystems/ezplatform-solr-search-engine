@@ -8,7 +8,6 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper;
 
-use EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper;
 use eZ\Publish\SPI\Persistence\Content as SPIContent;
 
 /**
@@ -17,7 +16,7 @@ use eZ\Publish\SPI\Persistence\Content as SPIContent;
  * Content translation document field mapper maps Content in a specific translation to the
  * search fields for Content document.
  */
-abstract class ContentTranslation extends FieldMapper
+abstract class ContentTranslation
 {
     /**
      * Indicates if the mapper accepts given $content and $languageCode for mapping.

@@ -8,7 +8,6 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper;
 
-use EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper;
 use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 
 /**
@@ -16,7 +15,7 @@ use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
  *
  * Location document field mapper maps Location to the search fields for Location document.
  */
-abstract class Location extends FieldMapper
+abstract class Location
 {
     /**
      * Indicates if the mapper accepts given $location for mapping.

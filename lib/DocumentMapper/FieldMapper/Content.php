@@ -8,7 +8,6 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper;
 
-use EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper;
 use eZ\Publish\SPI\Persistence\Content as SPIContent;
 
 /**
@@ -16,7 +15,7 @@ use eZ\Publish\SPI\Persistence\Content as SPIContent;
  *
  * Content document field mapper maps Content to the search fields for Content document.
  */
-abstract class Content extends FieldMapper
+abstract class Content
 {
     /**
      * Indicates if the mapper accepts the given $content for mapping.
