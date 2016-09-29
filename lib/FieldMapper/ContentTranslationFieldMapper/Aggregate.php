@@ -6,25 +6,25 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\ContentTranslation;
+namespace EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
 
-use EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\ContentTranslation;
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
 use eZ\Publish\SPI\Persistence\Content;
 
 /**
  * Aggregate implementation of Content translation document field mapper.
  */
-class Aggregate extends ContentTranslation
+class Aggregate extends ContentTranslationFieldMapper
 {
     /**
      * An array of aggregated field mappers, sorted by priority.
      *
-     * @var \EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\ContentTranslation[]
+     * @var \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper[]
      */
     protected $mappers = [];
 
     /**
-     * @param \EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\ContentTranslation[] $mappers
+     * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper[] $mappers
      *        An array of mappers, sorted by priority.
      */
     public function __construct(array $mappers = [])
@@ -37,9 +37,9 @@ class Aggregate extends ContentTranslation
     /**
      * Adds given $mapper to the internal array as the next one in priority.
      *
-     * @param \EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\ContentTranslation $mapper
+     * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper $mapper
      */
-    public function addMapper(ContentTranslation $mapper)
+    public function addMapper(ContentTranslationFieldMapper $mapper)
     {
         $this->mappers[] = $mapper;
     }

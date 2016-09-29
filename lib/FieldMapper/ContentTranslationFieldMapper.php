@@ -6,7 +6,7 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper;
+namespace EzSystems\EzPlatformSolrSearchEngine\FieldMapper;
 
 use eZ\Publish\SPI\Persistence\Content as SPIContent;
 
@@ -16,7 +16,7 @@ use eZ\Publish\SPI\Persistence\Content as SPIContent;
  * Content translation document field mapper maps Content in a specific translation to the
  * search fields for Content document.
  */
-abstract class ContentTranslation
+abstract class ContentTranslationFieldMapper
 {
     /**
      * Indicates if the mapper accepts given $content and $languageCode for mapping.

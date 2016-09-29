@@ -10,9 +10,9 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\DocumentMapper;
 
-use EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\Content as ContentFieldMapper;
-use EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\ContentTranslation as ContentTranslationFieldMapper;
-use EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\Location as LocationFieldMapper;
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper;
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper;
 use EzSystems\EzPlatformSolrSearchEngine\DocumentMapper;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Type as ContentType;
@@ -35,27 +35,27 @@ use eZ\Publish\Core\Search\Common\FieldNameGenerator;
 class NativeDocumentMapper implements DocumentMapper
 {
     /**
-     * @var \EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\Content
+     * @var \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper
      */
     private $blockFieldMapper;
 
     /**
-     * @var \EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\ContentTranslation
+     * @var \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper
      */
     private $blockTranslationFieldMapper;
 
     /**
-     * @var \EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\Content
+     * @var \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper
      */
     private $contentFieldMapper;
 
     /**
-     * @var \EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\ContentTranslation
+     * @var \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper
      */
     private $contentTranslationFieldMapper;
 
     /**
-     * @var \EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\Location
+     * @var \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper
      */
     private $locationFieldMapper;
 
@@ -111,11 +111,11 @@ class NativeDocumentMapper implements DocumentMapper
     /**
      * Creates a new document mapper.
      *
-     * @param \EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\Content $blockFieldMapper
-     * @param \EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\ContentTranslation $blockTranslationFieldMapper
-     * @param \EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\Content $contentFieldMapper
-     * @param \EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\ContentTranslation $contentTranslationFieldMapper
-     * @param \EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\Location $locationFieldMapper
+     * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper $blockFieldMapper
+     * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper $blockTranslationFieldMapper
+     * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper $contentFieldMapper
+     * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper $contentTranslationFieldMapper
+     * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper $locationFieldMapper
      * @param \eZ\Publish\Core\Search\Common\FieldRegistry $fieldRegistry
      * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler

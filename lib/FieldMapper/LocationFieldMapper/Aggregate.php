@@ -6,25 +6,25 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\Content;
+namespace EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper;
 
-use EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\Content as ContentMapper;
-use eZ\Publish\SPI\Persistence\Content;
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper;
+use eZ\Publish\SPI\Persistence\Content\Location;
 
 /**
- * Aggregate implementation of Content document field mapper.
+ * Aggregate implementation of Location document field mapper.
  */
-class Aggregate extends ContentMapper
+class Aggregate extends LocationFieldMapper
 {
     /**
      * An array of aggregated field mappers, sorted by priority.
      *
-     * @var \EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\Content[]
+     * @var \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper[]
      */
     protected $mappers = [];
 
     /**
-     * @param \EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\Content[] $mappers
+     * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper[] $mappers
      *        An array of mappers, sorted by priority.
      */
     public function __construct(array $mappers = [])
@@ -37,25 +37,25 @@ class Aggregate extends ContentMapper
     /**
      * Adds given $mapper to the internal array as the next one in priority.
      *
-     * @param \EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\Content $mapper
+     * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper $mapper
      */
-    public function addMapper(ContentMapper $mapper)
+    public function addMapper(LocationFieldMapper $mapper)
     {
         $this->mappers[] = $mapper;
     }
 
-    public function accept(Content $content)
+    public function accept(Location $location)
     {
         return true;
     }
 
-    public function mapFields(Content $content)
+    public function mapFields(Location $location)
     {
         $fields = [];
 
         foreach ($this->mappers as $mapper) {
-            if ($mapper->accept($content)) {
-                $fields = array_merge($fields, $mapper->mapFields($content));
+            if ($mapper->accept($location)) {
+                $fields = array_merge($fields, $mapper->mapFields($location));
             }
         }
 

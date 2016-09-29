@@ -3,11 +3,11 @@ parameters:
     ezpublish.search.solr.query.common.criterion_visitor.aggregate.class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\Aggregate
     ezpublish.search.solr.query.common.sort_clause_visitor.aggregate.class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\SortClauseVisitor\Aggregate
     ezpublish.search.solr.query.common.facet_builder_visitor.aggregate.class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\FacetBuilderVisitor\Aggregate
-    ezpublish.search.solr.document_field_mapper.block.class: EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\Content\Aggregate
-    ezpublish.search.solr.document_field_mapper.block_translation.class: EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\ContentTranslation\Aggregate
-    ezpublish.search.solr.document_field_mapper.content.class: EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\Content\Aggregate
-    ezpublish.search.solr.document_field_mapper.content_translation.class: EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\ContentTranslation\Aggregate
-    ezpublish.search.solr.document_field_mapper.location.class: EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\FieldMapper\Location\Aggregate
+    ezpublish.search.solr.document_field_mapper.block.class: EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper\Aggregate
+    ezpublish.search.solr.document_field_mapper.block_translation.class: EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper\Aggregate
+    ezpublish.search.solr.document_field_mapper.content.class: EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper\Aggregate
+    ezpublish.search.solr.document_field_mapper.content_translation.class: EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper\Aggregate
+    ezpublish.search.solr.document_field_mapper.location.class: EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper\Aggregate
 
 services:
     ezpublish.search.solr.gateway.client.http.stream:
