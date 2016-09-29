@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\Reference;
 /**
  * Base compiler pass for aggregate document field mappers.
  */
-abstract class BaseDocumentFieldMapperPass implements CompilerPassInterface
+abstract class BaseFieldMapperPass implements CompilerPassInterface
 {
     /**
      * Service ID of the aggregate plugin.
