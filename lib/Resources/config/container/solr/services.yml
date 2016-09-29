@@ -46,24 +46,24 @@ services:
     # Note: services tagged with 'ezpublish.search.solr.document_field_mapper.block'
     # are registered to this one using compilation pass
     ezpublish.search.solr.document_field_mapper.block:
-        class: '%ezpublish.search.solr.document_field_mapper.block.class%'
+        class: "%ezpublish.search.solr.document_field_mapper.block.class%"
 
     # Note: services tagged with 'ezpublish.search.solr.document_field_mapper.block_translation'
     # are registered to this one using compilation pass
     ezpublish.search.solr.document_field_mapper.block_translation:
-        class: '%ezpublish.search.solr.document_field_mapper.block_translation.class%'
+        class: "%ezpublish.search.solr.document_field_mapper.block_translation.class%"
 
     # Note: services tagged with 'ezpublish.search.solr.document_field_mapper.content'
     # are registered to this one using compilation pass
     ezpublish.search.solr.document_field_mapper.content:
-        class: '%ezpublish.search.solr.document_field_mapper.content.class%'
+        class: "%ezpublish.search.solr.document_field_mapper.content.class%"
 
     # Note: services tagged with 'ezpublish.search.solr.document_field_mapper.content_translation'
     # are registered to this one using compilation pass
     ezpublish.search.solr.document_field_mapper.content_translation:
-        class: '%ezpublish.search.solr.document_field_mapper.content_translation.class%'
+        class: "%ezpublish.search.solr.document_field_mapper.content_translation.class%"
 
     # Note: services tagged with 'ezpublish.search.solr.document_field_mapper.location'
     # are registered to this one using compilation pass
     ezpublish.search.solr.document_field_mapper.location:
-        class: '%ezpublish.search.solr.document_field_mapper.location.class%'
+        class: "%ezpublish.search.solr.document_field_mapper.location.class%"
