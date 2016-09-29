@@ -16,6 +16,6 @@ use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler\BaseFieldMapperPass;
  */
 class ContentTranslationFieldMapperPass extends BaseFieldMapperPass
 {
-    const AGGREGATE_MAPPER_SERVICE_ID = 'ezpublish.search.solr.document_mapper.plugin.content_translation';
+    const AGGREGATE_MAPPER_SERVICE_ID = 'ezpublish.search.solr.field_mapper.content_translation';
     const AGGREGATE_MAPPER_SERVICE_TAG = self::AGGREGATE_MAPPER_SERVICE_ID;
 }

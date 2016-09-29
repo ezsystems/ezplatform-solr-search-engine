@@ -15,6 +15,6 @@ use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler\BaseFieldMapperPass;
  */
 class LocationFieldMapperPass extends BaseFieldMapperPass
 {
-    const AGGREGATE_MAPPER_SERVICE_ID = 'ezpublish.search.solr.document_mapper.plugin.location';
+    const AGGREGATE_MAPPER_SERVICE_ID = 'ezpublish.search.solr.field_mapper.location';
     const AGGREGATE_MAPPER_SERVICE_TAG = self::AGGREGATE_MAPPER_SERVICE_ID;
 }
