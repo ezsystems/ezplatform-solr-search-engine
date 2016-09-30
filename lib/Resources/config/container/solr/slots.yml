@@ -20,6 +20,7 @@ parameters:
     ezpublish.search.solr.slot.unhide_location.class: eZ\Publish\Core\Search\Common\Slot\UnhideLocation
     ezpublish.search.solr.slot.set_content_state.class: eZ\Publish\Core\Search\Common\Slot\SetContentState
     ezpublish.search.solr.slot.swap_location.class: eZ\Publish\Core\Search\Common\Slot\SwapLocation
+    ezpublish.search.solr.slot.update_content_metadata.class: eZ\Publish\Core\Search\Common\Slot\UpdateContentMetadata
 
 services:
     ezpublish.search.solr.slot:
@@ -149,3 +150,9 @@ services:
         class: "%ezpublish.search.solr.slot.swap_location.class%"
         tags:
             - {name: ezpublish.search.solr.slot, signal: LocationService\SwapLocationSignal}
+
+    ezpublish.search.solr.slot.update_content_metadata:
+        parent: ezpublish.search.solr.slot
+        class: "%ezpublish.search.solr.slot.update_content_metadata.class%"
+        tags:
+            - {name: ezpublish.search.solr.slot, signal: ContentService\UpdateContentMetadataSignal}
