@@ -16,7 +16,7 @@ Other search features such as Faceting, Highlighting, .., not supported by the S
 ## Install
 
 For how to install and configure see:
-- eZ Platform: https://doc.ez.no/display/TECHDOC/Solr+Bundle
+- eZ Platform: https://doc.ez.no/display/DEVELOPER/Solr+Bundle
 - eZ Publish Platform 5.4.x: https://doc.ez.no/display/EZP/Solr+Search+Engine+Bundle
 
 
@@ -45,7 +45,7 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
     *Note: See .travis.yml and bin/.travis/init_solr.sh for multi core setups*
 
     ```bash
-    cp -R lib/Resources/config/solr/* solr-4.10.4/example/solr/collection1/conf
+    cp -R lib/Resources/config/solr/ solr-4.10.4/example/solr/collection1/conf
     ```
     
     ###### For use in production/dev
