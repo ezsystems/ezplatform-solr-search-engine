@@ -61,6 +61,7 @@ parameters:
     ezpublish.search.solr.query.location.criterion_visitor.priority_in.class: EzSystems\EzPlatformSolrSearchEngine\Query\Location\CriterionVisitor\Location\PriorityIn
     ezpublish.search.solr.query.location.criterion_visitor.priority_between.class: EzSystems\EzPlatformSolrSearchEngine\Query\Location\CriterionVisitor\Location\PriorityBetween
     ezpublish.search.solr.query.location.criterion_visitor.field_in.class: EzSystems\EzPlatformSolrSearchEngine\Query\Location\CriterionVisitor\Field\FieldIn
+    ezpublish.search.solr.query.location.criterion_visitor.field_relation.class: EzSystems\EzPlatformSolrSearchEngine\Query\Location\CriterionVisitor\Field\FieldRelation
     ezpublish.search.solr.query.location.criterion_visitor.field_range.class: EzSystems\EzPlatformSolrSearchEngine\Query\Location\CriterionVisitor\Field\FieldRange
     # We don't support fulltext Location search out of the box
     #ezpublish.search.solr.query.location.criterion_visitor.full_text.class: EzSystems\EzPlatformSolrSearchEngine\Query\Location\CriterionVisitor\FullText
@@ -388,6 +389,14 @@ services:
         arguments:
             - "@ezpublish.search.common.field_name_resolver"
             - "@ezpublish.search.solr.field_value_mapper.aggregate"
+        tags:
+            - {name: ezpublish.search.solr.query.location.criterion_visitor}
+
+    ezpublish.search.solr.query.location.criterion_visitor.field_relation:
+        class: "%ezpublish.search.solr.query.location.criterion_visitor.field_relation.class%"
+        arguments:
+            - "@ezpublish.search.common.field_name_resolver"
+            - "@ezpublish.search.common.field_value_mapper.aggregate"
         tags:
             - {name: ezpublish.search.solr.query.location.criterion_visitor}
 
