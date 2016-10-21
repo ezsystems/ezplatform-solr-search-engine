@@ -390,16 +390,12 @@ class NativeDocumentMapper implements DocumentMapper
     /**
      * Generates the Solr backend document ID for Content object.
      *
+     * Format of id is "content<content-id>lang[<language>]".
      * If $language code is not provided, the method will return prefix of the IDs
      * of all Content's documents (there will be one document per translation).
      * The above is useful when targeting all Content's documents, without
-     * the knowledge of it's translations.
-     *
-     * In https://jira.ez.no/browse/EZP-26484 a bug was detected:
-     * At object deletions, this happens without language code, resulting in a delete query like:
-     * content1234* --> which deletes all IDs with bigger IDs like 12341, 12342, causing random deletion of objects
-     * Introducing a delimiter between ID and language code, thus the delete query only deletes occurances of given ID.
-     * Underscore as delimiter did not work - stripped out somewhere so using "lang" - should not matter
+     * the knowledge of it's translations, and thanks to "lang" string it will not
+     * risk matching other documents (as was the case in EZP-26484).
      *
      * @param int|string $contentId
      * @param null|string $languageCode
@@ -414,16 +410,12 @@ class NativeDocumentMapper implements DocumentMapper
     /**
      * Generates the Solr backend document ID for Location object.
      *
+     * Format of id is "content<content-id>lang[<language>]".
      * If $language code is not provided, the method will return prefix of the IDs
      * of all Location's documents (there will be one document per translation).
      * The above is useful when targeting all Location's documents, without
-     * the knowledge of it's Content's translations.
-     *
-     * In https://jira.ez.no/browse/EZP-26484 a bug was detected:
-     * At object deletions, this happens without language code, resulting in a delete query like:
-     * content1234* --> which deletes all IDs with bigger IDs like 12341, 12342, causing random deletion of objects
-     * Introducing a delimiter between ID and language code, thus the delete query only deletes occurances of given ID.
-     * Underscore as delimiter did not work - stripped out somewhere so using "lang" - should not matter
+     * the knowledge of it's translations, and thanks to "lang" string it will not
+     * risk matching other documents (as was the case in EZP-26484).
      *
      * @param int|string $locationId
      * @param null|string $languageCode
