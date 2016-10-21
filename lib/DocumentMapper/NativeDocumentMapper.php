@@ -395,6 +395,12 @@ class NativeDocumentMapper implements DocumentMapper
      * The above is useful when targeting all Content's documents, without
      * the knowledge of it's translations.
      *
+     * In https://jira.ez.no/browse/EZP-26484 a bug was detected:
+     * At object deletions, this happens without language code, resulting in a delete query like:
+     * content1234* --> which deletes all IDs with bigger IDs like 12341, 12342, causing random deletion of objects
+     * Introducing a delimiter between ID and language code, thus the delete query only deletes occurances of given ID.
+     * Underscore as delimiter did not work - stripped out somewhere so using "lang" - should not matter
+     *
      * @param int|string $contentId
      * @param null|string $languageCode
      *
@@ -402,7 +408,7 @@ class NativeDocumentMapper implements DocumentMapper
      */
     public function generateContentDocumentId($contentId, $languageCode = null)
     {
-        return strtolower("content{$contentId}{$languageCode}");
+        return strtolower("content{$contentId}lang{$languageCode}");
     }
 
     /**
@@ -413,6 +419,12 @@ class NativeDocumentMapper implements DocumentMapper
      * The above is useful when targeting all Location's documents, without
      * the knowledge of it's Content's translations.
      *
+     * In https://jira.ez.no/browse/EZP-26484 a bug was detected:
+     * At object deletions, this happens without language code, resulting in a delete query like:
+     * content1234* --> which deletes all IDs with bigger IDs like 12341, 12342, causing random deletion of objects
+     * Introducing a delimiter between ID and language code, thus the delete query only deletes occurances of given ID.
+     * Underscore as delimiter did not work - stripped out somewhere so using "lang" - should not matter
+     *
      * @param int|string $locationId
      * @param null|string $languageCode
      *
@@ -420,7 +432,7 @@ class NativeDocumentMapper implements DocumentMapper
      */
     public function generateLocationDocumentId($locationId, $languageCode = null)
     {
-        return strtolower("location{$locationId}{$languageCode}");
+        return strtolower("location{$locationId}lang{$languageCode}");
     }
 
     /**
