@@ -390,10 +390,12 @@ class NativeDocumentMapper implements DocumentMapper
     /**
      * Generates the Solr backend document ID for Content object.
      *
+     * Format of id is "content<content-id>lang[<language>]".
      * If $language code is not provided, the method will return prefix of the IDs
      * of all Content's documents (there will be one document per translation).
      * The above is useful when targeting all Content's documents, without
-     * the knowledge of it's translations.
+     * the knowledge of it's translations, and thanks to "lang" string it will not
+     * risk matching other documents (as was the case in EZP-26484).
      *
      * @param int|string $contentId
      * @param null|string $languageCode
@@ -402,16 +404,18 @@ class NativeDocumentMapper implements DocumentMapper
      */
     public function generateContentDocumentId($contentId, $languageCode = null)
     {
-        return strtolower("content{$contentId}{$languageCode}");
+        return strtolower("content{$contentId}lang{$languageCode}");
     }
 
     /**
      * Generates the Solr backend document ID for Location object.
      *
+     * Format of id is "content<content-id>lang[<language>]".
      * If $language code is not provided, the method will return prefix of the IDs
      * of all Location's documents (there will be one document per translation).
      * The above is useful when targeting all Location's documents, without
-     * the knowledge of it's Content's translations.
+     * the knowledge of it's translations, and thanks to "lang" string it will not
+     * risk matching other documents (as was the case in EZP-26484).
      *
      * @param int|string $locationId
      * @param null|string $languageCode
@@ -420,7 +424,7 @@ class NativeDocumentMapper implements DocumentMapper
      */
     public function generateLocationDocumentId($locationId, $languageCode = null)
     {
-        return strtolower("location{$locationId}{$languageCode}");
+        return strtolower("location{$locationId}lang{$languageCode}");
     }
 
     /**
