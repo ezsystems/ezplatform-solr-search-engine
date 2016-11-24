@@ -154,7 +154,6 @@ class NativeDocumentMapper implements DocumentMapper
                     array(
                         'id' => $this->generateLocationDocumentId($location->id, $languageCode),
                         'fields' => array_merge(
-                            $translationFields['regular'],
                             $blockFields,
                             $locationFieldsMap[$location->id],
                             $blockTranslationFields
@@ -180,7 +179,6 @@ class NativeDocumentMapper implements DocumentMapper
                     'alwaysAvailable' => $alwaysAvailable,
                     'isMainTranslation' => $isMainTranslation,
                     'fields' => array_merge(
-                        $translationFields['regular'],
                         $translationFields['fulltext'],
                         $blockFields,
                         $contentFields,
@@ -250,7 +248,6 @@ class NativeDocumentMapper implements DocumentMapper
         foreach ($content->fields as $field) {
             if (!isset($fieldSets[$field->languageCode])) {
                 $fieldSets[$field->languageCode] = array(
-                    'regular' => array(),
                     'fulltext' => array(),
                 );
             }
@@ -280,8 +277,6 @@ class NativeDocumentMapper implements DocumentMapper
 
                     if ($documentField->type instanceof FieldType\FullTextField) {
                         $fieldSets[$field->languageCode]['fulltext'][] = $documentField;
-                    } else {
-                        $fieldSets[$field->languageCode]['regular'][] = $documentField;
                     }
                 }
             }
