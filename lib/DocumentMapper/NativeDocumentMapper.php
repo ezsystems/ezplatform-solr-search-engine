@@ -164,94 +164,10 @@ class NativeDocumentMapper implements DocumentMapper
         $locations = $this->locationHandler->loadLocationsByContent($content->versionInfo->contentInfo->id);
         $section = $this->sectionHandler->load($content->versionInfo->contentInfo->sectionId);
         $mainLocation = null;
-        $isSomeLocationVisible = false;
-        $locationData = array();
         $locationFields = array();
 
         foreach ($locations as $location) {
             $locationFields[$location->id] = $this->mapLocationFields($location, $content, $section);
-
-            $locationData['ids'][] = $location->id;
-            $locationData['parent_ids'][] = $location->parentId;
-            $locationData['remote_ids'][] = $location->remoteId;
-            $locationData['path_strings'][] = $location->pathString;
-
-            if ($location->id == $content->versionInfo->contentInfo->mainLocationId) {
-                $mainLocation = $location;
-            }
-
-            if (!$location->hidden && !$location->invisible) {
-                $isSomeLocationVisible = true;
-            }
-        }
-
-        $fields = array(
-            new Field(
-                'location_visible',
-                $isSomeLocationVisible,
-                new FieldType\BooleanField()
-            ),
-        );
-
-        if (!empty($locationData)) {
-            $fields[] = new Field(
-                'location_id',
-                $locationData['ids'],
-                new FieldType\MultipleIdentifierField()
-            );
-            $fields[] = new Field(
-                'location_parent_id',
-                $locationData['parent_ids'],
-                new FieldType\MultipleIdentifierField()
-            );
-            $fields[] = new Field(
-                'location_remote_id',
-                $locationData['remote_ids'],
-                new FieldType\MultipleIdentifierField()
-            );
-            $fields[] = new Field(
-                'location_path_string',
-                $locationData['path_strings'],
-                new FieldType\MultipleIdentifierField()
-            );
-        }
-
-        if ($mainLocation !== null) {
-            $fields[] = new Field(
-                'main_location',
-                $mainLocation->id,
-                new FieldType\IdentifierField()
-            );
-            $fields[] = new Field(
-                'main_location_parent',
-                $mainLocation->parentId,
-                new FieldType\IdentifierField()
-            );
-            $fields[] = new Field(
-                'main_location_remote_id',
-                $mainLocation->remoteId,
-                new FieldType\IdentifierField()
-            );
-            $fields[] = new Field(
-                'main_location_visible',
-                !$mainLocation->hidden && !$mainLocation->invisible,
-                new FieldType\BooleanField()
-            );
-            $fields[] = new Field(
-                'main_location_path',
-                $mainLocation->pathString,
-                new FieldType\IdentifierField()
-            );
-            $fields[] = new Field(
-                'main_location_depth',
-                $mainLocation->depth,
-                new FieldType\IntegerField()
-            );
-            $fields[] = new Field(
-                'main_location_priority',
-                $mainLocation->priority,
-                new FieldType\IntegerField()
-            );
         }
 
         $contentType = $this->contentTypeHandler->load($content->versionInfo->contentInfo->contentTypeId);
@@ -326,7 +242,6 @@ class NativeDocumentMapper implements DocumentMapper
                     'alwaysAvailable' => $alwaysAvailable,
                     'isMainTranslation' => $isMainTranslation,
                     'fields' => array_merge(
-                        $fields,
                         $translationFields['regular'],
                         $translationFields['fulltext'],
                         $metaFields,
