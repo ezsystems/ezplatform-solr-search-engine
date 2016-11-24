@@ -148,26 +148,6 @@ class NativeDocumentMapper implements DocumentMapper
                 $languageCode
             );
 
-            $metaFields = array();
-            $metaFields[] = new Field(
-                'meta_indexed_language_code',
-                $languageCode,
-                new FieldType\StringField()
-            );
-            $metaFields[] = new Field(
-                'meta_indexed_is_main_translation',
-                ($languageCode === $content->versionInfo->contentInfo->mainLanguageCode),
-                new FieldType\BooleanField()
-            );
-            $metaFields[] = new Field(
-                'meta_indexed_is_main_translation_and_always_available',
-                (
-                    ($languageCode === $content->versionInfo->contentInfo->mainLanguageCode) &&
-                    $content->versionInfo->contentInfo->alwaysAvailable
-                ),
-                new FieldType\BooleanField()
-            );
-
             $translationLocationDocuments = array();
             foreach ($locations as $location) {
                 $translationLocationDocuments[] = new Document(
@@ -175,7 +155,6 @@ class NativeDocumentMapper implements DocumentMapper
                         'id' => $this->generateLocationDocumentId($location->id, $languageCode),
                         'fields' => array_merge(
                             $translationFields['regular'],
-                            $metaFields,
                             $blockFields,
                             $locationFieldsMap[$location->id],
                             $blockTranslationFields
@@ -203,7 +182,6 @@ class NativeDocumentMapper implements DocumentMapper
                     'fields' => array_merge(
                         $translationFields['regular'],
                         $translationFields['fulltext'],
-                        $metaFields,
                         $blockFields,
                         $contentFields,
                         $blockTranslationFields,
