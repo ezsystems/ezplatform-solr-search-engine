@@ -53,10 +53,7 @@ services:
             - "@ezpublish.search.solr.field_mapper.content"
             - "@ezpublish.search.solr.field_mapper.content_translation"
             - "@ezpublish.search.solr.field_mapper.location"
-            - "@ezpublish.search.common.field_registry"
             - "@ezpublish.spi.persistence.location_handler"
-            - "@ezpublish.spi.persistence.content_type_handler"
-            - "@ezpublish.search.common.field_name_generator"
 
     ezpublish.search.solr.document_mapper:
         alias: ezpublish.search.solr.document_mapper.native

@@ -15,15 +15,9 @@ use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapp
 use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper;
 use EzSystems\EzPlatformSolrSearchEngine\DocumentMapper;
 use eZ\Publish\SPI\Persistence\Content;
-use eZ\Publish\SPI\Persistence\Content\Type as ContentType;
 use eZ\Publish\SPI\Persistence\Content\Location;
-use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\Document;
-use eZ\Publish\SPI\Search\FieldType;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
-use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
-use eZ\Publish\Core\Search\Common\FieldRegistry;
-use eZ\Publish\Core\Search\Common\FieldNameGenerator;
 
 /**
  * NativeDocumentMapper maps Solr backend documents per Content translation.
@@ -56,32 +50,11 @@ class NativeDocumentMapper implements DocumentMapper
     private $locationFieldMapper;
 
     /**
-     * Field registry.
-     *
-     * @var \eZ\Publish\Core\Search\Common\FieldRegistry
-     */
-    protected $fieldRegistry;
-
-    /**
      * Location handler.
      *
      * @var \eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
     protected $locationHandler;
-
-    /**
-     * Content type handler.
-     *
-     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
-     */
-    protected $contentTypeHandler;
-
-    /**
-     * Field name generator.
-     *
-     * @var \eZ\Publish\Core\Search\Common\FieldNameGenerator
-     */
-    protected $fieldNameGenerator;
 
     /**
      * Creates a new document mapper.
@@ -91,10 +64,7 @@ class NativeDocumentMapper implements DocumentMapper
      * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper $contentFieldMapper
      * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper $contentTranslationFieldMapper
      * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper $locationFieldMapper
-     * @param \eZ\Publish\Core\Search\Common\FieldRegistry $fieldRegistry
      * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
-     * @param \eZ\Publish\Core\Search\Common\FieldNameGenerator $fieldNameGenerator
      */
     public function __construct(
         ContentFieldMapper $blockFieldMapper,
@@ -102,20 +72,14 @@ class NativeDocumentMapper implements DocumentMapper
         ContentFieldMapper $contentFieldMapper,
         ContentTranslationFieldMapper $contentTranslationFieldMapper,
         LocationFieldMapper $locationFieldMapper,
-        FieldRegistry $fieldRegistry,
-        LocationHandler $locationHandler,
-        ContentTypeHandler $contentTypeHandler,
-        FieldNameGenerator $fieldNameGenerator
+        LocationHandler $locationHandler
     ) {
         $this->blockFieldMapper = $blockFieldMapper;
         $this->blockTranslationFieldMapper = $blockTranslationFieldMapper;
         $this->contentFieldMapper = $contentFieldMapper;
         $this->contentTranslationFieldMapper = $contentTranslationFieldMapper;
         $this->locationFieldMapper = $locationFieldMapper;
-        $this->fieldRegistry = $fieldRegistry;
         $this->locationHandler = $locationHandler;
-        $this->contentTypeHandler = $contentTypeHandler;
-        $this->fieldNameGenerator = $fieldNameGenerator;
     }
 
     /**
@@ -130,11 +94,8 @@ class NativeDocumentMapper implements DocumentMapper
         $locations = $this->locationHandler->loadLocationsByContent($content->versionInfo->contentInfo->id);
         $mainLocation = null;
 
-        $contentType = $this->contentTypeHandler->load($content->versionInfo->contentInfo->contentTypeId);
-
         $blockFields = $this->getBlockFields($content);
         $contentFields = $this->getContentFields($content);
-        $fieldSets = $this->mapContentFields($content, $contentType);
         $documents = array();
 
         $locationFieldsMap = [];
@@ -142,7 +103,7 @@ class NativeDocumentMapper implements DocumentMapper
             $locationFieldsMap[$location->id] = $this->getLocationFields($location);
         }
 
-        foreach ($fieldSets as $languageCode => $translationFields) {
+        foreach (array_keys($content->versionInfo->names) as $languageCode) {
             $blockTranslationFields = $this->getBlockTranslationFields(
                 $content,
                 $languageCode
@@ -179,7 +140,6 @@ class NativeDocumentMapper implements DocumentMapper
                     'alwaysAvailable' => $alwaysAvailable,
                     'isMainTranslation' => $isMainTranslation,
                     'fields' => array_merge(
-                        $translationFields['fulltext'],
                         $blockFields,
                         $contentFields,
                         $blockTranslationFields,
@@ -231,58 +191,6 @@ class NativeDocumentMapper implements DocumentMapper
     public function generateLocationDocumentId($locationId, $languageCode = null)
     {
         return strtolower("location{$locationId}lang{$languageCode}");
-    }
-
-    /**
-     * Maps given Content fields to a map Document fields.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content $content
-     * @param \eZ\Publish\SPI\Persistence\Content\Type $contentType
-     *
-     * @return \eZ\Publish\SPI\Search\Field[][][]
-     */
-    protected function mapContentFields(Content $content, ContentType $contentType)
-    {
-        $fieldSets = array();
-
-        foreach ($content->fields as $field) {
-            if (!isset($fieldSets[$field->languageCode])) {
-                $fieldSets[$field->languageCode] = array(
-                    'fulltext' => array(),
-                );
-            }
-
-            foreach ($contentType->fieldDefinitions as $fieldDefinition) {
-                if ($fieldDefinition->id !== $field->fieldDefinitionId) {
-                    continue;
-                }
-
-                $fieldType = $this->fieldRegistry->getType($field->type);
-                $indexFields = $fieldType->getIndexData($field, $fieldDefinition);
-
-                foreach ($indexFields as $indexField) {
-                    if ($indexField->value === null) {
-                        continue;
-                    }
-
-                    $documentField = new Field(
-                        $name = $this->fieldNameGenerator->getName(
-                            $indexField->name,
-                            $fieldDefinition->identifier,
-                            $contentType->identifier
-                        ),
-                        $indexField->value,
-                        $indexField->type
-                    );
-
-                    if ($documentField->type instanceof FieldType\FullTextField) {
-                        $fieldSets[$field->languageCode]['fulltext'][] = $documentField;
-                    }
-                }
-            }
-        }
-
-        return $fieldSets;
     }
 
     /**
