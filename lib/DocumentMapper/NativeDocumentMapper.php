@@ -550,68 +550,7 @@ class NativeDocumentMapper implements DocumentMapper
 
     protected function mapLocationFields(Location $location, Content $content, Section $section)
     {
-        $fields = array(
-            new Field(
-                'location',
-                $location->id,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'document_type',
-                self::DOCUMENT_TYPE_IDENTIFIER_LOCATION,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'priority',
-                $location->priority,
-                new FieldType\IntegerField()
-            ),
-            new Field(
-                'hidden',
-                $location->hidden,
-                new FieldType\BooleanField()
-            ),
-            new Field(
-                'invisible',
-                $location->invisible,
-                new FieldType\BooleanField()
-            ),
-            new Field(
-                'remote_id',
-                $location->remoteId,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'parent_id',
-                $location->parentId,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'path_string',
-                $location->pathString,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'depth',
-                $location->depth,
-                new FieldType\IntegerField()
-            ),
-            new Field(
-                'sort_field',
-                $location->sortField,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'sort_order',
-                $location->sortOrder,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'is_main_location',
-                ($location->id == $content->versionInfo->contentInfo->mainLocationId),
-                new FieldType\BooleanField()
-            ),
-        );
+        $fields = [];
 
         // UserGroups and Users are Content, but permissions cascade is achieved through
         // Locations hierarchy. We index all ancestor Location Content ids of all
