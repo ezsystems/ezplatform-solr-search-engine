@@ -1,12 +1,14 @@
 <?php
 
 /**
+ * This file is part of the eZ Platform Solr Search Engine package.
+ *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
 
-use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper as BaseContentTranslationFieldMapper;
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\FieldType;
@@ -14,7 +16,7 @@ use eZ\Publish\SPI\Search\FieldType;
 /**
  * Maps meta fields to block documents (Content and Location).
  */
-class BlockDocumentsMetaFields extends BaseContentTranslationFieldMapper
+class BlockDocumentsMetaFields extends ContentTranslationFieldMapper
 {
     public function accept(Content $content, $languageCode)
     {

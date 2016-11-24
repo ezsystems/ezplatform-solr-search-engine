@@ -9,12 +9,12 @@
 namespace EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
 
 use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
+use eZ\Publish\Core\Search\Common\FieldNameGenerator;
+use eZ\Publish\Core\Search\Common\FieldRegistry;
 use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\FieldType;
-use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
-use eZ\Publish\Core\Search\Common\FieldRegistry;
-use eZ\Publish\Core\Search\Common\FieldNameGenerator;
 
 /**
  * Maps Content fields to block documents (Content and Location).

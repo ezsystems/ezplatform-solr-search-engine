@@ -10,7 +10,7 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper;
 
-use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper as BaseContentFieldMapper;
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\SPI\Search\Field;
@@ -19,7 +19,7 @@ use eZ\Publish\SPI\Search\FieldType;
 /**
  * Maps Location related fields to a Content document.
  */
-class ContentDocumentLocationFields extends BaseContentFieldMapper
+class ContentDocumentLocationFields extends ContentFieldMapper
 {
     /**
      * @var \eZ\Publish\SPI\Persistence\Content\Location\Handler

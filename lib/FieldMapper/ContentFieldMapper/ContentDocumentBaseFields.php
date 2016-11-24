@@ -5,25 +5,23 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper;
 
-use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper as BaseContentFieldMapper;
 use EzSystems\EzPlatformSolrSearchEngine\DocumentMapper;
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper;
+use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
-use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandler;
 use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandler;
-use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\FieldType;
 
 /**
  * Maps base Content related fields to a Content document.
  */
-class ContentDocumentBaseFields extends BaseContentFieldMapper
+class ContentDocumentBaseFields extends ContentFieldMapper
 {
     /**
      * @var \eZ\Publish\SPI\Persistence\Content\Location\Handler

@@ -10,14 +10,14 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\DocumentMapper;
 
+use EzSystems\EzPlatformSolrSearchEngine\DocumentMapper;
 use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper;
 use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
 use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper;
-use EzSystems\EzPlatformSolrSearchEngine\DocumentMapper;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Location;
-use eZ\Publish\SPI\Search\Document;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
+use eZ\Publish\SPI\Search\Document;
 
 /**
  * NativeDocumentMapper maps Solr backend documents per Content translation.
@@ -91,14 +91,13 @@ class NativeDocumentMapper implements DocumentMapper
      */
     public function mapContentBlock(Content $content)
     {
-        $locations = $this->locationHandler->loadLocationsByContent($content->versionInfo->contentInfo->id);
-        $mainLocation = null;
-
+        $contentInfo = $content->versionInfo->contentInfo;
+        $locations = $this->locationHandler->loadLocationsByContent($contentInfo->id);
         $blockFields = $this->getBlockFields($content);
         $contentFields = $this->getContentFields($content);
-        $documents = array();
-
+        $documents = [];
         $locationFieldsMap = [];
+
         foreach ($locations as $location) {
             $locationFieldsMap[$location->id] = $this->getLocationFields($location);
         }
@@ -123,8 +122,8 @@ class NativeDocumentMapper implements DocumentMapper
                 );
             }
 
-            $isMainTranslation = ($content->versionInfo->contentInfo->mainLanguageCode === $languageCode);
-            $alwaysAvailable = ($isMainTranslation && $content->versionInfo->contentInfo->alwaysAvailable);
+            $isMainTranslation = ($contentInfo->mainLanguageCode === $languageCode);
+            $alwaysAvailable = ($isMainTranslation && $contentInfo->alwaysAvailable);
             $contentTranslationFields = $this->getContentTranslationFields(
                 $content,
                 $languageCode
@@ -133,7 +132,7 @@ class NativeDocumentMapper implements DocumentMapper
             $documents[] = new Document(
                 array(
                     'id' => $this->generateContentDocumentId(
-                        $content->versionInfo->contentInfo->id,
+                        $contentInfo->id,
                         $languageCode
                     ),
                     'languageCode' => $languageCode,

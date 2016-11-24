@@ -10,20 +10,20 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper;
 
-use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper as BaseLocationFieldMapper;
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper;
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
+use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
-use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandler;
 use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandler;
-use eZ\Publish\SPI\Persistence\Content\Location;
+use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\FieldType;
 
 /**
  * Maps Content related fields to a Location document.
  */
-class LocationDocumentContentFields extends BaseLocationFieldMapper
+class LocationDocumentContentFields extends LocationFieldMapper
 {
     /**
      * @var \eZ\Publish\SPI\Persistence\Content\Handler
