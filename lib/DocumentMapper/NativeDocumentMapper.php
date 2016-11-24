@@ -185,106 +185,7 @@ class NativeDocumentMapper implements DocumentMapper
             }
         }
 
-        // UserGroups and Users are Content, but permissions cascade is achieved through
-        // Locations hierarchy. We index all ancestor Location Content ids of all
-        // Locations of an owner.
-        $ancestorLocationsContentIds = $this->getAncestorLocationsContentIds(
-            $content->versionInfo->contentInfo->ownerId
-        );
-        // Add owner user id as it can also be considered as user group.
-        $ancestorLocationsContentIds[] = $content->versionInfo->contentInfo->ownerId;
-
         $fields = array(
-            new Field(
-                'content',
-                $content->versionInfo->contentInfo->id,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'document_type',
-                self::DOCUMENT_TYPE_IDENTIFIER_CONTENT,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'type',
-                $content->versionInfo->contentInfo->contentTypeId,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'version_no',
-                $content->versionInfo->versionNo,
-                new FieldType\IntegerField()
-            ),
-            new Field(
-                'status',
-                $content->versionInfo->status,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'name',
-                $content->versionInfo->contentInfo->name,
-                new FieldType\StringField()
-            ),
-            new Field(
-                'creator',
-                $content->versionInfo->creatorId,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'owner',
-                $content->versionInfo->contentInfo->ownerId,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'owner_user_group',
-                $ancestorLocationsContentIds,
-                new FieldType\MultipleIdentifierField()
-            ),
-            new Field(
-                'section',
-                $content->versionInfo->contentInfo->sectionId,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'section_identifier',
-                $section->identifier,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'section_name',
-                $section->name,
-                new FieldType\StringField()
-            ),
-            new Field(
-                'remote_id',
-                $content->versionInfo->contentInfo->remoteId,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'modified',
-                $content->versionInfo->contentInfo->modificationDate,
-                new FieldType\DateField()
-            ),
-            new Field(
-                'published',
-                $content->versionInfo->contentInfo->publicationDate,
-                new FieldType\DateField()
-            ),
-            new Field(
-                'language_code',
-                array_keys($content->versionInfo->names),
-                new FieldType\MultipleStringField()
-            ),
-            new Field(
-                'main_language_code',
-                $content->versionInfo->contentInfo->mainLanguageCode,
-                new FieldType\StringField()
-            ),
-            new Field(
-                'always_available',
-                $content->versionInfo->contentInfo->alwaysAvailable,
-                new FieldType\BooleanField()
-            ),
             new Field(
                 'location_visible',
                 $isSomeLocationVisible,
@@ -354,17 +255,6 @@ class NativeDocumentMapper implements DocumentMapper
         }
 
         $contentType = $this->contentTypeHandler->load($content->versionInfo->contentInfo->contentTypeId);
-        $fields[] = new Field(
-            'group',
-            $contentType->groupIds,
-            new FieldType\MultipleIdentifierField()
-        );
-
-        $fields[] = new Field(
-            'object_state',
-            $this->getObjectStateIds($content->versionInfo->contentInfo->id),
-            new FieldType\MultipleIdentifierField()
-        );
 
         $blockFields = $this->getBlockFields($content);
         $contentFields = $this->getContentFields($content);

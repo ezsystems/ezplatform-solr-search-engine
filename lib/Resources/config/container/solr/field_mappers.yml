@@ -1,7 +1,18 @@
 parameters:
+    ezpublish.search.solr.field_mapper.content.content_document_base_fields.class: EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper\ContentDocumentBaseFields
     ezpublish.search.solr.field_mapper.location.location_document_base_fields.class: EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper\LocationDocumentBaseFields
 
 services:
+    ezpublish.search.solr.field_mapper.content.content_document_base_fields:
+        class: '%ezpublish.search.solr.field_mapper.content.content_document_base_fields.class%'
+        arguments:
+            - '@ezpublish.spi.persistence.location_handler'
+            - '@ezpublish.spi.persistence.content_type_handler'
+            - '@ezpublish.spi.persistence.object_state_handler'
+            - '@ezpublish.spi.persistence.section_handler'
+        tags:
+            - {name: ezpublish.search.solr.field_mapper.content}
+
     ezpublish.search.solr.field_mapper.location.location_document_base_fields:
         class: '%ezpublish.search.solr.field_mapper.location.location_document_base_fields.class%'
         arguments:
