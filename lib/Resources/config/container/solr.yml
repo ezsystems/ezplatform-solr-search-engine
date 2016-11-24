@@ -47,6 +47,11 @@ services:
     ezpublish.search.solr.document_mapper.native:
         class: "%ezpublish.search.solr.document_mapper.native.class%"
         arguments:
+            - "@ezpublish.search.solr.field_mapper.block"
+            - "@ezpublish.search.solr.field_mapper.block_translation"
+            - "@ezpublish.search.solr.field_mapper.content"
+            - "@ezpublish.search.solr.field_mapper.content_translation"
+            - "@ezpublish.search.solr.field_mapper.location"
             - "@ezpublish.search.common.field_registry"
             - "@ezpublish.spi.persistence.content_handler"
             - "@ezpublish.spi.persistence.location_handler"

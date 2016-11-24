@@ -10,6 +10,9 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\DocumentMapper;
 
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper;
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper;
 use EzSystems\EzPlatformSolrSearchEngine\DocumentMapper;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Type as ContentType;
@@ -31,6 +34,31 @@ use eZ\Publish\Core\Search\Common\FieldNameGenerator;
  */
 class NativeDocumentMapper implements DocumentMapper
 {
+    /**
+     * @var \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper
+     */
+    private $blockFieldMapper;
+
+    /**
+     * @var \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper
+     */
+    private $blockTranslationFieldMapper;
+
+    /**
+     * @var \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper
+     */
+    private $contentFieldMapper;
+
+    /**
+     * @var \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper
+     */
+    private $contentTranslationFieldMapper;
+
+    /**
+     * @var \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper
+     */
+    private $locationFieldMapper;
+
     /**
      * Field registry.
      *
@@ -83,6 +111,11 @@ class NativeDocumentMapper implements DocumentMapper
     /**
      * Creates a new document mapper.
      *
+     * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper $blockFieldMapper
+     * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper $blockTranslationFieldMapper
+     * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper $contentFieldMapper
+     * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper $contentTranslationFieldMapper
+     * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper $locationFieldMapper
      * @param \eZ\Publish\Core\Search\Common\FieldRegistry $fieldRegistry
      * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
@@ -92,6 +125,11 @@ class NativeDocumentMapper implements DocumentMapper
      * @param \eZ\Publish\Core\Search\Common\FieldNameGenerator $fieldNameGenerator
      */
     public function __construct(
+        ContentFieldMapper $blockFieldMapper,
+        ContentTranslationFieldMapper $blockTranslationFieldMapper,
+        ContentFieldMapper $contentFieldMapper,
+        ContentTranslationFieldMapper $contentTranslationFieldMapper,
+        LocationFieldMapper $locationFieldMapper,
         FieldRegistry $fieldRegistry,
         ContentHandler $contentHandler,
         LocationHandler $locationHandler,
@@ -100,6 +138,11 @@ class NativeDocumentMapper implements DocumentMapper
         SectionHandler $sectionHandler,
         FieldNameGenerator $fieldNameGenerator
     ) {
+        $this->blockFieldMapper = $blockFieldMapper;
+        $this->blockTranslationFieldMapper = $blockTranslationFieldMapper;
+        $this->contentFieldMapper = $contentFieldMapper;
+        $this->contentTranslationFieldMapper = $contentTranslationFieldMapper;
+        $this->locationFieldMapper = $locationFieldMapper;
         $this->fieldRegistry = $fieldRegistry;
         $this->contentHandler = $contentHandler;
         $this->locationHandler = $locationHandler;
@@ -323,10 +366,22 @@ class NativeDocumentMapper implements DocumentMapper
             new FieldType\MultipleIdentifierField()
         );
 
+        $blockFields = $this->getBlockFields($content);
+        $contentFields = $this->getContentFields($content);
         $fieldSets = $this->mapContentFields($content, $contentType);
         $documents = array();
 
+        $locationFieldsMap = [];
+        foreach ($locations as $location) {
+            $locationFieldsMap[$location->id] = $this->getLocationFields($location);
+        }
+
         foreach ($fieldSets as $languageCode => $translationFields) {
+            $blockTranslationFields = $this->getBlockTranslationFields(
+                $content,
+                $languageCode
+            );
+
             $metaFields = array();
             $metaFields[] = new Field(
                 'meta_indexed_language_code',
@@ -355,7 +410,10 @@ class NativeDocumentMapper implements DocumentMapper
                         'fields' => array_merge(
                             $locationFields[$location->id],
                             $translationFields['regular'],
-                            $metaFields
+                            $metaFields,
+                            $blockFields,
+                            $locationFieldsMap[$location->id],
+                            $blockTranslationFields
                         ),
                     )
                 );
@@ -363,6 +421,10 @@ class NativeDocumentMapper implements DocumentMapper
 
             $isMainTranslation = ($content->versionInfo->contentInfo->mainLanguageCode === $languageCode);
             $alwaysAvailable = ($isMainTranslation && $content->versionInfo->contentInfo->alwaysAvailable);
+            $contentTranslationFields = $this->getContentTranslationFields(
+                $content,
+                $languageCode
+            );
 
             $documents[] = new Document(
                 array(
@@ -377,7 +439,11 @@ class NativeDocumentMapper implements DocumentMapper
                         $fields,
                         $translationFields['regular'],
                         $translationFields['fulltext'],
-                        $metaFields
+                        $metaFields,
+                        $blockFields,
+                        $contentFields,
+                        $blockTranslationFields,
+                        $contentTranslationFields
                     ),
                     'documents' => $translationLocationDocuments,
                 )
@@ -706,5 +772,102 @@ class NativeDocumentMapper implements DocumentMapper
         }
 
         return $objectStateIds;
+    }
+
+    /**
+     * Returns an array of fields for the given $content, to be added to the
+     * corresponding block documents.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content $content
+     *
+     * @return \eZ\Publish\SPI\Search\Field[]
+     */
+    private function getBlockFields(Content $content)
+    {
+        $fields = [];
+
+        if ($this->blockFieldMapper->accept($content)) {
+            $fields = $this->blockFieldMapper->mapFields($content);
+        }
+
+        return $fields;
+    }
+
+    /**
+     * Returns an array of fields for the given $content and $languageCode, to be added to the
+     * corresponding block documents.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content $content
+     * @param string $languageCode
+     *
+     * @return \eZ\Publish\SPI\Search\Field[]
+     */
+    private function getBlockTranslationFields(Content $content, $languageCode)
+    {
+        $fields = [];
+
+        if ($this->blockTranslationFieldMapper->accept($content, $languageCode)) {
+            $fields = $this->blockTranslationFieldMapper->mapFields($content, $languageCode);
+        }
+
+        return $fields;
+    }
+
+    /**
+     * Returns an array of fields for the given $content, to be added to the corresponding
+     * Content document.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content $content
+     *
+     * @return \eZ\Publish\SPI\Search\Field[]
+     */
+    private function getContentFields(Content $content)
+    {
+        $fields = [];
+
+        if ($this->contentFieldMapper->accept($content)) {
+            $fields = $this->contentFieldMapper->mapFields($content);
+        }
+
+        return $fields;
+    }
+
+    /**
+     * Returns an array of fields for the given $content and $languageCode, to be added to the
+     * corresponding Content document.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content $content
+     * @param string $languageCode
+     *
+     * @return \eZ\Publish\SPI\Search\Field[]
+     */
+    private function getContentTranslationFields(Content $content, $languageCode)
+    {
+        $fields = [];
+
+        if ($this->contentTranslationFieldMapper->accept($content, $languageCode)) {
+            $fields = $this->contentTranslationFieldMapper->mapFields($content, $languageCode);
+        }
+
+        return $fields;
+    }
+
+    /**
+     * Returns an array of fields for the given $location, to be added to the corresponding
+     * Location document.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Location $location
+     *
+     * @return \eZ\Publish\SPI\Search\Field[]
+     */
+    private function getLocationFields(Location $location)
+    {
+        $fields = [];
+
+        if ($this->locationFieldMapper->accept($location)) {
+            $fields = $this->locationFieldMapper->mapFields($location);
+        }
+
+        return $fields;
     }
 }

@@ -79,6 +79,8 @@ abstract class ResultExtractor
      * Returns language code of the Content's translation of the matched document.
      *
      * @param $hit
+     *
+     * @return string
      */
     protected function getMatchedLanguageCode($hit)
     {
