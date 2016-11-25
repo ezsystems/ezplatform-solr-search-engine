@@ -60,6 +60,6 @@ class PublishedBetween extends DateMetadata
             $start = null;
         }
 
-        return 'content_published_dt:' . $this->getRange($criterion->operator, $start, $end);
+        return 'content_publication_date_dt:' . $this->getRange($criterion->operator, $start, $end);
     }
 }

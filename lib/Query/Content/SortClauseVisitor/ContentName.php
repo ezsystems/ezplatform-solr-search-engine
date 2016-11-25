@@ -39,6 +39,6 @@ class ContentName extends SortClauseVisitor
      */
     public function visit(SortClause $sortClause)
     {
-        return 'name_s' . $this->getDirection($sortClause);
+        return 'content_name_s' . $this->getDirection($sortClause);
     }
 }

@@ -49,7 +49,7 @@ class ContentTypeGroupIdIn extends CriterionVisitor
                 ' OR ',
                 array_map(
                     function ($value) {
-                        return 'group_mid:"' . $value . '"';
+                        return 'content_type_group_ids_mid:"' . $value . '"';
                     },
                     (array)$criterion->value
                 )

@@ -51,7 +51,7 @@ class PublishedIn extends DateMetadata
                 ' OR ',
                 array_map(
                     function ($value) {
-                        return 'published_dt:"' . $this->getSolrTime($value) . '"';
+                        return 'content_publication_date_dt:"' . $this->getSolrTime($value) . '"';
                     },
                     $criterion->value
                 )

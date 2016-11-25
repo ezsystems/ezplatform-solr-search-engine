@@ -49,7 +49,7 @@ class RemoteIdIn extends CriterionVisitor
                 ' OR ',
                 array_map(
                     function ($value) {
-                        return 'remote_id_id:"' . $value . '"';
+                        return 'content_remote_id_id:"' . $value . '"';
                     },
                     $criterion->value
                 )

@@ -39,6 +39,6 @@ class DateModified extends SortClauseVisitor
      */
     public function visit(SortClause $sortClause)
     {
-        return 'modified_dt' . $this->getDirection($sortClause);
+        return 'content_modification_date_dt' . $this->getDirection($sortClause);
     }
 }

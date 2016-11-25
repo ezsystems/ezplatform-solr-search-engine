@@ -6,11 +6,10 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper;
+namespace EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper;
 
-use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper;
-use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
-use eZ\Publish\SPI\Persistence\Content\Location;
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper;
+use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandler;
 use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandler;
@@ -19,15 +18,10 @@ use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\FieldType;
 
 /**
- * Maps Content related fields to a Location document.
+ * Maps base Content related fields to block document (Content and Location).
  */
-class LocationDocumentContentFields extends LocationFieldMapper
+class BlockDocumentsBaseContentFields extends ContentFieldMapper
 {
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Handler
-     */
-    protected $contentHandler;
-
     /**
      * @var \eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
@@ -49,38 +43,32 @@ class LocationDocumentContentFields extends LocationFieldMapper
     protected $sectionHandler;
 
     /**
-     * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler $objectStateHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Section\Handler $sectionHandler
      */
     public function __construct(
-        ContentHandler $contentHandler,
         LocationHandler $locationHandler,
         ContentTypeHandler $contentTypeHandler,
         ObjectStateHandler $objectStateHandler,
         SectionHandler $sectionHandler
     ) {
-        $this->contentHandler = $contentHandler;
         $this->locationHandler = $locationHandler;
         $this->contentTypeHandler = $contentTypeHandler;
         $this->objectStateHandler = $objectStateHandler;
         $this->sectionHandler = $sectionHandler;
     }
 
-    public function accept(Location $location)
+    public function accept(Content $content)
     {
         return true;
     }
 
-    public function mapFields(Location $location)
+    public function mapFields(Content $content)
     {
-        $contentInfo = $this->contentHandler->loadContentInfo($location->contentId);
-        $versionInfo = $this->contentHandler->loadVersionInfo(
-            $location->contentId,
-            $contentInfo->currentVersionNo
-        );
+        $versionInfo = $content->versionInfo;
+        $contentInfo = $content->versionInfo->contentInfo;
 
         // UserGroups and Users are Content, but permissions cascade is achieved through
         // Locations hierarchy. We index all ancestor Location Content ids of all
@@ -100,7 +88,7 @@ class LocationDocumentContentFields extends LocationFieldMapper
                 new FieldType\IdentifierField()
             ),
             new Field(
-                'content_type',
+                'content_type_id',
                 $contentInfo->contentTypeId,
                 new FieldType\IdentifierField()
             ),
@@ -110,7 +98,7 @@ class LocationDocumentContentFields extends LocationFieldMapper
                 new FieldType\IntegerField()
             ),
             new Field(
-                'content_status',
+                'content_version_status',
                 $versionInfo->status,
                 new FieldType\IdentifierField()
             ),
@@ -120,17 +108,17 @@ class LocationDocumentContentFields extends LocationFieldMapper
                 new FieldType\StringField()
             ),
             new Field(
-                'content_creator',
+                'content_version_creator_user_id',
                 $versionInfo->creatorId,
                 new FieldType\IdentifierField()
             ),
             new Field(
-                'content_owner',
+                'content_owner_user_id',
                 $contentInfo->ownerId,
                 new FieldType\IdentifierField()
             ),
             new Field(
-                'content_section',
+                'content_section_id',
                 $contentInfo->sectionId,
                 new FieldType\IdentifierField()
             ),
@@ -140,22 +128,22 @@ class LocationDocumentContentFields extends LocationFieldMapper
                 new FieldType\IdentifierField()
             ),
             new Field(
-                'content_modified',
+                'content_modification_date',
                 $contentInfo->modificationDate,
                 new FieldType\DateField()
             ),
             new Field(
-                'content_published',
+                'content_publication_date',
                 $contentInfo->publicationDate,
                 new FieldType\DateField()
             ),
             new Field(
-                'language_code',
+                'content_language_codes',
                 array_keys($versionInfo->names),
                 new FieldType\MultipleStringField()
             ),
             new Field(
-                'main_language_code',
+                'content_main_language_code',
                 $contentInfo->mainLanguageCode,
                 new FieldType\StringField()
             ),
@@ -165,7 +153,7 @@ class LocationDocumentContentFields extends LocationFieldMapper
                 new FieldType\BooleanField()
             ),
             new Field(
-                'content_owner_user_group',
+                'content_owner_user_group_ids',
                 $ancestorLocationsContentIds,
                 new FieldType\MultipleIdentifierField()
             ),
@@ -180,12 +168,12 @@ class LocationDocumentContentFields extends LocationFieldMapper
                 new FieldType\StringField()
             ),
             new Field(
-                'content_group',
+                'content_type_group_ids',
                 $this->contentTypeHandler->load($contentInfo->contentTypeId)->groupIds,
                 new FieldType\MultipleIdentifierField()
             ),
             new Field(
-                'content_object_state',
+                'content_object_state_ids',
                 $this->getObjectStateIds($contentInfo->id),
                 new FieldType\MultipleIdentifierField()
             ),

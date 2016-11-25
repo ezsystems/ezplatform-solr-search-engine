@@ -58,6 +58,6 @@ class ModifiedBetween extends DateMetadata
             $start = null;
         }
 
-        return 'modified_dt:' . $this->getRange($criterion->operator, $start, $end);
+        return 'content_modification_date_dt:' . $this->getRange($criterion->operator, $start, $end);
     }
 }

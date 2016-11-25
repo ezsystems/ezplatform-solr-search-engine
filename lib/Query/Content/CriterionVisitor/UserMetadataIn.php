@@ -47,13 +47,13 @@ class UserMetadataIn extends CriterionVisitor
     {
         switch ($criterion->target) {
             case Criterion\UserMetadata::MODIFIER:
-                $solrField = 'creator_id';
+                $solrField = 'content_version_creator_user_id_id';
                 break;
             case Criterion\UserMetadata::OWNER:
-                $solrField = 'owner_id';
+                $solrField = 'content_owner_user_id_id';
                 break;
             case Criterion\UserMetadata::GROUP:
-                $solrField = 'owner_user_group_mid';
+                $solrField = 'content_owner_user_group_ids_mid';
                 break;
 
             default:

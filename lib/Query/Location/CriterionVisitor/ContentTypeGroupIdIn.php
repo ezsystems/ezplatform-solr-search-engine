@@ -51,7 +51,7 @@ class ContentTypeGroupIdIn extends CriterionVisitor
                 ' OR ',
                 array_map(
                     function ($value) {
-                        return 'content_group_mid:"' . $value . '"';
+                        return 'content_type_group_ids_mid:"' . $value . '"';
                     },
                     // TODO this should have been casted by criterion???
                     (array)$criterion->value

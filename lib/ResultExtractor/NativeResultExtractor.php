@@ -53,20 +53,20 @@ class NativeResultExtractor extends ResultExtractor
     protected function extractContentInfoFromHit($hit)
     {
         $contentInfo = new ContentInfo(
-            array(
-                'id' => (int)$hit->content_id,
-                'name' => $hit->name_s,
-                'contentTypeId' => (int)$hit->type_id,
-                'sectionId' => (int)$hit->section_id,
-                'currentVersionNo' => $hit->version_no_i,
+            [
+                'id' => (int)$hit->content_id_id,
+                'name' => $hit->content_name_s,
+                'contentTypeId' => (int)$hit->content_type_id_id,
+                'sectionId' => (int)$hit->content_section_id_id,
+                'currentVersionNo' => $hit->content_version_no_i,
                 'isPublished' => true,
-                'ownerId' => (int)$hit->owner_id,
-                'modificationDate' => strtotime($hit->modified_dt),
-                'publicationDate' => strtotime($hit->published_dt),
-                'alwaysAvailable' => $hit->always_available_b,
-                'remoteId' => $hit->remote_id_id,
-                'mainLanguageCode' => $hit->main_language_code_s,
-            )
+                'ownerId' => (int)$hit->content_owner_user_id_id,
+                'modificationDate' => strtotime($hit->content_modification_date_dt),
+                'publicationDate' => strtotime($hit->content_publication_date_dt),
+                'alwaysAvailable' => $hit->content_always_available_b,
+                'remoteId' => $hit->content_remote_id_id,
+                'mainLanguageCode' => $hit->content_main_language_code_s,
+            ]
         );
 
         if (isset($hit->main_location_id)) {

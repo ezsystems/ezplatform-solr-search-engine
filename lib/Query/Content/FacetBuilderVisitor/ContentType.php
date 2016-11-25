@@ -20,7 +20,7 @@ use eZ\Publish\API\Repository\Values\Content\Search\Facet;
 class ContentType extends FacetBuilderVisitor
 {
     /**
-     * CHeck if visitor is applicable to current facet result.
+     * Check if visitor is applicable to current facet result.
      *
      * @param string $field
      *
@@ -28,7 +28,7 @@ class ContentType extends FacetBuilderVisitor
      */
     public function canMap($field)
     {
-        return $field === 'type_id';
+        return $field === 'content_type_id_id';
     }
 
     /**
@@ -71,9 +71,9 @@ class ContentType extends FacetBuilderVisitor
     public function visit(FacetBuilder $facetBuilder)
     {
         return array(
-            'facet.field' => 'type_id',
-            'f.type_id.facet.limit' => $facetBuilder->limit,
-            'f.type_id.facet.mincount' => $facetBuilder->minCount,
+            'facet.field' => 'content_type_id_id',
+            'f.content_type_id_id.facet.limit' => $facetBuilder->limit,
+            'f.content_type_id_id.facet.mincount' => $facetBuilder->minCount,
         );
     }
 }

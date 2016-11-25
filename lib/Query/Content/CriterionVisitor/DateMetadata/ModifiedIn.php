@@ -48,7 +48,7 @@ class ModifiedIn extends DateMetadata
     {
         $values = array();
         foreach ($criterion->value as $value) {
-            $values[] = 'modified_dt:"' . $this->getSolrTime($value) . '"';
+            $values[] = 'content_modification_date_dt:"' . $this->getSolrTime($value) . '"';
         }
 
         return '(' . implode(' OR ', $values) . ')';

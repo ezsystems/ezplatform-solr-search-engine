@@ -39,6 +39,6 @@ class ContentId extends SortClauseVisitor
      */
     public function visit(SortClause $sortClause)
     {
-        return 'content_id' . $this->getDirection($sortClause);
+        return 'content_id_id' . $this->getDirection($sortClause);
     }
 }
