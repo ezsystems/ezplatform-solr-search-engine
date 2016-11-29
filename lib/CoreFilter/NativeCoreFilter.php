@@ -43,7 +43,7 @@ class NativeCoreFilter extends CoreFilter
      *
      * @var string
      */
-    const FIELD_LANGUAGES = 'language_code_ms';
+    const FIELD_LANGUAGES = 'content_language_codes_ms';
 
     /**
      * Name of the Solr backend field holding language code of the indexed

@@ -59,11 +59,11 @@ class LoadingResultExtractor extends ResultExtractor
     public function extractHit($hit)
     {
         if ($hit->document_type_id === 'content') {
-            return $this->contentHandler->loadContentInfo($hit->content_id);
+            return $this->contentHandler->loadContentInfo($hit->content_id_id);
         }
 
         if ($hit->document_type_id === 'location') {
-            return $this->locationHandler->load($hit->location_id);
+            return $this->locationHandler->load($hit->location_id_id);
         }
 
         throw new RuntimeException(
