@@ -24,7 +24,6 @@ branches:
     only:
         - master
         - /^\d.\d+$/
-        - EZP-26668-use-field-mappers
 
 before_script:
     - phpenv config-rm xdebug.ini
