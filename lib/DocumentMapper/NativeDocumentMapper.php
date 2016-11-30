@@ -470,10 +470,10 @@ class NativeDocumentMapper implements DocumentMapper
                         $indexField->type
                     );
 
-                    if ($documentField->type instanceof FieldType\FullTextField) {
-                        $fieldSets[$field->languageCode]['fulltext'][] = $documentField;
-                    } else {
+                    if (!$documentField->type instanceof FieldType\FullTextField) {
                         $fieldSets[$field->languageCode]['regular'][] = $documentField;
+                    } elseif ($fieldDefinition->isSearchable) {
+                        $fieldSets[$field->languageCode]['fulltext'][] = $documentField;
                     }
                 }
             }
