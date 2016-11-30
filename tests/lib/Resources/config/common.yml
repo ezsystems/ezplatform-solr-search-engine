@@ -7,3 +7,5 @@ services:
         arguments:
             - "%ezpublish.signalslot.signal_dispatcher.class%"
             - "solr"
+    logger:
+        class: Psr\Log\NullLogger
