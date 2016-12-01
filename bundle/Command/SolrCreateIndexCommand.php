@@ -21,6 +21,9 @@ use EzSystems\EzPlatformSolrSearchEngine\Handler as SolrSearchEngineHandler;
 use RuntimeException;
 use PDO;
 
+/**
+ * @deprecated since 1.2, use ezplatform:reindex command instead.
+ */
 class SolrCreateIndexCommand extends ContainerAwareCommand
 {
     protected function configure()
@@ -38,6 +41,11 @@ EOT
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        @trigger_error(
+            sprintf('%s is deprecated since 1.2. Use ezplatform:reindex command instead', $this->getName()),
+            E_USER_DEPRECATED
+        );
+
         $this->logger = $this->getContainer()->get('logger');
 
         $bulkCount = $input->getArgument('bulk_count');
