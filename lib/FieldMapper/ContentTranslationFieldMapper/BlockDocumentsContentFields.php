@@ -12,6 +12,7 @@ use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapp
 use eZ\Publish\Core\Search\Common\FieldNameGenerator;
 use eZ\Publish\Core\Search\Common\FieldRegistry;
 use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\FieldType;
@@ -91,7 +92,7 @@ class BlockDocumentsContentFields extends ContentTranslationFieldMapper
                         $indexField->type
                     );
 
-                    $this->appendField($fields, $documentField);
+                    $this->appendField($fields, $fieldDefinition, $documentField);
                 }
             }
         }
@@ -103,9 +104,10 @@ class BlockDocumentsContentFields extends ContentTranslationFieldMapper
      * Appends given $documentField to $fields collection, depending on a condition.
      *
      * @param array $fields
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      * @param \eZ\Publish\SPI\Search\Field $documentField
      */
-    protected function appendField(array &$fields, Field $documentField)
+    protected function appendField(array &$fields, FieldDefinition $fieldDefinition, Field $documentField)
     {
         if (!$documentField->type instanceof FieldType\FullTextField) {
             $fields[] = $documentField;
