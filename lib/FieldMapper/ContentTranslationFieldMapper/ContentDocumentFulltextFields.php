@@ -8,6 +8,7 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
 
+use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\FieldType;
@@ -19,14 +20,36 @@ class ContentDocumentFulltextFields extends BlockDocumentsContentFields
 {
     /**
      * {@inheritdoc}
-     *
-     * Overridden to append only full text fields, instead of everything but full text fields
-     * in the base implementation.
      */
-    protected function appendField(array &$fields, FieldDefinition $fieldDefinition, Field $documentField)
-    {
-        if ($documentField->type instanceof FieldType\FullTextField && $fieldDefinition->isSearchable) {
-            $fields[] = $documentField;
+    protected function getSearchFields(
+        Content\Type $contentType,
+        Content\Field $field,
+        FieldDefinition $fieldDefinition
+    ) {
+        if (!$fieldDefinition->isSearchable) {
+            return [];
         }
+
+        $searchFields = [];
+        $fieldType = $this->fieldRegistry->getType($field->type);
+        $fullTextData = $fieldType->getFullTextData($field, $fieldDefinition);
+
+        foreach ($fullTextData as $fullTextValue) {
+            if (empty($fullTextValue)) {
+                continue;
+            }
+
+            $searchFields[] = new Field(
+                $name = $this->fieldNameGenerator->getName(
+                    'fulltext',
+                    $fieldDefinition->identifier,
+                    $contentType->identifier
+                ),
+                $fullTextValue,
+                new FieldType\FullTextField()
+            );
+        }
+
+        return $searchFields;
     }
 }
