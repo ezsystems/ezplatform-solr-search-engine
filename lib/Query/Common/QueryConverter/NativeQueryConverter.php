@@ -63,7 +63,6 @@ class NativeQueryConverter extends QueryConverter
     {
         $params = array(
             'defType' => 'edismax',
-            'q.alt' => $this->criterionVisitor->visit($query->query),
             'fq' => $this->criterionVisitor->visit($query->filter),
             'sort' => $this->getSortClauses($query->sortClauses),
             'start' => $query->offset,
@@ -71,6 +70,14 @@ class NativeQueryConverter extends QueryConverter
             'fl' => '*,score,[shard]',
             'wt' => 'json',
         );
+
+        // use solr param q when search with fulltext query value
+        if (null === $query->query->value) {
+            $params['q.alt'] = $this->criterionVisitor->visit($query->query);
+        } else {
+            // solr q param enable suggestions in response
+            $params['q'] = $this->criterionVisitor->visit($query->query);
+        }
 
         $facetParams = $this->getFacetParams($query->facetBuilders);
         if (!empty($facetParams)) {
