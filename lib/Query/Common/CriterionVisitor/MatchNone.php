@@ -38,6 +38,6 @@ class MatchNone extends CriterionVisitor
      */
     public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null)
     {
-        return 'NOT (*:*)';
+        return '(NOT *:*)';
     }
 }

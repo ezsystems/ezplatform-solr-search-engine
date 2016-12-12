@@ -12,6 +12,7 @@ namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor;
 
 use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use RuntimeException;
 
 /**
  * Visits the LogicalOr criterion.
@@ -40,16 +41,22 @@ class LogicalOr extends CriterionVisitor
      */
     public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null)
     {
-        return '(' .
-            implode(
-                ' OR ',
-                array_map(
-                    function ($value) use ($subVisitor) {
-                        return $subVisitor->visit($value);
-                    },
-                    $criterion->criteria
-                )
-            ) .
-            ')';
+        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd $criterion */
+        if (!isset($criterion->criteria[0])) {
+            throw new RuntimeException('Invalid aggregation in LogicalOr criterion.');
+        }
+
+        $subCriteria = array_map(
+            function ($value) use ($subVisitor) {
+                return $subVisitor->visit($value);
+            },
+            $criterion->criteria
+        );
+
+        if (count($subCriteria) === 1) {
+            return reset($subCriteria);
+        }
+
+        return '(' . implode(' OR ', $subCriteria) . ')';
     }
 }
