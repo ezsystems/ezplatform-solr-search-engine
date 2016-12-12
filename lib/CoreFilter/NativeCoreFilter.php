@@ -103,13 +103,16 @@ class NativeCoreFilter extends CoreFilter
             $languageSettings['useAlwaysAvailable'] === true
         );
 
-        $query->filter = new LogicalAnd(
-            array(
-                new CustomField(self::FIELD_DOCUMENT_TYPE, Operator::EQ, $documentTypeIdentifier),
-                $query->filter,
-                $this->getCoreCriterion($languages, $useAlwaysAvailable),
-            )
-        );
+        $criteria = [
+            new CustomField(self::FIELD_DOCUMENT_TYPE, Operator::EQ, $documentTypeIdentifier),
+            $this->getCoreCriterion($languages, $useAlwaysAvailable),
+        ];
+
+        if ($query->filter !== null) {
+            $criteria[] = $query->filter;
+        }
+
+        $query->filter = new LogicalAnd($criteria);
     }
 
     /**

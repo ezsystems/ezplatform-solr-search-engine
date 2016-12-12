@@ -187,7 +187,6 @@ class Handler implements SearchHandlerInterface
     public function findLocations(LocationQuery $query, array $fieldFilters = array())
     {
         $query = clone $query;
-        $query->filter = $query->filter ?: new Criterion\MatchAll();
         $query->query = $query->query ?: new Criterion\MatchAll();
 
         $this->coreFilter->apply(
