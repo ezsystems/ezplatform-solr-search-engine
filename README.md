@@ -67,11 +67,9 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
 
 4. Start Solr
 
-    *Note: In this case in seperate terminal for debug use*
-
     ```bash
-    cd solr-4.10.4/example
-    java -Djetty.port=8983 -jar start.jar
+    cd solr-6.3.0
+    bin/solr start
     ```
 
 5. Run integration tests
