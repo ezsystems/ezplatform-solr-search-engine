@@ -3,7 +3,6 @@ parameters:
     # as searchable. Needed in order to test searching wiht Solr engine.
     ezpublish.fieldType.ezfloat.class: eZ\Publish\API\Repository\Tests\FieldType\SearchableFloat
     ezpublish.fieldType.ezimage.class: eZ\Publish\API\Repository\Tests\FieldType\SearchableImage
-    ezpublish.fieldType.eztext.class: eZ\Publish\API\Repository\Tests\FieldType\SearchableTextBlock
     ezpublish.fieldType.ezmedia.class: eZ\Publish\API\Repository\Tests\FieldType\SearchableMedia
     ezpublish.fieldType.ezurl.class: eZ\Publish\API\Repository\Tests\FieldType\SearchableUrl
     languages:
