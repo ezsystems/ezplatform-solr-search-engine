@@ -18,7 +18,9 @@ use eZ\Publish\SPI\Search\Field as SearchField;
 use eZ\Publish\SPI\Search\FieldType;
 
 /**
- * Visits the Field criterion.
+ * Base class for Field criterion visitors.
+ *
+ * @api
  */
 abstract class Field extends CriterionVisitor
 {
