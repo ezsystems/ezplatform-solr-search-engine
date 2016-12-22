@@ -149,47 +149,10 @@ class Configuration implements ConfigurationInterface
                     )
                     ->then(
                         function ($v) {
-                            // If single endpoint is set for Content mapping, use it as default
-                            // mapping for Content index
+                            // If single shard is set for mapping, use it as default shard
                             $v['mapping'] = array(
                                 'default' => $v['mapping'],
                             );
-
-                            return $v;
-                        }
-                    )
-                ->end()
-                ->beforeNormalization()
-                    ->ifTrue(
-                        function ($v) {
-                            return (
-                                empty($v['entry_endpoints']) &&
-                                (
-                                    !empty($v['mapping']['translations']) ||
-                                    !empty($v['mapping']['default']) ||
-                                    !empty($v['mapping']['main_translations'])
-                                )
-                            );
-                        }
-                    )
-                    ->then(
-                        // If entry endpoints are not provided use mapping endpoints
-                        function ($v) {
-                            $endpointSet = array();
-
-                            if (!empty($v['mapping']['translations'])) {
-                                $endpointSet = array_flip($v['mapping']['translations']);
-                            }
-
-                            if (!empty($v['mapping']['default'])) {
-                                $endpointSet[$v['mapping']['default']] = true;
-                            }
-
-                            if (!empty($v['mapping']['main_translations'])) {
-                                $endpointSet[$v['mapping']['main_translations']] = true;
-                            }
-
-                            $v['entry_endpoints'] = array_keys($endpointSet);
 
                             return $v;
                         }
@@ -213,24 +176,24 @@ class Configuration implements ConfigurationInterface
                     ->arrayNode('mapping')
                         ->info(
                             'Defines a map of translation language codes and Solr ' .
-                            "endpoint names for Content index.\n\n" .
+                            "shard identifiers.\n\n" .
                             'Optionally, you can define default and main translations ' .
-                            'endpoints. Default one will be used for a translation if it ' .
+                            'shards. Default one will be used for a translation if it ' .
                             'is not explicitly mapped, and main translations will be used ' .
                             "for indexing translations in the main languages.\n\n" .
-                            'If single endpoint name is given, it will be used as a ' .
-                            'shortcut to define the default endpoint.'
+                            'If single shard identifier is given, it will be used as a ' .
+                            'shortcut to define the default shard.'
                         )
                         ->addDefaultsIfNotSet()
                         ->example(
                             array(
                                 array(
                                     'translations' => array(
-                                        'cro-HR' => 'endpoint1',
-                                        'eng-GB' => 'endpoint2',
+                                        'cro-HR' => 'shard1',
+                                        'eng-GB' => 'shard2',
                                     ),
-                                    'default' => 'endpoint3',
-                                    'main_translations' => 'endpoint4',
+                                    'default' => 'shard3',
+                                    'main_translations' => 'shard4',
                                 ),
                             )
                         )
@@ -240,12 +203,12 @@ class Configuration implements ConfigurationInterface
                                 ->useAttributeAsKey('language_code')
                                     ->info(
                                         'A map of translation language codes and Solr ' .
-                                        'endpoint names for Content index.'
+                                        'shard identifiers.'
                                     )
                                     ->example(
                                         array(
-                                            'cro-HR' => 'endpoint1',
-                                            'eng-GB' => 'endpoint2',
+                                            'cro-HR' => 'shard1',
+                                            'eng-GB' => 'shard2',
                                         )
                                     )
                                 ->prototype('scalar')
@@ -254,7 +217,7 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('default')
                                 ->defaultNull()
                                 ->info(
-                                    'Default endpoint will be used for indexing ' .
+                                    'Default shard will be used for indexing ' .
                                     'documents of a translation that is not explicitly ' .
                                     "mapped.\n\n" .
                                     'This setting is optional.'
@@ -263,10 +226,10 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('main_translations')
                                 ->defaultNull()
                                 ->info(
-                                    'Main translations endpoint will be used to index ' .
+                                    'Main translations shard will be used to index ' .
                                     "documents of translations in the main languages\n\n" .
                                     'This setting is optional. Use it to reduce the ' .
-                                    'number of Solr endpoints that the query is ' .
+                                    'number of Solr shards that the query is ' .
                                     'distributed to when using always available fallback ' .
                                     'or searching only on the main languages.'
                                 )

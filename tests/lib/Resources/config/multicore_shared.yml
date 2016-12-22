@@ -18,11 +18,11 @@ parameters:
     ezpublish.solr.endpoint.class: EzSystems\EzPlatformSolrSearchEngine\Gateway\Endpoint
 
     ezpublish.search.solr.entry_endpoints:
-          - endpoint1
+          - endpoint0
     ezpublish.search.solr.cluster_endpoints:
-          eng-GB: endpoint3
-    ezpublish.search.solr.default_endpoint: endpoint2
-    ezpublish.search.solr.main_translations_endpoint: endpoint0
+          eng-GB: shard3
+    ezpublish.search.solr.default_endpoint: shard2
+    ezpublish.search.solr.main_translations_endpoint: shard0
 
 services:
     ezpublish.cache_pool.spi.cache.decorator:
@@ -39,42 +39,6 @@ services:
                 host: localhost
                 port: 8983
                 path: /solr
-                core: core0
+                core: ezplatform
         tags:
             - {name: ezpublish.search.solr.endpoint, alias: endpoint0}
-
-    ezpublish.search.solr.endpoint.endpoint1:
-        class: "%ezpublish.solr.endpoint.class%"
-        arguments:
-            -
-                scheme: http
-                host: localhost
-                port: 8983
-                path: /solr
-                core: core1
-        tags:
-            - {name: ezpublish.search.solr.endpoint, alias: endpoint1}
-
-    ezpublish.search.solr.endpoint.endpoint2:
-        class: "%ezpublish.solr.endpoint.class%"
-        arguments:
-            -
-                scheme: http
-                host: localhost
-                port: 8983
-                path: /solr
-                core: core2
-        tags:
-            - {name: ezpublish.search.solr.endpoint, alias: endpoint2}
-
-    ezpublish.search.solr.endpoint.endpoint3:
-        class: "%ezpublish.solr.endpoint.class%"
-        arguments:
-            -
-                scheme: http
-                host: localhost
-                port: 8983
-                path: /solr
-                core: core3
-        tags:
-            - {name: ezpublish.search.solr.endpoint, alias: endpoint3}
