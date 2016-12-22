@@ -27,33 +27,33 @@ class NativeEndpointResolver implements EndpointResolver, SingleEndpointResolver
     private $entryEndpoints;
 
     /**
-     * Holds a map of translations to Endpoint names, with language code as key
-     * and Endpoint name as value.
+     * Holds a map of translations to shard identifiers, with language code as key
+     * and shard identifier as value.
      *
      * <code>
      *  array(
-     *      "cro-HR" => "endpoint1",
-     *      "eng-GB" => "endpoint2",
+     *      "cro-HR" => "shard1",
+     *      "eng-GB" => "shard2",
      *  );
      * </code>
      *
      * @var string[]
      */
-    private $endpointMap;
+    private $shardMap;
 
     /**
-     * Holds a name of the default Endpoint used for translations, if configured.
+     * Holds a name of the default shard used for translations, if configured.
      *
      * @var null|string
      */
-    private $defaultEndpoint;
+    private $defaultShard;
 
     /**
-     * Holds a name of the Endpoint used to index translations in main languages, if configured.
+     * Holds an identifier of the shard used to index translations in main languages, if configured.
      *
      * @var null|string
      */
-    private $mainLanguagesEndpoint;
+    private $mainLanguagesShard;
 
     /**
      * Result of hasMultipleEndpoints() once called the first time.
@@ -66,20 +66,20 @@ class NativeEndpointResolver implements EndpointResolver, SingleEndpointResolver
      * Create from Endpoint names.
      *
      * @param string[] $entryEndpoints
-     * @param string[] $endpointMap
-     * @param null|string $defaultEndpoint
-     * @param null|string $mainLanguagesEndpoint
+     * @param string[] $shardMap
+     * @param null|string $defaultShard
+     * @param null|string $mainLanguagesShard
      */
     public function __construct(
         array $entryEndpoints = array(),
-        array $endpointMap = array(),
-        $defaultEndpoint = null,
-        $mainLanguagesEndpoint = null
+        array $shardMap = array(),
+        $defaultShard = null,
+        $mainLanguagesShard = null
     ) {
         $this->entryEndpoints = $entryEndpoints;
-        $this->endpointMap = $endpointMap;
-        $this->defaultEndpoint = $defaultEndpoint;
-        $this->mainLanguagesEndpoint = $mainLanguagesEndpoint;
+        $this->shardMap = $shardMap;
+        $this->defaultShard = $defaultShard;
+        $this->mainLanguagesShard = $mainLanguagesShard;
     }
 
     public function getEntryEndpoint()
@@ -93,12 +93,12 @@ class NativeEndpointResolver implements EndpointResolver, SingleEndpointResolver
 
     public function getIndexingTarget($languageCode)
     {
-        if (isset($this->endpointMap[$languageCode])) {
-            return $this->endpointMap[$languageCode];
+        if (isset($this->shardMap[$languageCode])) {
+            return $this->shardMap[$languageCode];
         }
 
-        if (isset($this->defaultEndpoint)) {
-            return $this->defaultEndpoint;
+        if (isset($this->defaultShard)) {
+            return $this->defaultShard;
         }
 
         throw new RuntimeException(
@@ -108,7 +108,7 @@ class NativeEndpointResolver implements EndpointResolver, SingleEndpointResolver
 
     public function getMainLanguagesEndpoint()
     {
-        return $this->mainLanguagesEndpoint;
+        return $this->mainLanguagesShard;
     }
 
     public function getSearchTargets(array $languageSettings)
@@ -123,30 +123,30 @@ class NativeEndpointResolver implements EndpointResolver, SingleEndpointResolver
             $languageSettings['useAlwaysAvailable'] === true
         );
 
-        if (($useAlwaysAvailable || empty($languages)) && !isset($this->mainLanguagesEndpoint)) {
+        if (($useAlwaysAvailable || empty($languages)) && !isset($this->mainLanguagesShard)) {
             return $this->getEndpoints();
         }
 
         $targetSet = array();
 
         foreach ($languages as $languageCode) {
-            if (isset($this->endpointMap[$languageCode])) {
-                $targetSet[$this->endpointMap[$languageCode]] = true;
-            } elseif (isset($this->defaultEndpoint)) {
-                $targetSet[$this->defaultEndpoint] = true;
+            if (isset($this->shardMap[$languageCode])) {
+                $targetSet[$this->shardMap[$languageCode]] = true;
+            } elseif (isset($this->defaultShard)) {
+                $targetSet[$this->defaultShard] = true;
             } else {
                 throw new RuntimeException(
-                    "Language '{$languageCode}' is not mapped to Solr endpoint"
+                    "Language '{$languageCode}' is not mapped to Solr shard"
                 );
             }
         }
 
-        if (($useAlwaysAvailable || empty($targetSet)) && isset($this->mainLanguagesEndpoint)) {
-            $targetSet[$this->mainLanguagesEndpoint] = true;
+        if (($useAlwaysAvailable || empty($targetSet)) && isset($this->mainLanguagesShard)) {
+            $targetSet[$this->mainLanguagesShard] = true;
         }
 
         if (empty($targetSet)) {
-            throw new RuntimeException('No endpoints defined for given language settings');
+            throw new RuntimeException('No shards defined for given language settings');
         }
 
         return array_keys($targetSet);
@@ -154,21 +154,21 @@ class NativeEndpointResolver implements EndpointResolver, SingleEndpointResolver
 
     public function getEndpoints()
     {
-        $endpointSet = array_flip($this->endpointMap);
+        $shardSet = array_flip($this->shardMap);
 
-        if (isset($this->defaultEndpoint)) {
-            $endpointSet[$this->defaultEndpoint] = true;
+        if (isset($this->defaultShard)) {
+            $shardSet[$this->defaultShard] = true;
         }
 
-        if (isset($this->mainLanguagesEndpoint)) {
-            $endpointSet[$this->mainLanguagesEndpoint] = true;
+        if (isset($this->mainLanguagesShard)) {
+            $shardSet[$this->mainLanguagesShard] = true;
         }
 
-        if (empty($endpointSet)) {
-            throw new RuntimeException('No endpoints defined');
+        if (empty($shardSet)) {
+            throw new RuntimeException('No shards defined');
         }
 
-        return array_keys($endpointSet);
+        return array_keys($shardSet);
     }
 
     /**

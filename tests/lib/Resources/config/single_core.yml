@@ -19,7 +19,7 @@ parameters:
     ezpublish.search.solr.entry_endpoints:
           - endpoint0
     ezpublish.search.solr.cluster_endpoints: []
-    ezpublish.search.solr.default_endpoint: endpoint0
+    ezpublish.search.solr.default_endpoint: shard0
     ezpublish.search.solr.main_translations_endpoint: null
 
 services:
@@ -34,6 +34,6 @@ services:
                 host: localhost
                 port: 8983
                 path: /solr
-                core: collection1
+                core: ezplatform
         tags:
             - {name: ezpublish.search.solr.endpoint, alias: endpoint0}

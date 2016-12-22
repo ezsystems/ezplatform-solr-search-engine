@@ -129,9 +129,10 @@ class Native extends Gateway
      */
     protected function internalFind(array $parameters, array $languageSettings = array())
     {
-        $searchTargets = $this->getSearchTargets($languageSettings);
-        if (!empty($searchTargets)) {
-            $parameters['shards'] = $searchTargets;
+        $shards = $this->endpointResolver->getSearchTargets($languageSettings);
+
+        if (!empty($shards)) {
+            $parameters['shards'] = implode(',', $shards);
         }
 
         return $this->search($parameters);
@@ -140,11 +141,6 @@ class Native extends Gateway
     public function searchAllEndpoints(Query $query)
     {
         $parameters = $this->contentQueryConverter->convert($query);
-
-        $searchTargets = $this->getAllSearchTargets();
-        if (!empty($searchTargets)) {
-            $parameters['shards'] = $searchTargets;
-        }
 
         return $this->search($parameters);
     }
@@ -173,57 +169,18 @@ class Native extends Gateway
     }
 
     /**
-     * Returns search targets for given language settings.
-     *
      * Only return endpoints if there are more then one configured, as this is meant for use on shard parameter.
      *
-     * @param array $languageSettings
-     *
-     * @return string
-     */
-    protected function getSearchTargets($languageSettings)
-    {
         if ($this->endpointResolver instanceof SingleEndpointResolver && !$this->endpointResolver->hasMultipleEndpoints()) {
             return '';
         }
 
-        $shards = array();
-        $endpoints = $this->endpointResolver->getSearchTargets($languageSettings);
-
-        if (!empty($endpoints)) {
-            foreach ($endpoints as $endpoint) {
-                $shards[] = $this->endpointRegistry->getEndpoint($endpoint)->getIdentifier();
-            }
-        }
-
-        return implode(',', $shards);
-    }
-
-    /**
-     * Returns all search targets without language constraint.
-     *
      * Only return endpoints if there are more then one configured, as this is meant for use on shard parameter.
      *
-     * @return string
-     */
-    protected function getAllSearchTargets()
-    {
         if ($this->endpointResolver instanceof SingleEndpointResolver && !$this->endpointResolver->hasMultipleEndpoints()) {
             return '';
         }
 
-        $shards = [];
-        $searchTargets = $this->endpointResolver->getEndpoints();
-        if (!empty($searchTargets)) {
-            foreach ($searchTargets as $endpointName) {
-                $shards[] = $this->endpointRegistry->getEndpoint($endpointName)->getIdentifier();
-            }
-        }
-
-        return  implode(',', $shards);
-    }
-
-    /**
      * Indexes an array of documents.
      *
      * Documents are given as an array of the array of documents. The array of documents
@@ -238,35 +195,45 @@ class Native extends Gateway
      */
     public function bulkIndexDocuments(array $documents)
     {
-        $documentMap = array();
-        $mainTranslationsEndpoint = $this->endpointResolver->getMainLanguagesEndpoint();
-        $mainTranslationsDocuments = array();
+        $routedDocuments = [];
+        $mainTranslationsShardId = $this->endpointResolver->getMainLanguagesEndpoint();
 
         foreach ($documents as $translationDocuments) {
             foreach ($translationDocuments as $document) {
-                $documentMap[$document->languageCode][] = $document;
+                $shardId = $this->endpointResolver->getIndexingTarget($document->languageCode);
+                $document2 = clone $document;
+                $this->routeDocument($document2, $shardId);
+                $routedDocuments[] = $document2;
 
-                if ($mainTranslationsEndpoint !== null && $document->isMainTranslation) {
-                    $mainTranslationsDocuments[] = $this->getMainTranslationDocument($document);
+                if ($mainTranslationsShardId !== null && $document->isMainTranslation) {
+                    $mainTranslationsDocument = $this->getMainTranslationDocument($document);
+                    $this->routeDocument($mainTranslationsDocument, $mainTranslationsShardId);
+                    $routedDocuments[] = $mainTranslationsDocument;
                 }
             }
         }
 
-        foreach ($documentMap as $languageCode => $translationDocuments) {
-            $this->doBulkIndexDocuments(
-                $this->endpointRegistry->getEndpoint(
-                    $this->endpointResolver->getIndexingTarget($languageCode)
-                ),
-                $translationDocuments
-            );
-        }
+        $this->doBulkIndexDocuments(
+            $this->endpointRegistry->getEndpoint(
+                $this->endpointResolver->getEntryEndpoint()
+            ),
+            $routedDocuments
+        );
+    }
 
-        if (!empty($mainTranslationsDocuments)) {
-            $this->doBulkIndexDocuments(
-                $this->endpointRegistry->getEndpoint($mainTranslationsEndpoint),
-                $mainTranslationsDocuments
-            );
-        }
+    /**
+     * todo
+     *
+     * @param \eZ\Publish\SPI\Search\Document $document
+     * @param string $shardId
+     */
+    private function routeDocument(Document $document, $shardId)
+    {
+        $document->fields[] = new Field(
+            'router_field',
+            $shardId,
+            new FieldType\IdentifierField()
+        );
     }
 
     /**
@@ -344,21 +311,19 @@ class Native extends Gateway
      */
     public function deleteByQuery($query)
     {
-        $endpoints = $this->endpointResolver->getEndpoints();
-
-        foreach ($endpoints as $endpointName) {
-            $this->client->request(
-                'POST',
-                $this->endpointRegistry->getEndpoint($endpointName),
-                '/update?wt=json',
-                new Message(
-                    array(
-                        'Content-Type' => 'text/xml',
-                    ),
-                    "<delete><query>{$query}</query></delete>"
-                )
-            );
-        }
+        $this->client->request(
+            'POST',
+            $this->endpointRegistry->getEndpoint(
+                $this->endpointResolver->getEntryEndpoint()
+            ),
+            '/update?wt=json',
+            new Message(
+                array(
+                    'Content-Type' => 'text/xml',
+                ),
+                "<delete><query>{$query}</query></delete>"
+            )
+        );
     }
 
     /**
@@ -368,25 +333,11 @@ class Native extends Gateway
      */
     public function purgeIndex()
     {
-        $endpoints = $this->endpointResolver->getEndpoints();
-
-        foreach ($endpoints as $endpointName) {
-            $this->purgeEndpoint(
-                $this->endpointRegistry->getEndpoint($endpointName)
-            );
-        }
-    }
-
-    /**
-     * @todo error handling
-     *
-     * @param $endpoint
-     */
-    protected function purgeEndpoint($endpoint)
-    {
         $this->client->request(
             'POST',
-            $endpoint,
+            $this->endpointRegistry->getEndpoint(
+                $this->endpointResolver->getEntryEndpoint()
+            ),
             '/update?wt=json',
             new Message(
                 array(
@@ -412,25 +363,25 @@ class Native extends Gateway
             '<commit/>' :
             '<commit softCommit="true"/>';
 
-        foreach ($this->endpointResolver->getEndpoints() as $endpointName) {
-            $result = $this->client->request(
-                'POST',
-                $this->endpointRegistry->getEndpoint($endpointName),
-                '/update',
-                new Message(
-                    array(
-                        'Content-Type' => 'text/xml',
-                    ),
-                    $payload
-                )
-            );
+        $result = $this->client->request(
+            'POST',
+            $this->endpointRegistry->getEndpoint(
+                $this->endpointResolver->getEntryEndpoint()
+            ),
+            '/update',
+            new Message(
+                array(
+                    'Content-Type' => 'text/xml',
+                ),
+                $payload
+            )
+        );
 
-            if ($result->headers['status'] !== 200) {
-                throw new RuntimeException(
-                    'Wrong HTTP status received from Solr: ' .
-                    $result->headers['status'] . var_export($result, true)
-                );
-            }
+        if ($result->headers['status'] !== 200) {
+            throw new RuntimeException(
+                'Wrong HTTP status received from Solr: ' .
+                $result->headers['status'] . var_export($result, true)
+            );
         }
     }
 
