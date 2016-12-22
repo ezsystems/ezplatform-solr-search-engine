@@ -227,7 +227,10 @@ class Native extends Gateway
     }
 
     /**
-     * todo
+     * Routes a given $document to the given $shardId.
+     *
+     * Adds a special field, recognized by the implicit router.
+     * Note that collection must be created to support this type of routing.
      *
      * @param \eZ\Publish\SPI\Search\Document $document
      * @param string $shardId
