@@ -416,7 +416,8 @@ class Handler implements SearchHandlerInterface
      * Generate search document for Content object to be indexed by a search engine.
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
-     * @return \eZ\Publish\SPI\Search\Document
+     *
+     * @return \eZ\Publish\SPI\Search\Document[]
      */
     public function generateDocument(Content $content)
     {
