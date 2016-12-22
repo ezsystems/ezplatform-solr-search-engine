@@ -191,25 +191,23 @@ class Native extends Gateway
      * - On large amounts of data make sure to iterate with several calls to this function with a limited
      *   set of documents, amount you have memory for depends on server, size of documents, & PHP version.
      *
-     * @param \eZ\Publish\SPI\Search\Document[][] $documents
+     * @param \eZ\Publish\SPI\Search\Document[] $documents
      */
     public function bulkIndexDocuments(array $documents)
     {
         $routedDocuments = [];
         $mainTranslationsShardId = $this->endpointResolver->getMainLanguagesEndpoint();
 
-        foreach ($documents as $translationDocuments) {
-            foreach ($translationDocuments as $document) {
-                $shardId = $this->endpointResolver->getIndexingTarget($document->languageCode);
-                $document2 = clone $document;
-                $this->routeDocument($document2, $shardId);
-                $routedDocuments[] = $document2;
+        foreach ($documents as $document) {
+            $shardId = $this->endpointResolver->getIndexingTarget($document->languageCode);
+            $document2 = clone $document;
+            $this->routeDocument($document2, $shardId);
+            $routedDocuments[] = $document2;
 
-                if ($mainTranslationsShardId !== null && $document->isMainTranslation) {
-                    $mainTranslationsDocument = $this->getMainTranslationDocument($document);
-                    $this->routeDocument($mainTranslationsDocument, $mainTranslationsShardId);
-                    $routedDocuments[] = $mainTranslationsDocument;
-                }
+            if ($mainTranslationsShardId !== null && $document->isMainTranslation) {
+                $mainTranslationsDocument = $this->getMainTranslationDocument($document);
+                $this->routeDocument($mainTranslationsDocument, $mainTranslationsShardId);
+                $routedDocuments[] = $mainTranslationsDocument;
             }
         }
 

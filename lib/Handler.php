@@ -226,7 +226,9 @@ class Handler implements SearchHandlerInterface, Capable
      */
     public function indexContent(Content $content)
     {
-        $this->gateway->bulkIndexDocuments(array($this->mapper->mapContentBlock($content)));
+        $this->gateway->bulkIndexDocuments(
+            $this->mapper->mapContentBlock($content)
+        );
     }
 
     /**
@@ -252,7 +254,8 @@ class Handler implements SearchHandlerInterface, Capable
 
         foreach ($contentObjects as $content) {
             try {
-                $documents[] = $this->mapper->mapContentBlock($content);
+                $blockDocuments = $this->mapper->mapContentBlock($content);
+                $documents = array_merge($documents, $blockDocuments);
             } catch (NotFoundException $ex) {
                 // ignore content objects without assigned state id
             }

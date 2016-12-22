@@ -50,7 +50,8 @@ class Indexer extends IncrementalIndexer
                 $info = $contentHandler->loadContentInfo($contentId);
                 if ($info->isPublished) {
                     $content = $contentHandler->load($contentId, $info->currentVersionNo);
-                    $documents[] = $this->searchHandler->generateDocument($content);
+                    $blockDocuments = $this->searchHandler->generateDocument($content);
+                    $documents = array_merge($documents, $blockDocuments);
                 } else {
                     $this->searchHandler->deleteContent($contentId);
                 }
