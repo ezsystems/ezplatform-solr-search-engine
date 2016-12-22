@@ -67,7 +67,8 @@ class Indexer extends SearchIndexer
             $documents = [];
             foreach ($contentObjects as $content) {
                 try {
-                    $documents[] = $this->searchHandler->generateDocument($content);
+                    $blockDocuments = $this->searchHandler->generateDocument($content);
+                    $documents = array_merge($documents, $blockDocuments);
                 } catch (NotFoundException $e) {
                     // Ignore content objects that have some sort of missing data on it
                     $this->logWarning($progress, 'Content with id ' . $content->versionInfo->id . ' has missing data, so skipped for indexing. Full exception: ' . $e->getMessage());
