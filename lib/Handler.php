@@ -423,7 +423,7 @@ class Handler implements SearchHandlerInterface, Capable
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
      *
-     * @return \eZ\Publish\SPI\Search\Document
+     * @return \eZ\Publish\SPI\Search\Document[]
      */
     public function generateDocument(Content $content)
     {
