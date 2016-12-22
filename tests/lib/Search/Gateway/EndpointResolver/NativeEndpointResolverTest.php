@@ -844,7 +844,7 @@ class NativeEndpointResolverTest extends TestCase
                 null,
                 null,
                 array(),
-                'No endpoints defined',
+                'No shards defined',
             ),
             1 => array(
                 array(),
@@ -854,7 +854,7 @@ class NativeEndpointResolverTest extends TestCase
                     'languages' => array(),
                     'useAlwaysAvailable' => true,
                 ),
-                'No endpoints defined',
+                'No shards defined',
             ),
             2 => array(
                 array(),
@@ -864,7 +864,7 @@ class NativeEndpointResolverTest extends TestCase
                     'languages' => array(),
                     'useAlwaysAvailable' => false,
                 ),
-                'No endpoints defined',
+                'No shards defined',
             ),
             3 => array(
                 array(),
@@ -876,7 +876,7 @@ class NativeEndpointResolverTest extends TestCase
                     ),
                     'useAlwaysAvailable' => true,
                 ),
-                'No endpoints defined',
+                'No shards defined',
             ),
             // Will try to map translation
             4 => array(
@@ -889,7 +889,7 @@ class NativeEndpointResolverTest extends TestCase
                     ),
                     'useAlwaysAvailable' => false,
                 ),
-                "Language 'eng-GB' is not mapped to Solr endpoint",
+                "Language 'eng-GB' is not mapped to Solr shard",
             ),
             5 => array(
                 array(),
@@ -901,7 +901,7 @@ class NativeEndpointResolverTest extends TestCase
                     ),
                     'useAlwaysAvailable' => true,
                 ),
-                "Language 'eng-GB' is not mapped to Solr endpoint",
+                "Language 'eng-GB' is not mapped to Solr shard",
             ),
             6 => array(
                 array(),
@@ -913,7 +913,7 @@ class NativeEndpointResolverTest extends TestCase
                     ),
                     'useAlwaysAvailable' => false,
                 ),
-                "Language 'eng-GB' is not mapped to Solr endpoint",
+                "Language 'eng-GB' is not mapped to Solr shard",
             ),
         );
     }
