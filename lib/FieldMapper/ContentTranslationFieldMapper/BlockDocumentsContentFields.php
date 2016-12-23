@@ -15,7 +15,6 @@ use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\SPI\Search\Field;
-use eZ\Publish\SPI\Search\FieldType;
 
 /**
  * Maps Content fields to block documents (Content and Location).
@@ -74,26 +73,10 @@ class BlockDocumentsContentFields extends ContentTranslationFieldMapper
                     continue;
                 }
 
-                $fieldType = $this->fieldRegistry->getType($field->type);
-                $indexFields = $fieldType->getIndexData($field, $fieldDefinition);
-
-                foreach ($indexFields as $indexField) {
-                    if ($indexField->value === null) {
-                        continue;
-                    }
-
-                    $documentField = new Field(
-                        $name = $this->fieldNameGenerator->getName(
-                            $indexField->name,
-                            $fieldDefinition->identifier,
-                            $contentType->identifier
-                        ),
-                        $indexField->value,
-                        $indexField->type
-                    );
-
-                    $this->appendField($fields, $fieldDefinition, $documentField);
-                }
+                $fields = array_merge(
+                    $fields,
+                    $this->getSearchFields($contentType, $field, $fieldDefinition)
+                );
             }
         }
 
@@ -101,16 +84,39 @@ class BlockDocumentsContentFields extends ContentTranslationFieldMapper
     }
 
     /**
-     * Appends given $documentField to $fields collection, depending on a condition.
+     * Get search fields for the given Content Field.
      *
-     * @param array $fields
+     * @param \eZ\Publish\SPI\Persistence\Content\Type $contentType
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
-     * @param \eZ\Publish\SPI\Search\Field $documentField
+     *
+     * @return \eZ\Publish\SPI\Search\Field[]
      */
-    protected function appendField(array &$fields, FieldDefinition $fieldDefinition, Field $documentField)
-    {
-        if (!$documentField->type instanceof FieldType\FullTextField) {
-            $fields[] = $documentField;
+    protected function getSearchFields(
+        Content\Type $contentType,
+        Content\Field $field,
+        FieldDefinition $fieldDefinition
+    ) {
+        $searchFields = [];
+        $fieldType = $this->fieldRegistry->getType($field->type);
+        $filterData = $fieldType->getFilterData($field, $fieldDefinition);
+
+        foreach ($filterData as $filterField) {
+            if ($filterField->value === null) {
+                continue;
+            }
+
+            $searchFields[] = new Field(
+                $name = $this->fieldNameGenerator->getName(
+                    $filterField->name,
+                    $fieldDefinition->identifier,
+                    $contentType->identifier
+                ),
+                $filterField->value,
+                $filterField->type
+            );
         }
+
+        return $searchFields;
     }
 }
