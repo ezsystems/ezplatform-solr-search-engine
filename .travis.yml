@@ -17,12 +17,6 @@ matrix:
         - php: 7.0
           env: TEST_CONFIG="phpunit.xml"
         - php: 5.6
-          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="4.10.4" CORES_SETUP="dedicated"
-        - php: 5.6
-          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="4.10.4" CORES_SETUP="shared"
-        - php: 7.0
-          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="4.10.4" CORES_SETUP="single" SOLR_CORES="collection1"
-        - php: 5.6
           env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="6.3.0"  CORES_SETUP="dedicated"
         - php: 5.6
           env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="6.3.0"  CORES_SETUP="shared"
