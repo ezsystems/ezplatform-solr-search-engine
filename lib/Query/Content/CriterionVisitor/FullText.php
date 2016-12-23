@@ -18,6 +18,7 @@ use QueryTranslator\Languages\Galach\Generators\ExtendedDisMax;
 use QueryTranslator\Languages\Galach\Parser;
 use QueryTranslator\Languages\Galach\Tokenizer;
 
+// VL : Kept as is, skipped 02561dfe3fb3fee4c65d176ef1d44d2b2ee44ac0
 /**
  * Visits the FullText criterion.
  */
