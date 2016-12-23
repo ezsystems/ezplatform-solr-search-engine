@@ -73,75 +73,19 @@ class FullText extends CriterionVisitor
     public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null)
     {
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\FullText $criterion */
-        $string = $this->prepareSearchString($criterion);
-        $queries = [];
-
-        $queries[] = "text:({$string})";
+        $fields = ['text'];
 
         foreach ($criterion->boost as $field => $boost) {
             $searchFields = $this->getSearchFields($criterion, $field);
 
             foreach ($searchFields as $name => $fieldType) {
-                $queries[] = "{$name}:({$string})^{$boost}";
+                $fields[] = "{$name}^{$boost}";
             }
         }
 
-        return '(' . implode(' OR ', $queries) . ')';
-    }
+        $fields = implode(' ', $fields);
+        $string = $this->escapeQuote($criterion->value);
 
-    /**
-     * Prepares full-text search string.
-     *
-     * Preparing includes escaping special characters and applying fuzziness to tokens.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion\FullText $criterion
-     *
-     * @return string
-     */
-    private function prepareSearchString(FullTextCriterion $criterion)
-    {
-        $tokens = [];
-        $fuzziness = '';
-        if ($criterion->fuzziness < 1) {
-            $fuzziness = sprintf('~%.1f', $criterion->fuzziness);
-        }
-
-        foreach ($this->tokenizeString($criterion->value) as $token) {
-            // Escaping special characters as fuzziness can't be applied to a phrase (quoted string)
-            $tokenEscaped = $this->escapeTerm($token);
-            $tokens[] = "{$tokenEscaped}{$fuzziness}";
-        }
-
-        return implode(' ', $tokens);
-    }
-
-    /**
-     * Tokenize string.
-     *
-     * @param string $string
-     *
-     * @return string[]
-     */
-    private function tokenizeString($string)
-    {
-        return array_filter(array_map('trim', preg_split('(\\p{Z})u', $string)));
-    }
-
-    /**
-     * Escape a term.
-     *
-     * We don't escape a wildcard.
-     *
-     * @link http://lucene.apache.org/core/5_0_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#Escaping_Special_Characters
-     *
-     * @param string $input
-     *
-     * @return string
-     */
-    private function escapeTerm($input)
-    {
-        $pattern = '/(\+|-|&&|\|\||!|\(|\)|\{|}|\[|]|\^|"|~|\?|:|\/|\\\)/';
-
-        return preg_replace($pattern, '\\\$1', $input);
+        return "{!edismax v='{$string}' uf='-*' qf='{$fields}'}";
     }
 }
