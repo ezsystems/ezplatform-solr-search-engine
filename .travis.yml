@@ -17,11 +17,17 @@ matrix:
         - php: 7.0
           env: TEST_CONFIG="phpunit.xml"
         - php: 5.6
-          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="4.10.4" CORES_SETUP="dedicated" SOLR_CONFS="lib/Resources/config/solr/schema.xml lib/Resources/config/solr/custom-fields-types.xml lib/Resources/config/solr/language-fieldtypes.xml" SOLR_CORES="core0 core1 core2 core3"
+          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="4.10.4" CORES_SETUP="dedicated"
         - php: 5.6
-          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="4.10.4" CORES_SETUP="shared"    SOLR_CONFS="lib/Resources/config/solr/schema.xml lib/Resources/config/solr/custom-fields-types.xml lib/Resources/config/solr/language-fieldtypes.xml" SOLR_CORES="core0 core1 core2 core3"
+          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="4.10.4" CORES_SETUP="shared"
         - php: 7.0
-          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="4.10.4" CORES_SETUP="single"    SOLR_CONFS="lib/Resources/config/solr/schema.xml lib/Resources/config/solr/custom-fields-types.xml lib/Resources/config/solr/language-fieldtypes.xml"
+          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="4.10.4" CORES_SETUP="single" SOLR_CORES="collection1"
+        - php: 5.6
+          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="6.3.0"  CORES_SETUP="dedicated"
+        - php: 5.6
+          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="6.3.0"  CORES_SETUP="shared"
+        - php: 7.0
+          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="6.3.0"  CORES_SETUP="single" SOLR_CORES="collection1"
 
 # test only master and stable branches (+ Pull requests against those)
 branches:
