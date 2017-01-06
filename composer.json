@@ -34,7 +34,8 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.5.x-dev"
+            "dev-master": "2.0.x-dev",
+            "dev-solr-cloud-support-2.0-master": "2.0.x-dev"
         }
     }
 }
