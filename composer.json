@@ -11,7 +11,7 @@
     ],
     "require": {
         "php": "~5.6|~7.0",
-        "ezsystems/ezpublish-kernel": "^6.7.0@dev"
+        "ezsystems/ezpublish-kernel": "^6.7.0@dev|^7.0@dev"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.7",
@@ -27,7 +27,8 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.2.x-dev"
+            "dev-master": "2.0.x-dev",
+            "dev-solr-cloud-support-2.0": "2.0.x-dev"
         }
     }
 }
