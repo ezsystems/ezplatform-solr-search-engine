@@ -38,14 +38,30 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
     php vendor/bin/phpunit --bootstrap tests/bootstrap.php
     ```
 
-2. Get & extract [Solr 4.10.4](http://archive.apache.org/dist/lucene/solr/4.10.4/solr-4.10.4.tgz)
+2. Get & extract Solr
+
+   One of the following:
+   - [Solr 4.10.4](http://archive.apache.org/dist/lucene/solr/4.10.4/solr-4.10.4.tgz)
+   - [Solr 6.4.1](http://archive.apache.org/dist/lucene/solr/6.4.1/solr-6.4.1.tgz)
+
+   _Solr 6 support is currently experimental, but already supports more features then 4.10 (atm: location search scoring)._
+
 
 3. Configure Solr *(single core)*
 
     *Note: See .travis.yml and bin/.travis/init_solr.sh for multi core setups*
 
     ```bash
+    # Solr 4.10
     cp -R lib/Resources/config/solr/ solr-4.10.4/example/solr/collection1/conf
+
+    # Solr 6
+    cp -R lib/Resources/config/solr/ <solr-dir>/server/ez/template
+    cp -R <solr-dir>/server/solr/configsets/basic_configs/conf/{currency.xml,solrconfig.xml,stopwords.txt,synonyms.txt,elevate.xml} <solr-dir>/server/ez/template
+    cp <solr-dir>/server/solr/solr.xml <solr-dir>/server/ez
+
+    ## modify solrconfig.xml to remove section that doesn't agree with our schema
+    sed -i.bak '/<updateRequestProcessorChain name="add-unknown-fields-to-the-schema">/,/<\/updateRequestProcessorChain>/d' <solr-dir>/server/ez/template/solrconfig.xml
     ```
     
     ###### For use in production/dev
@@ -60,7 +76,7 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
            <openSearcher>false</openSearcher> 
          </autoCommit>
 
-         <autoSoftCommit> 
+         <autoSoftCommit>
            <maxTime>${solr.autoSoftCommit.maxTime:100}</maxTime> 
          </autoSoftCommit>
 
@@ -68,8 +84,16 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
 4. Start Solr
 
     ```bash
-    cd solr-6.3.0
-    bin/solr start
+    # Solr 4.10
+    cd solr-4.10.4/example
+    java -Djetty.port=8983 -jar start.jar
+
+    # Solr 6
+    cd solr-6.4.1
+    bin/solr -s ez
+
+    ## optionally you can now create several cores if you have configured bundle for that
+    bin/solr create_core -c collection1 -d <solr-dir>/server/ez/template
     ```
 
 5. Run integration tests

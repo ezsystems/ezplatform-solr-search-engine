@@ -10,7 +10,7 @@ default_cores[2]='core2'
 default_cores[3]='core3'
 
 SOLR_PORT=${SOLR_PORT:-8983}
-SOLR_VERSION=${SOLR_VERSION:-6.3.0}
+SOLR_VERSION=${SOLR_VERSION:-6.4.1}
 SOLR_DEBUG=${SOLR_DEBUG:-false}
 SOLR_HOME=${SOLR_HOME:-ez}
 SOLR_CONFIG=${SOLR_CONFIG:-${default_config_files[*]}}
@@ -20,7 +20,8 @@ SOLR_INSTALL_DIR="${SOLR_DIR}/${SOLR_VERSION}"
 
 download() {
     case ${SOLR_VERSION} in
-        4.10.4|6.3.0 )
+        # PS!!: Append versions and don't remove old once, kernel uses this script!
+        4.10.4|6.3.0|6.4.1 )
             url="http://archive.apache.org/dist/lucene/solr/${SOLR_VERSION}/solr-${SOLR_VERSION}.tgz"
             ;;
         *)
@@ -161,6 +162,7 @@ solr4_run() {
     echo 'Started'
 }
 
+# Configure for Solr 6, see solr4_configure() for 4.10
 configure() {
     home_dir="${SOLR_INSTALL_DIR}/server/${SOLR_HOME}"
     template_dir="${home_dir}/template"
@@ -183,6 +185,7 @@ configure() {
     sed -i.bak '/<updateRequestProcessorChain name="add-unknown-fields-to-the-schema">/,/<\/updateRequestProcessorChain>/d' "${template_dir}/solrconfig.xml"
 }
 
+# Run for Solr 6, see solr4_run() for 4.10
 run() {
     echo "Running with version ${SOLR_VERSION} in standalone mode"
     echo "Starting solr on port ${SOLR_PORT}..."
@@ -194,6 +197,7 @@ run() {
     create_cores
 }
 
+# Create cores for Solr 6, see solr4_add_core() for 4.10
 create_cores() {
     home_dir="${SOLR_INSTALL_DIR}/server/${SOLR_HOME}"
     template_dir="${home_dir}/template"
