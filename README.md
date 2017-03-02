@@ -8,9 +8,11 @@ Solr Search Engine Bundle for use with:
 
 Scope for 1.0 version of this bundle is to be able to power close to any kind of queries eZ Publish Platform 5.x users are currently running agains the LegacySearch engine *(aka SQL Search/Storage engine)*, *both* Content and Location Search. This search engine is also taking advantage of Solr's Full text capabilities for language analysis, and it's scalability.
 
-Version 1.0 is tested and will be supported with _Solr 4.10.4_, support for Solr 5.x will be added in a future update.
+1.1 and higher has dendencies on changes in eZ Platform, and thus 1.0.x is kept supported for eZ Publish 5.4 users.
 
-Other search features such as Faceting, Highlighting, .., not supported by the SQL search engine is planned for future versions. Some will be available by a simple composer patch update *(0.0.z)*, for major *(x.0.0)* or minor *(0.y.0)* updates there will sometimes be a need to also re index your repository.
+Version 1.0-1.2 is tested and supported with _Solr 4.10.4_, 1.3 adds support for Solr 6 _(tested with 6.4.1)_.
+
+Other search features such as Faceting, Highlighting, .., not supported by the SQL search engine is planned for future versions. Some will be available by a simple composer patch update *(0.0.z)*. For major *(x.0.0)* or minor *(0.y.0)* updates there will sometimes be a need to also re index your repository.
 
 
 ## Install
