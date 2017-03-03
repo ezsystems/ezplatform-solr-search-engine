@@ -94,7 +94,7 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
     cd solr-6.4.1
     bin/solr -s ez
 
-    ## For single core setup as used for example to run test below, add the one expected:
+    ## You'll also need to add cores on Solr 6, this adds single core setup:
     bin/solr create_core -c collection1 -d server/ez/template
     ```
 
