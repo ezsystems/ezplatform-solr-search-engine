@@ -2,6 +2,7 @@
     "name": "ezsystems/ezplatform-solr-search-engine",
     "description": "Solr search engine implementation for eZ Platform",
     "license": "GPL-2.0",
+    "type": "ezplatform-bundle",
     "homepage": "https://github.com/ezsystems/ezplatform-solr-search-engine",
     "authors": [
         {
