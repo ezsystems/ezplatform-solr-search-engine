@@ -55,7 +55,7 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
 
     ```bash
     # Solr 4.10
-    cp -R lib/Resources/config/solr/* solr-4.10.4/example/solr/collection1/conf
+    cp -R <ezplatform-solr-search-engine>/lib/Resources/config/solr/* solr-4.10.4/example/solr/collection1/conf
 
     # Solr 6
     cd solr-6.4.1
