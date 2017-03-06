@@ -55,15 +55,16 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
 
     ```bash
     # Solr 4.10
-    cp -R lib/Resources/config/solr/ solr-4.10.4/example/solr/collection1/conf
+    cp -R lib/Resources/config/solr/* solr-4.10.4/example/solr/collection1/conf
 
     # Solr 6
-    cp -R lib/Resources/config/solr/ <solr-dir>/server/ez/template
-    cp -R <solr-dir>/server/solr/configsets/basic_configs/conf/{currency.xml,solrconfig.xml,stopwords.txt,synonyms.txt,elevate.xml} <solr-dir>/server/ez/template
-    cp <solr-dir>/server/solr/solr.xml <solr-dir>/server/ez
-
-    ## modify solrconfig.xml to remove section that doesn't agree with our schema
-    sed -i.bak '/<updateRequestProcessorChain name="add-unknown-fields-to-the-schema">/,/<\/updateRequestProcessorChain>/d' <solr-dir>/server/ez/template/solrconfig.xml
+    cd solr-6.4.1
+    mkdir -p server/ez/template
+    cp -R <ezplatform-solr-search-engine>/lib/Resources/config/solr/* server/ez/template
+    cp server/solr/configsets/basic_configs/conf/{currency.xml,solrconfig.xml,stopwords.txt,synonyms.txt,elevate.xml} server/ez/template
+    cp server/solr/solr.xml server/ez
+    ## Modify solrconfig.xml to remove section that doesn't agree with our schema
+    sed -i.bak '/<updateRequestProcessorChain name="add-unknown-fields-to-the-schema">/,/<\/updateRequestProcessorChain>/d' server/ez/template/solrconfig.xml
     ```
     
     ###### For use in production/dev
@@ -93,7 +94,6 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
     # Solr 6
     cd solr-6.4.1
     bin/solr -s ez
-
     ## You'll also need to add cores on Solr 6, this adds single core setup:
     bin/solr create_core -c collection1 -d server/ez/template
     ```
