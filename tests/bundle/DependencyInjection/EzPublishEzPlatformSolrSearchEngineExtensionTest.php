@@ -12,7 +12,6 @@ namespace EzSystems\EzPlatformSolrSearchEngineBundle\Tests\DependencyInjection;
 
 use EzSystems\EzPlatformSolrSearchEngineBundle\DependencyInjection\EzSystemsEzPlatformSolrSearchEngineExtension;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
-use Symfony\Component\Yaml\Yaml;
 
 class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtensionTestCase
 {
@@ -35,9 +34,7 @@ class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtension
 
     protected function getMinimalConfiguration()
     {
-        return Yaml::parse(
-            file_get_contents(__DIR__ . '/Fixtures/minimal.yml')
-        );
+        return [];
     }
 
     public function testEmpty()
@@ -55,12 +52,13 @@ class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtension
                     'core' => 'core0',
                 ),
                 array(
-                    'scheme' => 'https',
-                    'host' => '10.10.10.10',
-                    'port' => 5434,
-                    'user' => 'jura',
-                    'pass' => 'pura',
-                    'path' => '/jolr',
+                    'dsn' => 'https://jura:pura@10.10.10.10:5434/jolr',
+                    'scheme' => 'http',
+                    'host' => '127.0.0.1',
+                    'port' => 8983,
+                    'user' => null,
+                    'pass' => null,
+                    'path' => '/solr',
                     'core' => 'core0',
                 ),
             ),
@@ -76,6 +74,7 @@ class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtension
                     'core' => 'core1',
                 ),
                 array(
+                    'dsn' => null,
                     'scheme' => 'https',
                     'host' => '22.22.22.22',
                     'port' => 1232,
@@ -98,12 +97,13 @@ class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtension
                     'path' => '/dunr',
                 ),
                 array(
-                    'scheme' => 'https',
-                    'host' => '257.258.259.400',
-                    'port' => 5555,
-                    'user' => 'miles',
-                    'pass' => 'teg',
-                    'path' => '/noship',
+                    'dsn' => 'https://miles:teg@257.258.259.400:5555/noship',
+                    'scheme' => 'http',
+                    'host' => 'farm.com',
+                    'port' => 1234,
+                    'user' => 'darwi',
+                    'pass' => 'odrade',
+                    'path' => '/dunr',
                     'core' => 'core2',
                 ),
             ),
@@ -113,6 +113,7 @@ class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtension
                     'core' => 'core3',
                 ),
                 array(
+                    'dsn' => null,
                     'scheme' => 'http',
                     'host' => '127.0.0.1',
                     'port' => 8983,
