@@ -73,6 +73,21 @@ class Endpoint extends ValueObject
     protected $core;
 
     /**
+     * Parse DSN settings if present, otherwise take parameters as is.
+     *
+     * @param array $properties
+     */
+    public function __construct(array $properties = array())
+    {
+        if (!empty($properties['dsn'])) {
+            $properties = parse_url($properties['dsn']) + $properties;
+            unset($properties['dsn']);
+        }
+
+        parent::__construct($properties);
+    }
+
+    /**
      * Returns Endpoint's identifier, to be used for targeting specific logical indexes.
      *
      * @return string
