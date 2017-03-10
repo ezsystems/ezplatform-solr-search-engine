@@ -10,7 +10,7 @@ default_cores[2]='core2'
 default_cores[3]='core3'
 
 SOLR_PORT=${SOLR_PORT:-8983}
-SOLR_VERSION=${SOLR_VERSION:-6.4.1}
+SOLR_VERSION=${SOLR_VERSION:-6.4.2}
 SOLR_DEBUG=${SOLR_DEBUG:-false}
 SOLR_HOME=${SOLR_HOME:-ez}
 SOLR_CONFIG=${SOLR_CONFIG:-${default_config_files[*]}}
@@ -21,7 +21,7 @@ SOLR_INSTALL_DIR="${SOLR_DIR}/${SOLR_VERSION}"
 download() {
     case ${SOLR_VERSION} in
         # PS!!: Append versions and don't remove old once, kernel uses this script!
-        4.10.4|6.3.0|6.4.1 )
+        4.10.4|6.3.0|6.4.1|6.4.2 )
             url="http://archive.apache.org/dist/lucene/solr/${SOLR_VERSION}/solr-${SOLR_VERSION}.tgz"
             ;;
         *)

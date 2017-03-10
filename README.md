@@ -10,7 +10,7 @@ Scope for 1.0 version of this bundle is to be able to power close to any kind of
 
 1.1 and higher has dendencies on changes in eZ Platform, and thus 1.0.x is kept supported for eZ Publish 5.4 users.
 
-Version 1.0-1.2 is tested and supported with _Solr 4.10.4_, 1.3 adds support for Solr 6 _(tested with 6.4.1)_.
+Version 1.0-1.2 is tested and supported with _Solr 4.10.4_, 1.3 adds support for Solr 6 _(tested with 6.4.2)_.
 
 Other search features such as Faceting, Highlighting, .., not supported by the SQL search engine is planned for future versions. Some will be available by a simple composer patch update *(0.0.z)*. For major *(x.0.0)* or minor *(0.y.0)* updates there will sometimes be a need to also re index your repository.
 
@@ -44,7 +44,7 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
 
    One of the following:
    - [Solr 4.10.4](http://archive.apache.org/dist/lucene/solr/4.10.4/solr-4.10.4.tgz)
-   - [Solr 6.4.1](http://archive.apache.org/dist/lucene/solr/6.4.1/solr-6.4.1.tgz)
+   - [Solr 6.4.2](http://archive.apache.org/dist/lucene/solr/6.4.2/solr-6.4.2.tgz)
 
    _Solr 6 support is currently experimental, but already supports more features then 4.10 (atm: location search scoring)._
 
@@ -58,7 +58,7 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
     cp -R <ezplatform-solr-search-engine>/lib/Resources/config/solr/* solr-4.10.4/example/solr/collection1/conf
 
     # Solr 6
-    cd solr-6.4.1
+    cd solr-6.4.2
     mkdir -p server/ez/template
     cp -R <ezplatform-solr-search-engine>/lib/Resources/config/solr/* server/ez/template
     cp server/solr/configsets/basic_configs/conf/{currency.xml,solrconfig.xml,stopwords.txt,synonyms.txt,elevate.xml} server/ez/template
@@ -92,7 +92,7 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
     java -Djetty.port=8983 -jar start.jar
 
     # Solr 6
-    cd solr-6.4.1
+    cd solr-6.4.2
     bin/solr -s ez
     ## You'll also need to add cores on Solr 6, this adds single core setup:
     bin/solr create_core -c collection1 -d server/ez/template

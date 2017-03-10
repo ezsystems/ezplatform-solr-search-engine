@@ -19,11 +19,11 @@ matrix:
         - php: 7.0
           env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="4.10.4" CORES_SETUP="single" SOLR_CORES="collection1"
         - php: 5.6
-          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="6.4.1"  CORES_SETUP="dedicated"
+          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="6.4.2"  CORES_SETUP="dedicated"
         - php: 5.6
-          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="6.4.1"  CORES_SETUP="shared"
+          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="6.4.2"  CORES_SETUP="shared"
         - php: 7.0
-          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="6.4.1"  CORES_SETUP="single" SOLR_CORES="collection1"
+          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="6.4.2"  CORES_SETUP="single" SOLR_CORES="collection1"
 
 # test only master and stable branches (+ Pull requests against those)
 branches:
