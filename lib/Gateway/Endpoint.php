@@ -73,6 +73,28 @@ class Endpoint extends ValueObject
     protected $core;
 
     /**
+     * Parse DSN settings if present, otherwise take parameters as is.
+     *
+     * @param array $properties
+     */
+    public function __construct(array $properties = array())
+    {
+        // If dns is defined parse it to individual parts
+        if (!empty($properties['dsn'])) {
+            $properties = parse_url($properties['dsn']) + $properties;
+            unset($properties['dsn']);
+
+            // if dns contained fragment we set that on core config, query however will result in exception.
+            if (isset($properties['fragment'])) {
+                $properties['core'] = $properties['fragment'];
+                unset($properties['fragment']);
+            }
+        }
+
+        parent::__construct($properties);
+    }
+
+    /**
      * Returns Endpoint's identifier, to be used for targeting specific logical indexes.
      *
      * @return string

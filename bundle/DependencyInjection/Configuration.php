@@ -59,43 +59,11 @@ class Configuration implements ConfigurationInterface
                 ->useAttributeAsKey('endpoint_name')
                 ->performNoDeepMerging()
                 ->prototype('array')
-                    ->beforeNormalization()
-                        ->ifTrue(
-                            function ($v) {
-                                return isset($v['dsn']);
-                            }
-                        )
-                        ->then(
-                            function ($v) {
-                                // Provided DSN will override overlapping standalone values
-                                $parts = parse_url($v['dsn']);
-                                unset($v['dsn']);
-
-                                if (isset($parts['scheme'])) {
-                                    $v['scheme'] = $parts['scheme'];
-                                }
-                                if (isset($parts['host'])) {
-                                    $v['host'] = $parts['host'];
-                                }
-                                if (isset($parts['port'])) {
-                                    $v['port'] = $parts['port'];
-                                }
-                                if (isset($parts['user'])) {
-                                    $v['user'] = $parts['user'];
-                                }
-                                if (isset($parts['pass'])) {
-                                    $v['pass'] = $parts['pass'];
-                                }
-                                if (isset($parts['path'])) {
-                                    $v['path'] = $parts['path'];
-                                }
-
-                                return $v;
-                            }
-                        )
-                    ->end()
-                    ->addDefaultsIfNotSet()
                     ->children()
+                        // To support Symfony 3 env() variables we don't parse the dsn setting here but in Endpoint ctor
+                        ->scalarNode('dsn')
+                            ->defaultNull()
+                        ->end()
                         ->scalarNode('scheme')
                             ->defaultValue($this->defaultEndpointValues['scheme'])
                         ->end()
