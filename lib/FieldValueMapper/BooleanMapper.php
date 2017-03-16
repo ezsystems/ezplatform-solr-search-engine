@@ -40,6 +40,6 @@ class BooleanMapper extends FieldValueMapper
      */
     public function map(Field $field)
     {
-        return (boolean)$field->value;
+        return (bool)$field->value;
     }
 }
