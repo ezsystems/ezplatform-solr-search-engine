@@ -110,9 +110,9 @@ class Configuration implements ConfigurationInterface
                 ->beforeNormalization()
                     ->ifTrue(
                         function ($v) {
-                            return (
+                            return
                                 !empty($v['mapping']) && !is_array($v['mapping'])
-                            );
+                            ;
                         }
                     )
                     ->then(
@@ -130,14 +130,14 @@ class Configuration implements ConfigurationInterface
                 ->beforeNormalization()
                     ->ifTrue(
                         function ($v) {
-                            return (
+                            return
                                 empty($v['entry_endpoints']) &&
                                 (
                                     !empty($v['mapping']['translations']) ||
                                     !empty($v['mapping']['default']) ||
                                     !empty($v['mapping']['main_translations'])
                                 )
-                            );
+                            ;
                         }
                     )
                     ->then(
