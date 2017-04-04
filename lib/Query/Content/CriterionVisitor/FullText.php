@@ -76,7 +76,7 @@ class FullText extends CriterionVisitor
         $string = $this->prepareSearchString($criterion);
         $queries = [];
 
-        $queries[] = "text:({$string})";
+        $queries[] = "meta_content__text_t:({$string})";
 
         foreach ($criterion->boost as $field => $boost) {
             $searchFields = $this->getSearchFields($criterion, $field);
