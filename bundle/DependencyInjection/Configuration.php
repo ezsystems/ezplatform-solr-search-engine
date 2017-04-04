@@ -30,6 +30,11 @@ class Configuration implements ConfigurationInterface
         'path' => '/solr',
     );
 
+    protected $metaFieldNames = [
+        'name',
+        'text',
+    ];
+
     public function __construct($rootNodeName)
     {
         $this->rootNodeName = $rootNodeName;
@@ -93,6 +98,8 @@ class Configuration implements ConfigurationInterface
 
     /**
      * Adds connections definition.
+     *
+     * @throws \RuntimeException
      *
      * @param \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition $node
      */
@@ -238,6 +245,112 @@ class Configuration implements ConfigurationInterface
                                     'distributed to when using always available fallback ' .
                                     'or searching only on the main languages.'
                                 )
+                            ->end()
+                        ->end()
+                    ->end()
+                    ->arrayNode('boost_factors')
+                        ->addDefaultsIfNotSet()
+                        ->info('Index-time field boost factor mapping.')
+                        ->children()
+                            ->arrayNode('content_type')
+                                ->info('A map of ContentType identifiers and boost factors for fields.')
+                                ->example(
+                                    [
+                                        'article' => 1.5,
+                                        'blog_post' => 3.0,
+                                    ]
+                                )
+                                ->normalizeKeys(false)
+                                ->useAttributeAsKey('content_type_identifier')
+                                ->prototype('float')->end()
+                            ->end()
+                            ->arrayNode('field_definition')
+                                ->info('A map of ContentType and/or FieldDefinition identifiers and boost factors for fields.')
+                                ->example(
+                                    [
+                                        'name' => 2.0,
+                                        'title' => 1.5,
+                                        'blog_post' => [
+                                            'title' => 3.0,
+                                        ],
+                                    ]
+                                )
+                                ->normalizeKeys(false)
+                                ->useAttributeAsKey('content_type_identifier')
+                                ->beforeNormalization()
+                                    ->always(
+                                        function (array $v) {
+                                            $valuesMapped = [];
+                                            foreach ($v as $key => $value) {
+                                                if (is_array($value)) {
+                                                    $valuesMapped[$key] = $value;
+                                                } else {
+                                                    $valuesMapped['*'][$key] = $value;
+                                                }
+                                            }
+
+                                            return $valuesMapped;
+                                        }
+                                    )
+                                ->end()
+                                ->prototype('array')
+                                    ->normalizeKeys(false)
+                                    ->useAttributeAsKey('field_definition_identifier')
+                                    ->prototype('float')->end()
+                                ->end()
+                            ->end()
+                            ->arrayNode('meta_field')
+                                ->info('A map of ContentType and/or field name identifiers and boost factors for meta fields.')
+                                ->example(
+                                    [
+                                        'name' => 2.0,
+                                        'text' => 1.5,
+                                        'blog_post' => [
+                                            'name' => 3.0,
+                                            'text' => 4.0,
+                                        ],
+                                    ]
+                                )
+                                ->normalizeKeys(false)
+                                ->useAttributeAsKey('content_type_identifier')
+                                ->beforeNormalization()
+                                    ->always(
+                                        function (array $v) {
+                                            $valuesMapped = [];
+                                            foreach ($v as $key => $value) {
+                                                if (is_array($value)) {
+                                                    $valuesMapped[$key] = $value;
+                                                } else {
+                                                    $valuesMapped['*'][$key] = $value;
+                                                }
+                                            }
+
+                                            return $valuesMapped;
+                                        }
+                                    )
+                                ->end()
+                                ->prototype('array')
+                                    ->normalizeKeys(false)
+                                    ->useAttributeAsKey('meta_field_name')
+                                    ->validate()
+                                        ->ifTrue(
+                                            function($v) {
+                                                foreach (array_keys($v) as $key) {
+                                                    if (!in_array($key, $this->metaFieldNames, true)) {
+                                                        return true;
+                                                    }
+                                                }
+
+                                                return false;
+                                            }
+                                        )
+                                        ->thenInvalid(
+                                            'Allowed meta field names are: ' .
+                                            implode(', ', $this->metaFieldNames)
+                                        )
+                                    ->end()
+                                    ->prototype('float')->end()
+                                ->end()
                             ->end()
                         ->end()
                     ->end()
