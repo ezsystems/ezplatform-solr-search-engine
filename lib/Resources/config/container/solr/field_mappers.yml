@@ -5,6 +5,7 @@ parameters:
     ezpublish.search.solr.field_mapper.content.content_document_base_fields.class: EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper\ContentDocumentBaseFields
     ezpublish.search.solr.field_mapper.content.content_document_location_fields.class: EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper\ContentDocumentLocationFields
     ezpublish.search.solr.field_mapper.content_translation.content_document_fulltext_fields.class: EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper\ContentDocumentFulltextFields
+    ezpublish.search.solr.field_mapper.content_translation.content_document_translated_content_name_field.class: EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper\ContentDocumentTranslatedContentNameField
     ezpublish.search.solr.field_mapper.location.location_document_base_fields.class: EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper\LocationDocumentBaseFields
 
 services:
@@ -51,6 +52,14 @@ services:
             - '@ezpublish.spi.persistence.content_type_handler'
             - '@ezpublish.search.common.field_registry'
             - '@ezpublish.search.common.field_name_generator'
+            - '@ezpublish.search.solr.field_mapper.boost_factor_provider'
+        tags:
+            - {name: ezpublish.search.solr.field_mapper.content_translation}
+
+    ezpublish.search.solr.field_mapper.content_translation.content_document_translated_content_name_field:
+        class: '%ezpublish.search.solr.field_mapper.content_translation.content_document_translated_content_name_field.class%'
+        arguments:
+            - '@ezpublish.spi.persistence.content_type_handler'
             - '@ezpublish.search.solr.field_mapper.boost_factor_provider'
         tags:
             - {name: ezpublish.search.solr.field_mapper.content_translation}
