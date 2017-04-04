@@ -8,25 +8,127 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
 
-use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider;
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
+use eZ\Publish\Core\Search\Common\FieldNameGenerator;
+use eZ\Publish\Core\Search\Common\FieldRegistry;
+use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\Type as ContentType;
+use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\FieldType;
 
 /**
  * Maps Content fulltext fields to Content document.
  */
-class ContentDocumentFulltextFields extends BlockDocumentsContentFields
+class ContentDocumentFulltextFields extends ContentTranslationFieldMapper
 {
     /**
-     * {@inheritdoc}
+     * Field name, untyped.
      *
-     * Overridden to append only full text fields, instead of everything but full text fields
-     * in the base implementation.
+     * @var string
      */
-    protected function appendField(array &$fields, FieldDefinition $fieldDefinition, Field $documentField)
+    private static $fieldName = 'meta_content__text';
+
+    /**
+     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
+     */
+    protected $contentTypeHandler;
+
+    /**
+     * @var \eZ\Publish\Core\Search\Common\FieldRegistry
+     */
+    protected $fieldRegistry;
+
+    /**
+     * @var \eZ\Publish\Core\Search\Common\FieldNameGenerator
+     */
+    protected $fieldNameGenerator;
+
+    /**
+     * @var \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider
+     */
+    protected $boostFactorProvider;
+
+    /**
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
+     * @param \eZ\Publish\Core\Search\Common\FieldRegistry $fieldRegistry
+     * @param \eZ\Publish\Core\Search\Common\FieldNameGenerator $fieldNameGenerator
+     * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider $boostFactorProvider
+     */
+    public function __construct(
+        ContentTypeHandler $contentTypeHandler,
+        FieldRegistry $fieldRegistry,
+        FieldNameGenerator $fieldNameGenerator,
+        BoostFactorProvider $boostFactorProvider
+    ) {
+        $this->contentTypeHandler = $contentTypeHandler;
+        $this->fieldRegistry = $fieldRegistry;
+        $this->fieldNameGenerator = $fieldNameGenerator;
+        $this->boostFactorProvider = $boostFactorProvider;
+    }
+
+    public function accept(Content $content, $languageCode)
     {
-        if ($documentField->type instanceof FieldType\FullTextField && $fieldDefinition->isSearchable) {
-            $fields[] = $documentField;
+        return true;
+    }
+
+    public function mapFields(Content $content, $languageCode)
+    {
+        $fields = [];
+        $contentType = $this->contentTypeHandler->load(
+            $content->versionInfo->contentInfo->contentTypeId
+        );
+
+        foreach ($content->fields as $field) {
+            if ($field->languageCode !== $languageCode) {
+                continue;
+            }
+
+            foreach ($contentType->fieldDefinitions as $fieldDefinition) {
+                if ($fieldDefinition->id !== $field->fieldDefinitionId) {
+                    continue;
+                }
+
+                $fieldType = $this->fieldRegistry->getType($field->type);
+                $indexFields = $fieldType->getIndexData($field, $fieldDefinition);
+
+                foreach ($indexFields as $indexField) {
+                    if ($indexField->value === null) {
+                        continue;
+                    }
+
+                    if (!$indexField->type instanceof FieldType\FullTextField || !$fieldDefinition->isSearchable) {
+                        continue;
+                    }
+
+                    $fields[] = new Field(
+                        self::$fieldName,
+                        $indexField->value,
+                        $this->getIndexFieldType($contentType)
+                    );
+                }
+            }
         }
+
+        return $fields;
+    }
+
+    /**
+     * Return index field type for the given $contentType.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Type $contentType
+     *
+     * @return \eZ\Publish\SPI\Search\FieldType
+     */
+    private function getIndexFieldType(ContentType $contentType)
+    {
+        $newFieldType = new FieldType\TextField();
+        $newFieldType->boost = $this->boostFactorProvider->getContentMetaFieldBoostFactor(
+            $contentType,
+            'text'
+        );
+
+        return $newFieldType;
     }
 }

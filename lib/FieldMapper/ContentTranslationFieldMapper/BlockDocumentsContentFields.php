@@ -8,10 +8,12 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
 
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider;
 use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
 use eZ\Publish\Core\Search\Common\FieldNameGenerator;
 use eZ\Publish\Core\Search\Common\FieldRegistry;
 use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\Type as ContentType;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\SPI\Search\Field;
@@ -38,18 +40,26 @@ class BlockDocumentsContentFields extends ContentTranslationFieldMapper
     protected $fieldNameGenerator;
 
     /**
+     * @var \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider
+     */
+    protected $boostFactorProvider;
+
+    /**
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\Core\Search\Common\FieldRegistry $fieldRegistry
      * @param \eZ\Publish\Core\Search\Common\FieldNameGenerator $fieldNameGenerator
+     * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider $boostFactorProvider
      */
     public function __construct(
         ContentTypeHandler $contentTypeHandler,
         FieldRegistry $fieldRegistry,
-        FieldNameGenerator $fieldNameGenerator
+        FieldNameGenerator $fieldNameGenerator,
+        BoostFactorProvider $boostFactorProvider
     ) {
         $this->contentTypeHandler = $contentTypeHandler;
         $this->fieldRegistry = $fieldRegistry;
         $this->fieldNameGenerator = $fieldNameGenerator;
+        $this->boostFactorProvider = $boostFactorProvider;
     }
 
     public function accept(Content $content, $languageCode)
@@ -82,17 +92,19 @@ class BlockDocumentsContentFields extends ContentTranslationFieldMapper
                         continue;
                     }
 
-                    $documentField = new Field(
+                    if ($indexField->type instanceof FieldType\FullTextField) {
+                        continue;
+                    }
+
+                    $fields[] = new Field(
                         $name = $this->fieldNameGenerator->getName(
                             $indexField->name,
                             $fieldDefinition->identifier,
                             $contentType->identifier
                         ),
                         $indexField->value,
-                        $indexField->type
+                        $this->getIndexFieldType($contentType, $fieldDefinition, $indexField->type)
                     );
-
-                    $this->appendField($fields, $fieldDefinition, $documentField);
                 }
             }
         }
@@ -101,16 +113,25 @@ class BlockDocumentsContentFields extends ContentTranslationFieldMapper
     }
 
     /**
-     * Appends given $documentField to $fields collection, depending on a condition.
+     * Return index field type for the given arguments.
      *
-     * @param array $fields
+     * @param \eZ\Publish\SPI\Persistence\Content\Type $contentType
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
-     * @param \eZ\Publish\SPI\Search\Field $documentField
+     * @param \eZ\Publish\SPI\Search\FieldType $fieldType
+     *
+     * @return \eZ\Publish\SPI\Search\FieldType
      */
-    protected function appendField(array &$fields, FieldDefinition $fieldDefinition, Field $documentField)
-    {
-        if (!$documentField->type instanceof FieldType\FullTextField) {
-            $fields[] = $documentField;
-        }
+    private function getIndexFieldType(
+        ContentType $contentType,
+        FieldDefinition $fieldDefinition,
+        FieldType $fieldType
+    ) {
+        $fieldType = clone $fieldType;
+        $fieldType->boost = $this->boostFactorProvider->getContentFieldBoostFactor(
+            $contentType,
+            $fieldDefinition
+        );
+
+        return $fieldType;
     }
 }
