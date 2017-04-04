@@ -92,6 +92,21 @@ class BoostFactorProviderTest extends TestCase
                 'title',
                 1.0,
             ],
+            [
+                [
+                    'content-fields' => [
+                        'article' => [
+                            '*' => 3.3,
+                        ],
+                        '*' => [
+                            'name' => 2.2,
+                        ],
+                    ],
+                ],
+                'article',
+                'name',
+                3.3,
+            ],
         ];
     }
 
@@ -203,6 +218,21 @@ class BoostFactorProviderTest extends TestCase
                 'news',
                 'name',
                 1.0,
+            ],
+            [
+                [
+                    'meta-fields' => [
+                        'article' => [
+                            '*' => 3.3,
+                        ],
+                        '*' => [
+                            'text' => 2.2,
+                        ],
+                    ],
+                ],
+                'article',
+                'text',
+                3.3,
             ],
         ];
     }
