@@ -11,15 +11,12 @@
 namespace EzSystems\EzPlatformSolrSearchEngine\Gateway;
 
 use EzSystems\EzPlatformSolrSearchEngine\Gateway;
-use eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\Core\Search\Common\FieldNameGenerator;
 use EzSystems\EzPlatformSolrSearchEngine\Query\QueryConverter;
-use eZ\Publish\Core\Search\Common\FieldValueMapper;
-use RuntimeException;
-use XmlWriter;
-use eZ\Publish\SPI\Search\Field;
+use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\SPI\Search\Document;
+use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\FieldType;
+use RuntimeException;
 
 /**
  * The Content Search Gateway provides the implementation for one database to
@@ -30,7 +27,7 @@ class Native extends Gateway
     /**
      * HTTP client to communicate with Solr server.
      *
-     * @var HttpClient
+     * @var \EzSystems\EzPlatformSolrSearchEngine\Gateway\HttpClient
      */
     protected $client;
 
@@ -61,29 +58,17 @@ class Native extends Gateway
     protected $locationQueryConverter;
 
     /**
-     * Field value mapper.
-     *
-     * @var \eZ\Publish\Core\Search\Common\FieldValueMapper
+     * @var \EzSystems\EzPlatformSolrSearchEngine\Gateway\UpdateSerializer
      */
-    protected $fieldValueMapper;
+    protected $updateSerializer;
 
     /**
-     * Field name generator.
-     *
-     * @var FieldNameGenerator
-     */
-    protected $nameGenerator;
-
-    /**
-     * Construct from HTTP client.
-     *
-     * @param HttpClient $client
+     * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\HttpClient $client
      * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointResolver $endpointResolver
      * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointRegistry $endpointRegistry
      * @param \EzSystems\EzPlatformSolrSearchEngine\Query\QueryConverter $contentQueryConverter
      * @param \EzSystems\EzPlatformSolrSearchEngine\Query\QueryConverter $locationQueryConverter
-     * @param \eZ\Publish\Core\Search\Common\FieldValueMapper $fieldValueMapper
-     * @param \eZ\Publish\Core\Search\Common\FieldNameGenerator $nameGenerator
+     * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\UpdateSerializer $updateSerializer
      */
     public function __construct(
         HttpClient $client,
@@ -91,16 +76,14 @@ class Native extends Gateway
         EndpointRegistry $endpointRegistry,
         QueryConverter $contentQueryConverter,
         QueryConverter $locationQueryConverter,
-        FieldValueMapper $fieldValueMapper,
-        FieldNameGenerator $nameGenerator
+        UpdateSerializer $updateSerializer
     ) {
         $this->client = $client;
         $this->endpointResolver = $endpointResolver;
         $this->endpointRegistry = $endpointRegistry;
         $this->contentQueryConverter = $contentQueryConverter;
         $this->locationQueryConverter = $locationQueryConverter;
-        $this->fieldValueMapper = $fieldValueMapper;
-        $this->nameGenerator = $nameGenerator;
+        $this->updateSerializer = $updateSerializer;
     }
 
     /**
@@ -319,7 +302,7 @@ class Native extends Gateway
      */
     protected function doBulkIndexDocuments(Endpoint $endpoint, array $documents)
     {
-        $updates = $this->createUpdates($documents);
+        $updates = $this->updateSerializer->serialize($documents);
         $result = $this->client->request(
             'POST',
             $endpoint,
@@ -436,103 +419,6 @@ class Native extends Gateway
                     $result->headers['status'] . var_export($result, true)
                 );
             }
-        }
-    }
-
-    /**
-     * Create document(s) update XML.
-     *
-     * @param \eZ\Publish\SPI\Search\Document[] $documents
-     *
-     * @return string
-     */
-    protected function createUpdates(array $documents)
-    {
-        $xmlWriter = new XmlWriter();
-        $xmlWriter->openMemory();
-        $xmlWriter->startElement('add');
-
-        foreach ($documents as $document) {
-            // Index dummy nested document when there are no other nested documents.
-            // This is done in order to avoid the situation when previous standalone document is
-            // being re-indexed as a block-joined set of documents, or vice-versa.
-            // Enforcing document block in all cases ensures correct overwriting (updating) and
-            // avoiding multiple documents with the same ID.
-            if (empty($document->documents)) {
-                $document->documents[] = $this->getDummyDocument($document->id);
-            }
-            $this->writeDocument($xmlWriter, $document);
-        }
-
-        $xmlWriter->endElement();
-
-        return $xmlWriter->outputMemory(true);
-    }
-
-    protected function writeDocument(XmlWriter $xmlWriter, Document $document)
-    {
-        $xmlWriter->startElement('doc');
-
-        $this->writeField(
-            $xmlWriter,
-            new Field(
-                'id',
-                $document->id,
-                new FieldType\IdentifierField()
-            )
-        );
-
-        foreach ($document->fields as $field) {
-            $this->writeField($xmlWriter, $field);
-        }
-
-        foreach ($document->documents as $subDocument) {
-            $this->writeDocument($xmlWriter, $subDocument);
-        }
-
-        $xmlWriter->endElement();
-    }
-
-    /**
-     * Returns a 'dummy' document.
-     *
-     * This is intended to be indexed as nested document of Content, in order to enforce
-     * document block when Content does not have other nested documents (Locations).
-     * Not intended to be returned as a search result.
-     *
-     * For more info see:
-     * @link http://grokbase.com/t/lucene/solr-user/14chqr73nv/converting-to-parent-child-block-indexing
-     * @link https://issues.apache.org/jira/browse/SOLR-5211
-     *
-     * @param string $id
-     * @return \eZ\Publish\SPI\Search\Document
-     */
-    protected function getDummyDocument($id)
-    {
-        return new Document(
-            array(
-                'id' => $id . '_nested_dummy',
-                'fields' => array(
-                    new Field(
-                        'document_type',
-                        'nested_dummy',
-                        new FieldType\IdentifierField()
-                    ),
-                ),
-            )
-        );
-    }
-
-    protected function writeField(XmlWriter $xmlWriter, Field $field)
-    {
-        foreach ((array)$this->fieldValueMapper->map($field) as $value) {
-            $xmlWriter->startElement('field');
-            $xmlWriter->writeAttribute(
-                'name',
-                $this->nameGenerator->getTypedName($field->name, $field->type)
-            );
-            $xmlWriter->text($value);
-            $xmlWriter->endElement();
         }
     }
 
