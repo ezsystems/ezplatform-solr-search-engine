@@ -126,6 +126,10 @@ class BlockDocumentsContentFields extends ContentTranslationFieldMapper
         FieldDefinition $fieldDefinition,
         FieldType $fieldType
     ) {
+        if (!$fieldType instanceof FieldType\TextField) {
+            return $fieldType;
+        }
+
         $fieldType = clone $fieldType;
         $fieldType->boost = $this->boostFactorProvider->getContentFieldBoostFactor(
             $contentType,
