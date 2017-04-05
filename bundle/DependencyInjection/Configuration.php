@@ -334,7 +334,7 @@ class Configuration implements ConfigurationInterface
                                     ->useAttributeAsKey('meta_field_name')
                                     ->validate()
                                         ->ifTrue(
-                                            function($v) {
+                                            function (array $v) {
                                                 foreach (array_keys($v) as $key) {
                                                     if (!in_array($key, $this->metaFieldNames, true)) {
                                                         return true;

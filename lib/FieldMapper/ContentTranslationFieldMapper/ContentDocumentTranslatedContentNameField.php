@@ -82,7 +82,7 @@ class ContentDocumentTranslatedContentNameField extends ContentTranslationFieldM
                         ),
                     ]
                 )
-            )
+            ),
         ];
     }
 }
