@@ -12,6 +12,9 @@ use eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
+/**
+ * BoostFactorProvider service factory takes into account boost factor semantic configuration.
+ */
 class BoostFactorProviderFactory implements ContainerAwareInterface
 {
     use ContainerAwareTrait;
