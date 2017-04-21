@@ -250,7 +250,13 @@ class Configuration implements ConfigurationInterface
                     ->end()
                     ->arrayNode('boost_factors')
                         ->addDefaultsIfNotSet()
-                        ->info('Index-time field boost factor mapping.')
+                        ->info(
+                            "Index-time field boost factor mapping.\n\n" .
+                            'Note: Changes to this configuration are not reflected on the Solr index without ' .
+                            'manually re-indexing the affected content or executing a full re-index. ' .
+                            'To avoid that a future version might apply boost factors on the query instead ' .
+                            '(also known as query-time boost).'
+                        )
                         ->children()
                             ->arrayNode('content_type')
                                 ->info('A map of ContentType identifiers and boost factors for fields.')
