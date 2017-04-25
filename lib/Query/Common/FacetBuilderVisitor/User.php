@@ -13,6 +13,7 @@ namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\FacetBuilderVisitor;
 use EzSystems\EzPlatformSolrSearchEngine\Query\FacetBuilderVisitor;
 use EzSystems\EzPlatformSolrSearchEngine\Query\FacetFieldVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
+use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder\UserFacetBuilder;
 use eZ\Publish\API\Repository\Values\Content\Search\Facet;
 
 /**
@@ -20,6 +21,15 @@ use eZ\Publish\API\Repository\Values\Content\Search\Facet;
  */
 class User extends FacetBuilderVisitor implements FacetFieldVisitor
 {
+    /**
+     * @internal Will be marked private when we require PHP 7.0 and can do that.
+     */
+    const DOC_FIELD_MAP = [
+        UserFacetBuilder::OWNER => 'content_owner_user_id_id',
+        UserFacetBuilder::GROUP => 'content_owner_user_group_ids_mid',
+        UserFacetBuilder::MODIFIER => 'content_version_creator_user_id_id',
+    ];
+
     /**
      * {@inheritdoc}.
      */
@@ -38,7 +48,7 @@ class User extends FacetBuilderVisitor implements FacetFieldVisitor
      */
     public function canVisit(FacetBuilder $facetBuilder)
     {
-        return $facetBuilder instanceof FacetBuilder\UserFacetBuilder;
+        return $facetBuilder instanceof UserFacetBuilder;
     }
 
     /**
@@ -46,10 +56,13 @@ class User extends FacetBuilderVisitor implements FacetFieldVisitor
      */
     public function visitBuilder(FacetBuilder $facetBuilder, $fieldId)
     {
+        /** @var \eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder\UserFacetBuilder $facetBuilder */
+        $field = self::DOC_FIELD_MAP[$facetBuilder->type];
+
         return array(
-            'facet.field' => "{!ex=dt key=${fieldId}}content_version_creator_user_id_id",
-            'f.content_version_creator_user_id_id.facet.limit' => $facetBuilder->limit,
-            'f.content_version_creator_user_id_id.facet.mincount' => $facetBuilder->minCount,
+            'facet.field' => "{!ex=dt key=${fieldId}}$field",
+            "f.${field}.facet.limit" => $facetBuilder->limit,
+            "f.${field}.facet.mincount" => $facetBuilder->minCount,
         );
     }
 }
