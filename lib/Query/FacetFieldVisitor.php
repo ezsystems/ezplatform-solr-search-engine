@@ -41,7 +41,7 @@ interface FacetFieldVisitor
      * @param FacetBuilder $facetBuilder
      * @param string $fieldId Id to identify the field in Solr facet.
      *
-     * @return string
+     * @return string[]
      */
     public function visitBuilder(FacetBuilder $facetBuilder, $fieldId);
 }

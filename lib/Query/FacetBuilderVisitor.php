@@ -62,7 +62,7 @@ abstract class FacetBuilderVisitor
      *
      * @param FacetBuilder $facetBuilder
      *
-     * @return string
+     * @return string[]
      */
     public function visit(FacetBuilder $facetBuilder)
     {
