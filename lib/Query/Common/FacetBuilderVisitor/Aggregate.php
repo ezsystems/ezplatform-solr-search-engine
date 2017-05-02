@@ -13,7 +13,6 @@ namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\FacetBuilderVisitor;
 use EzSystems\EzPlatformSolrSearchEngine\Query\FacetBuilderVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
 use EzSystems\EzPlatformSolrSearchEngine\Query\FacetFieldVisitor;
-use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 
 /**
  * Visits the facet builder tree into a Solr query.
@@ -106,7 +105,7 @@ class Aggregate extends FacetBuilderVisitor implements FacetFieldVisitor
      *
      * @param FacetBuilder $facetBuilder
      *
-     * @return string
+     * @return string[]
      */
     public function visit(FacetBuilder $facetBuilder)
     {
@@ -116,8 +115,8 @@ class Aggregate extends FacetBuilderVisitor implements FacetFieldVisitor
             }
         }
 
-        throw new NotImplementedException(
-            'No visitor available for: ' . get_class($facetBuilder)
-        );
+        // Ignore unsupported FacetBuilders, don't block the query for it
+        // ref: https://github.com/ezsystems/ezpublish-kernel/commit/435624d6fb8aa03ec219818ff7cb6755944b8d7b
+        return [];
     }
 }

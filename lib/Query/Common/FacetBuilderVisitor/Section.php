@@ -68,7 +68,7 @@ class Section extends FacetBuilderVisitor implements FacetFieldVisitor
      *
      * @param FacetBuilder $facetBuilder;
      *
-     * @return string
+     * @return string[]
      */
     public function visit(FacetBuilder $facetBuilder)
     {
