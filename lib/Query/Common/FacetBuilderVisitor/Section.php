@@ -11,50 +11,30 @@
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\FacetBuilderVisitor;
 
 use EzSystems\EzPlatformSolrSearchEngine\Query\FacetBuilderVisitor;
+use EzSystems\EzPlatformSolrSearchEngine\Query\FacetFieldVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
 use eZ\Publish\API\Repository\Values\Content\Search\Facet;
 
 /**
  * Visits the Section facet builder.
  */
-class Section extends FacetBuilderVisitor
+class Section extends FacetBuilderVisitor implements FacetFieldVisitor
 {
     /**
-     * Check if visitor is applicable to current facet result.
-     *
-     * @param string $field
-     *
-     * @return bool
+     * {@inheritdoc}.
      */
-    public function canMap($field)
-    {
-        return $field === 'content_section_id_id';
-    }
-
-    /**
-     * Map Solr facet result back to facet objects.
-     *
-     * @param string $field
-     * @param array $data
-     *
-     * @return Facet
-     */
-    public function map($field, array $data)
+    public function mapField($field, array $data, FacetBuilder $facetBuilder)
     {
         return new Facet\SectionFacet(
             array(
-                'name' => 'section',
+                'name' => $facetBuilder->name,
                 'entries' => $this->mapData($data),
             )
         );
     }
 
     /**
-     * Check if visitor is applicable to current facet builder.
-     *
-     * @param FacetBuilder $facetBuilder
-     *
-     * @return bool
+     * {@inheritdoc}.
      */
     public function canVisit(FacetBuilder $facetBuilder)
     {
@@ -62,16 +42,12 @@ class Section extends FacetBuilderVisitor
     }
 
     /**
-     * Map field value to a proper Solr representation.
-     *
-     * @param FacetBuilder $facetBuilder;
-     *
-     * @return string
+     * {@inheritdoc}.
      */
-    public function visit(FacetBuilder $facetBuilder)
+    public function visitBuilder(FacetBuilder $facetBuilder, $fieldId)
     {
         return array(
-            'facet.field' => 'content_section_id_id',
+            'facet.field' => "{!ex=dt key=${fieldId}}content_section_id_id",
             'f.content_section_id_id.facet.limit' => $facetBuilder->limit,
             'f.content_section_id_id.facet.mincount' => $facetBuilder->minCount,
         );

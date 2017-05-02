@@ -11,13 +11,14 @@
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\FacetBuilderVisitor;
 
 use EzSystems\EzPlatformSolrSearchEngine\Query\FacetBuilderVisitor;
+use EzSystems\EzPlatformSolrSearchEngine\Query\FacetFieldVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 
 /**
  * Visits the facet builder tree into a Solr query.
  */
-class Aggregate extends FacetBuilderVisitor
+class Aggregate extends FacetBuilderVisitor implements FacetFieldVisitor
 {
     /**
      * Array of available visitors.
@@ -49,29 +50,17 @@ class Aggregate extends FacetBuilderVisitor
     }
 
     /**
-     * Check if visitor is applicable to current facet result.
+     * {@inheritdoc}.
      *
-     * @param string $field
-     *
-     * @return bool
+     * @deprecated Internal support for nullable $facetBuilder will be removed in 2.0, here now to support facetBuilders
+     *             that has not adapted yet.
      */
-    public function canMap($field)
-    {
-        return true;
-    }
-
-    /**
-     * Map Solr facet result back to facet objects.
-     *
-     * @param string $field
-     * @param array $data
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Search\Facet
-     */
-    public function map($field, array $data)
+    public function mapField($field, array $data, FacetBuilder $facetBuilder = null)
     {
         foreach ($this->visitors as $visitor) {
-            if ($visitor->canMap($field)) {
+            if ($facetBuilder && $visitor instanceof FacetFieldVisitor && $visitor->canVisit($facetBuilder)) {
+                return $visitor->mapField($field, $data, $facetBuilder);
+            } elseif (!$facetBuilder && $visitor->canMap($field)) {
                 return $visitor->map($field, $data);
             }
         }
@@ -80,11 +69,7 @@ class Aggregate extends FacetBuilderVisitor
     }
 
     /**
-     * CHeck if visitor is applicable to current facet builder.
-     *
-     * @param FacetBuilder $facetBuilder
-     *
-     * @return bool
+     * {@inheritdoc}.
      */
     public function canVisit(FacetBuilder $facetBuilder)
     {
@@ -92,19 +77,15 @@ class Aggregate extends FacetBuilderVisitor
     }
 
     /**
-     * Map field value to a proper Solr representation.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException
-     *
-     * @param FacetBuilder $facetBuilder
-     *
-     * @return string
+     * {@inheritdoc}.
      */
-    public function visit(FacetBuilder $facetBuilder)
+    public function visitBuilder(FacetBuilder $facetBuilder, $fieldId)
     {
         foreach ($this->visitors as $visitor) {
             if ($visitor->canVisit($facetBuilder)) {
-                return $visitor->visit($facetBuilder);
+                return $visitor instanceof FacetFieldVisitor ?
+                    $visitor->visitBuilder($facetBuilder, $fieldId) :
+                    $visitor->visit($facetBuilder);
             }
         }
 
