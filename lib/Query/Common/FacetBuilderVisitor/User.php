@@ -11,39 +11,42 @@
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\FacetBuilderVisitor;
 
 use EzSystems\EzPlatformSolrSearchEngine\Query\FacetBuilderVisitor;
+use EzSystems\EzPlatformSolrSearchEngine\Query\FacetFieldVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
 use eZ\Publish\API\Repository\Values\Content\Search\Facet;
 
 /**
  * Visits the User facet builder.
  */
-class User extends FacetBuilderVisitor
+class User extends FacetBuilderVisitor implements FacetFieldVisitor
 {
     /**
-     * Check if visitor is applicable to current facet result.
-     *
-     * @param string $field
-     *
-     * @return bool
+     * {@inheritdoc}.
      */
-    public function canMap($field)
+    public function getFieldVisitor($field)
     {
-        return $field === 'content_version_creator_user_id_id';
+        if ($field === 'content_version_creator_user_id_id') {
+            return $this;
+        }
     }
 
     /**
-     * Map Solr facet result back to facet objects.
-     *
-     * @param string $field
-     * @param array $data
-     *
-     * @return Facet
+     * {@inheritdoc}.
      */
-    public function map($field, array $data)
+    public function canMapField($field, FacetBuilder $facetBuilder)
+    {
+        return $facetBuilder instanceof FacetBuilder\UserFacetBuilder &&
+            $field === 'content_version_creator_user_id_id';
+    }
+
+    /**
+     * {@inheritdoc}.
+     */
+    public function mapField($field, array $data, FacetBuilder $facetBuilder)
     {
         return new Facet\UserFacet(
             array(
-                'name' => 'creator',
+                'name' => $facetBuilder->name,
                 'entries' => $this->mapData($data),
             )
         );
