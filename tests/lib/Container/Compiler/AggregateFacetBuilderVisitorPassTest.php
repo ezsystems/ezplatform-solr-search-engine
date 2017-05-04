@@ -25,6 +25,10 @@ class AggregateFacetBuilderVisitorPassTest extends AbstractCompilerPassTestCase
             'ezpublish.search.solr.query.content.facet_builder_visitor.aggregate',
             new Definition()
         );
+        $this->setDefinition(
+            'ezpublish.search.solr.query.location.facet_builder_visitor.aggregate',
+            new Definition()
+        );
     }
 
     /**
@@ -45,12 +49,23 @@ class AggregateFacetBuilderVisitorPassTest extends AbstractCompilerPassTestCase
         $def->addTag('ezpublish.search.solr.query.content.facet_builder_visitor');
         $this->setDefinition($serviceId, $def);
 
+        $serviceId2 = 'service_id2';
+        $def = new Definition();
+        $def->addTag('ezpublish.search.solr.query.location.facet_builder_visitor');
+        $this->setDefinition($serviceId2, $def);
+
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.search.solr.query.content.facet_builder_visitor.aggregate',
             'addVisitor',
             array(new Reference($serviceId))
+        );
+
+        $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
+            'ezpublish.search.solr.query.location.facet_builder_visitor.aggregate',
+            'addVisitor',
+            array(new Reference($serviceId2))
         );
     }
 }
