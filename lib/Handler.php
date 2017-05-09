@@ -127,7 +127,8 @@ class Handler implements SearchHandlerInterface
         );
 
         return $this->resultExtractor->extract(
-            $this->gateway->findContent($query, $fieldFilters)
+            $this->gateway->findContent($query, $fieldFilters),
+            $query->facetBuilders
         );
     }
 
@@ -196,7 +197,8 @@ class Handler implements SearchHandlerInterface
         );
 
         return $this->resultExtractor->extract(
-            $this->gateway->findLocations($query, $fieldFilters)
+            $this->gateway->findLocations($query, $fieldFilters),
+            $query->facetBuilders
         );
     }
 

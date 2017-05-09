@@ -13,6 +13,7 @@ namespace EzSystems\EzPlatformSolrSearchEngine;
 use EzSystems\EzPlatformSolrSearchEngine\Query\FacetBuilderVisitor;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
+use EzSystems\EzPlatformSolrSearchEngine\Query\FacetFieldVisitor;
 
 /**
  * Abstract implementation of Search Extractor, which extracts search result
@@ -39,7 +40,7 @@ abstract class ResultExtractor
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function extract($data)
+    public function extract($data, array $facetBuilders = [])
     {
         $result = new SearchResult(
             array(
@@ -50,14 +51,7 @@ abstract class ResultExtractor
         );
 
         if (isset($data->facet_counts)) {
-            foreach ($data->facet_counts as $facetCounts) {
-                foreach ($facetCounts as $field => $facet) {
-                    $result->facets[] = $this->facetBuilderVisitor->map(
-                        $field,
-                        (array)$facet
-                    );
-                }
-            }
+            $result->facets = $this->extractFacets($data->facet_counts, $facetBuilders);
         }
 
         foreach ($data->response->docs as $doc) {
@@ -73,6 +67,48 @@ abstract class ResultExtractor
         }
 
         return $result;
+    }
+
+    /**
+     * Extract facets.
+     *
+     * @param array $facetCounts
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder[] $facetBuilders
+     *
+     * @return array
+     */
+    private function extractFacets($facetCounts, array $facetBuilders)
+    {
+        $facets = [];
+        if (!$this->facetBuilderVisitor instanceof FacetFieldVisitor) {
+            // @deprecated logic
+            foreach ($facetCounts as $facetList) {
+                foreach ($facetList as $field => $facet) {
+                    $facets[] = $this->facetBuilderVisitor->map(
+                        $field,
+                        (array)$facet
+                    );
+                }
+            }
+        }
+
+        foreach ($facetCounts as $facetList) {
+            foreach ($facetList as $field => $facet) {
+                $visitor = $this->facetBuilderVisitor->getFieldVisitor($field);
+
+                foreach ($facetBuilders as $facetBuilder) {
+                    if ($visitor->canMapField($field, $facetBuilder)) {
+                        $facets[] = $visitor->mapField(
+                            $field,
+                            (array)$facet,
+                            $facetBuilder
+                        );
+                    }
+                }
+            }
+        }
+
+        return $facets;
     }
 
     /**

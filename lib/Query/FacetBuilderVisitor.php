@@ -18,26 +18,36 @@ use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
 abstract class FacetBuilderVisitor
 {
     /**
-     * CHeck if visitor is applicable to current facet result.
+     * Check if visitor is applicable to current facet result.
+     *
+     * @deprecated Instead implement {@link FacetFieldVisitor::canMapField()}
      *
      * @param string $field
      *
      * @return bool
      */
-    abstract public function canMap($field);
+    public function canMap($field)
+    {
+        return false;
+    }
 
     /**
      * Map Solr facet result back to facet objects.
      *
+     * @deprecated Instead implement {@link FacetFieldVisitor::mapField()}
+     *
      * @param string $field
      * @param array $data
      *
-     * @return Facet
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\Facet
      */
-    abstract public function map($field, array $data);
+    public function map($field, array $data)
+    {
+        throw new \LogicException('Deprecated and not in use by default anymore, make sure to implement FacetFieldVisitor');
+    }
 
     /**
-     * CHeck if visitor is applicable to current facet builder.
+     * Check if visitor is applicable to current facet builder.
      *
      * @param FacetBuilder $facetBuilder
      *
@@ -50,7 +60,7 @@ abstract class FacetBuilderVisitor
      *
      * @param FacetBuilder $facetBuilder
      *
-     * @return string
+     * @return string[]
      */
     abstract public function visit(FacetBuilder $facetBuilder);
 
