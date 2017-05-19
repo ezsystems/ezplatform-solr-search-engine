@@ -10,6 +10,7 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngineBundle\DependencyInjection;
 
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Reference;
@@ -68,6 +69,11 @@ class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
      */
     const ENDPOINT_TAG = 'ezpublish.search.solr.endpoint';
 
+    /**
+     * @var string
+     */
+    const BOOST_FACTOR_PROVIDER_ID = 'ezpublish.search.solr.field_mapper.boost_factor_provider';
+
     public function getAlias()
     {
         return 'ez_search_engine_solr';
@@ -111,7 +117,7 @@ class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      * @param array $config
      */
-    protected function processConnectionConfiguration(ContainerBuilder $container, $config)
+    protected function processConnectionConfiguration(ContainerBuilder $container, array $config)
     {
         $alias = $this->getAlias();
 
@@ -130,6 +136,7 @@ class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
 
         foreach ($config['connections'] as $name => $params) {
             $this->configureSearchServices($container, $name, $params);
+            $this->configureBoostMap($container, $name, $params);
             $container->setParameter("$alias.connection.$name", $params);
         }
 
@@ -140,6 +147,10 @@ class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
         // Search engine itself, for given connection name
         $searchEngineDef = $container->findDefinition(self::ENGINE_ID);
         $searchEngineDef->setFactory([new Reference('ezpublish.solr.engine_factory'), 'buildEngine']);
+
+        // Factory for BoostFactorProvider uses mapping configured for the connection in use
+        $boostFactorProviderDef = $container->findDefinition(self::BOOST_FACTOR_PROVIDER_ID);
+        $boostFactorProviderDef->setFactory([new Reference('ezpublish.solr.boost_factor_provider_factory'), 'buildService']);
     }
 
     /**
@@ -176,6 +187,22 @@ class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
     }
 
     /**
+     * Creates boost factor map parameter for a given $connectionName.
+     *
+     * @param ContainerBuilder $container
+     * @param string $connectionName
+     * @param array $connectionParams
+     */
+    private function configureBoostMap(ContainerBuilder $container, $connectionName, $connectionParams)
+    {
+        $alias = $this->getAlias();
+        $boostFactorMap = $this->buildBoostFactorMap($connectionParams['boost_factors']);
+        $boostFactorMapId = "{$alias}.connection.{$connectionName}.boost_factor_map_id";
+
+        $container->setParameter($boostFactorMapId, $boostFactorMap);
+    }
+
+    /**
      * Creates Endpoint definition in the service container.
      *
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
@@ -196,5 +223,38 @@ class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
     public function getConfiguration(array $config, ContainerBuilder $container)
     {
         return new Configuration($this->getAlias());
+    }
+
+    /**
+     * Builds boost factor map from the given $config.
+     *
+     * @see \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider::$map
+     *
+     * @param array $config
+     *
+     * @return array
+     */
+    protected function buildBoostFactorMap(array $config)
+    {
+        $boostFactorMap = [];
+
+        foreach ($config['content_type'] as $typeIdentifier => $factor) {
+            $boostFactorMap['content-fields'][$typeIdentifier]['*'] = $factor;
+            $boostFactorMap['meta-fields'][$typeIdentifier]['*'] = $factor;
+        }
+
+        foreach ($config['field_definition'] as $typeIdentifier => $mapping) {
+            foreach ($mapping as $fieldIdentifier => $factor) {
+                $boostFactorMap['content-fields'][$typeIdentifier][$fieldIdentifier] = $factor;
+            }
+        }
+
+        foreach ($config['meta_field'] as $typeIdentifier => $mapping) {
+            foreach ($mapping as $fieldIdentifier => $factor) {
+                $boostFactorMap['meta-fields'][$typeIdentifier][$fieldIdentifier] = $factor;
+            }
+        }
+
+        return $boostFactorMap;
     }
 }

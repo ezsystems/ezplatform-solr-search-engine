@@ -8,6 +8,8 @@ parameters:
     ezpublish.search.solr.field_mapper.content.class: EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper\Aggregate
     ezpublish.search.solr.field_mapper.content_translation.class: EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper\Aggregate
     ezpublish.search.solr.field_mapper.location.class: EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper\Aggregate
+    ezpublish.search.solr.field_mapper.boost_factor_provider.class: EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider
+    ezpublish.search.solr.field_mapper.boost_factor_provider.map: []
 
 services:
     ezpublish.search.solr.gateway.client.http.stream:
@@ -67,3 +69,8 @@ services:
     # are registered to this one using compilation pass
     ezpublish.search.solr.field_mapper.location:
         class: "%ezpublish.search.solr.field_mapper.location.class%"
+
+    ezpublish.search.solr.field_mapper.boost_factor_provider:
+        class: "%ezpublish.search.solr.field_mapper.boost_factor_provider.class%"
+        arguments:
+            - "%ezpublish.search.solr.field_mapper.boost_factor_provider.map%"

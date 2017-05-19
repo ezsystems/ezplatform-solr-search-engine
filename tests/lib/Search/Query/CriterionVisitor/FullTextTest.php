@@ -66,7 +66,7 @@ class FullTextTest extends TestCase
         $criterion = new Criterion\FullText('Hello');
 
         $this->assertEquals(
-            '(text:(Hello))',
+            '(meta_content__text_t:(Hello))',
             $visitor->visit($criterion)
         );
     }
@@ -78,7 +78,7 @@ class FullTextTest extends TestCase
         $criterion = new Criterion\FullText('Hello World');
 
         $this->assertEquals(
-            '(text:(Hello World))',
+            '(meta_content__text_t:(Hello World))',
             $visitor->visit($criterion)
         );
     }
@@ -91,7 +91,7 @@ class FullTextTest extends TestCase
         $criterion->fuzziness = .5;
 
         $this->assertEquals(
-            '(text:(Hello~0.5))',
+            '(meta_content__text_t:(Hello~0.5))',
             $visitor->visit($criterion)
         );
     }
@@ -104,7 +104,7 @@ class FullTextTest extends TestCase
         $criterion->fuzziness = .5;
 
         $this->assertEquals(
-            '(text:(Hello~0.5 World~0.5))',
+            '(meta_content__text_t:(Hello~0.5 World~0.5))',
             $visitor->visit($criterion)
         );
     }
@@ -123,7 +123,7 @@ class FullTextTest extends TestCase
         $criterion->boost = array('title' => 2);
 
         $this->assertEquals(
-            '(text:(Hello) OR title_1_s:(Hello)^2 OR title_2_s:(Hello)^2)',
+            '(meta_content__text_t:(Hello) OR title_1_s:(Hello)^2 OR title_2_s:(Hello)^2)',
             $visitor->visit($criterion)
         );
     }
@@ -142,7 +142,7 @@ class FullTextTest extends TestCase
         $criterion->boost = array('title' => 2);
 
         $this->assertEquals(
-            '(text:(Hello World) OR title_1_s:(Hello World)^2 OR title_2_s:(Hello World)^2)',
+            '(meta_content__text_t:(Hello World) OR title_1_s:(Hello World)^2 OR title_2_s:(Hello World)^2)',
             $visitor->visit($criterion)
         );
     }
@@ -157,7 +157,7 @@ class FullTextTest extends TestCase
         );
 
         $this->assertEquals(
-            '(text:(Hello))',
+            '(meta_content__text_t:(Hello))',
             $visitor->visit($criterion)
         );
     }
@@ -172,7 +172,7 @@ class FullTextTest extends TestCase
         );
 
         $this->assertEquals(
-            '(text:(Hello World))',
+            '(meta_content__text_t:(Hello World))',
             $visitor->visit($criterion)
         );
     }
@@ -191,7 +191,7 @@ class FullTextTest extends TestCase
         $criterion->boost = array('title' => 2);
 
         $this->assertEquals(
-            '(text:(Hello~0.5) OR title_1_s:(Hello~0.5)^2 OR title_2_s:(Hello~0.5)^2)',
+            '(meta_content__text_t:(Hello~0.5) OR title_1_s:(Hello~0.5)^2 OR title_2_s:(Hello~0.5)^2)',
             $visitor->visit($criterion)
         );
     }
@@ -210,7 +210,7 @@ class FullTextTest extends TestCase
         $criterion->boost = array('title' => 2);
 
         $this->assertEquals(
-            '(text:(Hello~0.5 World~0.5) OR title_1_s:(Hello~0.5 World~0.5)^2 OR title_2_s:(Hello~0.5 World~0.5)^2)',
+            '(meta_content__text_t:(Hello~0.5 World~0.5) OR title_1_s:(Hello~0.5 World~0.5)^2 OR title_2_s:(Hello~0.5 World~0.5)^2)',
             $visitor->visit($criterion)
         );
     }

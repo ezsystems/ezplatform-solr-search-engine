@@ -92,7 +92,7 @@ should not remove or drastically change the existing definitions.
     <dynamicField name="*_s" type="string" indexed="true" stored="true"/>
     <dynamicField name="*_ms" type="string" indexed="true" stored="true" multiValued="true"/>
     <dynamicField name="*_l" type="long" indexed="true" stored="true"/>
-    <dynamicField name="*_t" type="text" indexed="true" stored="true"/>
+    <dynamicField name="*_t" type="text" indexed="true" stored="true" multiValued="true" omitNorms="false"/>
     <dynamicField name="*_b" type="boolean" indexed="true" stored="true"/>
     <dynamicField name="*_mb" type="boolean" indexed="true" stored="true" multiValued="true"/>
     <dynamicField name="*_f" type="float" indexed="true" stored="true"/>
@@ -102,13 +102,6 @@ should not remove or drastically change the existing definitions.
     <dynamicField name="*_gl_0_coordinate" type="double" indexed="true" stored="true"/>
     <dynamicField name="*_gl_1_coordinate" type="double" indexed="true" stored="true"/>
     <dynamicField name="*_c" type="currency" indexed="true" stored="true"/>
-
-    <!--
-      Full text field is indexed through proxy fields matching '*_fulltext' pattern.
-    -->
-    <field name="text" type="text" indexed="true" multiValued="true" stored="false"/>
-    <dynamicField name="*_fulltext" type="text" indexed="false" multiValued="true" stored="false"/>
-    <copyField source="*_fulltext" dest="text" />
 
     <!--
       This field is required since Solr 4

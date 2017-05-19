@@ -441,4 +441,207 @@ class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtension
             'ez_search_engine_solr.connection.connection1.gateway_id'
         );
     }
+
+    public function dataProvideForTestBoostFactorMap()
+    {
+        return [
+            [
+                [
+                    'connections' => [
+                        'connection1' => [],
+                    ],
+                ],
+                [],
+            ],
+            [
+                [
+                    'connections' => [
+                        'connection1' => [
+                            'boost_factors' => [],
+                        ],
+                    ],
+                ],
+                [],
+            ],
+            [
+                [
+                    'connections' => [
+                        'connection1' => [
+                            'boost_factors' => [
+                                'content_type' => [
+                                    'article' => 1.5,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'content-fields' => [
+                        'article' => [
+                            '*' => 1.5,
+                        ],
+                    ],
+                    'meta-fields' => [
+                        'article' => [
+                            '*' => 1.5,
+                        ],
+                    ],
+                ],
+            ],
+            [
+                [
+                    'connections' => [
+                        'connection1' => [
+                            'boost_factors' => [
+                                'field_definition' => [
+                                    'title' => 1.5,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'content-fields' => [
+                        '*' => [
+                            'title' => 1.5,
+                        ],
+                    ],
+                ],
+            ],
+            [
+                [
+                    'connections' => [
+                        'connection1' => [
+                            'boost_factors' => [
+                                'field_definition' => [
+                                    'title' => 2.2,
+                                    'article' => [
+                                        'title' => 1.5,
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'content-fields' => [
+                        '*' => [
+                            'title' => 2.2,
+                        ],
+                        'article' => [
+                            'title' => 1.5,
+                        ],
+                    ],
+                ],
+            ],
+            [
+                [
+                    'connections' => [
+                        'connection1' => [
+                            'boost_factors' => [
+                                'content_type' => [
+                                    'article' => 5.5,
+                                ],
+                                'field_definition' => [
+                                    'title' => 2.2,
+                                    'article' => [
+                                        'title' => 1.5,
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'content-fields' => [
+                        'article' => [
+                            '*' => 5.5,
+                            'title' => 1.5,
+                        ],
+                        '*' => [
+                            'title' => 2.2,
+                        ],
+                    ],
+                    'meta-fields' => [
+                        'article' => [
+                            '*' => 5.5,
+                        ],
+                    ],
+                ],
+            ],
+            [
+                [
+                    'connections' => [
+                        'connection1' => [
+                            'boost_factors' => [
+                                'content_type' => [
+                                    'article' => 5.5,
+                                ],
+                                'meta_field' => [
+                                    'text' => 2.2,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'content-fields' => [
+                        'article' => [
+                            '*' => 5.5,
+                        ],
+                    ],
+                    'meta-fields' => [
+                        'article' => [
+                            '*' => 5.5,
+                        ],
+                        '*' => [
+                            'text' => 2.2,
+                        ],
+                    ],
+                ],
+            ],
+            [
+                [
+                    'connections' => [
+                        'connection1' => [
+                            'boost_factors' => [
+                                'meta_field' => [
+                                    'text' => 2.2,
+                                    'article' => [
+                                        'name' => 7.8,
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'meta-fields' => [
+                        '*' => [
+                            'text' => 2.2,
+                        ],
+                        'article' => [
+                            'name' => 7.8,
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dataProvideForTestBoostFactorMap
+     *
+     * @param array $configuration
+     * @param array $map
+     */
+    public function testBoostFactorMap(array $configuration, array $map)
+    {
+        $this->load($configuration);
+
+        $this->assertContainerBuilderHasParameter(
+            'ez_search_engine_solr.connection.connection1.boost_factor_map_id',
+            $map
+        );
+    }
 }
