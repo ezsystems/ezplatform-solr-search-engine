@@ -18,26 +18,36 @@ use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
 abstract class FacetBuilderVisitor
 {
     /**
-     * CHeck if visitor is applicable to current facet result.
+     * Check if visitor is applicable to current facet result.
+     *
+     * @deprecated Not needed anymore if visit() correctly used $id param to identify facetBuilder.
      *
      * @param string $field
      *
      * @return bool
      */
-    abstract public function canMap($field);
+    public function canMap($field)
+    {
+        throw new \LogicException('Deprecated in favour of FacetFieldVisitor, and not in use if that is implemented');
+    }
 
     /**
      * Map Solr facet result back to facet objects.
      *
+     * @deprecated Will be removed in 2.0, replaced by {@link FacetFieldVisitor::mapField()}.
+     *
      * @param string $field
      * @param array $data
      *
-     * @return Facet
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\Facet
      */
-    abstract public function map($field, array $data);
+    public function map($field, array $data)
+    {
+        throw new \LogicException('Deprecated in favour of FacetFieldVisitor, and not in use if that is implemented');
+    }
 
     /**
-     * CHeck if visitor is applicable to current facet builder.
+     * Check if visitor is applicable to current facet builder.
      *
      * @param FacetBuilder $facetBuilder
      *
@@ -48,11 +58,16 @@ abstract class FacetBuilderVisitor
     /**
      * Map field value to a proper Solr representation.
      *
+     * @deprecated Will be removed in 2.0, replaced by {@link FacetFieldVisitor::visitBuilder()}.
+     *
      * @param FacetBuilder $facetBuilder
      *
-     * @return string
+     * @return string[]
      */
-    abstract public function visit(FacetBuilder $facetBuilder);
+    public function visit(FacetBuilder $facetBuilder)
+    {
+        throw new \LogicException('Deprecated in favour of FacetFieldVisitor, and not in use if that is implemented');
+    }
 
     /**
      * Map Solr return array into a sane hash map.

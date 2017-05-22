@@ -10,7 +10,7 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine;
 
-use EzSystems\EzPlatformSolrSearchEngine\Query\FacetBuilderVisitor;
+use EzSystems\EzPlatformSolrSearchEngine\Query\FacetFieldVisitor;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 
@@ -23,11 +23,11 @@ abstract class ResultExtractor
     /**
      * Facet builder visitor.
      *
-     * @var \EzSystems\EzPlatformSolrSearchEngine\Query\FacetBuilderVisitor
+     * @var \EzSystems\EzPlatformSolrSearchEngine\Query\FacetFieldVisitor
      */
     protected $facetBuilderVisitor;
 
-    public function __construct(FacetBuilderVisitor $facetBuilderVisitor)
+    public function __construct(FacetFieldVisitor $facetBuilderVisitor)
     {
         $this->facetBuilderVisitor = $facetBuilderVisitor;
     }
@@ -36,10 +36,11 @@ abstract class ResultExtractor
      * Extracts search result from $data returned by Solr backend.
      *
      * @param mixed $data
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder[] $facetBuilders
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function extract($data)
+    public function extract($data, array $facetBuilders = [])
     {
         $result = new SearchResult(
             array(
@@ -50,11 +51,28 @@ abstract class ResultExtractor
         );
 
         if (isset($data->facet_counts)) {
+            // We'll first need to generate id's for facet builders to match against fields, as also done for
+            // visit stage in NativeQueryConverter.
+            $facetBuildersById = [];
+            foreach ($facetBuilders as $facetBuilder) {
+                $facetBuildersById[spl_object_hash($facetBuilder)] = $facetBuilder;
+            }
+
             foreach ($data->facet_counts as $facetCounts) {
                 foreach ($facetCounts as $field => $facet) {
-                    $result->facets[] = $this->facetBuilderVisitor->map(
+                    if (empty($facetBuildersById[$field])) {
+                        @trigger_error(
+                            'Not setting id of field using FacetFieldVisitor::visitBuilder will not be supported in 2.0'
+                            . ', as it makes it impossible to exactly identify which facets belongs to which builder.'
+                            . "\nMake sure to adapt your visitor for the following field: ${field}"
+                            . "\nExample: 'facet.field' => \"{!ex=dt key=\${id}}${field}\",",
+                            E_USER_DEPRECATED);
+                    }
+
+                    $result->facets[] = $this->facetBuilderVisitor->mapField(
                         $field,
-                        (array)$facet
+                        (array)$facet,
+                        isset($facetBuildersById[$field]) ? $facetBuildersById[$field] : null
                     );
                 }
             }
