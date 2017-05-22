@@ -11,69 +11,58 @@
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\FacetBuilderVisitor;
 
 use EzSystems\EzPlatformSolrSearchEngine\Query\FacetBuilderVisitor;
+use EzSystems\EzPlatformSolrSearchEngine\Query\FacetFieldVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
+use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder\UserFacetBuilder;
 use eZ\Publish\API\Repository\Values\Content\Search\Facet;
 
 /**
  * Visits the User facet builder.
  */
-class User extends FacetBuilderVisitor
+class User extends FacetBuilderVisitor implements FacetFieldVisitor
 {
     /**
-     * Check if visitor is applicable to current facet result.
-     *
-     * @param string $field
-     *
-     * @return bool
+     * @internal Will be marked private when we require PHP 7.0 and can do that.
      */
-    public function canMap($field)
-    {
-        return $field === 'content_version_creator_user_id_id';
-    }
+    const DOC_FIELD_MAP = [
+        UserFacetBuilder::OWNER => 'content_owner_user_id_id',
+        UserFacetBuilder::GROUP => 'content_owner_user_group_ids_mid',
+        UserFacetBuilder::MODIFIER => 'content_version_creator_user_id_id',
+    ];
 
     /**
-     * Map Solr facet result back to facet objects.
-     *
-     * @param string $field
-     * @param array $data
-     *
-     * @return Facet
+     * {@inheritdoc}.
      */
-    public function map($field, array $data)
+    public function mapField($field, array $data, FacetBuilder $facetBuilder)
     {
         return new Facet\UserFacet(
             array(
-                'name' => 'creator',
+                'name' => $facetBuilder->name,
                 'entries' => $this->mapData($data),
             )
         );
     }
 
     /**
-     * Check if visitor is applicable to current facet builder.
-     *
-     * @param FacetBuilder $facetBuilder
-     *
-     * @return bool
+     * {@inheritdoc}.
      */
     public function canVisit(FacetBuilder $facetBuilder)
     {
-        return $facetBuilder instanceof FacetBuilder\UserFacetBuilder;
+        return $facetBuilder instanceof UserFacetBuilder;
     }
 
     /**
-     * Map field value to a proper Solr representation.
-     *
-     * @param FacetBuilder $facetBuilder;
-     *
-     * @return string
+     * {@inheritdoc}.
      */
-    public function visit(FacetBuilder $facetBuilder)
+    public function visitBuilder(FacetBuilder $facetBuilder, $fieldId)
     {
+        /** @var \eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder\UserFacetBuilder $facetBuilder */
+        $field = self::DOC_FIELD_MAP[$facetBuilder->type];
+
         return array(
-            'facet.field' => 'content_version_creator_user_id_id',
-            'f.content_version_creator_user_id_id.facet.limit' => $facetBuilder->limit,
-            'f.content_version_creator_user_id_id.facet.mincount' => $facetBuilder->minCount,
+            'facet.field' => "{!ex=dt key=${fieldId}}$field",
+            "f.${field}.facet.limit" => $facetBuilder->limit,
+            "f.${field}.facet.mincount" => $facetBuilder->minCount,
         );
     }
 }

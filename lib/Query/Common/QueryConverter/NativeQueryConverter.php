@@ -14,7 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use EzSystems\EzPlatformSolrSearchEngine\Query\QueryConverter;
 use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 use EzSystems\EzPlatformSolrSearchEngine\Query\SortClauseVisitor;
-use EzSystems\EzPlatformSolrSearchEngine\Query\FacetBuilderVisitor;
+use EzSystems\EzPlatformSolrSearchEngine\Query\FacetFieldVisitor;
 
 /**
  * Native implementation of Query Converter.
@@ -38,7 +38,7 @@ class NativeQueryConverter extends QueryConverter
     /**
      * Facet builder visitor.
      *
-     * @var \EzSystems\EzPlatformSolrSearchEngine\Query\FacetBuilderVisitor
+     * @var \EzSystems\EzPlatformSolrSearchEngine\Query\FacetFieldVisitor
      */
     protected $facetBuilderVisitor;
 
@@ -47,12 +47,12 @@ class NativeQueryConverter extends QueryConverter
      *
      * @param \EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor $criterionVisitor
      * @param \EzSystems\EzPlatformSolrSearchEngine\Query\SortClauseVisitor $sortClauseVisitor
-     * @param \EzSystems\EzPlatformSolrSearchEngine\Query\FacetBuilderVisitor $facetBuilderVisitor
+     * @param \EzSystems\EzPlatformSolrSearchEngine\Query\FacetFieldVisitor $facetBuilderVisitor
      */
     public function __construct(
         CriterionVisitor $criterionVisitor,
         SortClauseVisitor $sortClauseVisitor,
-        FacetBuilderVisitor $facetBuilderVisitor
+        FacetFieldVisitor $facetBuilderVisitor
     ) {
         $this->criterionVisitor = $criterionVisitor;
         $this->sortClauseVisitor = $sortClauseVisitor;
@@ -103,6 +103,9 @@ class NativeQueryConverter extends QueryConverter
     /**
      * Converts an array of facet builder objects to a Solr query parameters representation.
      *
+     * This method uses spl_object_hash() to get id of each and every facet builder, as this
+     * is expected by {@link \EzSystems\EzPlatformSolrSearchEngine\ResultExtractor}.
+     *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder[] $facetBuilders
      *
      * @return array
@@ -110,7 +113,9 @@ class NativeQueryConverter extends QueryConverter
     private function getFacetParams(array $facetBuilders)
     {
         $facetSets = array_map(
-            array($this->facetBuilderVisitor, 'visit'),
+            function ($facetBuilder) {
+                return $this->facetBuilderVisitor->visitBuilder($facetBuilder, spl_object_hash($facetBuilder));
+            },
             $facetBuilders
         );
 
