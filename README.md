@@ -3,7 +3,7 @@
 [![Build Status](https://img.shields.io/travis/ezsystems/ezplatform-solr-search-engine.svg?style=flat-square)](https://travis-ci.org/ezsystems/ezplatform-solr-search-engine)
 [![Downloads](https://img.shields.io/packagist/dt/ezsystems/ezplatform-solr-search-engine.svg?style=flat-square)](https://packagist.org/packages/ezsystems/ezplatform-solr-search-engine)
 [![Latest stable](https://img.shields.io/packagist/v/ezsystems/ezplatform-solr-search-engine.svg?style=flat-square)](https://packagist.org/packages/ezsystems/ezplatform-solr-search-engine)
-[![License](https://img.shields.io/packagist/l/ezsystems/ezplatform-solr-search-engine.svg?style=flat-square)](https://packagist.org/packages/ezsystems/ezplatform-solr-search-engine)
+[![License](https://img.shields.io/packagist/l/ezsystems/ezplatform-solr-search-engine.svg?style=flat-square)](LICENSE)
 
 Solr Search Engine Bundle for use with:
 - eZ Platform *(bundled out of the box as of 15.07 release)*
