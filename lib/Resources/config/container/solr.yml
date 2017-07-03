@@ -2,6 +2,7 @@ imports:
     - {resource: solr/criterion_visitors.yml}
     - {resource: solr/field_mappers.yml}
     - {resource: solr/facet_builder_visitors.yml}
+    - {resource: solr/query_translator.yml}
     - {resource: solr/services.yml}
     - {resource: solr/sort_clause_visitors.yml}
     - {resource: solr/slots.yml}

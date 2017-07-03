@@ -14,6 +14,9 @@ use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 use eZ\Publish\Core\Search\Common\FieldNameResolver;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\FullText as FullTextCriterion;
+use QueryTranslator\Languages\Galach\Generators\ExtendedDisMax;
+use QueryTranslator\Languages\Galach\Parser;
+use QueryTranslator\Languages\Galach\Tokenizer;
 
 /**
  * Visits the FullText criterion.
@@ -28,13 +31,38 @@ class FullText extends CriterionVisitor
     protected $fieldNameResolver;
 
     /**
+     * @var \QueryTranslator\Languages\Galach\Tokenizer
+     */
+    protected $tokenizer;
+
+    /**
+     * @var \QueryTranslator\Languages\Galach\Parser
+     */
+    protected $parser;
+
+    /**
+     * @var \QueryTranslator\Languages\Galach\Generators\ExtendedDisMax
+     */
+    protected $generator;
+
+    /**
      * Create from content type handler and field registry.
      *
      * @param \eZ\Publish\Core\Search\Common\FieldNameResolver $fieldNameResolver
+     * @param \QueryTranslator\Languages\Galach\Tokenizer $tokenizer
+     * @param \QueryTranslator\Languages\Galach\Parser $parser
+     * @param \QueryTranslator\Languages\Galach\Generators\ExtendedDisMax $generator
      */
-    public function __construct(FieldNameResolver $fieldNameResolver)
-    {
+    public function __construct(
+        FieldNameResolver $fieldNameResolver,
+        Tokenizer $tokenizer,
+        Parser $parser,
+        ExtendedDisMax $generator
+    ) {
         $this->fieldNameResolver = $fieldNameResolver;
+        $this->tokenizer = $tokenizer;
+        $this->parser = $parser;
+        $this->generator = $generator;
     }
 
     /**
@@ -51,9 +79,9 @@ class FullText extends CriterionVisitor
     }
 
     /**
-     * CHeck if visitor is applicable to current criterion.
+     * Check if visitor is applicable to current criterion.
      *
-     * @param Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *
      * @return bool
      */
@@ -65,83 +93,42 @@ class FullText extends CriterionVisitor
     /**
      * Map field value to a proper Solr representation.
      *
-     * @param Criterion $criterion
-     * @param CriterionVisitor $subVisitor
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor $subVisitor
      *
      * @return string
      */
     public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null)
     {
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\FullText $criterion */
-        $string = $this->prepareSearchString($criterion);
-        $queries = [];
+        $tokenSequence = $this->tokenizer->tokenize($criterion->value);
+        $syntaxTree = $this->parser->parse($tokenSequence);
 
-        $queries[] = "meta_content__text_t:({$string})";
+        $options = [];
+        if ($criterion->fuzziness < 1) {
+            $options['word_proximity'] = $criterion->fuzziness;
+        }
+
+        $queryString = $this->generator->generate($syntaxTree, $options);
+        $queryStringEscaped = $this->escapeQuote($queryString);
+        $queryFields = $this->getQueryFields($criterion);
+
+        return "{!edismax v='{$queryStringEscaped}' qf='{$queryFields}' uf=-*}";
+    }
+
+    private function getQueryFields(Criterion $criterion)
+    {
+        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\FullText $criterion */
+        $queryFields = ['meta_content__text_t'];
 
         foreach ($criterion->boost as $field => $boost) {
             $searchFields = $this->getSearchFields($criterion, $field);
 
             foreach ($searchFields as $name => $fieldType) {
-                $queries[] = "{$name}:({$string})^{$boost}";
+                $queryFields[] = "{$name}^{$boost}";
             }
         }
 
-        return '(' . implode(' OR ', $queries) . ')';
-    }
-
-    /**
-     * Prepares full-text search string.
-     *
-     * Preparing includes escaping special characters and applying fuzziness to tokens.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion\FullText $criterion
-     *
-     * @return string
-     */
-    private function prepareSearchString(FullTextCriterion $criterion)
-    {
-        $tokens = [];
-        $fuzziness = '';
-        if ($criterion->fuzziness < 1) {
-            $fuzziness = sprintf('~%.1f', $criterion->fuzziness);
-        }
-
-        foreach ($this->tokenizeString($criterion->value) as $token) {
-            // Escaping special characters as fuzziness can't be applied to a phrase (quoted string)
-            $tokenEscaped = $this->escapeTerm($token);
-            $tokens[] = "{$tokenEscaped}{$fuzziness}";
-        }
-
-        return implode(' ', $tokens);
-    }
-
-    /**
-     * Tokenize string.
-     *
-     * @param string $string
-     *
-     * @return string[]
-     */
-    private function tokenizeString($string)
-    {
-        return array_filter(array_map('trim', preg_split('(\\p{Z})u', $string)));
-    }
-
-    /**
-     * Escape a term.
-     *
-     * We don't escape a wildcard.
-     *
-     * @link http://lucene.apache.org/core/5_0_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#Escaping_Special_Characters
-     *
-     * @param string $input
-     *
-     * @return string
-     */
-    private function escapeTerm($input)
-    {
-        $pattern = '/(\+|-|&&|\|\||!|\(|\)|\{|}|\[|]|\^|"|~|\?|:|\/|\\\)/';
-
-        return preg_replace($pattern, '\\\$1', $input);
+        return implode(' ', $queryFields);
     }
 }
