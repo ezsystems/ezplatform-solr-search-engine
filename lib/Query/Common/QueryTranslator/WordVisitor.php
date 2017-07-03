@@ -32,7 +32,7 @@ class WordVisitor extends WordBase
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
      * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html
      *
