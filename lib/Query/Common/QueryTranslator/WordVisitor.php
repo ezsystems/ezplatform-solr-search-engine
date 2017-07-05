@@ -23,8 +23,8 @@ class WordVisitor extends WordBase
     {
         $word = parent::visit($node, $subVisitor, $options);
 
-        if (isset($options['word_proximity'])) {
-            $fuzziness = sprintf('~%.1f', $options['word_proximity']);
+        if (isset($options['fuzziness'])) {
+            $fuzziness = sprintf('~%.1f', $options['fuzziness']);
             $word .= $fuzziness;
         }
 

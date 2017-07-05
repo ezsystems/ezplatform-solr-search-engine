@@ -106,7 +106,7 @@ class FullText extends CriterionVisitor
 
         $options = [];
         if ($criterion->fuzziness < 1) {
-            $options['word_proximity'] = $criterion->fuzziness;
+            $options['fuzziness'] = $criterion->fuzziness;
         }
 
         $queryString = $this->generator->generate($syntaxTree, $options);
