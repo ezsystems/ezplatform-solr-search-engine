@@ -8,7 +8,7 @@
  *
  * @version //autogentag//
  */
-namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\QueryTranslator;
+namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\QueryTranslator\Generator;
 
 use QueryTranslator\Languages\Galach\Generators\Common\Visitor;
 use QueryTranslator\Languages\Galach\Generators\Lucene\Common\WordBase;

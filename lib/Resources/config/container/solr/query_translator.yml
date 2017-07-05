@@ -37,7 +37,7 @@ services:
         class: QueryTranslator\Languages\Galach\Generators\Lucene\Common\Query
 
     ezpublish.search.solr.query.query_translator.galach.generator.visitor.word:
-        class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\QueryTranslator\WordVisitor
+        class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\QueryTranslator\Generator\WordVisitor
 
     ezpublish.search.solr.query.query_translator.galach.generator.common.aggregate:
         class: QueryTranslator\Languages\Galach\Generators\Common\Aggregate
