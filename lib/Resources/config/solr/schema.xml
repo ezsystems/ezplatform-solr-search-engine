@@ -109,5 +109,4 @@ should not remove or drastically change the existing definitions.
     <field name="_version_" type="long" indexed="true" stored="true" multiValued="false" />
 
   <uniqueKey>id</uniqueKey>
-  <defaultSearchField>id</defaultSearchField>
 </schema>
