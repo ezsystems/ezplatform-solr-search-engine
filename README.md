@@ -58,7 +58,15 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
 
     ```bash
     # Solr 4.10
-    cp -R <ezplatform-solr-search-engine>/lib/Resources/config/solr/* solr-4.10.4/example/solr/collection1/conf
+    cd solr-4.10.4/example
+    mkdir -p multicore/collection1/conf
+    cp -R <ezplatform-solr-search-engine>/lib/Resources/config/solr/* multicore/collection1/conf
+    cp solr/collection1/conf/{currency.xml,stopwords.txt,synonyms.txt} multicore/collection1/conf
+    ## Remove default cores configuration and add core configuration
+    sed -i.bak 's/<core name=".*" instanceDir=".*" \/>//g' multicore/solr.xml
+    sed -i.bak "s/<shardHandlerFactory/<core name=\"collection1\" instanceDir=\"collection1\" \/><shardHandlerFactory/g" multicore/solr.xml
+    cp multicore/core0/conf/solrconfig.xml multicore/collection1/conf
+    sed -i.bak s/core0/collection1/g multicore/collection1/conf/solrconfig.xml
 
     # Solr 6
     cd solr-6.4.2
@@ -92,7 +100,7 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
     ```bash
     # Solr 4.10
     cd solr-4.10.4/example
-    java -Djetty.port=8983 -jar start.jar
+    java -Djetty.port=8983 -Dsolr.solr.home=multicore -jar start.jar
 
     # Solr 6
     cd solr-6.4.2
