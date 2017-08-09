@@ -1,3 +1,4 @@
+# @todo decouple Slots from Core (ezpublish-kernel)
 parameters:
     ezpublish.search.solr.slot.class: eZ\Publish\Core\Search\Common\Slot
     ezpublish.search.solr.slot.publish_version.class: eZ\Publish\Core\Search\Common\Slot\PublishVersion
@@ -21,6 +22,7 @@ parameters:
     ezpublish.search.solr.slot.set_content_state.class: eZ\Publish\Core\Search\Common\Slot\SetContentState
     ezpublish.search.solr.slot.swap_location.class: eZ\Publish\Core\Search\Common\Slot\SwapLocation
     ezpublish.search.solr.slot.update_content_metadata.class: eZ\Publish\Core\Search\Common\Slot\UpdateContentMetadata
+    ezpublish.search.solr.slot.remove_translation.class: EzSystems\EzPlatformSolrSearchEngine\Slot\RemoveTranslation
     ezpublish.search.solr.slot.assign_section.class: eZ\Publish\Core\Search\Common\Slot\AssignSection
 
 services:
@@ -157,6 +159,12 @@ services:
         class: "%ezpublish.search.solr.slot.update_content_metadata.class%"
         tags:
             - {name: ezpublish.search.solr.slot, signal: ContentService\UpdateContentMetadataSignal}
+
+    ezpublish.search.solr.slot.remove_translation:
+        parent: ezpublish.search.solr.slot
+        class: "%ezpublish.search.solr.slot.remove_translation.class%"
+        tags:
+            - {name: ezpublish.search.solr.slot, signal: ContentService\RemoveTranslationSignal}
 
     ezpublish.search.solr.slot.assign_section:
         parent: ezpublish.search.solr.slot
