@@ -47,10 +47,7 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
 
    One of the following:
    - [Solr 4.10.4](http://archive.apache.org/dist/lucene/solr/4.10.4/solr-4.10.4.tgz)
-   - [Solr 6.4.2](http://archive.apache.org/dist/lucene/solr/6.4.2/solr-6.4.2.tgz)
-
-   _Solr 6 support is currently experimental, but already supports more features then 4.10 (atm: location search scoring)._
-
+   - [Solr 6.6.0](http://archive.apache.org/dist/lucene/solr/6.6.0/solr-6.6.0.tgz)
 
 3. Configure Solr *(single core)*
 
@@ -69,7 +66,7 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
     sed -i.bak s/core0/collection1/g multicore/collection1/conf/solrconfig.xml
 
     # Solr 6
-    cd solr-6.4.2
+    cd solr-6
     mkdir -p server/ez/template
     cp -R <ezplatform-solr-search-engine>/lib/Resources/config/solr/* server/ez/template
     cp server/solr/configsets/basic_configs/conf/{currency.xml,solrconfig.xml,stopwords.txt,synonyms.txt,elevate.xml} server/ez/template
@@ -103,7 +100,7 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
     java -Djetty.port=8983 -Dsolr.solr.home=multicore -jar start.jar
 
     # Solr 6
-    cd solr-6.4.2
+    cd solr-6
     bin/solr -s ez
     ## You'll also need to add cores on Solr 6, this adds single core setup:
     bin/solr create_core -c collection1 -d server/ez/template

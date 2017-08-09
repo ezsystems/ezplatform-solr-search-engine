@@ -21,9 +21,9 @@ matrix:
         - php: 7.0
           env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="6.4.2"  CORES_SETUP="dedicated"
         - php: 7.1
-          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="6.4.2"  CORES_SETUP="shared" COMPOSER_REQUIRE="ezsystems/ezpublish-kernel:~6.7.4@dev"
+          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="6.5.1"  CORES_SETUP="shared" COMPOSER_REQUIRE="ezsystems/ezpublish-kernel:~6.7.4@dev"
         - php: 5.6
-          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="6.4.2"  CORES_SETUP="single" SOLR_CORES="collection1"
+          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="6.6.0"  CORES_SETUP="single" SOLR_CORES="collection1"
 
 # test only master and stable branches (+ Pull requests against those)
 branches:
