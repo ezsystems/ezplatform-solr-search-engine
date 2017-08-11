@@ -13,7 +13,7 @@ matrix:
         - php: 7.1
           env: TEST_CONFIG="phpunit.xml"
         - php: 5.6
-          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="4.10.4" CORES_SETUP="dedicated"
+          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="4.10.4" CORES_SETUP="dedicated" COMPOSER_REQUIRE="ezsystems/ezpublish-kernel:~6.7.4@dev"
         - php: 7.0
           env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="4.10.4" CORES_SETUP="shared"
         - php: 7.1
@@ -21,9 +21,9 @@ matrix:
         - php: 7.0
           env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="6.4.2"  CORES_SETUP="dedicated"
         - php: 7.1
-          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="6.4.2"  CORES_SETUP="shared"
+          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="6.5.1"  CORES_SETUP="shared" COMPOSER_REQUIRE="ezsystems/ezpublish-kernel:~6.7.4@dev"
         - php: 5.6
-          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="6.4.2"  CORES_SETUP="single" SOLR_CORES="collection1"
+          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="6.6.0"  CORES_SETUP="single" SOLR_CORES="collection1"
 
 # test only master and stable branches (+ Pull requests against those)
 branches:
@@ -37,6 +37,7 @@ before_script:
     - composer config -g github-oauth.github.com "d0285ed5c8644f30547572ead2ed897431c1fc09"
     # Avoid memory issues on composer install
     - echo "memory_limit=-1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+    - if [ "$COMPOSER_REQUIRE" != "" ] ; then composer require --no-update $COMPOSER_REQUIRE ; fi
     - travis_retry composer update --prefer-dist --no-interaction
     - if [ "$SOLR_VERSION" != "" ] ; then ./bin/.travis/init_solr.sh ; fi
 
