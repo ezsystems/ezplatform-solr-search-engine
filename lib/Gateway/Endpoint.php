@@ -101,7 +101,9 @@ class Endpoint extends ValueObject
      */
     public function getIdentifier()
     {
-        return "{$this->host}:{$this->port}{$this->path}/{$this->core}";
+        $authorization = (!empty($this->user) ? "{$this->user}:{$this->pass}@" : '');
+
+        return "{$authorization}{$this->host}:{$this->port}{$this->path}/{$this->core}";
     }
 
     /**
@@ -111,8 +113,6 @@ class Endpoint extends ValueObject
      */
     public function getURL()
     {
-        $authorization = (!empty($this->username) ? "{$this->user}:{$this->pass}" : '');
-
-        return "{$this->scheme}://{$authorization}" . $this->getIdentifier();
+        return "{$this->scheme}://" . $this->getIdentifier();
     }
 }
