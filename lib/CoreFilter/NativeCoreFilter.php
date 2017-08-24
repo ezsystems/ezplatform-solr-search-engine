@@ -103,10 +103,10 @@ class NativeCoreFilter extends CoreFilter
             $languageSettings['useAlwaysAvailable'] === true
         );
 
-        $criteria = [
-            new CustomField(self::FIELD_DOCUMENT_TYPE, Operator::EQ, $documentTypeIdentifier),
-            $this->getCoreCriterion($languages, $useAlwaysAvailable),
-        ];
+        $criteria[] = new CustomField(self::FIELD_DOCUMENT_TYPE, Operator::EQ, $documentTypeIdentifier);
+        if (!empty($languages)) {
+            $criteria[] = $this->getLanguageFilterCondition($languages, $useAlwaysAvailable);
+        }
 
         if ($query->filter !== null) {
             $criteria[] = $query->filter;
@@ -126,30 +126,24 @@ class NativeCoreFilter extends CoreFilter
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion
      */
-    private function getCoreCriterion(array $languageCodes, $useAlwaysAvailable)
+    private function getLanguageFilterCondition(array $languageCodes, $useAlwaysAvailable)
     {
-        // Handle languages if given
-        if (!empty($languageCodes)) {
-            // Get condition for prioritized languages fallback
-            $filter = $this->getLanguageFilter($languageCodes);
+        // Get condition for prioritized languages fallback
+        $filter = $this->getLanguageFilter($languageCodes);
 
-            // Handle always available fallback if used
-            if ($useAlwaysAvailable) {
-                // Combine conditions with OR
-                $filter = new LogicalOr(
-                    array(
-                        $filter,
-                        $this->getAlwaysAvailableFilter($languageCodes),
-                    )
-                );
-            }
-
-            // Return languages condition
-            return $filter;
+        // Handle always available fallback if used
+        if ($useAlwaysAvailable) {
+            // Combine conditions with OR
+            $filter = new LogicalOr(
+                array(
+                    $filter,
+                    $this->getAlwaysAvailableFilter($languageCodes),
+                )
+            );
         }
 
-        // Otherwise search only main languages
-        return new CustomField(self::FIELD_IS_MAIN_LANGUAGE, Operator::EQ, true);
+        // Return languages condition
+        return $filter;
     }
 
     /**
