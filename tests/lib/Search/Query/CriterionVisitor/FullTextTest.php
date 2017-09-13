@@ -26,13 +26,10 @@ class FullTextTest extends TestCase
     protected function getFullTextCriterionVisitor(array $fieldTypes = array())
     {
         $fieldNames = array_keys($fieldTypes);
-        $fieldNameResolver = $this->getMock(
-            '\\eZ\\Publish\\Core\\Search\\Common\\FieldNameResolver',
-            array('getFieldNames', 'getFieldTypes'),
-            array(),
-            '',
-            false
-        );
+        $fieldNameResolver = $this->getMockBuilder('\\eZ\\Publish\\Core\\Search\\Common\\FieldNameResolver')
+            ->disableOriginalConstructor()
+            ->setMethods(array('getFieldNames', 'getFieldTypes'))
+            ->getMock();
 
         $fieldNameResolver
             ->expects($this->any())

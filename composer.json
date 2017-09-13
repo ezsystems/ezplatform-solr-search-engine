@@ -15,14 +15,18 @@
         "ezsystems/ezpublish-kernel": "~6.7.4@dev|^6.9.1@dev|^7.0@dev"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.7",
-        "matthiasnoback/symfony-dependency-injection-test": "0.*"
+        "phpunit/phpunit": "^5.7",
+        "matthiasnoback/symfony-dependency-injection-test": "~1.0"
     },
     "autoload": {
         "psr-4": {
             "EzSystems\\EzPlatformSolrSearchEngine\\": "lib",
+            "EzSystems\\EzPlatformSolrSearchEngineBundle\\": "bundle"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
             "EzSystems\\EzPlatformSolrSearchEngine\\Tests\\": "tests/lib",
-            "EzSystems\\EzPlatformSolrSearchEngineBundle\\": "bundle",
             "EzSystems\\EzPlatformSolrSearchEngineBundle\\Tests\\": "tests/bundle"
         }
     },
