@@ -29,7 +29,7 @@ class FullTextTest extends TestCase
         $fieldNames = array_keys($fieldTypes);
         $fieldNameResolver = $this->getMockBuilder(FieldNameResolver::class)
             ->disableOriginalConstructor()
-            ->setMethods(array('getFieldNames', 'getFieldTypes'))
+            ->setMethods(['getFieldNames', 'getFieldTypes'])
             ->getMock();
 
         $fieldNameResolver
