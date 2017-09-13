@@ -12,11 +12,12 @@ use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Search\Handler as SearchHandler;
+use PHPUnit\Framework\TestCase as BaseTestCase;
 
 /**
  * Base class for testing Slots.
  */
-class TestCase extends \PHPUnit_Framework_TestCase
+class TestCase extends BaseTestCase
 {
     /**
      * @var \eZ\Publish\SPI\Persistence\Content\Handler
@@ -38,7 +39,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
      */
     protected function getRepositoryMock()
     {
-        return $this->getMock(Repository::class);
+        return $this->createMock(Repository::class);
     }
 
     /**
@@ -47,7 +48,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
     protected function getPersistenceHandlerMock()
     {
         if ($this->persistenceHandlerMock === null) {
-            $this->persistenceHandlerMock = $this->getMock(PersistenceHandler::class);
+            $this->persistenceHandlerMock = $this->createMock(PersistenceHandler::class);
             $this->persistenceHandlerMock
                 ->expects($this->any())
                 ->method('contentHandler')
@@ -64,7 +65,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
     protected function getSearchHandlerMock()
     {
         if ($this->searchHandlerMock === null) {
-            $this->searchHandlerMock = $this->getMock(SearchHandler::class);
+            $this->searchHandlerMock = $this->createMock(SearchHandler::class);
         }
 
         return $this->searchHandlerMock;
@@ -76,7 +77,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
     protected function getContentHandlerMock()
     {
         if ($this->contentHandlerMock === null) {
-            $this->contentHandlerMock = $this->getMock(ContentHandler::class);
+            $this->contentHandlerMock = $this->createMock(ContentHandler::class);
         }
 
         return $this->contentHandlerMock;

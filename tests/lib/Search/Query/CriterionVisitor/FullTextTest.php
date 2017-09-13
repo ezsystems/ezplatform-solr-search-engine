@@ -15,6 +15,7 @@ use eZ\Publish\Core\FieldType\TextLine\SearchField;
 use eZ\Publish\SPI\Search\FieldType\StringField;
 use EzSystems\EzPlatformSolrSearchEngine\Tests\Search\TestCase;
 use EzSystems\EzPlatformSolrSearchEngine\Query;
+use eZ\Publish\Core\Search\Common\FieldNameResolver;
 
 /**
  * Test case for FullText criterion visitor.
@@ -26,13 +27,10 @@ class FullTextTest extends TestCase
     protected function getFullTextCriterionVisitor(array $fieldTypes = array())
     {
         $fieldNames = array_keys($fieldTypes);
-        $fieldNameResolver = $this->getMock(
-            '\\eZ\\Publish\\Core\\Search\\Common\\FieldNameResolver',
-            array('getFieldNames', 'getFieldTypes'),
-            array(),
-            '',
-            false
-        );
+        $fieldNameResolver = $this->getMockBuilder(FieldNameResolver::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getFieldNames', 'getFieldTypes'])
+            ->getMock();
 
         $fieldNameResolver
             ->expects($this->any())
