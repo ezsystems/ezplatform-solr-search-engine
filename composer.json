@@ -21,7 +21,8 @@
     "autoload": {
         "psr-4": {
             "EzSystems\\EzPlatformSolrSearchEngine\\": "lib",
-            "EzSystems\\EzPlatformSolrSearchEngineBundle\\": "bundle"
+            "EzSystems\\EzPlatformSolrSearchEngineBundle\\": "bundle",
+            "EzSystems\\EzPlatformSolrSearchEngine\\Tests\\SetupFactory\\": "tests/lib/SetupFactory"
         }
     },
     "autoload-dev": {

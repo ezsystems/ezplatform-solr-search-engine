@@ -11,12 +11,12 @@
 namespace EzSystems\EzPlatformSolrSearchEngine\Tests\SetupFactory;
 
 use eZ\Publish\API\Repository\Tests\SetupFactory\Legacy as CoreLegacySetupFactory;
-use eZ\Publish\Core\Base\ServiceContainer;
 use eZ\Publish\Core\Base\Container\Compiler as BaseCompiler;
 use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler;
 use PDO;
 use RuntimeException;
 use eZ\Publish\API\Repository\Tests\SearchServiceTranslationLanguageFallbackTest;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Config\FileLocator;
 
@@ -45,78 +45,29 @@ class LegacySetupFactory extends CoreLegacySetupFactory
         return $repository;
     }
 
-    public function getServiceContainer()
+    protected function externalBuildContainer(ContainerBuilder $containerBuilder)
     {
-        if (!isset(self::$serviceContainer)) {
-            $configPath = __DIR__ . '/../../../vendor/ezsystems/ezpublish-kernel/config.php';
-            if (file_exists($configPath)) {
-                // If executed from ezsystems/ezplatform-solr-search-engine
-                $config = include $configPath;
-                $installDir = $config['install_dir'];
-                /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder */
-                $containerBuilder = include $config['container_builder_path'];
-                $settingsPath = __DIR__ . '/../../../lib/Resources/config/container/';
-                $testSettingsPath = __DIR__ . '/../../../tests/lib/Resources/config/';
-            } elseif (file_exists($configPath = __DIR__ . '/../../../../../../config.php')) {
-                // If executed from ezsystems/ezpublish-kernel
-                $config = include $configPath;
-                $installDir = $config['install_dir'];
-                /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder */
-                $containerBuilder = include $config['container_builder_path'];
-                $settingsPath = $installDir . '/vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/container/';
-                $testSettingsPath = $installDir . '/vendor/ezsystems/ezplatform-solr-search-engine/tests/lib/Resources/config/';
-            } else {
-                // Else it should run from external repository
-                $configPath = __DIR__ . '/../../../../../../vendor/ezsystems/ezpublish-kernel/config.php';
-                $config = include $configPath;
-                $installDir = $config['install_dir'];
-                /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder */
-                $containerBuilder = include $config['container_builder_path'];
-                $settingsPath = __DIR__ . '/../../../lib/Resources/config/container/';
-                $testSettingsPath = __DIR__ . '/../../../tests/lib/Resources/config/';
-            }
+        $settingsPath = __DIR__ . '/../../../lib/Resources/config/container/';
+        $testSettingsPath = __DIR__ . '/../Resources/config/';
 
-            $solrLoader = new YamlFileLoader($containerBuilder, new FileLocator($settingsPath));
-            $solrLoader->load('solr.yml');
+        $solrLoader = new YamlFileLoader($containerBuilder, new FileLocator($settingsPath));
+        $solrLoader->load('solr.yml');
 
-            $solrTestLoader = new YamlFileLoader($containerBuilder, new FileLocator($testSettingsPath));
-            $solrTestLoader->load($this->getTestConfigurationFile());
+        $solrTestLoader = new YamlFileLoader($containerBuilder, new FileLocator($testSettingsPath));
+        $solrTestLoader->load($this->getTestConfigurationFile());
 
-            $containerBuilder->addCompilerPass(new Compiler\FieldMapperPass\BlockFieldMapperPass());
-            $containerBuilder->addCompilerPass(new Compiler\FieldMapperPass\BlockTranslationFieldMapperPass());
-            $containerBuilder->addCompilerPass(new Compiler\FieldMapperPass\ContentFieldMapperPass());
-            $containerBuilder->addCompilerPass(new Compiler\FieldMapperPass\ContentTranslationFieldMapperPass());
-            $containerBuilder->addCompilerPass(new Compiler\FieldMapperPass\LocationFieldMapperPass());
-            $containerBuilder->addCompilerPass(new Compiler\AggregateCriterionVisitorPass());
-            $containerBuilder->addCompilerPass(new Compiler\AggregateFacetBuilderVisitorPass());
-            $containerBuilder->addCompilerPass(new Compiler\AggregateSortClauseVisitorPass());
-            $containerBuilder->addCompilerPass(new Compiler\EndpointRegistryPass());
-            $containerBuilder->addCompilerPass(new BaseCompiler\Search\AggregateFieldValueMapperPass());
-            $containerBuilder->addCompilerPass(new BaseCompiler\Search\FieldRegistryPass());
-            $containerBuilder->addCompilerPass(new BaseCompiler\Search\SearchEngineSignalSlotPass('solr'));
-
-            $this->externalBuildContainer($containerBuilder);
-
-            $containerBuilder->setParameter(
-                'legacy_dsn',
-                self::$dsn
-            );
-
-            $containerBuilder->setParameter(
-                'io_root_dir',
-                self::$ioRootDir . '/' . $containerBuilder->getParameter('storage_dir')
-            );
-
-            self::$serviceContainer = new ServiceContainer(
-                $containerBuilder,
-                $installDir,
-                $config['cache_dir'],
-                true,
-                true
-            );
-        }
-
-        return self::$serviceContainer;
+        $containerBuilder->addCompilerPass(new Compiler\FieldMapperPass\BlockFieldMapperPass());
+        $containerBuilder->addCompilerPass(new Compiler\FieldMapperPass\BlockTranslationFieldMapperPass());
+        $containerBuilder->addCompilerPass(new Compiler\FieldMapperPass\ContentFieldMapperPass());
+        $containerBuilder->addCompilerPass(new Compiler\FieldMapperPass\ContentTranslationFieldMapperPass());
+        $containerBuilder->addCompilerPass(new Compiler\FieldMapperPass\LocationFieldMapperPass());
+        $containerBuilder->addCompilerPass(new Compiler\AggregateCriterionVisitorPass());
+        $containerBuilder->addCompilerPass(new Compiler\AggregateFacetBuilderVisitorPass());
+        $containerBuilder->addCompilerPass(new Compiler\AggregateSortClauseVisitorPass());
+        $containerBuilder->addCompilerPass(new Compiler\EndpointRegistryPass());
+        $containerBuilder->addCompilerPass(new BaseCompiler\Search\AggregateFieldValueMapperPass());
+        $containerBuilder->addCompilerPass(new BaseCompiler\Search\FieldRegistryPass());
+        $containerBuilder->addCompilerPass(new BaseCompiler\Search\SearchEngineSignalSlotPass('solr'));
     }
 
     /**
