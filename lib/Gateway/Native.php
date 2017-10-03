@@ -434,11 +434,17 @@ class Native extends Gateway
         $queryString = $this->generateQueryString($parameters);
 
         $response = $this->client->request(
-            'GET',
+            'POST',
             $this->endpointRegistry->getEndpoint(
                 $this->endpointResolver->getEntryEndpoint()
             ),
-            "/select?{$queryString}"
+            '/select',
+            new Message(
+                [
+                    'Content-Type' => 'application/x-www-form-urlencoded',
+                ],
+                $queryString
+            )
         );
 
         // @todo: Error handling?
