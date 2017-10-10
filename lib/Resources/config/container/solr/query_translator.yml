@@ -1,0 +1,59 @@
+parameters:
+
+services:
+    ezpublish.search.solr.query.query_translator.galach.token_extractor:
+        class: QueryTranslator\Languages\Galach\TokenExtractor\Text
+
+    ezpublish.search.solr.query.query_translator.galach.tokenizer:
+        class: QueryTranslator\Languages\Galach\Tokenizer
+        arguments:
+            - "@ezpublish.search.solr.query.query_translator.galach.token_extractor"
+
+    ezpublish.search.solr.query.query_translator.galach.parser:
+        class: QueryTranslator\Languages\Galach\Parser
+
+    ezpublish.search.solr.query.query_translator.galach.generator.visitor.group:
+        class: QueryTranslator\Languages\Galach\Generators\Lucene\Common\Group
+
+    ezpublish.search.solr.query.query_translator.galach.generator.visitor.logical_and:
+        class: QueryTranslator\Languages\Galach\Generators\Lucene\Common\LogicalAnd
+
+    ezpublish.search.solr.query.query_translator.galach.generator.visitor.logical_not:
+        class: QueryTranslator\Languages\Galach\Generators\Lucene\Common\LogicalNot
+
+    ezpublish.search.solr.query.query_translator.galach.generator.visitor.logical_or:
+        class: QueryTranslator\Languages\Galach\Generators\Lucene\Common\LogicalOr
+
+    ezpublish.search.solr.query.query_translator.galach.generator.visitor.mandatory:
+        class: QueryTranslator\Languages\Galach\Generators\Lucene\Common\Mandatory
+
+    ezpublish.search.solr.query.query_translator.galach.generator.visitor.phrase:
+        class: QueryTranslator\Languages\Galach\Generators\Lucene\Common\Phrase
+
+    ezpublish.search.solr.query.query_translator.galach.generator.visitor.prohibited:
+        class: QueryTranslator\Languages\Galach\Generators\Lucene\Common\Prohibited
+
+    ezpublish.search.solr.query.query_translator.galach.generator.visitor.query:
+        class: QueryTranslator\Languages\Galach\Generators\Lucene\Common\Query
+
+    ezpublish.search.solr.query.query_translator.galach.generator.visitor.word:
+        class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\QueryTranslator\Generator\WordVisitor
+
+    ezpublish.search.solr.query.query_translator.galach.generator.common.aggregate:
+        class: QueryTranslator\Languages\Galach\Generators\Common\Aggregate
+        arguments:
+            -
+                - "@ezpublish.search.solr.query.query_translator.galach.generator.visitor.group"
+                - "@ezpublish.search.solr.query.query_translator.galach.generator.visitor.logical_and"
+                - "@ezpublish.search.solr.query.query_translator.galach.generator.visitor.logical_not"
+                - "@ezpublish.search.solr.query.query_translator.galach.generator.visitor.logical_or"
+                - "@ezpublish.search.solr.query.query_translator.galach.generator.visitor.mandatory"
+                - "@ezpublish.search.solr.query.query_translator.galach.generator.visitor.phrase"
+                - "@ezpublish.search.solr.query.query_translator.galach.generator.visitor.prohibited"
+                - "@ezpublish.search.solr.query.query_translator.galach.generator.visitor.query"
+                - "@ezpublish.search.solr.query.query_translator.galach.generator.visitor.word"
+
+    ezpublish.search.solr.query.query_translator.galach.generator.edismax:
+        class: QueryTranslator\Languages\Galach\Generators\ExtendedDisMax
+        arguments:
+            - "@ezpublish.search.solr.query.query_translator.galach.generator.common.aggregate"

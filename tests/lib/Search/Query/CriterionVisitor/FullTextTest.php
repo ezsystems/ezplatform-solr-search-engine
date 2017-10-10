@@ -13,9 +13,14 @@ namespace EzSystems\EzPlatformSolrSearchEngine\Tests\Search\Query\CriterionVisit
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\FieldType\TextLine\SearchField;
 use eZ\Publish\SPI\Search\FieldType\StringField;
+use EzSystems\EzPlatformSolrSearchEngine\Query\Common\QueryTranslator\Generator\WordVisitor;
+use EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor\FullText;
 use EzSystems\EzPlatformSolrSearchEngine\Tests\Search\TestCase;
-use EzSystems\EzPlatformSolrSearchEngine\Query;
 use eZ\Publish\Core\Search\Common\FieldNameResolver;
+use QueryTranslator\Languages\Galach\Generators;
+use QueryTranslator\Languages\Galach\Parser;
+use QueryTranslator\Languages\Galach\TokenExtractor\Text;
+use QueryTranslator\Languages\Galach\Tokenizer;
 
 /**
  * Test case for FullText criterion visitor.
@@ -36,7 +41,7 @@ class FullTextTest extends TestCase
             ->expects($this->any())
             ->method('getFieldNames')
             ->with(
-                $this->isInstanceOf('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion'),
+                $this->isInstanceOf(Criterion::class),
                 $this->isType('string')
             )
             ->will(
@@ -47,14 +52,62 @@ class FullTextTest extends TestCase
             ->expects($this->any())
             ->method('getFieldTypes')
             ->with(
-                $this->isInstanceOf('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion'),
+                $this->isInstanceOf(Criterion::class),
                 $this->isType('string')
             )
             ->will(
                 $this->returnValue($fieldTypes)
             );
 
-        return new Query\Content\CriterionVisitor\FullText($fieldNameResolver);
+        /** @var \eZ\Publish\Core\Search\Common\FieldNameResolver $fieldNameResolver */
+        return new FullText(
+            $fieldNameResolver,
+            $this->getTokenizer(),
+            $this->getParser(),
+            $this->getGenerator()
+        );
+    }
+
+    /**
+     * @return \QueryTranslator\Languages\Galach\Tokenizer
+     */
+    protected function getTokenizer()
+    {
+        return new Tokenizer(
+            new Text()
+        );
+    }
+
+    /**
+     * @return \QueryTranslator\Languages\Galach\Parser
+     */
+    protected function getParser()
+    {
+        return new Parser();
+    }
+
+    /**
+     * @return \QueryTranslator\Languages\Galach\Generators\ExtendedDisMax
+     */
+    protected function getGenerator()
+    {
+        return new Generators\ExtendedDisMax(
+            new Generators\Common\Aggregate(
+                [
+                    new Generators\Lucene\Common\Group(),
+                    new Generators\Lucene\Common\LogicalAnd(),
+                    new Generators\Lucene\Common\LogicalNot(),
+                    new Generators\Lucene\Common\LogicalOr(),
+                    new Generators\Lucene\Common\Mandatory(),
+                    new Generators\Lucene\Common\Prohibited(),
+                    new Generators\Lucene\Common\Phrase(),
+                    new Generators\Lucene\Common\Query(),
+                    new Generators\Lucene\Common\Tag(),
+                    new WordVisitor(),
+                    new Generators\Lucene\Common\User(),
+                ]
+            )
+        );
     }
 
     public function testVisitSimple()
@@ -64,7 +117,7 @@ class FullTextTest extends TestCase
         $criterion = new Criterion\FullText('Hello');
 
         $this->assertEquals(
-            '(meta_content__text_t:(Hello))',
+            "{!edismax v='Hello' qf='meta_content__text_t' uf=-*}",
             $visitor->visit($criterion)
         );
     }
@@ -76,7 +129,7 @@ class FullTextTest extends TestCase
         $criterion = new Criterion\FullText('Hello World');
 
         $this->assertEquals(
-            '(meta_content__text_t:(Hello World))',
+            "{!edismax v='Hello World' qf='meta_content__text_t' uf=-*}",
             $visitor->visit($criterion)
         );
     }
@@ -89,7 +142,7 @@ class FullTextTest extends TestCase
         $criterion->fuzziness = .5;
 
         $this->assertEquals(
-            '(meta_content__text_t:(Hello~0.5))',
+            "{!edismax v='Hello~0.5' qf='meta_content__text_t' uf=-*}",
             $visitor->visit($criterion)
         );
     }
@@ -102,7 +155,7 @@ class FullTextTest extends TestCase
         $criterion->fuzziness = .5;
 
         $this->assertEquals(
-            '(meta_content__text_t:(Hello~0.5 World~0.5))',
+            "{!edismax v='Hello~0.5 World~0.5' qf='meta_content__text_t' uf=-*}",
             $visitor->visit($criterion)
         );
     }
@@ -121,7 +174,7 @@ class FullTextTest extends TestCase
         $criterion->boost = array('title' => 2);
 
         $this->assertEquals(
-            '(meta_content__text_t:(Hello) OR title_1_s:(Hello)^2 OR title_2_s:(Hello)^2)',
+            "{!edismax v='Hello' qf='meta_content__text_t title_1_s^2 title_2_s^2' uf=-*}",
             $visitor->visit($criterion)
         );
     }
@@ -140,7 +193,7 @@ class FullTextTest extends TestCase
         $criterion->boost = array('title' => 2);
 
         $this->assertEquals(
-            '(meta_content__text_t:(Hello World) OR title_1_s:(Hello World)^2 OR title_2_s:(Hello World)^2)',
+            "{!edismax v='Hello World' qf='meta_content__text_t title_1_s^2 title_2_s^2' uf=-*}",
             $visitor->visit($criterion)
         );
     }
@@ -155,7 +208,7 @@ class FullTextTest extends TestCase
         );
 
         $this->assertEquals(
-            '(meta_content__text_t:(Hello))',
+            "{!edismax v='Hello' qf='meta_content__text_t' uf=-*}",
             $visitor->visit($criterion)
         );
     }
@@ -170,7 +223,7 @@ class FullTextTest extends TestCase
         );
 
         $this->assertEquals(
-            '(meta_content__text_t:(Hello World))',
+            "{!edismax v='Hello World' qf='meta_content__text_t' uf=-*}",
             $visitor->visit($criterion)
         );
     }
@@ -189,7 +242,7 @@ class FullTextTest extends TestCase
         $criterion->boost = array('title' => 2);
 
         $this->assertEquals(
-            '(meta_content__text_t:(Hello~0.5) OR title_1_s:(Hello~0.5)^2 OR title_2_s:(Hello~0.5)^2)',
+            "{!edismax v='Hello~0.5' qf='meta_content__text_t title_1_s^2 title_2_s^2' uf=-*}",
             $visitor->visit($criterion)
         );
     }
@@ -208,7 +261,19 @@ class FullTextTest extends TestCase
         $criterion->boost = array('title' => 2);
 
         $this->assertEquals(
-            '(meta_content__text_t:(Hello~0.5 World~0.5) OR title_1_s:(Hello~0.5 World~0.5)^2 OR title_2_s:(Hello~0.5 World~0.5)^2)',
+            "{!edismax v='Hello~0.5 World~0.5' qf='meta_content__text_t title_1_s^2 title_2_s^2' uf=-*}",
+            $visitor->visit($criterion)
+        );
+    }
+
+    public function testVisitErrorCorrection()
+    {
+        $visitor = $this->getFullTextCriterionVisitor();
+
+        $criterion = new Criterion\FullText('OR Hello && (and goodbye)) AND OR AND "as NOT +always');
+
+        $this->assertEquals(
+            "{!edismax v='Hello AND (and goodbye) as +always' qf='meta_content__text_t' uf=-*}",
             $visitor->visit($criterion)
         );
     }
