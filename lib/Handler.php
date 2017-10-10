@@ -447,7 +447,7 @@ class Handler implements SearchHandlerInterface, Capable
     public function supports($capabilityFlag)
     {
         // @todo change to use constants once we require 6.12 and higher (or change if constants are backported to 6.7)
-        if ($capabilityFlag < 8) {
+        if ($capabilityFlag < 8 || $capabilityFlag === 64) {
             return true;
         }
 
