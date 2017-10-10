@@ -14,6 +14,7 @@ use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
 use eZ\Publish\SPI\Search\Handler as SearchHandlerInterface;
+use eZ\Publish\SPI\Search\Capable;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
@@ -41,7 +42,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
  * content objects based on criteria, which could not be converted in to
  * database statements.
  */
-class Handler implements SearchHandlerInterface
+class Handler implements SearchHandlerInterface, Capable
 {
     /**
      * Content locator gateway.
@@ -393,6 +394,7 @@ class Handler implements SearchHandlerInterface
 
     /**
      * @param int $locationId
+     *
      * @return Criterion\CustomField
      */
     protected function allItemsWithinLocation($locationId)
@@ -403,6 +405,7 @@ class Handler implements SearchHandlerInterface
 
     /**
      * @param int $locationId
+     *
      * @return Criterion\CustomField
      */
     protected function allItemsWithinLocationWithAdditionalLocation($locationId)
@@ -418,6 +421,7 @@ class Handler implements SearchHandlerInterface
      * Generate search document for Content object to be indexed by a search engine.
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
+     *
      * @return \eZ\Publish\SPI\Search\Document
      */
     public function generateDocument(Content $content)
@@ -438,5 +442,15 @@ class Handler implements SearchHandlerInterface
     public function bulkIndexDocuments(array $documents)
     {
         $this->gateway->bulkIndexDocuments($documents);
+    }
+
+    public function supports($capabilityFlag)
+    {
+        // @todo change to use constants once we require 6.12 and higher (or change if constants are backported to 6.7)
+        if ($capabilityFlag < 8) {
+            return true;
+        }
+
+        return false;
     }
 }
