@@ -70,10 +70,19 @@ class FieldIn extends Field
                     true
                 );
 
-                $queries[] = $name . ':"' . $preparedValue . '"';
+                if ($this->isRegExp($preparedValue)) {
+                    $queries[] = $name . ':' . $preparedValue;
+                } else {
+                    $queries[] = $name . ':"' . $preparedValue . '"';
+                }
             }
         }
 
         return '(' . implode(' OR ', $queries) . ')';
+    }
+
+    private function isRegExp($preparedValue)
+    {
+        return preg_match('#^/.*/$#', $preparedValue);
     }
 }
