@@ -10,6 +10,7 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine;
 
+use eZ\Publish\API\Repository\SearchService;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
@@ -446,11 +447,17 @@ class Handler implements SearchHandlerInterface, Capable
 
     public function supports($capabilityFlag)
     {
-        // @todo change to use constants once we require 6.12 and higher (or change if constants are backported to 6.7)
-        if ($capabilityFlag < 8 || $capabilityFlag === 64) {
-            return true;
+        switch ($capabilityFlag) {
+            case SearchService::CAPABILITY_SCORING:
+            case SearchService::CAPABILITY_FACETS:
+            case SearchService::CAPABILITY_CUSTOM_FIELDS:
+            //case SearchService::CAPABILITY_SPELLCHECK:
+            //case SearchService::CAPABILITY_HIGHLIGHT:
+            //case SearchService::CAPABILITY_SUGGEST:
+            case SearchService::CAPABILITY_ADVANCED_FULLTEXT:
+                return true;
+            default:
+               return false;
         }
-
-        return false;
     }
 }
