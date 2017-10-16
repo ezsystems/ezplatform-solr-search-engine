@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\Field;
 
@@ -54,7 +52,7 @@ class FieldLike extends Field
             );
         }
 
-        $queries = array();
+        $queries = [];
         foreach ($searchFields as $name => $fieldType) {
             $preparedValue = $this->escape(
                 $this->toString(
@@ -69,7 +67,7 @@ class FieldLike extends Field
     }
 
     /**
-     * Escapes value for use in wildcard search
+     * Escapes value for use in wildcard search.
      *
      * @param $value
      * @return mixed
@@ -77,6 +75,7 @@ class FieldLike extends Field
     private function escape($value)
     {
         $reservedCharacters = preg_quote('+-&|!(){}[]^"~*?:\\ ');
+
         return preg_replace_callback(
             '/([' . $reservedCharacters . '])/',
             function ($matches) {
