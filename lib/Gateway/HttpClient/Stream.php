@@ -38,7 +38,7 @@ class Stream implements HttpClient
         // We'll try to reach backend 5 times before throwing exception.
         $i = 0;
         do {
-            $i++;
+            ++$i;
             if ($responseMessage = $this->requestStream($method, $endpoint, $path, $message)) {
                 return $responseMessage;
             }
