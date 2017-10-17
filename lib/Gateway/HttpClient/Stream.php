@@ -34,12 +34,32 @@ class Stream implements HttpClient
     public function request($method, Endpoint $endpoint, $path, Message $message = null)
     {
         $message = $message ?: new Message();
+
+        // We'll try to reach backend 5 times before throwing exception.
+        $i = 0;
+        do {
+            $i++;
+            if ($responseMessage = $this->requestStream($method, $endpoint, $path, $message)) {
+                return $responseMessage;
+            }
+
+            // Wait for 100ms before we retry
+            // Timeout is 10s, so time spent in worst case is 50.5s, which is less then default_socket_timeout (60s)
+            usleep(100000);
+        } while ($i < 5);
+
+        throw new ConnectionException($endpoint->getURL(), $path, $method);
+    }
+
+    private function requestStream($method, Endpoint $endpoint, $path, Message $message)
+    {
         $requestHeaders = $this->getRequestHeaders($message, $endpoint);
         $contextOptions = array(
             'http' => array(
                 'method' => $method,
                 'content' => $message->body,
                 'ignore_errors' => true,
+                'timeout' => 10,
                 'header' => $requestHeaders,
             ),
         );
@@ -53,7 +73,7 @@ class Stream implements HttpClient
 
         // Check if connection has been established successfully
         if ($httpFilePointer === false) {
-            throw new ConnectionException($endpoint->getURL(), $path, $method);
+            return null;
         }
 
         // Read request body
