@@ -129,22 +129,12 @@ class Native extends Gateway
      */
     protected function internalFind(array $parameters, array $languageSettings = array())
     {
-        $searchTargets = $this->getSearchTargets($languageSettings);
-        if (!empty($searchTargets)) {
-            $parameters['shards'] = $searchTargets;
-        }
-
         return $this->search($parameters);
     }
 
     public function searchAllEndpoints(Query $query)
     {
         $parameters = $this->contentQueryConverter->convert($query);
-
-        $searchTargets = $this->getAllSearchTargets();
-        if (!empty($searchTargets)) {
-            $parameters['shards'] = $searchTargets;
-        }
 
         return $this->search($parameters);
     }
