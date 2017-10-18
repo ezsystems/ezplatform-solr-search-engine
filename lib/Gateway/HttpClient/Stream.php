@@ -46,7 +46,6 @@ class Stream implements HttpClient
         $this->connectionTimeout = $connectionTimeout;
         $this->connectionRetry = $connectionRetry;
         $this->retryWaitMs = $retryWaitMs;
-
     }
 
     /**
