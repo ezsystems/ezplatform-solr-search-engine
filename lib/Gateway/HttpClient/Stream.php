@@ -74,7 +74,7 @@ class Stream implements HttpClient
 
             // Wait for 100ms before we retry
             // Timeout is 10s, so time spent in worst case is 50.5s, which is less then default_socket_timeout (60s)
-            usleep($this->retryWaitMs*1000);
+            usleep($this->retryWaitMs * 1000);
         } while ($i < $this->connectionRetry);
 
         throw new ConnectionException($endpoint->getURL(), $path, $method);
