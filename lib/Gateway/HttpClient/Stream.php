@@ -20,6 +20,36 @@ use EzSystems\EzPlatformSolrSearchEngine\Gateway\Endpoint;
 class Stream implements HttpClient
 {
     /**
+     * @var int
+     */
+    private $connectionTimeout;
+
+    /**
+     * @var int
+     */
+    private $connectionRetry;
+
+    /**
+     * @var int
+     */
+    private $retryWaitMs;
+
+    /**
+     * Stream constructor.
+     *
+     * @param int $connectionTimeout Timeout for connection in seconds.
+     * @param int $connectionRetry Number of times to re-try connection.
+     * @param int $retryWaitMs Time in milli seconds.
+     */
+    public function __construct($connectionTimeout = 10, $connectionRetry = 5, $retryWaitMs = 100)
+    {
+        $this->connectionTimeout = $connectionTimeout;
+        $this->connectionRetry = $connectionRetry;
+        $this->retryWaitMs = $retryWaitMs;
+
+    }
+
+    /**
      * Execute a HTTP request to the remote server.
      *
      * Returns the result from the remote server.
@@ -45,8 +75,8 @@ class Stream implements HttpClient
 
             // Wait for 100ms before we retry
             // Timeout is 10s, so time spent in worst case is 50.5s, which is less then default_socket_timeout (60s)
-            usleep(100000);
-        } while ($i < 5);
+            usleep($this->retryWaitMs*1000);
+        } while ($i < $this->connectionRetry);
 
         throw new ConnectionException($endpoint->getURL(), $path, $method);
     }
@@ -59,7 +89,7 @@ class Stream implements HttpClient
                 'method' => $method,
                 'content' => $message->body,
                 'ignore_errors' => true,
-                'timeout' => 10,
+                'timeout' => $this->connectionTimeout,
                 'header' => $requestHeaders,
             ),
         );
