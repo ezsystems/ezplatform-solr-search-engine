@@ -13,12 +13,18 @@ namespace EzSystems\EzPlatformSolrSearchEngine\Gateway\HttpClient;
 use EzSystems\EzPlatformSolrSearchEngine\Gateway\HttpClient;
 use EzSystems\EzPlatformSolrSearchEngine\Gateway\Message;
 use EzSystems\EzPlatformSolrSearchEngine\Gateway\Endpoint;
+use Psr\Log\LoggerInterface;
 
 /**
  * Simple PHP stream based HTTP client.
  */
 class Stream implements HttpClient
 {
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
     /**
      * @var int
      */
@@ -37,14 +43,15 @@ class Stream implements HttpClient
     /**
      * Stream constructor.
      *
-     * @param int $connectionTimeout Timeout for connection in seconds.
-     * @param int $connectionRetry Number of times to re-try connection.
+     * @param int $timeout Timeout for connection in seconds.
+     * @param int $retry Number of times to re-try connection.
      * @param int $retryWaitMs Time in milli seconds.
      */
-    public function __construct($connectionTimeout = 10, $connectionRetry = 5, $retryWaitMs = 100)
+    public function __construct(LoggerInterface $logger, $timeout = 20, $retry = 3, $retryWaitMs = 100)
     {
-        $this->connectionTimeout = $connectionTimeout;
-        $this->connectionRetry = $connectionRetry;
+        $this->logger = $logger;
+        $this->connectionTimeout = $timeout;
+        $this->connectionRetry = $retry;
         $this->retryWaitMs = $retryWaitMs;
     }
 
@@ -64,7 +71,7 @@ class Stream implements HttpClient
     {
         $message = $message ?: new Message();
 
-        // We'll try to reach backend 5 times before throwing exception.
+        // We'll try to reach backend several times before throwing exception.
         $i = 0;
         do {
             ++$i;
@@ -72,11 +79,12 @@ class Stream implements HttpClient
                 return $responseMessage;
             }
 
-            // Wait for 100ms before we retry
-            // Timeout is 10s, so time spent in worst case is 50.5s, which is less then default_socket_timeout (60s)
             usleep($this->retryWaitMs * 1000);
         } while ($i < $this->connectionRetry);
 
+        $this->logger->error(
+            sprintf('Connection to %s failed, attempted %d times', $endpoint->getURL(), $this->connectionRetry)
+        );
         throw new ConnectionException($endpoint->getURL(), $path, $method);
     }
 
