@@ -43,6 +43,7 @@ class Stream implements HttpClient
     /**
      * Stream constructor.
      *
+     * @param \Psr\Log\LoggerInterface $logger
      * @param int $timeout Timeout for connection in seconds.
      * @param int $retry Number of times to re-try connection.
      * @param int $retryWaitMs Time in milli seconds.
