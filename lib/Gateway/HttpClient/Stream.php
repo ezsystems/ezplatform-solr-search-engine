@@ -47,7 +47,7 @@ class Stream implements HttpClient
      * @param int $retry Number of times to re-try connection.
      * @param int $retryWaitMs Time in milli seconds.
      */
-    public function __construct(LoggerInterface $logger, $timeout = 20, $retry = 3, $retryWaitMs = 100)
+    public function __construct(LoggerInterface $logger, $timeout = 10, $retry = 5, $retryWaitMs = 100)
     {
         $this->logger = $logger;
         $this->connectionTimeout = $timeout;
