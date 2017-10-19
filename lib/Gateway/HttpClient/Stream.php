@@ -13,12 +13,49 @@ namespace EzSystems\EzPlatformSolrSearchEngine\Gateway\HttpClient;
 use EzSystems\EzPlatformSolrSearchEngine\Gateway\HttpClient;
 use EzSystems\EzPlatformSolrSearchEngine\Gateway\Message;
 use EzSystems\EzPlatformSolrSearchEngine\Gateway\Endpoint;
+use Psr\Log\LoggerInterface;
 
 /**
  * Simple PHP stream based HTTP client.
  */
 class Stream implements HttpClient
 {
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @var int
+     */
+    private $connectionTimeout;
+
+    /**
+     * @var int
+     */
+    private $connectionRetry;
+
+    /**
+     * @var int
+     */
+    private $retryWaitMs;
+
+    /**
+     * Stream constructor.
+     *
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param int $timeout Timeout for connection in seconds.
+     * @param int $retry Number of times to re-try connection.
+     * @param int $retryWaitMs Time in milli seconds.
+     */
+    public function __construct(LoggerInterface $logger, $timeout = 10, $retry = 5, $retryWaitMs = 100)
+    {
+        $this->logger = $logger;
+        $this->connectionTimeout = $timeout;
+        $this->connectionRetry = $retry;
+        $this->retryWaitMs = $retryWaitMs;
+    }
+
     /**
      * Execute a HTTP request to the remote server.
      *
@@ -34,12 +71,33 @@ class Stream implements HttpClient
     public function request($method, Endpoint $endpoint, $path, Message $message = null)
     {
         $message = $message ?: new Message();
+
+        // We'll try to reach backend several times before throwing exception.
+        $i = 0;
+        do {
+            ++$i;
+            if ($responseMessage = $this->requestStream($method, $endpoint, $path, $message)) {
+                return $responseMessage;
+            }
+
+            usleep($this->retryWaitMs * 1000);
+        } while ($i < $this->connectionRetry);
+
+        $this->logger->error(
+            sprintf('Connection to %s failed, attempted %d times', $endpoint->getURL(), $this->connectionRetry)
+        );
+        throw new ConnectionException($endpoint->getURL(), $path, $method);
+    }
+
+    private function requestStream($method, Endpoint $endpoint, $path, Message $message)
+    {
         $requestHeaders = $this->getRequestHeaders($message, $endpoint);
         $contextOptions = array(
             'http' => array(
                 'method' => $method,
                 'content' => $message->body,
                 'ignore_errors' => true,
+                'timeout' => $this->connectionTimeout,
                 'header' => $requestHeaders,
             ),
         );
@@ -53,7 +111,7 @@ class Stream implements HttpClient
 
         // Check if connection has been established successfully
         if ($httpFilePointer === false) {
-            throw new ConnectionException($endpoint->getURL(), $path, $method);
+            return null;
         }
 
         // Read request body
