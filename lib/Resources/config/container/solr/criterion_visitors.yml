@@ -85,8 +85,7 @@ services:
             - {name: ezpublish.search.solr.query.location.criterion_visitor}
 
     ezpublish.search.solr.query.common.criterion_visitor.field_like:
-        class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\Field\FieldLike
-        class: '%ezpublish.search.solr.query.common.criterion_visitor.custom_field_like.class%'
+        class: '%ezpublish.search.solr.query.common.criterion_visitor.field_like.class%'
         arguments:
             - '@ezpublish.search.common.field_name_resolver'
             - '@ezpublish.search.common.field_value_mapper.aggregate'
