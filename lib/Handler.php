@@ -106,17 +106,17 @@ class Handler implements SearchHandlerInterface, Capable
     /**
      * Finds content objects for the given query.
      *
-     * @todo define structs for the field filters
-     *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if Query criterion is not applicable to its target
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     * @param array $fieldFilters - a map of filters for the returned fields.
-     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
+     * @param array $languageFilter - a map of language related filters specifying languages query will be performed on.
+     *        Also used to define which field languages are loaded for the returned content.
+     *        Currently supports: <code>array("languages" => array(<language1>,..), "useAlwaysAvailable" => bool)</code>
+     *                            useAlwaysAvailable defaults to true to avoid exceptions on missing translations.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function findContent(Query $query, array $fieldFilters = array())
+    public function findContent(Query $query, array $languageFilter = array())
     {
         $query = clone $query;
         $query->filter = $query->filter ?: new Criterion\MatchAll();
@@ -124,12 +124,12 @@ class Handler implements SearchHandlerInterface, Capable
 
         $this->coreFilter->apply(
             $query,
-            $fieldFilters,
+            $languageFilter,
             DocumentMapper::DOCUMENT_TYPE_IDENTIFIER_CONTENT
         );
 
         return $this->resultExtractor->extract(
-            $this->gateway->findContent($query, $fieldFilters),
+            $this->gateway->findContent($query, $languageFilter),
             $query->facetBuilders
         );
     }
@@ -141,15 +141,15 @@ class Handler implements SearchHandlerInterface, Capable
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if Criterion is not applicable to its target
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is more than than one result matching the criterions
      *
-     * @todo define structs for the field filters
-     *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
-     * @param array $fieldFilters - a map of filters for the returned fields.
-     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
+     * @param array $languageFilter - a map of language related filters specifying languages query will be performed on.
+     *        Also used to define which field languages are loaded for the returned content.
+     *        Currently supports: <code>array("languages" => array(<language1>,..), "useAlwaysAvailable" => bool)</code>
+     *                            useAlwaysAvailable defaults to true to avoid exceptions on missing translations.
      *
      * @return \eZ\Publish\SPI\Persistence\Content
      */
-    public function findSingle(Criterion $filter, array $fieldFilters = array())
+    public function findSingle(Criterion $filter, array $languageFilter = array())
     {
         $query = new Query();
         $query->filter = $filter;
@@ -159,12 +159,12 @@ class Handler implements SearchHandlerInterface, Capable
 
         $this->coreFilter->apply(
             $query,
-            $fieldFilters,
+            $languageFilter,
             DocumentMapper::DOCUMENT_TYPE_IDENTIFIER_CONTENT
         );
 
         $result = $this->resultExtractor->extract(
-            $this->gateway->findContent($query, $fieldFilters)
+            $this->gateway->findContent($query, $languageFilter)
         );
 
         if (!$result->totalCount) {
@@ -182,24 +182,26 @@ class Handler implements SearchHandlerInterface, Capable
      * Finds Locations for the given $query.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\LocationQuery $query
-     * @param array $fieldFilters - a map of filters for the returned fields.
-     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
+     * @param array $languageFilter - a map of language related filters specifying languages query will be performed on.
+     *        Also used to define which field languages are loaded for the returned content.
+     *        Currently supports: <code>array("languages" => array(<language1>,..), "useAlwaysAvailable" => bool)</code>
+     *                            useAlwaysAvailable defaults to true to avoid exceptions on missing translations.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function findLocations(LocationQuery $query, array $fieldFilters = array())
+    public function findLocations(LocationQuery $query, array $languageFilter = array())
     {
         $query = clone $query;
         $query->query = $query->query ?: new Criterion\MatchAll();
 
         $this->coreFilter->apply(
             $query,
-            $fieldFilters,
+            $languageFilter,
             DocumentMapper::DOCUMENT_TYPE_IDENTIFIER_LOCATION
         );
 
         return $this->resultExtractor->extract(
-            $this->gateway->findLocations($query, $fieldFilters),
+            $this->gateway->findLocations($query, $languageFilter),
             $query->facetBuilders
         );
     }
@@ -235,7 +237,7 @@ class Handler implements SearchHandlerInterface, Capable
      * - On large amounts of data make sure to iterate with several calls to this function with a limited
      *   set of content objects, amount you have memory for depends on server, size of objects, & PHP version.
      *
-     * @todo: This method, {@see purgeIndex}, & {@see commit()} is needed for being able to bulk index content.
+     * @todo: This method & {@see commit()} is needed for being able to bulk index content, and then afterwards commit.
      *       However it is not added to an official SPI interface yet as we anticipate adding a bulkIndexDocument
      *       using eZ\Publish\SPI\Search\Document instead of bulkIndexContent based on Content objects. However
      *       that won't be added until we have several stable or close to stable advance search engines to make
@@ -299,8 +301,6 @@ class Handler implements SearchHandlerInterface, Capable
 
     /**
      * Purges all contents from the index.
-     *
-     * @see bulkIndexContent() For info on why this is not on an SPI Interface yet.
      */
     public function purgeIndex()
     {
