@@ -73,7 +73,7 @@ EOT
             $date = new DateTime($since);
             $where = [
                 $where,
-                $query->expr->gte('modified', $date->getTimestamp())
+                $query->expr->gte('modified', $date->getTimestamp()),
             ];
             $purge = false;
         }
