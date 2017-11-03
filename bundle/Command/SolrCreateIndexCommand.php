@@ -15,9 +15,11 @@ use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use EzSystems\EzPlatformSolrSearchEngine\Handler as SolrSearchEngineHandler;
+use DateTime;
 use RuntimeException;
 use PDO;
 
@@ -29,6 +31,9 @@ class SolrCreateIndexCommand extends ContainerAwareCommand
             ->setName('ezplatform:solr_create_index')
             ->setDescription('Indexes the configured database in configured Solr index')
             ->addArgument('bulk_count', InputArgument::OPTIONAL, 'Number of Content objects indexed at once', 5)
+            ->addOption('no-commit', null, InputOption::VALUE_NONE, 'Do not commit after each bulk iteration')
+            ->addOption('no-purge', null, InputOption::VALUE_NONE, 'Do not purge before indexing, hence rather refresh index')
+            ->addOption('since', null, InputOption::VALUE_OPTIONAL, 'Index changes since a given time, any format understood by DateTime. Implies "no-purge".')
             ->setHelp(
                 <<<EOT
 The command <info>%command.name%</info> indexes current configured database in configured Solr storage.
@@ -40,6 +45,8 @@ EOT
     {
         $this->logger = $this->getContainer()->get('logger');
 
+        $commit = !$input->getOption('no-commit');
+        $purge = !$input->getOption('no-purge');
         $bulkCount = $input->getArgument('bulk_count');
         if (!is_numeric($bulkCount) || (int)$bulkCount < 1) {
             throw new RuntimeException("'bulk_count' argument should be > 0, got '{$bulkCount}'");
@@ -61,9 +68,19 @@ EOT
 
         // Indexing Content
         $query = $databaseHandler->createSelectQuery();
+        $where = $query->expr->eq('status', ContentInfo::STATUS_PUBLISHED);
+        if ($since = $input->getOption('since')) {
+            $date = new DateTime($since);
+            $where = [
+                $where,
+                $query->expr->gte('modified', $date->getTimestamp())
+            ];
+            $purge = false;
+        }
+
         $query->select('count(id)')
             ->from('ezcontentobject')
-            ->where($query->expr->eq('status', ContentInfo::STATUS_PUBLISHED));
+            ->where($where);
         $stmt = $query->prepare();
         $stmt->execute();
         $totalCount = $stmt->fetchColumn();
@@ -71,13 +88,14 @@ EOT
         $query = $databaseHandler->createSelectQuery();
         $query->select('id', 'current_version')
             ->from('ezcontentobject')
-            ->where($query->expr->eq('status', ContentInfo::STATUS_PUBLISHED));
-
+            ->where($where);
         $stmt = $query->prepare();
         $stmt->execute();
 
-        /** @var \EzSystems\EzPlatformSolrSearchEngine\Handler $searchHandler */
-        $searchHandler->purgeIndex();
+        if ($purge) {
+            $output->writeln('Purging index before starting re-indexing (use no-purge to skip this)..');
+            $searchHandler->purgeIndex();
+        }
 
         $output->writeln('Indexing Content...');
 
@@ -115,13 +133,15 @@ EOT
 
             if (!empty($documents)) {
                 $searchHandler->bulkIndexDocuments($documents);
+
+                if ($commit) {
+                    // Make the bulk changes available for search
+                    $searchHandler->commit();
+                }
             }
 
             $progress->advance($k);
         } while (($i += $bulkCount) < $totalCount);
-
-        // Make changes available for search
-        $searchHandler->commit();
 
         $progress->finish();
         $output->writeln('');
