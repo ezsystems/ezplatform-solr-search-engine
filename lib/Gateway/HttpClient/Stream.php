@@ -21,7 +21,7 @@ use Psr\Log\LoggerInterface;
 class Stream implements HttpClient
 {
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var \Psr\Log\LoggerInterface|null
      */
     private $logger;
 
@@ -43,12 +43,12 @@ class Stream implements HttpClient
     /**
      * Stream constructor.
      *
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Psr\Log\LoggerInterface|null $logger
      * @param int $timeout Timeout for connection in seconds.
      * @param int $retry Number of times to re-try connection.
      * @param int $retryWaitMs Time in milli seconds.
      */
-    public function __construct(LoggerInterface $logger, $timeout = 10, $retry = 5, $retryWaitMs = 100)
+    public function __construct(LoggerInterface $logger = null, $timeout = 10, $retry = 5, $retryWaitMs = 100)
     {
         $this->logger = $logger;
         $this->connectionTimeout = $timeout;
@@ -83,9 +83,12 @@ class Stream implements HttpClient
             usleep($this->retryWaitMs * 1000);
         } while ($i < $this->connectionRetry);
 
-        $this->logger->error(
-            sprintf('Connection to %s failed, attempted %d times', $endpoint->getURL(), $this->connectionRetry)
-        );
+        if ($this->logger instanceof LoggerInterface) {
+            $this->logger->error(
+                sprintf('Connection to %s failed, attempted %d times', $endpoint->getURL(), $this->connectionRetry)
+            );
+        }
+
         throw new ConnectionException($endpoint->getURL(), $path, $method);
     }
 
