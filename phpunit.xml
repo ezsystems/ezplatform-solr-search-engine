@@ -4,6 +4,7 @@
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
+         beStrictAboutTestsThatDoNotTestAnything="false"
          syntaxCheck="true">
     <php>
         <ini name="error_reporting" value="-1" />
