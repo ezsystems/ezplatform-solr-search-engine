@@ -11,6 +11,7 @@
 namespace EzSystems\EzPlatformSolrSearchEngine\Tests\Search\Gateway\EndpointResolver;
 
 use EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointResolver\NativeEndpointResolver;
+use EzSystems\EzPlatformSolrSearchEngine\Gateway\SingleEndpointResolver;
 use EzSystems\EzPlatformSolrSearchEngine\Tests\Search\TestCase;
 use RuntimeException;
 
@@ -158,6 +159,7 @@ class NativeEndpointResolverTest extends TestCase
                 array(
                     'endpoint_en_GB',
                 ),
+                false,
             ),
             // Will return all endpoints (for always available fallback without main languages endpoint)
             3 => array(
@@ -689,6 +691,7 @@ class NativeEndpointResolverTest extends TestCase
                 array(
                     'default_endpoint',
                 ),
+                false,
             ),
             // Will return main languages endpoint (search on main languages with main languages endpoint)
             34 => array(
@@ -699,6 +702,7 @@ class NativeEndpointResolverTest extends TestCase
                 array(
                     'main_languages_endpoint',
                 ),
+                false,
             ),
             // Will return main languages endpoint (search on main languages with main languages endpoint)
             35 => array(
@@ -722,6 +726,7 @@ class NativeEndpointResolverTest extends TestCase
                 array(
                     'default_endpoint',
                 ),
+                false,
             ),
             // Will return main languages endpoint (search on main languages with main languages endpoint)
             37 => array(
@@ -748,6 +753,7 @@ class NativeEndpointResolverTest extends TestCase
                 array(
                     'main_languages_endpoint',
                 ),
+                false,
             ),
             // Will return all endpoints (search on main languages without main languages endpoint)
             39 => array(
@@ -763,6 +769,7 @@ class NativeEndpointResolverTest extends TestCase
                 array(
                     'default_endpoint',
                 ),
+                false,
             ),
             // Will return main languages endpoint (search on main languages with main languages endpoint)
             40 => array(
@@ -789,6 +796,7 @@ class NativeEndpointResolverTest extends TestCase
                 array(
                     'main_languages_endpoint',
                 ),
+                false,
             ),
         );
     }
@@ -801,13 +809,15 @@ class NativeEndpointResolverTest extends TestCase
      * @param null|string $mainLanguagesEndpoint
      * @param array $languageSettings
      * @param string[] $expected
+     * @param bool $expectedIsMultiple
      */
     public function testGetSearchTargets(
         $endpointMap,
         $defaultEndpoint,
         $mainLanguagesEndpoint,
         $languageSettings,
-        $expected
+        $expected,
+        $expectedIsMultiple = true
     ) {
         $endpointResolver = $this->getEndpointResolver(
             array(),
@@ -819,6 +829,11 @@ class NativeEndpointResolverTest extends TestCase
         $actual = $endpointResolver->getSearchTargets($languageSettings);
 
         $this->assertEquals($expected, $actual);
+
+        if ($endpointResolver instanceof SingleEndpointResolver) {
+            $this->assertEquals($expectedIsMultiple, $endpointResolver->hasMultipleEndpoints());
+        }
+
     }
 
     public function providerForTestGetSearchTargetsThrowsRuntimeException()

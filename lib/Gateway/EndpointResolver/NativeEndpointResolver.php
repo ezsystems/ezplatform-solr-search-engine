@@ -11,12 +11,13 @@
 namespace EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointResolver;
 
 use EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointResolver;
+use EzSystems\EzPlatformSolrSearchEngine\Gateway\SingleEndpointResolver;
 use RuntimeException;
 
 /**
  * NativeEndpointResolver provides Solr endpoints for a Content translations.
  */
-class NativeEndpointResolver implements EndpointResolver
+class NativeEndpointResolver implements EndpointResolver, SingleEndpointResolver
 {
     /**
      * Holds an array of Solr entry endpoint names.
@@ -53,6 +54,13 @@ class NativeEndpointResolver implements EndpointResolver
      * @var null|string
      */
     private $mainLanguagesEndpoint;
+
+    /**
+     * Result of hasMultipleEndpoints() once called the first time.
+     *
+     * @var bool|null
+     */
+    protected $hasMultiple = null;
 
     /**
      * Create from Endpoint names.
@@ -161,5 +169,29 @@ class NativeEndpointResolver implements EndpointResolver
         }
 
         return array_keys($endpointSet);
+    }
+
+    /**
+     * Returns true if current configurations has several endpoints.
+     *
+     * @return bool
+     */
+    public function hasMultipleEndpoints()
+    {
+        if ($this->hasMultiple !== null) {
+            return $this->hasMultiple;
+        }
+
+        $endpointSet = array_flip($this->endpointMap);
+
+        if (isset($this->defaultEndpoint)) {
+            $endpointSet[$this->defaultEndpoint] = true;
+        }
+
+        if (isset($this->mainLanguagesEndpoint)) {
+            $endpointSet[$this->mainLanguagesEndpoint] = true;
+        }
+
+        return $this->hasMultiple = count($endpointSet) > 1;
     }
 }

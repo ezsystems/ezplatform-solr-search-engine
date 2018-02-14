@@ -175,12 +175,18 @@ class Native extends Gateway
     /**
      * Returns search targets for given language settings.
      *
+     * Only return endpoints if there are more then one configured, as this is meant for use on shard parameter.
+     *
      * @param array $languageSettings
      *
      * @return string
      */
     protected function getSearchTargets($languageSettings)
     {
+        if ($this->endpointResolver instanceof SingleEndpointResolver && !$this->endpointResolver->hasMultipleEndpoints()) {
+            return '';
+        }
+
         $shards = array();
         $endpoints = $this->endpointResolver->getSearchTargets($languageSettings);
 
@@ -196,10 +202,16 @@ class Native extends Gateway
     /**
      * Returns all search targets without language constraint.
      *
+     * Only return endpoints if there are more then one configured, as this is meant for use on shard parameter.
+     *
      * @return string
      */
     protected function getAllSearchTargets()
     {
+        if ($this->endpointResolver instanceof SingleEndpointResolver && !$this->endpointResolver->hasMultipleEndpoints()) {
+            return '';
+        }
+
         $shards = [];
         $searchTargets = $this->endpointResolver->getEndpoints();
         if (!empty($searchTargets)) {
