@@ -10,6 +10,7 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine;
 
+use EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointRegistry;
 use EzSystems\EzPlatformSolrSearchEngine\Query\FacetFieldVisitor;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
@@ -20,16 +21,16 @@ use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
  */
 abstract class ResultExtractor
 {
-    /**
-     * Facet builder visitor.
-     *
-     * @var \EzSystems\EzPlatformSolrSearchEngine\Query\FacetFieldVisitor
-     */
+    /** @var \EzSystems\EzPlatformSolrSearchEngine\Query\FacetFieldVisitor */
     protected $facetBuilderVisitor;
 
-    public function __construct(FacetFieldVisitor $facetBuilderVisitor)
+    /** @var \EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointRegistry */
+    protected $endpointRegistry;
+
+    public function __construct(FacetFieldVisitor $facetBuilderVisitor, EndpointRegistry $endpointRegistry)
     {
         $this->facetBuilderVisitor = $facetBuilderVisitor;
+        $this->endpointRegistry = $endpointRegistry;
     }
 
     /**
@@ -114,6 +115,12 @@ abstract class ResultExtractor
      */
     protected function getIndexIdentifier($hit)
     {
+        // In single core setup, shard parameter is not set on request to avoid issues in environments that does not
+        // know about own dns, which means it's not set here either
+        if ($hit->{'[shard]'} === '[not a shard request]') {
+            return $this->endpointRegistry->getFirstEndpoint()->getIdentifier();
+        }
+
         return $hit->{'[shard]'};
     }
 

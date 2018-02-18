@@ -833,7 +833,6 @@ class NativeEndpointResolverTest extends TestCase
         if ($endpointResolver instanceof SingleEndpointResolver) {
             $this->assertEquals($expectedIsMultiple, $endpointResolver->hasMultipleEndpoints());
         }
-
     }
 
     public function providerForTestGetSearchTargetsThrowsRuntimeException()

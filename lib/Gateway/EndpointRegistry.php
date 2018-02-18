@@ -62,4 +62,18 @@ class EndpointRegistry
 
         return $this->endpoint[$name];
     }
+
+    /**
+     * Get first Endpoint, for usecases where there is only one.
+     *
+     * @return \EzSystems\EzPlatformSolrSearchEngine\Gateway\Endpoint
+     */
+    public function getFirstEndpoint()
+    {
+        if (empty($this->endpoint)) {
+            throw new OutOfBoundsException("No Endpoint registered at all'.");
+        }
+
+        return reset($this->endpoint);
+    }
 }
