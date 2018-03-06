@@ -10,6 +10,7 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\ResultExtractor;
 
+use EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointRegistry;
 use EzSystems\EzPlatformSolrSearchEngine\ResultExtractor;
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
@@ -39,12 +40,13 @@ class LoadingResultExtractor extends ResultExtractor
     public function __construct(
         ContentHandler $contentHandler,
         LocationHandler $locationHandler,
-        FacetBuilderVisitor $facetBuilderVisitor
+        FacetBuilderVisitor $facetBuilderVisitor,
+        EndpointRegistry $endpointRegistry
     ) {
         $this->contentHandler = $contentHandler;
         $this->locationHandler = $locationHandler;
 
-        parent::__construct($facetBuilderVisitor);
+        parent::__construct($facetBuilderVisitor, $endpointRegistry);
     }
 
     /**

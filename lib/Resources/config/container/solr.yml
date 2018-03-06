@@ -66,6 +66,7 @@ services:
         class: "%ezpublish.search.solr.result_extractor.native.class%"
         arguments:
             - "@ezpublish.search.solr.query.content.facet_builder_visitor.aggregate"
+            - "@ezpublish.search.solr.gateway.endpoint_registry"
 
     ezpublish.search.solr.result_extractor:
         alias: ezpublish.search.solr.result_extractor.native
