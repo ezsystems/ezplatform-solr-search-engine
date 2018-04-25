@@ -80,7 +80,7 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
     which can lead to issues of content not showing up in the index. You can control this by adjusting `autoSoftCommit` *(visibility
     of change to search index)* and `autoCommit` *(hard commit, for durability and replication)* values in `solrconfig.xml`.
     
-    Example of working `solrconfig.xml` settings that you can use to tune for your needs, change from defaults is on `autoSoftCommit` from `-1` *(disabled)* to `100`ms:
+    Example of working `solrconfig.xml` settings that you can use to tune for your needs, change from defaults is on `autoSoftCommit` from `-1` *(disabled)* to `20`ms:
 
          <autoCommit> 
            <maxTime>${solr.autoCommit.maxTime:15000}</maxTime> 
@@ -88,7 +88,7 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
          </autoCommit>
 
          <autoSoftCommit>
-           <maxTime>${solr.autoSoftCommit.maxTime:100}</maxTime> 
+           <maxTime>${solr.autoSoftCommit.maxTime:20}</maxTime> 
          </autoSoftCommit>
 
 
