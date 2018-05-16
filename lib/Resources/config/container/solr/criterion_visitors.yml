@@ -230,6 +230,15 @@ services:
             - {name: ezpublish.search.solr.query.content.criterion_visitor}
             - {name: ezpublish.search.solr.query.location.criterion_visitor}
 
+    ezpublish.search.solr.query.common.criterion_visitor.is_field_empty:
+        class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\IsFieldEmpty
+        arguments:
+            - '@ezpublish.spi.persistence.content_type_handler'
+            - '@ezpublish.search.common.field_name_generator'
+        tags:
+            - {name: ezpublish.search.solr.query.content.criterion_visitor}
+            - {name: ezpublish.search.solr.query.location.criterion_visitor}
+
     # Content search
     ezpublish.search.solr.query.content.criterion_visitor.ancestor:
         class: "%ezpublish.search.solr.query.content.criterion_visitor.ancestor.class%"
