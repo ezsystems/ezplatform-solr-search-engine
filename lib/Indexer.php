@@ -42,10 +42,9 @@ class Indexer extends IncrementalIndexer
         $this->searchHandler->purgeIndex();
     }
 
-    public function updateSearchIndex(array $contentIds, $commit, $continueOnError = false)
+    public function updateSearchIndex(array $contentIds, $commit)
     {
         $documents = [];
-        $unindexableContentIds = [];
         $contentHandler = $this->persistenceHandler->contentHandler();
 
         foreach ($contentIds as $contentId) {
@@ -59,13 +58,11 @@ class Indexer extends IncrementalIndexer
                 }
             } catch (NotFoundException $e) {
                 $this->searchHandler->deleteContent($contentId);
-            } catch (InvalidIndexDataException $indexDataException) {
-                $unindexableContentIds[] = $contentId;
-                if (!$continueOnError) {
-                    $this->logger->error($indexDataException->getMessage());
+            } catch (InvalidIndexDataException $e) {
+                if (!$this->errorCollector->collect($info, $e->getMessage())) {
                     break;
                 }
-                $this->logger->warning($indexDataException->getMessage());
+                $this->logger->warning($e->getMessage());
             }
         }
 
@@ -76,7 +73,5 @@ class Indexer extends IncrementalIndexer
         if ($commit) {
             $this->searchHandler->commit(true);
         }
-
-        return $unindexableContentIds;
     }
 }
