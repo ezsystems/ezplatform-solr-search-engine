@@ -13,6 +13,7 @@ use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Search\Common\IncrementalIndexer;
 use EzSystems\EzPlatformSolrSearchEngine\Handler as SolrSearchHandler;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
+use eZ\Publish\SPI\FieldType\Exceptions\InvalidIndexDataException;
 use Psr\Log\LoggerInterface;
 
 class Indexer extends IncrementalIndexer
@@ -22,6 +23,11 @@ class Indexer extends IncrementalIndexer
      */
     protected $searchHandler;
 
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
     public function __construct(
         LoggerInterface $logger,
         PersistenceHandler $persistenceHandler,
@@ -29,6 +35,7 @@ class Indexer extends IncrementalIndexer
         SolrSearchHandler $searchHandler
     ) {
         parent::__construct($logger, $persistenceHandler, $databaseHandler, $searchHandler);
+        $this->logger = $logger;
     }
 
     public function getName()
@@ -41,10 +48,12 @@ class Indexer extends IncrementalIndexer
         $this->searchHandler->purgeIndex();
     }
 
-    public function updateSearchIndex(array $contentIds, $commit)
+    public function updateSearchIndex(array $contentIds, $commit, $continueOnError = false)
     {
         $documents = [];
+        $unindexableContentIds = [];
         $contentHandler = $this->persistenceHandler->contentHandler();
+
         foreach ($contentIds as $contentId) {
             try {
                 $info = $contentHandler->loadContentInfo($contentId);
@@ -56,6 +65,13 @@ class Indexer extends IncrementalIndexer
                 }
             } catch (NotFoundException $e) {
                 $this->searchHandler->deleteContent($contentId);
+            } catch (InvalidIndexDataException $indexDataException) {
+                $unindexableContentIds[] = $contentId;
+                if (!$continueOnError) {
+                    $this->logger->error($indexDataException->getMessage());
+                    break;
+                }
+                $this->logger->warning($indexDataException->getMessage());
             }
         }
 
@@ -66,5 +82,7 @@ class Indexer extends IncrementalIndexer
         if ($commit) {
             $this->searchHandler->commit(true);
         }
+
+        return $unindexableContentIds;
     }
 }
