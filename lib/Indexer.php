@@ -23,11 +23,6 @@ class Indexer extends IncrementalIndexer
      */
     protected $searchHandler;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $logger;
-
     public function __construct(
         LoggerInterface $logger,
         PersistenceHandler $persistenceHandler,
@@ -35,7 +30,6 @@ class Indexer extends IncrementalIndexer
         SolrSearchHandler $searchHandler
     ) {
         parent::__construct($logger, $persistenceHandler, $databaseHandler, $searchHandler);
-        $this->logger = $logger;
     }
 
     public function getName()
