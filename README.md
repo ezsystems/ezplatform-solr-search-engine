@@ -21,7 +21,7 @@ Other search features such as Faceting, Highlighting, .., not supported by the S
 ## Install
 
 For how to install and configure see:
-- eZ Platform: https://doc.ez.no/display/DEVELOPER/Solr+Bundle
+- eZ Platform: https://doc.ezplatform.com/en/latest/guide/solr/
 - eZ Publish Platform 5.4.x: https://doc.ez.no/display/EZP/Solr+Search+Engine+Bundle
 
 
@@ -45,7 +45,7 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
 
 2. Get & extract Solr
 
-   One of the following:
+   E.g. one of the following:
    - [Solr 4.10.4](http://archive.apache.org/dist/lucene/solr/4.10.4/solr-4.10.4.tgz)
    - [Solr 6.6.0](http://archive.apache.org/dist/lucene/solr/6.6.0/solr-6.6.0.tgz)
 
