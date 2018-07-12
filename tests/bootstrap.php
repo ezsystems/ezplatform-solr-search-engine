@@ -23,3 +23,8 @@ if (!file_exists($file)) {
 }
 
 $autoload = require_once $file;
+
+// Polyfill PHPUnit 6.0
+if (!class_exists('PHPUnit_Framework_Constraint', true)) {
+    class_alias('PHPUnit\Framework\Constraint\Constraint', 'PHPUnit_Framework_Constraint');
+}
