@@ -74,18 +74,6 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
     ## Modify solrconfig.xml to remove section that doesn't agree with our schema
     sed -i.bak '/<updateRequestProcessorChain name="add-unknown-fields-to-the-schema">/,/<\/updateRequestProcessorChain>/d' server/ez/template/solrconfig.xml
     ```
-    
-    You may also use the command line tool `bin/generate-solr-config.sh` to generate the solr 6 configuration.
-    This is particular convenient if deploying to eZ Platform Cloud / Platform.sh.
-    The script should be executed from the eZ Platform root directory.
-
-    ```bash
-    ./vendor/ezsystems/ezplatform-solr-search-engine/bin/generate-solr-config.sh
-    ```
-
-     By default, the script saves the config in .platform/configsets/solr6/conf (use `--help` parameter to see how to change the path).
-     If you are using Platform.sh, make sure those files are committed to your Platform.sh git.
-     You also need to enable solr service in `.platform.app.yaml` and `.platform/services.yaml`. 
 
     ###### For use in production/dev
     Note that Solr Bundle does not commit changes directly on repository updates,
@@ -102,6 +90,16 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
          <autoSoftCommit>
            <maxTime>${solr.autoSoftCommit.maxTime:20}</maxTime> 
          </autoSoftCommit>
+
+    ###### TIP for automating generating of config
+    You may also use the command line tool `bin/generate-solr-config.sh` to generate the Solr 6 configuration instead of these instructions.
+    This is particular convenient if deploying to eZ Platform Cloud (Platform.sh), but can also be used for on-premise installs.
+
+    The script should be executed from the eZ Platform root directory, run the following for more info:
+
+    ```bash
+    ./vendor/ezsystems/ezplatform-solr-search-engine/bin/generate-solr-config.sh --help
+    ```
 
 
 4. Start Solr

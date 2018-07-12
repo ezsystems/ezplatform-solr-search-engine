@@ -10,7 +10,7 @@ default_cores[2]='core2'
 default_cores[3]='core3'
 
 SOLR_PORT=${SOLR_PORT:-8983}
-SOLR_VERSION=${SOLR_VERSION:-6.6.0}
+SOLR_VERSION=${SOLR_VERSION:-6.6.5}
 SOLR_DEBUG=${SOLR_DEBUG:-false}
 SOLR_HOME=${SOLR_HOME:-ez}
 SOLR_CONFIG=${SOLR_CONFIG:-${default_config_files[*]}}
@@ -21,7 +21,7 @@ SOLR_INSTALL_DIR="${SOLR_DIR}/${SOLR_VERSION}"
 download() {
     case ${SOLR_VERSION} in
         # PS!!: Append versions and don't remove old once, kernel uses this script!
-        4.10.4|6.3.0|6.4.1|6.4.2|6.5.1|6.6.0 )
+        4.10.4|6.3.0|6.4.1|6.4.2|6.5.1|6.6.0|6.6.5 )
             url="http://archive.apache.org/dist/lucene/solr/${SOLR_VERSION}/solr-${SOLR_VERSION}.tgz"
             ;;
         *)
@@ -162,29 +162,6 @@ solr4_run() {
     echo 'Started'
 }
 
-# Configure for Solr 6, see solr4_configure() for 4.10
-configure() {
-    home_dir="${SOLR_INSTALL_DIR}/server/${SOLR_HOME}"
-    template_dir="${home_dir}/template"
-    config_dir="${SOLR_INSTALL_DIR}/server/solr/configsets/basic_configs/conf"
-
-    create_dir ${home_dir}
-    create_dir ${template_dir}
-
-    files=${SOLR_CONFIG}
-    files+=("${config_dir}/currency.xml")
-    files+=("${config_dir}/solrconfig.xml")
-    files+=("${config_dir}/stopwords.txt")
-    files+=("${config_dir}/synonyms.txt")
-    files+=("${config_dir}/elevate.xml")
-
-    copy_files ${template_dir} "${files[*]}"
-    copy_file "${SOLR_INSTALL_DIR}/server/solr/solr.xml" ${home_dir}
-
-    # modify solrconfig.xml to remove section that doesn't agree with our schema
-    sed -i.bak '/<updateRequestProcessorChain name="add-unknown-fields-to-the-schema">/,/<\/updateRequestProcessorChain>/d' "${template_dir}/solrconfig.xml"
-}
-
 # Run for Solr 6, see solr4_run() for 4.10
 run() {
     echo "Running with version ${SOLR_VERSION} in standalone mode"
@@ -221,7 +198,9 @@ create_core() {
 download
 
 if [[ ${SOLR_VERSION} == 6* ]] ; then
-    configure
+    ./bin/generate-solr-config.sh --ez-bundle-path=. \
+            --solr-install-dir="${SOLR_INSTALL_DIR}" \
+            --destination-dir="${SOLR_INSTALL_DIR}/server/${SOLR_HOME}/template"
     run
 else
     solr4_configure
