@@ -198,7 +198,7 @@ create_core() {
 download
 
 if [[ ${SOLR_VERSION} == 6* ]] ; then
-    ./bin/generate-solr-config.sh --ez-bundle-path=. \
+    ./bin/generate-solr-config.sh \
             --solr-install-dir="${SOLR_INSTALL_DIR}" \
             --destination-dir="${SOLR_INSTALL_DIR}/server/${SOLR_HOME}/template"
     run
