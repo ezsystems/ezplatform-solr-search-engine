@@ -41,7 +41,13 @@ Arguments:
 EOF
 }
 
-EZ_BUNDLE_PATH="`dirname $0`/../../../vendor/ezsystems/ezplatform-solr-search-engine"
+realpath() {
+    [[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"
+}
+
+
+EZ_SCRIPT=`realpath $0`
+EZ_BUNDLE_PATH="`dirname $EZ_SCRIPT`/.."
 
 ## Parse arguments
 for i in "$@"; do
@@ -58,10 +64,6 @@ for i in "$@"; do
         --solr-install-dir=*)
             SOLR_INSTALL_DIR="${i#*=}"
             SOLR_INSTALL_DIR="${SOLR_INSTALL_DIR/#\~/$HOME}"
-            ;;
-        # Internal argument for use with Travis tests only
-        --ez-bundle-path=*)
-            EZ_BUNDLE_PATH="${i#*=}"
             ;;
         -h|--help)
             show_help
