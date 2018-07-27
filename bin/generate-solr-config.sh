@@ -129,6 +129,6 @@ fi
 
 echo -e "\033[0;32mDone generating config to $DESTINATION_DIR ! \033[0m"
 
-if [[ ! $DESTINATION_DIR =~ ^\.platform ]]; then
+if [[ $DESTINATION_DIR =~ ^\.platform ]]; then
     echo "NOTE: You also need to enable solr service in `.platform.app.yaml` and `.platform/services.yaml`."
 fi
