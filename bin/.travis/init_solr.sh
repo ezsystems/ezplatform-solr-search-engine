@@ -18,6 +18,8 @@ SOLR_CORES=${SOLR_CORES:-${default_cores[*]}}
 SOLR_DIR=${SOLR_DIR:-__solr}
 SOLR_INSTALL_DIR="${SOLR_DIR}/${SOLR_VERSION}"
 
+SCRIPT_DIR=`dirname $0`
+
 download() {
     case ${SOLR_VERSION} in
         # PS!!: Append versions and don't remove old once, kernel uses this script!
@@ -198,7 +200,7 @@ create_core() {
 download
 
 if [[ ${SOLR_VERSION} == 6* ]] ; then
-    ./bin/generate-solr-config.sh \
+    $SCRIPT_DIR/../generate-solr-config.sh \
             --solr-install-dir="${SOLR_INSTALL_DIR}" \
             --destination-dir="${SOLR_INSTALL_DIR}/server/${SOLR_HOME}/template"
     run
