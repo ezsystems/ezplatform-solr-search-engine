@@ -40,6 +40,9 @@ class SolrCreateIndexCommand extends ContainerAwareCommand
             ->setHelp(
                 <<<EOT
 The command <info>%command.name%</info> indexes current configured database in configured Solr storage.
+
+
+DEPRECATED: Use ezplatform:reindex command instead, it gives many more options for indexing your content.
 EOT
             );
     }
