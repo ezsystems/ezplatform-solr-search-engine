@@ -28,7 +28,7 @@ Usage with on-premise version of Solr:
   --solr-install-dir=/opt/solr
 
 Warning:
- This script only supports Solr 6 and higher !!
+ This script only supports Solr 6 and 7 !!
 
 
 Arguments:
@@ -109,7 +109,13 @@ fi
 
 mkdir -p $DESTINATION_DIR
 cp -a ${EZ_BUNDLE_PATH}/lib/Resources/config/solr/* $DESTINATION_DIR
-cp ${SOLR_INSTALL_DIR}/server/solr/configsets/basic_configs/conf/{currency.xml,solrconfig.xml,stopwords.txt,synonyms.txt,elevate.xml} $DESTINATION_DIR
+
+# SOLR 6 or 7?
+if [ -e "${SOLR_INSTALL_DIR}/server/solr/configsets/basic_configs" ]; then
+    cp ${SOLR_INSTALL_DIR}/server/solr/configsets/basic_configs/conf/{solrconfig.xml,stopwords.txt,synonyms.txt,currency.xml,elevate.xml} $DESTINATION_DIR
+else
+    cp ${SOLR_INSTALL_DIR}/server/solr/configsets/_default/conf/{solrconfig.xml,stopwords.txt,synonyms.txt} $DESTINATION_DIR
+fi
 
 if [[ ! $DESTINATION_DIR =~ ^\.platform ]]; then
     # If we are not targeting .platform(.sh) config, we also output default solr.xml

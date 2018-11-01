@@ -23,7 +23,7 @@ SCRIPT_DIR=`dirname $0`
 download() {
     case ${SOLR_VERSION} in
         # PS!!: Append versions and don't remove old once, kernel uses this script!
-        4.10.4|6.3.0|6.4.1|6.4.2|6.5.1|6.6.0|6.6.5 )
+        4.10.4|6.3.0|6.4.1|6.4.2|6.5.1|6.6.0|6.6.5|7.5.0 )
             url="http://archive.apache.org/dist/lucene/solr/${SOLR_VERSION}/solr-${SOLR_VERSION}.tgz"
             ;;
         *)
