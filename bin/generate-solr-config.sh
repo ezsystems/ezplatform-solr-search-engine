@@ -115,6 +115,10 @@ if [ -e "${SOLR_INSTALL_DIR}/server/solr/configsets/basic_configs" ]; then
     cp ${SOLR_INSTALL_DIR}/server/solr/configsets/basic_configs/conf/{solrconfig.xml,stopwords.txt,synonyms.txt,currency.xml,elevate.xml} $DESTINATION_DIR
 else
     cp ${SOLR_INSTALL_DIR}/server/solr/configsets/_default/conf/{solrconfig.xml,stopwords.txt,synonyms.txt} $DESTINATION_DIR
+    cp ${SOLR_INSTALL_DIR}/server/solr/configsets/sample_techproducts_configs/conf/{currency.xml,elevate.xml} $DESTINATION_DIR
+
+    # Change luceneMatchVersion, ref: https://github.com/apache/lucene-solr/blob/master/solr/solr-ref-guide/src/solr-upgrade-notes.adoc#solr-72
+    sed -i.bak0 's/<luceneMatchVersion>7.[0-9].[0-9]/$<luceneMatchVersion>7.1.0/' $DESTINATION_DIR/solrconfig.xml
 fi
 
 if [[ ! $DESTINATION_DIR =~ ^\.platform ]]; then
@@ -125,7 +129,7 @@ else
 fi
 
 # Adapt autoSoftCommit to have a recommended value, and remove add-unknown-fields-to-the-schema
-sed -i.bak '/<updateRequestProcessorChain name="add-unknown-fields-to-the-schema">/,/<\/updateRequestProcessorChain>/d' $DESTINATION_DIR/solrconfig.xml
+sed -i.bak1 '/<updateRequestProcessorChain name="add-unknown-fields-to-the-schema">/,/<\/updateRequestProcessorChain>/d' $DESTINATION_DIR/solrconfig.xml
 sed -i.bak2 's/${solr.autoSoftCommit.maxTime:-1}/${solr.autoSoftCommit.maxTime:20}/' $DESTINATION_DIR/solrconfig.xml
 
 if [ "$GENERATE_SOLR_TMPDIR" != "" ]; then

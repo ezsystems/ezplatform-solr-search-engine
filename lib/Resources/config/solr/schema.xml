@@ -30,6 +30,7 @@ should not remove or drastically change the existing definitions.
 
     <!--
       Default types by Solr. Will be reused for dynamic fields.
+      Some might aslo be used in default solrconfig.xml and hence needs to be here.
     -->
     <fieldType name="string" class="solr.TextField" sortMissingLast="true">
       <analyzer type="index">
@@ -41,14 +42,22 @@ should not remove or drastically change the existing definitions.
         <filter class="solr.LowerCaseFilterFactory"/>
       </analyzer>
     </fieldType>
+    <fieldType name="strings" class="solr.StrField" sortMissingLast="true" multiValued="true" docValues="true" />
     <fieldType name="identifier" class="solr.StrField" sortMissingLast="true" />
     <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true"/>
+    <fieldType name="booleans" class="solr.BoolField" sortMissingLast="true" multiValued="true"/>
     <fieldtype name="binary" class="solr.BinaryField"/>
-    <fieldType name="int" class="solr.TrieIntField" precisionStep="0" positionIncrementGap="0"/>
-    <fieldType name="float" class="solr.TrieFloatField" precisionStep="0" positionIncrementGap="0"/>
-    <fieldType name="long" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0"/>
-    <fieldType name="double" class="solr.TrieDoubleField" precisionStep="0" positionIncrementGap="0"/>
-    <fieldType name="date" class="solr.TrieDateField" precisionStep="0" positionIncrementGap="0"/>
+    <fieldType name="int" class="solr.TrieIntField" docValues="true" precisionStep="0" positionIncrementGap="0"/>
+    <fieldType name="ints" class="solr.TrieIntField" docValues="true" precisionStep="0" positionIncrementGap="0" multiValued="true"/>
+    <fieldType name="float" class="solr.TrieFloatField" docValues="true" precisionStep="0" positionIncrementGap="0"/>
+    <fieldType name="floats" class="solr.TrieFloatField" docValues="true" precisionStep="0" positionIncrementGap="0" multiValued="true"/>
+    <fieldType name="long" class="solr.TrieLongField" docValues="true" precisionStep="0" positionIncrementGap="0"/>
+    <fieldType name="longs" class="solr.TrieLongField" docValues="true" precisionStep="0" positionIncrementGap="0" multiValued="true"/>
+    <fieldType name="double" class="solr.TrieDoubleField" docValues="true" precisionStep="0" positionIncrementGap="0"/>
+    <fieldType name="doubles" class="solr.TrieDoubleField" docValues="true" precisionStep="0" positionIncrementGap="0" multiValued="true"/>
+
+    <fieldType name="date" class="solr.TrieDateField" docValues="true" precisionStep="0" positionIncrementGap="0"/>
+    <fieldType name="dates" class="solr.TrieDateField" docValues="true" precisionStep="0" positionIncrementGap="0" multiValued="true"/>
 
     <fieldtype name="ignored" stored="false" indexed="false" multiValued="true" class="solr.StrField" />
     <fieldType name="point" class="solr.PointType" dimension="2" subFieldSuffix="_d"/>
@@ -56,57 +65,70 @@ should not remove or drastically change the existing definitions.
 
     <fieldType name="currency" class="solr.CurrencyField" precisionStep="8" defaultCurrency="USD" currencyConfig="currency.xml" />
 
+    <fieldType name="pint" class="solr.IntPointField" docValues="true"/>
+    <fieldType name="pfloat" class="solr.FloatPointField" docValues="true"/>
+    <fieldType name="plong" class="solr.LongPointField" docValues="true"/>
+    <fieldType name="pdouble" class="solr.DoublePointField" docValues="true"/>
+
+    <fieldType name="pints" class="solr.IntPointField" docValues="true" multiValued="true"/>
+    <fieldType name="pfloats" class="solr.FloatPointField" docValues="true" multiValued="true"/>
+    <fieldType name="plongs" class="solr.LongPointField" docValues="true" multiValued="true"/>
+    <fieldType name="pdoubles" class="solr.DoublePointField" docValues="true" multiValued="true"/>
+
+    <fieldType name="pdate" class="solr.DatePointField" docValues="true"/>
+    <fieldType name="pdates" class="solr.DatePointField" docValues="true" multiValued="true"/>
 
 
+    <!-- Native fields from Solr schema -->
+    <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
+    <!-- ez: adjusted for index/storage  -->
+    <field name="_version_" type="long" indexed="false" stored="false" />
+    <field name="_root_" type="string" indexed="true" stored="false" docValues="false" required="false"  />
+    <!-- field name="_text_" type="text_general" indexed="true" stored="false" multiValued="true"/ -->
 
-    <!--
-      Required ID field.
-    -->
-    <field name="id" type="string" indexed="true" stored="true" required="true"/>
-
-    <!--
-      Always contains the date a document was added to the index. Might be
-      useful.
-    -->
-    <field name="timestamp" type="date" indexed="true" stored="true" default="NOW" multiValued="false"/>
-
-    <!--
-      Points to the root document of a block of nested documents. Required for nested document support.
-    -->
-    <field name="_root_" type="string" indexed="true" stored="true" required="false"/>
-
+    <!-- eZ fields (time and content/location separator)-->
+    <field name="timestamp" type="date" indexed="true" stored="true" default="NOW" />
     <field name="document_type_id" type="string" indexed="true" stored="true" required="true"/>
+
 
     <!--
       Dynamic field definitions.  If a field name is not found, dynamicFields
-      will be used if the name matches any of the patterns.  RESTRICTION: the
-      glob-like pattern in the name attribute must have a "*" only at the start
-      or the end.  EXAMPLE:  name="*_i" will match any field ending in _i (like
-      myid_i, z_i) Longer patterns will be matched first.  if equal size
-      patterns both match, the first appearing in the schema will be used.
-    -->
-    <dynamicField name="*_i" type="int" indexed="true" stored="true"/>
-    <dynamicField name="*_mi" type="int" indexed="true" stored="true" multiValued="true"/>
+           ... see solr stock managed-schema for more info.
+     -->
+    <dynamicField name="*_i"  type="int"    indexed="true"  stored="true"/>
+    <!-- dynamicField name="*_is" type="ints"    indexed="true"  stored="true"/ -->
+    <dynamicField name="*_s"  type="string"  indexed="true"  stored="true"/>
+    <!-- dynamicField name="*_ss" type="strings"  indexed="true"  stored="true"/ -->
+    <dynamicField name="*_l"  type="long"   indexed="true"  stored="true"/>
+    <!-- dynamicField name="*_ls" type="longs"   indexed="true"  stored="true"/ -->
+    <!-- eZ: multi values and does not ommit norms -->
+    <dynamicField name="*_t"   type="text_general" indexed="true" stored="true" multiValued="true" omitNorms="false"/>
+    <dynamicField name="*_txt" type="text_general" indexed="true" stored="true"/>
+    <dynamicField name="*_b"  type="boolean" indexed="true" stored="true"/>
+    <!-- dynamicField name="*_bs" type="booleans" indexed="true" stored="true"/ -->
+    <dynamicField name="*_f"  type="float"  indexed="true"  stored="true"/>
+    <!-- dynamicField name="*_fs" type="floats"  indexed="true"  stored="true"/ -->
+    <dynamicField name="*_d"  type="double" indexed="true"  stored="true"/>
+    <!-- dynamicField name="*_ds" type="doubles" indexed="true"  stored="true"/ -->
+
+    <dynamicField name="*_dt"  type="date"    indexed="true"  stored="true"/>
+    <!-- dynamicField name="*_dts" type="date"    indexed="true"  stored="true" multiValued="true"/ -->
+
+    <dynamicField name="*_c"   type="currency" indexed="true"  stored="true"/>
+
+    <!-- Dynamic field definitions from eZ-->
     <dynamicField name="*_id" type="identifier" indexed="true" stored="true"/>
     <dynamicField name="*_mid" type="identifier" indexed="true" stored="true" multiValued="true"/>
-    <dynamicField name="*_s" type="string" indexed="true" stored="true"/>
+
+    <!-- These might be changed to the new multi type fields (*_ss ,..) added in Solr instead -->
+    <dynamicField name="*_mi" type="int" indexed="true" stored="true" multiValued="true"/>
     <dynamicField name="*_ms" type="string" indexed="true" stored="true" multiValued="true"/>
-    <dynamicField name="*_l" type="long" indexed="true" stored="true"/>
-    <dynamicField name="*_t" type="text" indexed="true" stored="true" multiValued="true" omitNorms="false"/>
-    <dynamicField name="*_b" type="boolean" indexed="true" stored="true"/>
     <dynamicField name="*_mb" type="boolean" indexed="true" stored="true" multiValued="true"/>
-    <dynamicField name="*_f" type="float" indexed="true" stored="true"/>
-    <dynamicField name="*_d" type="double" indexed="true" stored="true"/>
-    <dynamicField name="*_dt" type="date" indexed="true" stored="true"/>
+
+    <!-- Geo location fields -->
     <dynamicField name="*_gl" type="location" indexed="true" stored="true"/>
     <dynamicField name="*_gl_0_coordinate" type="double" indexed="true" stored="true"/>
     <dynamicField name="*_gl_1_coordinate" type="double" indexed="true" stored="true"/>
-    <dynamicField name="*_c" type="currency" indexed="true" stored="true"/>
 
-    <!--
-      This field is required since Solr 4
-    -->
-    <field name="_version_" type="long" indexed="true" stored="true" multiValued="false" />
-
-  <uniqueKey>id</uniqueKey>
+    <uniqueKey>id</uniqueKey>
 </schema>

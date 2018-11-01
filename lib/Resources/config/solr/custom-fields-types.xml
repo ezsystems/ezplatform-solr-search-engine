@@ -9,7 +9,7 @@
 
       In this case we copy the full user name and index it as a text field.
     -->
-    <field name="custom_field" type="text" indexed="true" stored="false" required="false" multiValued="true" />
+    <field name="custom_field" type="text_general" indexed="true" stored="false" required="false" multiValued="true" />
     <copyField source="user_first_name_value_s" dest="custom_field" />
     <copyField source="user_last_name_value_s" dest="custom_field" />
 
