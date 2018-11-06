@@ -6,17 +6,26 @@
 [![License](https://img.shields.io/github/license/ezsystems/ezplatform-solr-search-engine.svg?style=flat-square)](LICENSE)
 
 Solr Search Engine Bundle for use with:
-- eZ Platform *(bundled out of the box as of 15.07 release)*
-- eZ Publish Platform 5.4.5 *and higher* *(optional, but recommended for scaling search queries)*
+- 1.5+: eZ Platform 1.7+ *(bundled out of the box)* with Solr 4.10.4 _or_ 6.x _(recommended: 6.x)_
+- 1.0.x: eZ Publish Platform Enterprise 5.4.5+ *(optional, not as feature rich but helpful for scaling search queries)* with Solr 4.10.4
 
-Scope for 1.0 version of this bundle is to be able to power close to any kind of queries eZ Publish Platform 5.x users are currently running agains the LegacySearch engine *(aka SQL Search/Storage engine)*, *both* Content and Location Search. This search engine is also taking advantage of Solr's Full text capabilities for language analysis, and it's scalability.
+#####  Overview of features
 
-1.1 and higher has dendencies on changes in eZ Platform, and thus 1.0.x is kept supported for eZ Publish 5.4 users.
+| Feature             | Solr Search Engine        | Legacy Search Engine _(SQL)_ |
+|:--------------------|:-------------------------:|:----------------------------:|
+| Filtering           | yes                       | yes, but with limitations*   |
+| Fulltext            | yes, incl advance features| Partly**                     |
+| Faceting            | Partly as of v1.4         | No                           |
+| Spellchecking       | Planned _(TBD when)_      | No                           |
+| Highlighting        | Planned _(TBD when)_      | No                           |
+| Index time boosting | Yes, as of v1.4           | No                           |
 
-Version 1.0-1.2 is tested and supported with _Solr 4.10.4_, 1.3 adds support for Solr 6 _(tested with 6.4.2)_.
+_* Usage of Criterion and SortClause for Fields does not perform well on medium to larger amount of data with Legacy
+Search Engine (SQL), use Solr for this._
 
-Other search features such as Faceting, Highlighting, .., not supported by the SQL search engine is planned for future versions. Some will be available by a simple composer patch update *(0.0.z)*. For major *(x.0.0)* or minor *(0.y.0)* updates there will sometimes be a need to also re index your repository.
-
+_** Does not include full set of full text features includes Scoring/Ranking _(Solr Search Engine does sorting on scoring
+by default, for location search available as of v1.3 on Solr 6.x)_, and as of [Solr Search Engine v1.5](https://github.com/ezsystems/ezplatform-solr-search-engine/releases/tag/v1.5.0)
+advance full text capabilities such as `word "phrase" (group) +mandatory -prohibited AND && OR || NOT !`_
 
 ## Install
 
@@ -47,7 +56,7 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
 
    E.g. one of the following:
    - [Solr 4.10.4](http://archive.apache.org/dist/lucene/solr/4.10.4/solr-4.10.4.tgz)
-   - [Solr 6.6.0](http://archive.apache.org/dist/lucene/solr/6.6.0/solr-6.6.0.tgz)
+   - [Solr 6.6.5](http://archive.apache.org/dist/lucene/solr/6.6.0/solr-6.6.5.tgz)
 
 3. Configure Solr *(single core)*
 
@@ -66,7 +75,7 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
     sed -i.bak s/core0/collection1/g multicore/collection1/conf/solrconfig.xml
 
     # Solr 6
-    cd solr-6
+    cd solr-6.6.5
     mkdir -p server/ez/template
     cp -R <ezplatform-solr-search-engine>/lib/Resources/config/solr/* server/ez/template
     cp server/solr/configsets/basic_configs/conf/{currency.xml,solrconfig.xml,stopwords.txt,synonyms.txt,elevate.xml} server/ez/template
@@ -110,7 +119,7 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
     java -Djetty.port=8983 -Dsolr.solr.home=multicore -jar start.jar
 
     # Solr 6
-    cd solr-6
+    cd solr-6.6.5
     bin/solr -s ez
     ## You'll also need to add cores on Solr 6, this adds single core setup:
     bin/solr create_core -c collection1 -d server/ez/template
