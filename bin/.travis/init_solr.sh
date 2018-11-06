@@ -13,7 +13,7 @@ default_nodes=('node1:8983' 'node2:8984' 'node3:8985')
 default_shards=('shard0' 'shard1' 'shard2' 'shard3')
 
 SOLR_DIR=${SOLR_DIR:-'__solr'}
-SOLR_VERSION=${SOLR_VERSION:'-6.6.5'}
+SOLR_VERSION=${SOLR_VERSION:-'6.6.5'}
 SOLR_DEBUG=${SOLR_DEBUG:-false}
 SOLR_HOME=${SOLR_HOME:-'ezcloud'}
 SOLR_CONFIG=("${SOLR_CONFIG[@]:-${default_config_files[*]}}")
@@ -34,7 +34,7 @@ ZOOKEEPER_HOST=""
 
 SCRIPT_DIR=`dirname $0`
 case $1 in
-solr-cloud)
+--solr-cloud)
     SOLR_CLOUD='yes'
     ;;
 *)
@@ -237,7 +237,7 @@ solr_cloud_configure_nodes() {
         IFS=':' read node_name node_port <<< "${node}"
 
         if [ ! -d "${HOME_DIR}/${node_name}" ] ; then
-            solr_configure_node ${node_name} ${node_port}
+            solr_cloud_configure_node ${node_name} ${node_port}
         else
             echo "Node '${node_name}' already exists, skipping"
         fi
@@ -333,7 +333,7 @@ solr_cloud_create_collection() {
 
 download
 
-if ("$SOLR_CLOUD" == "no"); then
+if [ "$SOLR_CLOUD" == "no" ]; then
     if [[ ${SOLR_VERSION} == 6* ]] ; then
         $SCRIPT_DIR/../generate-solr-config.sh \
                 --solr-install-dir="${SOLR_INSTALL_DIR}" \
