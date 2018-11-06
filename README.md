@@ -6,8 +6,8 @@
 [![License](https://img.shields.io/github/license/ezsystems/ezplatform-solr-search-engine.svg?style=flat-square)](LICENSE)
 
 Solr Search Engine Bundle for use with:
-- 1.5+: eZ Platform 1.7+ *(bundled out of the box)* with Solr 4.10.4 _or_ 6.x _(recommended: 6.x)_
-- 1.0.x: eZ Publish Platform Enterprise 5.4.5+ *(optional, not as feature rich but helpful for scaling search queries)* with Solr 4.10.4
+- v1.5+: eZ Platform 1.7+ *(bundled out of the box)* with Solr 4.10.4 _or_ 6.x _(recommended: 6.x)_
+- v1.0.x: eZ Publish Platform Enterprise 5.4.5+ *(optional, not as feature rich but helpful for scaling search queries)* with Solr 4.10.4
 
 #####  Overview of features
 
