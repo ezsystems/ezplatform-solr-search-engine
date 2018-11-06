@@ -7,25 +7,26 @@
 
 Solr Search Engine Bundle for use with:
 - v1.5+: eZ Platform 1.7+ *(bundled out of the box)* with Solr 4.10.4 _or_ 6.x _(recommended: 6.x)_
-- v1.0.x: eZ Publish Platform Enterprise 5.4.5+ *(optional, not as feature rich but helpful for scaling search queries)* with Solr 4.10.4
+- v1.0.x: eZ Publish Platform Enterprise 5.4.5+ *(optional, not as feature rich but helpful for scaling filtering queries)* with Solr 4.10.4
 
 #####  Overview of features
 
-| Feature             | Solr Search Engine        | Legacy Search Engine _(SQL)_ |
-|:--------------------|:-------------------------:|:----------------------------:|
-| Filtering           | yes                       | yes, but with limitations*   |
-| Fulltext            | yes, incl advance features| Partly**                     |
-| Faceting            | Partly as of v1.4         | No                           |
-| Spellchecking       | Planned _(TBD when)_      | No                           |
-| Highlighting        | Planned _(TBD when)_      | No                           |
-| Index time boosting | Yes, as of v1.4           | No                           |
+| Feature                       | Solr Search Engine        | Legacy Search Engine _(SQL)_ |
+|:------------------------------|:-------------------------:|:----------------------------:|
+| Filtering                     | Yes                       | Yes, but limited*            |
+| Query _(filter with scoring)_ | Yes                       | Only filters, no scoring     |
+| Fulltext                      | Yes, incl advance features| Partly**                     |
+| Faceting                      | [Partly as of v1.4][1]    | No                           |
+| Spellchecking                 | Planned _(TBD when)_      | No                           |
+| Highlighting                  | Planned _(TBD when)_      | No                           |
+| Index time boosting           | [Yes, as of v1.4][4]      | No                           |
 
 _* Usage of Criterion and SortClause for Fields does not perform well on medium to larger amount of data with Legacy
 Search Engine (SQL), use Solr for this._
 
-_** Does not include full set of full text features includes Scoring/Ranking _(Solr Search Engine does sorting on scoring
-by default, for location search available as of v1.3 on Solr 6.x)_, and as of [Solr Search Engine v1.5](https://github.com/ezsystems/ezplatform-solr-search-engine/releases/tag/v1.5.0)
-advance full text capabilities such as `word "phrase" (group) +mandatory -prohibited AND && OR || NOT !`_
+_** Does not include full set of full text features includes: Scoring/Ranking _(Solr Search Engine does sorting on scoring
+by default, for location search available as of [v1.3][3] with Solr 6.x)_, and as of [Solr Search Engine v1.5][5]
+supports advanced full text capabilities such as `word "phrase" (group) +mandatory -prohibited AND && OR || NOT !`_
 
 ## Install
 
@@ -135,3 +136,10 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
 ## Copyright & license
 
 Copyright eZ Systems AS, for copyright and license details see provided LICENSE file.
+
+
+[1]: https://doc.ezplatform.com/en/latest/api/public_php_api_browsing/#performing-a-faceted-search
+[2]: https://github.com/ezsystems/ezplatform-solr-search-engine
+[3]: https://github.com/ezsystems/ezplatform-solr-search-engine/releases/tag/v1.3.0
+[4]: https://github.com/ezsystems/ezplatform-solr-search-engine/releases/tag/v1.4.0
+[5]: https://github.com/ezsystems/ezplatform-solr-search-engine/releases/tag/v1.5.0
