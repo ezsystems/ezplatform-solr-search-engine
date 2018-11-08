@@ -21,8 +21,11 @@ use RuntimeException;
 /**
  * The Content Search Gateway provides the implementation for one database to
  * retrieve the desired content objects.
+ *
+ * todo:
+ *  - base on Native and shrink
  */
-class Native extends Gateway
+class SolrCloud extends Gateway
 {
     /**
      * HTTP client to communicate with Solr server.
@@ -129,9 +132,10 @@ class Native extends Gateway
      */
     protected function internalFind(array $parameters, array $languageSettings = array())
     {
-        $searchTargets = $this->getSearchTargets($languageSettings);
-        if (!empty($searchTargets)) {
-            $parameters['shards'] = $searchTargets;
+        $shards = $this->endpointResolver->getSearchTargets($languageSettings);
+
+        if (!empty($shards)) {
+            $parameters['shards'] = implode(',', $shards);
         }
 
         return $this->search($parameters);
@@ -140,11 +144,6 @@ class Native extends Gateway
     public function searchAllEndpoints(Query $query)
     {
         $parameters = $this->contentQueryConverter->convert($query);
-
-        $searchTargets = $this->getAllSearchTargets();
-        if (!empty($searchTargets)) {
-            $parameters['shards'] = $searchTargets;
-        }
 
         return $this->search($parameters);
     }
@@ -173,57 +172,18 @@ class Native extends Gateway
     }
 
     /**
-     * Returns search targets for given language settings.
-     *
      * Only return endpoints if there are more then one configured, as this is meant for use on shard parameter.
      *
-     * @param array $languageSettings
-     *
-     * @return string
-     */
-    protected function getSearchTargets($languageSettings)
-    {
         if ($this->endpointResolver instanceof SingleEndpointResolver && !$this->endpointResolver->hasMultipleEndpoints()) {
             return '';
         }
 
-        $shards = array();
-        $endpoints = $this->endpointResolver->getSearchTargets($languageSettings);
-
-        if (!empty($endpoints)) {
-            foreach ($endpoints as $endpoint) {
-                $shards[] = $this->endpointRegistry->getEndpoint($endpoint)->getIdentifier();
-            }
-        }
-
-        return implode(',', $shards);
-    }
-
-    /**
-     * Returns all search targets without language constraint.
-     *
      * Only return endpoints if there are more then one configured, as this is meant for use on shard parameter.
      *
-     * @return string
-     */
-    protected function getAllSearchTargets()
-    {
         if ($this->endpointResolver instanceof SingleEndpointResolver && !$this->endpointResolver->hasMultipleEndpoints()) {
             return '';
         }
 
-        $shards = [];
-        $searchTargets = $this->endpointResolver->getEndpoints();
-        if (!empty($searchTargets)) {
-            foreach ($searchTargets as $endpointName) {
-                $shards[] = $this->endpointRegistry->getEndpoint($endpointName)->getIdentifier();
-            }
-        }
-
-        return  implode(',', $shards);
-    }
-
-    /**
      * Indexes an array of documents.
      *
      * Documents are given as an array of the array of documents. The array of documents
@@ -355,21 +315,19 @@ class Native extends Gateway
      */
     public function deleteByQuery($query)
     {
-        $endpoints = $this->endpointResolver->getEndpoints();
-
-        foreach ($endpoints as $endpointName) {
-            $this->client->request(
-                'POST',
-                $this->endpointRegistry->getEndpoint($endpointName),
-                '/update?wt=json',
-                new Message(
-                    array(
-                        'Content-Type' => 'text/xml',
-                    ),
-                    "<delete><query>{$query}</query></delete>"
-                )
-            );
-        }
+        $this->client->request(
+            'POST',
+            $this->endpointRegistry->getEndpoint(
+                $this->endpointResolver->getEntryEndpoint()
+            ),
+            '/update?wt=json',
+            new Message(
+                array(
+                    'Content-Type' => 'text/xml',
+                ),
+                "<delete><query>{$query}</query></delete>"
+            )
+        );
     }
 
     /**
@@ -379,25 +337,11 @@ class Native extends Gateway
      */
     public function purgeIndex()
     {
-        $endpoints = $this->endpointResolver->getEndpoints();
-
-        foreach ($endpoints as $endpointName) {
-            $this->purgeEndpoint(
-                $this->endpointRegistry->getEndpoint($endpointName)
-            );
-        }
-    }
-
-    /**
-     * @todo error handling
-     *
-     * @param $endpoint
-     */
-    protected function purgeEndpoint($endpoint)
-    {
         $this->client->request(
             'POST',
-            $endpoint,
+            $this->endpointRegistry->getEndpoint(
+                $this->endpointResolver->getEntryEndpoint()
+            ),
             '/update?wt=json',
             new Message(
                 array(
@@ -423,25 +367,25 @@ class Native extends Gateway
             '<commit/>' :
             '<commit softCommit="true"/>';
 
-        foreach ($this->endpointResolver->getEndpoints() as $endpointName) {
-            $result = $this->client->request(
-                'POST',
-                $this->endpointRegistry->getEndpoint($endpointName),
-                '/update',
-                new Message(
-                    array(
-                        'Content-Type' => 'text/xml',
-                    ),
-                    $payload
-                )
-            );
+        $result = $this->client->request(
+            'POST',
+            $this->endpointRegistry->getEndpoint(
+                $this->endpointResolver->getEntryEndpoint()
+            ),
+            '/update',
+            new Message(
+                array(
+                    'Content-Type' => 'text/xml',
+                ),
+                $payload
+            )
+        );
 
-            if ($result->headers['status'] !== 200) {
-                throw new RuntimeException(
-                    'Wrong HTTP status received from Solr: ' .
-                    $result->headers['status'] . var_export($result, true)
-                );
-            }
+        if ($result->headers['status'] !== 200) {
+            throw new RuntimeException(
+                'Wrong HTTP status received from Solr: ' .
+                $result->headers['status'] . var_export($result, true)
+            );
         }
     }
 
