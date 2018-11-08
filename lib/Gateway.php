@@ -54,7 +54,7 @@ abstract class Gateway
      * Documents are given as an array of the array of documents. The array of documents
      * holds documents for all translations of the particular entity.
      *
-     * @param \eZ\Publish\SPI\Search\Document[][] $documents
+     * @param \eZ\Publish\SPI\Search\Document[] $documents
      */
     abstract public function bulkIndexDocuments(array $documents);
 
