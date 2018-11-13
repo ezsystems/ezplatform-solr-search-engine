@@ -12,8 +12,10 @@ default_cores[3]='core3'
 default_nodes=('node1:8983' 'node2:8984' 'node3:8985')
 default_shards=('shard0' 'shard1' 'shard2' 'shard3')
 
+SOLR_PORT=${SOLR_PORT:-8983}
 SOLR_DIR=${SOLR_DIR:-'__solr'}
 SOLR_VERSION=${SOLR_VERSION:-'6.6.5'}
+SOLR_INSTALL_DIR="${SOLR_DIR}/${SOLR_VERSION}"
 SOLR_DEBUG=${SOLR_DEBUG:-false}
 SOLR_HOME=${SOLR_HOME:-'ezcloud'}
 SOLR_CONFIG=("${SOLR_CONFIG[@]:-${default_config_files[*]}}")
@@ -338,7 +340,7 @@ if [ "$SOLR_CLOUD" == "no" ]; then
         $SCRIPT_DIR/../generate-solr-config.sh \
                 --solr-install-dir="${SOLR_INSTALL_DIR}" \
                 --destination-dir="${SOLR_INSTALL_DIR}/server/${SOLR_HOME}/template"
-        run
+        solr_run
     else
         solr4_configure
         solr4_run
