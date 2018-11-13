@@ -22,40 +22,6 @@ use Symfony\Component\Config\FileLocator;
 class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
 {
     /**
-     * Main Solr search handler service ID.
-     *
-     * @var string
-     */
-    const ENGINE_ID = 'ezpublish.spi.search.solr';
-
-    /**
-     * Configured core gateway service ID.
-     *
-     * Not using service alias since alias can't be passed for decoration.
-     *
-     * @var string
-     */
-    const GATEWAY_ID = 'ezpublish.search.solr.gateway.native';
-
-    /**
-     * Configured core filter service ID.
-     *
-     * Not using service alias since alias can't be passed for decoration.
-     *
-     * @var string
-     */
-    const CORE_FILTER_ID = 'ezpublish.search.solr.core_filter.native';
-
-    /**
-     * Configured core endpoint resolver service ID.
-     *
-     * Not using service alias since alias can't be passed for decoration.
-     *
-     * @var string
-     */
-    const ENDPOINT_RESOLVER_ID = 'ezpublish.search.solr.gateway.endpoint_resolver.native';
-
-    /**
      * Endpoint class.
      *
      * @var string
@@ -134,8 +100,9 @@ class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
             );
         }
 
+        $container->setParameter("$alias.connections", $config['connections']);
+
         foreach ($config['connections'] as $name => $params) {
-            $this->configureSearchServices($container, $name, $params);
             $this->configureBoostMap($container, $name, $params);
             $container->setParameter("$alias.connection.$name", $params);
         }
@@ -144,46 +111,9 @@ class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
             $this->defineEndpoint($container, $name, $params);
         }
 
-        // Search engine itself, for given connection name
-        $searchEngineDef = $container->findDefinition(self::ENGINE_ID);
-        $searchEngineDef->setFactory([new Reference('ezpublish.solr.engine_factory'), 'buildEngine']);
-
         // Factory for BoostFactorProvider uses mapping configured for the connection in use
         $boostFactorProviderDef = $container->findDefinition(self::BOOST_FACTOR_PROVIDER_ID);
         $boostFactorProviderDef->setFactory([new Reference('ezpublish.solr.boost_factor_provider_factory'), 'buildService']);
-    }
-
-    /**
-     * Creates needed search services for given connection name and parameters.
-     *
-     * @param ContainerBuilder $container
-     * @param string $connectionName
-     * @param array $connectionParams
-     */
-    private function configureSearchServices(ContainerBuilder $container, $connectionName, $connectionParams)
-    {
-        $alias = $this->getAlias();
-
-        // Endpoint resolver
-        $endpointResolverDefinition = new DefinitionDecorator(self::ENDPOINT_RESOLVER_ID);
-        $endpointResolverDefinition->replaceArgument(0, $connectionParams['entry_endpoints']);
-        $endpointResolverDefinition->replaceArgument(1, $connectionParams['mapping']['translations']);
-        $endpointResolverDefinition->replaceArgument(2, $connectionParams['mapping']['default']);
-        $endpointResolverDefinition->replaceArgument(3, $connectionParams['mapping']['main_translations']);
-        $endpointResolverId = "$alias.connection.$connectionName.endpoint_resolver_id";
-        $container->setDefinition($endpointResolverId, $endpointResolverDefinition);
-
-        // Core filter
-        $coreFilterDefinition = new DefinitionDecorator(self::CORE_FILTER_ID);
-        $coreFilterDefinition->replaceArgument(0, new Reference($endpointResolverId));
-        $coreFilterId = "$alias.connection.$connectionName.core_filter_id";
-        $container->setDefinition($coreFilterId, $coreFilterDefinition);
-
-        // Gateway
-        $gatewayDefinition = new DefinitionDecorator(self::GATEWAY_ID);
-        $gatewayDefinition->replaceArgument(1, new Reference($endpointResolverId));
-        $gatewayId = "$alias.connection.$connectionName.gateway_id";
-        $container->setDefinition($gatewayId, $gatewayDefinition);
     }
 
     /**

@@ -15,6 +15,7 @@ parameters:
     ezpublish.search.solr.gateway.endpoint_registry.class: EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointRegistry
     ezpublish.search.solr.gateway.endpoint_resolver.native.class: EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointResolver\NativeEndpointResolver
     ezpublish.search.solr.gateway.update_serializer.class: EzSystems\EzPlatformSolrSearchEngine\Gateway\UpdateSerializer
+    ezpublish.search.solr.gateway.solr_cloud.class: EzSystems\EzPlatformSolrSearchEngine\Gateway\SolrCloud
     ezpublish.search.solr.core_filter.native.class: EzSystems\EzPlatformSolrSearchEngine\CoreFilter\NativeCoreFilter
     ezpublish.search.solr.document_mapper.native.class: EzSystems\EzPlatformSolrSearchEngine\DocumentMapper\NativeDocumentMapper
     ezpublish.search.solr.result_extractor.native.class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\NativeResultExtractor
@@ -101,19 +102,45 @@ services:
             - "@ezpublish.search.solr.query_converter.location"
             - "@ezpublish.search.solr.gateway.update_serializer"
 
+    ezpublish.search.solr.gateway.solr_cloud:
+        class: "%ezpublish.search.solr.gateway.solr_cloud.class%"
+        arguments:
+            - "@ezpublish.search.solr.gateway.client.http.stream"
+            - "@ezpublish.search.solr.gateway.endpoint_resolver"
+            - "@ezpublish.search.solr.gateway.endpoint_registry"
+            - "@ezpublish.search.solr.query_converter.content"
+            - "@ezpublish.search.solr.query_converter.location"
+            - "@ezpublish.search.solr.gateway.update_serializer"
+
+    # Could also fix in compiler pass, but make no difference ( not in use except in ezpublish.spi.search.solr )
     ezpublish.search.solr.gateway:
-        alias: ezpublish.search.solr.gateway.native
+        alias: ezpublish.search.solr.gateway.solr_cloud
+#        alias: ezpublish.search.solr.gateway.native
 
     ezpublish.spi.search.solr:
         class: "%ezpublish.spi.search.solr.class%"
         arguments:
-            - "@ezpublish.search.solr.gateway"
+            - "@ezpublish.search.solr.gateway.solr_cloud"
+#            - "@ezpublish.search.solr.gateway"
             - "@ezpublish.spi.persistence.content_handler"
             - "@ezpublish.search.solr.document_mapper"
             - "@ezpublish.search.solr.result_extractor"
             - "@ezpublish.search.solr.core_filter"
         tags:
             - {name: ezpublish.searchEngine, alias: solr}
+        lazy: true
+
+    ezpublish.spi.search.solr_cloud:
+    # we might have to create dedicated solrcloud class
+        class: "%ezpublish.spi.search.solr.class%"
+        arguments:
+            - "@ezpublish.search.solr.gateway.solr_cloud"
+            - "@ezpublish.spi.persistence.content_handler"
+            - "@ezpublish.search.solr.document_mapper"
+            - "@ezpublish.search.solr.result_extractor"
+            - "@ezpublish.search.solr.core_filter"
+        tags:
+            - {name: ezpublish.searchEngine, alias: solrcloud}
         lazy: true
 
     ezpublish.spi.search.solr.indexer:
@@ -125,4 +152,5 @@ services:
             - "@ezpublish.spi.search.solr"
         tags:
             - {name: ezpublish.searchEngineIndexer, alias: solr}
+            - {name: ezpublish.searchEngineIndexer, alias: solrcloud}
         lazy: true

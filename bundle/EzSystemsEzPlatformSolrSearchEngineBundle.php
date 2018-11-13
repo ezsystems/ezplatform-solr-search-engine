@@ -12,11 +12,13 @@ namespace EzSystems\EzPlatformSolrSearchEngineBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler\AggregateCriterionVisitorPass;
 use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler\AggregateFacetBuilderVisitorPass;
 use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler\AggregateSortClauseVisitorPass;
 use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler\FieldMapperPass;
 use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler\EndpointRegistryPass;
+use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler\RepositorySettingPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\AggregateFieldValueMapperPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\FieldRegistryPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\SearchEngineSignalSlotPass;
@@ -40,6 +42,7 @@ class EzSystemsEzPlatformSolrSearchEngineBundle extends Bundle
         $container->addCompilerPass(new AggregateFieldValueMapperPass());
         $container->addCompilerPass(new FieldRegistryPass());
         $container->addCompilerPass(new SearchEngineSignalSlotPass('solr'));
+        $container->addCompilerPass(new RepositorySettingPass(), PassConfig::TYPE_OPTIMIZE);
     }
 
     public function getContainerExtension()
