@@ -238,46 +238,29 @@ class Native extends Gateway
      */
     public function bulkIndexDocuments(array $documents)
     {
-        $routedDocuments = [];
-        $mainTranslationsShardId = $this->endpointResolver->getMainLanguagesEndpoint();
-
+        $documentMap = array();
+        $mainTranslationsEndpoint = $this->endpointResolver->getMainLanguagesEndpoint();
+        $mainTranslationsDocuments = array();
         foreach ($documents as $document) {
-            $shardId = $this->endpointResolver->getIndexingTarget($document->languageCode);
-            $document2 = clone $document;
-            $this->routeDocument($document2, $shardId);
-            $routedDocuments[] = $document2;
-
-            if ($mainTranslationsShardId !== null && $document->isMainTranslation) {
-                $mainTranslationsDocument = $this->getMainTranslationDocument($document);
-                $this->routeDocument($mainTranslationsDocument, $mainTranslationsShardId);
-                $routedDocuments[] = $mainTranslationsDocument;
+            $documentMap[$document->languageCode][] = $document;
+            if ($mainTranslationsEndpoint !== null && $document->isMainTranslation) {
+                $mainTranslationsDocuments[] = $this->getMainTranslationDocument($document);
             }
         }
-
-        $this->doBulkIndexDocuments(
-            $this->endpointRegistry->getEndpoint(
-                $this->endpointResolver->getEntryEndpoint()
-            ),
-            $routedDocuments
-        );
-    }
-
-    /**
-     * Routes a given $document to the given $shardId.
-     *
-     * Adds a special field, recognized by the implicit router.
-     * Note that collection must be created to support this type of routing.
-     *
-     * @param \eZ\Publish\SPI\Search\Document $document
-     * @param string $shardId
-     */
-    private function routeDocument(Document $document, $shardId)
-    {
-        $document->fields[] = new Field(
-            'router_field',
-            $shardId,
-            new FieldType\IdentifierField()
-        );
+        foreach ($documentMap as $languageCode => $translationDocuments) {
+            $this->doBulkIndexDocuments(
+                $this->endpointRegistry->getEndpoint(
+                    $this->endpointResolver->getIndexingTarget($languageCode)
+                ),
+                $translationDocuments
+            );
+        }
+        if (!empty($mainTranslationsDocuments)) {
+            $this->doBulkIndexDocuments(
+                $this->endpointRegistry->getEndpoint($mainTranslationsEndpoint),
+                $mainTranslationsDocuments
+            );
+        }
     }
 
     /**
