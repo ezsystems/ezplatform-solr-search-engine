@@ -10,8 +10,6 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Gateway;
 
-use EzSystems\EzPlatformSolrSearchEngine\Gateway;
-use EzSystems\EzPlatformSolrSearchEngine\Query\QueryConverter;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\SPI\Search\Document;
 use eZ\Publish\SPI\Search\Field;
@@ -21,74 +19,9 @@ use RuntimeException;
 /**
  * The Content Search Gateway provides the implementation for one database to
  * retrieve the desired content objects.
- *
- * todo:
- *  - base on Native and shrink
  */
-class SolrCloud extends Gateway
+class SolrCloud extends Native
 {
-    /**
-     * HTTP client to communicate with Solr server.
-     *
-     * @var \EzSystems\EzPlatformSolrSearchEngine\Gateway\HttpClient
-     */
-    protected $client;
-
-    /**
-     * @var \EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointResolver
-     */
-    protected $endpointResolver;
-
-    /**
-     * Endpoint registry service.
-     *
-     * @var \EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointRegistry
-     */
-    protected $endpointRegistry;
-
-    /**
-     * Content Query converter.
-     *
-     * @var \EzSystems\EzPlatformSolrSearchEngine\Query\QueryConverter
-     */
-    protected $contentQueryConverter;
-
-    /**
-     * Location Query converter.
-     *
-     * @var \EzSystems\EzPlatformSolrSearchEngine\Query\QueryConverter
-     */
-    protected $locationQueryConverter;
-
-    /**
-     * @var \EzSystems\EzPlatformSolrSearchEngine\Gateway\UpdateSerializer
-     */
-    protected $updateSerializer;
-
-    /**
-     * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\HttpClient $client
-     * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointResolver $endpointResolver
-     * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointRegistry $endpointRegistry
-     * @param \EzSystems\EzPlatformSolrSearchEngine\Query\QueryConverter $contentQueryConverter
-     * @param \EzSystems\EzPlatformSolrSearchEngine\Query\QueryConverter $locationQueryConverter
-     * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\UpdateSerializer $updateSerializer
-     */
-    public function __construct(
-        HttpClient $client,
-        EndpointResolver $endpointResolver,
-        EndpointRegistry $endpointRegistry,
-        QueryConverter $contentQueryConverter,
-        QueryConverter $locationQueryConverter,
-        UpdateSerializer $updateSerializer
-    ) {
-        $this->client = $client;
-        $this->endpointResolver = $endpointResolver;
-        $this->endpointRegistry = $endpointRegistry;
-        $this->contentQueryConverter = $contentQueryConverter;
-        $this->locationQueryConverter = $locationQueryConverter;
-        $this->updateSerializer = $updateSerializer;
-    }
-
     /**
      * Returns search hits for the given query.
      *
@@ -101,22 +34,6 @@ class SolrCloud extends Gateway
     public function findContent(Query $query, array $languageSettings = array())
     {
         $parameters = $this->contentQueryConverter->convert($query);
-
-        return $this->internalFind($parameters, $languageSettings);
-    }
-
-    /**
-     * Returns search hits for the given query.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     * @param array $languageSettings - a map of filters for the returned fields.
-     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
-     *
-     * @return mixed
-     */
-    public function findLocations(Query $query, array $languageSettings = array())
-    {
-        $parameters = $this->locationQueryConverter->convert($query);
 
         return $this->internalFind($parameters, $languageSettings);
     }
@@ -146,29 +63,6 @@ class SolrCloud extends Gateway
         $parameters = $this->contentQueryConverter->convert($query);
 
         return $this->search($parameters);
-    }
-
-    /**
-     * Generate URL-encoded query string.
-     *
-     * Array markers, possibly added for the facet parameters,
-     * will be removed from the result.
-     *
-     * @param array $parameters
-     *
-     * @return string
-     */
-    protected function generateQueryString(array $parameters)
-    {
-        $removedArrayCharacters = preg_replace(
-            '/%5B[0-9]+%5D=/',
-            '=',
-            http_build_query($parameters)
-        );
-
-        $removedDuplicatedEscapingForUrlPath = str_replace('%5C%5C%2F', '%5C%2F', $removedArrayCharacters);
-
-        return $removedDuplicatedEscapingForUrlPath;
     }
 
     /**
@@ -238,74 +132,6 @@ class SolrCloud extends Gateway
             $shardId,
             new FieldType\IdentifierField()
         );
-    }
-
-    /**
-     * Returns version of the $document to be indexed in the always available core.
-     *
-     * @param \eZ\Publish\SPI\Search\Document $document
-     *
-     * @return \eZ\Publish\SPI\Search\Document
-     */
-    protected function getMainTranslationDocument(Document $document)
-    {
-        // Clone to prevent mutation
-        $document = clone $document;
-        $subDocuments = array();
-
-        $document->id .= 'mt';
-        $document->fields[] = new Field(
-            'meta_indexed_main_translation',
-            true,
-            new FieldType\BooleanField()
-        );
-
-        foreach ($document->documents as $subDocument) {
-            // Clone to prevent mutation
-            $subDocument = clone $subDocument;
-
-            $subDocument->id .= 'mt';
-            $subDocument->fields[] = new Field(
-                'meta_indexed_main_translation',
-                true,
-                new FieldType\BooleanField()
-            );
-
-            $subDocuments[] = $subDocument;
-        }
-
-        $document->documents = $subDocuments;
-
-        return $document;
-    }
-
-    /**
-     * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\Endpoint $endpoint
-     * @param \eZ\Publish\SPI\Search\Document[] $documents
-     */
-    protected function doBulkIndexDocuments(Endpoint $endpoint, array $documents)
-    {
-        $updates = $this->updateSerializer->serialize($documents);
-        $result = $this->client->request(
-            'POST',
-            $endpoint,
-            '/update?wt=json',
-            new Message(
-                array(
-                    'Content-Type' => 'text/xml',
-                ),
-                $updates
-            )
-        );
-
-        if ($result->headers['status'] !== 200) {
-            throw new RuntimeException(
-                'Wrong HTTP status received from Solr: ' . $result->headers['status'] . ' on ' . $endpoint->getURL() . "\n"
-                . var_export($endpoint, true) . "\n"
-                . var_export($result, true) . "\n"
-                . var_export($updates, true)
-            );
-        }
     }
 
     /**
@@ -387,42 +213,5 @@ class SolrCloud extends Gateway
                 $result->headers['status'] . var_export($result, true)
             );
         }
-    }
-
-    /**
-     * Perform request to client to search for records with query string.
-     *
-     * @param array $parameters
-     *
-     * @return mixed
-     */
-    protected function search(array $parameters)
-    {
-        $queryString = $this->generateQueryString($parameters);
-
-        $response = $this->client->request(
-            'POST',
-            $this->endpointRegistry->getEndpoint(
-                $this->endpointResolver->getEntryEndpoint()
-            ),
-            '/select',
-            new Message(
-                [
-                    'Content-Type' => 'application/x-www-form-urlencoded',
-                ],
-                $queryString
-            )
-        );
-
-        // @todo: Error handling?
-        $result = json_decode($response->body);
-
-        if (!isset($result->response)) {
-            throw new RuntimeException(
-                '->response not set: ' . var_export(array($result, $parameters), true)
-            );
-        }
-
-        return $result;
     }
 }
