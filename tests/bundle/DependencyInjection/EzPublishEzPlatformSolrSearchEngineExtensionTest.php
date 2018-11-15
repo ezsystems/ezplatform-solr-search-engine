@@ -276,8 +276,6 @@ class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtension
             'ez_search_engine_solr.connection.connection1.gateway_id'
         );
     }
-        );
-    }
 
     public function dataProvideForTestBoostFactorMap()
     {
@@ -479,4 +477,6 @@ class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtension
         $this->assertContainerBuilderHasParameter(
             'ez_search_engine_solr.connection.connection1.boost_factor_map_id',
             $map
+        );
+    }
 }
