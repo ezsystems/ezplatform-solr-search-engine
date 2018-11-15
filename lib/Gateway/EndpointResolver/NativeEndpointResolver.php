@@ -182,7 +182,7 @@ class NativeEndpointResolver implements EndpointResolver, SingleEndpointResolver
             return $this->hasMultiple;
         }
 
-        $endpointSet = array_flip($this->endpointMap);
+        $endpointSet = array_flip($this->shardMap);
 
         if (isset($this->defaultEndpoint)) {
             $endpointSet[$this->defaultEndpoint] = true;
