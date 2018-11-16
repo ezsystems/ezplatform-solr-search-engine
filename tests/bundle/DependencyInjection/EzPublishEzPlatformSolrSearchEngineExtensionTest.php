@@ -241,40 +241,6 @@ class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtension
             'ez_search_engine_solr.default_connection',
             'connection1'
         );
-
-        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
-            'ez_search_engine_solr.connection.connection1.endpoint_resolver_id',
-            0,
-            array(
-                'endpoint1',
-                'endpoint2',
-            )
-        );
-        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
-            'ez_search_engine_solr.connection.connection1.endpoint_resolver_id',
-            1,
-            array(
-                'cro-HR' => 'endpoint1',
-                'eng-GB' => 'endpoint2',
-                'gal-MW' => 'endpoint3',
-            )
-        );
-        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
-            'ez_search_engine_solr.connection.connection1.endpoint_resolver_id',
-            2,
-            'endpoint4'
-        );
-        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
-            'ez_search_engine_solr.connection.connection1.endpoint_resolver_id',
-            3,
-            'endpoint5'
-        );
-        $this->assertContainerBuilderHasService(
-            'ez_search_engine_solr.connection.connection1.core_filter_id'
-        );
-        $this->assertContainerBuilderHasService(
-            'ez_search_engine_solr.connection.connection1.gateway_id'
-        );
     }
 
     public function dataProvideForTestBoostFactorMap()
