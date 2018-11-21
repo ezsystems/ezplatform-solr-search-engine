@@ -26,6 +26,7 @@ SOLR_COLLECTION_NAME=${SOLR_COLLECTION_NAME:-'ezplatform'}
 SOLR_CONFIGURATION_NAME=${SOLR_CONFIGURATION_NAME:-'ezconfig'}
 SOLR_MAX_SHARDS_PER_NODE=${SOLR_MAX_SHARDS_PER_NODE:-'3'}
 SOLR_REPLICATION_FACTOR=${SOLR_REPLICATION_FACTOR:-'2'}
+SOLR_CLOUD=${SOLR_CLOUD:-'no'}
 
 INSTALL_DIR="${SOLR_DIR}/${SOLR_VERSION}"
 HOME_DIR="${INSTALL_DIR}/server/${SOLR_HOME}"
@@ -35,14 +36,9 @@ ZOOKEEPER_CLI_SCRIPT="./${INSTALL_DIR}/server/scripts/cloud-scripts/zkcli.sh"
 ZOOKEEPER_HOST=""
 
 SCRIPT_DIR=`dirname $0`
-case $1 in
---solr-cloud)
+if [ "$1" = "--solr-cloud" ]; then
     SOLR_CLOUD='yes'
-    ;;
-*)
-    SOLR_CLOUD='no'
-    ;;
-esac
+fi
 
 download() {
     case ${SOLR_VERSION} in
@@ -335,7 +331,7 @@ solr_cloud_create_collection() {
 
 download
 
-if [ "$SOLR_CLOUD" == "no" ]; then
+if [ "$SOLR_CLOUD" = "no" ]; then
     if [[ ${SOLR_VERSION} == 6* ]] ; then
         $SCRIPT_DIR/../generate-solr-config.sh \
                 --solr-install-dir="${SOLR_INSTALL_DIR}" \
