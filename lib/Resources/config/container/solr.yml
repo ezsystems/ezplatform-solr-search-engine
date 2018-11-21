@@ -112,34 +112,20 @@ services:
             - "@ezpublish.search.solr.query_converter.location"
             - "@ezpublish.search.solr.gateway.update_serializer"
 
-    # Could also fix in compiler pass, but make no difference ( not in use except in ezpublish.spi.search.solr )
     ezpublish.search.solr.gateway:
-        alias: ezpublish.search.solr.gateway.solr_cloud
-#        alias: ezpublish.search.solr.gateway.native
+        # Alias changed to ezpublish.search.solr.gateway.solr_cloud in compiler pass if needed
+        alias: ezpublish.search.solr.gateway.native
 
     ezpublish.spi.search.solr:
         class: "%ezpublish.spi.search.solr.class%"
         arguments:
-            - "@ezpublish.search.solr.gateway.solr_cloud"
-#            - "@ezpublish.search.solr.gateway"
+            - "@ezpublish.search.solr.gateway"
             - "@ezpublish.spi.persistence.content_handler"
             - "@ezpublish.search.solr.document_mapper"
             - "@ezpublish.search.solr.result_extractor"
             - "@ezpublish.search.solr.core_filter"
         tags:
             - {name: ezpublish.searchEngine, alias: solr}
-        lazy: true
-
-    ezpublish.spi.search.solr_cloud:
-    # we might have to create dedicated solrcloud class
-        class: "%ezpublish.spi.search.solr.class%"
-        arguments:
-            - "@ezpublish.search.solr.gateway.solr_cloud"
-            - "@ezpublish.spi.persistence.content_handler"
-            - "@ezpublish.search.solr.document_mapper"
-            - "@ezpublish.search.solr.result_extractor"
-            - "@ezpublish.search.solr.core_filter"
-        tags:
             - {name: ezpublish.searchEngine, alias: solrcloud}
         lazy: true
 
