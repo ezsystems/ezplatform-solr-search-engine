@@ -65,6 +65,7 @@ class LegacySetupFactory extends CoreLegacySetupFactory
         $containerBuilder->addCompilerPass(new Compiler\AggregateFacetBuilderVisitorPass());
         $containerBuilder->addCompilerPass(new Compiler\AggregateSortClauseVisitorPass());
         $containerBuilder->addCompilerPass(new Compiler\EndpointRegistryPass());
+        $containerBuilder->addCompilerPass(new Compiler\RepositorySettingPass());
         $containerBuilder->addCompilerPass(new BaseCompiler\Search\AggregateFieldValueMapperPass());
         $containerBuilder->addCompilerPass(new BaseCompiler\Search\FieldRegistryPass());
         $containerBuilder->addCompilerPass(new BaseCompiler\Search\SearchEngineSignalSlotPass('solr'));
@@ -109,14 +110,27 @@ class LegacySetupFactory extends CoreLegacySetupFactory
     protected function getTestConfigurationFile()
     {
         $coresSetup = getenv('CORES_SETUP');
+        $solrCloud = getenv('SOLR_ENGINE') === 'solrcloud';
 
-        switch ($coresSetup) {
-            case SearchServiceTranslationLanguageFallbackTest::SETUP_DEDICATED:
-                return 'multicore_dedicated.yml';
-            case SearchServiceTranslationLanguageFallbackTest::SETUP_SHARED:
-                return 'multicore_shared.yml';
-            case SearchServiceTranslationLanguageFallbackTest::SETUP_SINGLE:
-                return 'single_core.yml';
+        if ($solrCloud) {
+            switch ($coresSetup) {
+                case SearchServiceTranslationLanguageFallbackTest::SETUP_DEDICATED:
+                    return 'solrcloud_multicore_dedicated.yml';
+                case SearchServiceTranslationLanguageFallbackTest::SETUP_SHARED:
+                    return 'solrcloud_multicore_shared.yml';
+                case SearchServiceTranslationLanguageFallbackTest::SETUP_SINGLE:
+                    return 'solrcloud_single_core.yml';
+            }
+        } else {
+            switch ($coresSetup) {
+                case SearchServiceTranslationLanguageFallbackTest::SETUP_DEDICATED:
+                    return 'multicore_dedicated.yml';
+                case SearchServiceTranslationLanguageFallbackTest::SETUP_SHARED:
+                    return 'multicore_shared.yml';
+                case SearchServiceTranslationLanguageFallbackTest::SETUP_SINGLE:
+                    return 'single_core.yml';
+            }
+
         }
 
         throw new RuntimeException("Backend cores setup '{$coresSetup}' is not handled");
