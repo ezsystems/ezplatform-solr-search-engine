@@ -35,6 +35,9 @@ parameters:
 
     ezpublish.api.repository_configuration_provider.class: EzSystems\EzPlatformSolrSearchEngine\Tests\SetupFactory\RepositoryConfigurationTestProvider
 
+#    ezpublish.solr.engine_factory.class: EzSystems\EzPlatformSolrSearchEngineBundle\ApiLoader\SolrEngineFactory
+#    ez_search_engine_solr.default_connection: 'default'
+
 services:
     ezpublish.spi.search_engine:
         alias: ezpublish.spi.search.solr
@@ -55,3 +58,12 @@ services:
         class: "%ezpublish.api.repository_configuration_provider.class%"
         arguments:
             - "solrcloud"
+
+#    ezpublish.solr.engine_factory:
+#        class: "%ezpublish.solr.engine_factory.class%"
+#        arguments:
+#            - "@ezpublish.api.repository_configuration_provider"
+#            - "%ez_search_engine_solr.default_connection%"
+#            - "%ezpublish.spi.search.solr.class%"
+#        calls:
+#            - [setContainer, ["@service_container"]]
