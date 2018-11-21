@@ -8,24 +8,9 @@ namespace EzSystems\EzPlatformSolrSearchEngine\Container\Compiler;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
 
 class RepositorySettingPass implements CompilerPassInterface
 {
-    /**
-     * Solr search handler service ID.
-     *
-     * @var string
-     */
-    const ENGINE_SOLR_ID = 'ezpublish.spi.search.solr';
-
-    /**
-     * SolrCloud search handler service ID.
-     *
-     * @var string
-     */
-    const ENGINE_SOLR_CLOUD_ID = 'ezpublish.spi.search.solr_cloud';
-
     /**
      * Configured core gateway service ID.
      *
@@ -61,15 +46,13 @@ class RepositorySettingPass implements CompilerPassInterface
         $engine = $repositoryConfiguration['search']['engine'];
 
         if( $engine == 'solrcloud') {
-            $solrEngineServiceName = self::ENGINE_SOLR_CLOUD_ID;
+            $container->setAlias('ezpublish.search.solr.gateway', self::GATEWAY_SOLR_CLOUD_ID);
         } else {
-            $solrEngineServiceName = self::ENGINE_SOLR_ID;
+            $container->setAlias('ezpublish.search.solr.gateway', self::GATEWAY_SOLR_ID);
         }
 
-        $searchEngineDef = $container->findDefinition($solrEngineServiceName);
-        $searchEngineDef->setFactory([new Reference('ezpublish.solr.engine_factory'), 'buildEngine']);
-
         $connections = $container->getParameter('ez_search_engine_solr.connections');
+
         foreach ($connections as $name => $params) {
             $this->configureSearchService($container, $name, $params, $engine);
         }

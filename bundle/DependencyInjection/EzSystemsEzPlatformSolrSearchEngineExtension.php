@@ -12,7 +12,6 @@ namespace EzSystems\EzPlatformSolrSearchEngineBundle\DependencyInjection;
 
 use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -21,6 +20,13 @@ use Symfony\Component\Config\FileLocator;
 
 class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
 {
+    /**
+     * Main Solr search handler service ID.
+     *
+     * @var string
+     */
+    const ENGINE_ID = 'ezpublish.spi.search.solr';
+
     /**
      * Endpoint class.
      *
@@ -110,6 +116,10 @@ class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
         foreach ($config['endpoints'] as $name => $params) {
             $this->defineEndpoint($container, $name, $params);
         }
+
+        // Search engine itself, for given connection name
+        $searchEngineDef = $container->findDefinition(self::ENGINE_ID);
+        $searchEngineDef->setFactory([new Reference('ezpublish.solr.engine_factory'), 'buildEngine']);
 
         // Factory for BoostFactorProvider uses mapping configured for the connection in use
         $boostFactorProviderDef = $container->findDefinition(self::BOOST_FACTOR_PROVIDER_ID);
