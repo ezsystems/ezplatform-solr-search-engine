@@ -68,15 +68,15 @@ class SolrCloud extends Native
     /**
      * Only return endpoints if there are more then one configured, as this is meant for use on shard parameter.
      *
-        if ($this->endpointResolver instanceof SingleEndpointResolver && !$this->endpointResolver->hasMultipleEndpoints()) {
-            return '';
-        }
+     if ($this->endpointResolver instanceof SingleEndpointResolver && !$this->endpointResolver->hasMultipleEndpoints()) {
+         return '';
+     }
 
      * Only return endpoints if there are more then one configured, as this is meant for use on shard parameter.
      *
-        if ($this->endpointResolver instanceof SingleEndpointResolver && !$this->endpointResolver->hasMultipleEndpoints()) {
-            return '';
-        }
+     if ($this->endpointResolver instanceof SingleEndpointResolver && !$this->endpointResolver->hasMultipleEndpoints()) {
+         return '';
+     }
 
      * Indexes an array of documents.
      *
