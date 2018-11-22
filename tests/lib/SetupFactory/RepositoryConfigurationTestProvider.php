@@ -7,13 +7,13 @@ class RepositoryConfigurationTestProvider
 {
     private $searchEngine;
 
-    function __construct($searchEngine)
+    public function __construct($searchEngine)
     {
         $this->searchEngine = $searchEngine;
     }
 
     public function getRepositoryConfig()
     {
-        return ['search' => ['engine' => $this->searchEngine] ];
+        return ['search' => ['engine' => $this->searchEngine]];
     }
 }

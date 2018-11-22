@@ -130,7 +130,6 @@ class LegacySetupFactory extends CoreLegacySetupFactory
                 case SearchServiceTranslationLanguageFallbackTest::SETUP_SINGLE:
                     return 'single_core.yml';
             }
-
         }
 
         throw new RuntimeException("Backend cores setup '{$coresSetup}' is not handled");
