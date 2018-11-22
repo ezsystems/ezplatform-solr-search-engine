@@ -172,7 +172,6 @@ class Configuration implements ConfigurationInterface
                 ->end()
 //VL Petar removed END
 
-
                 ->children()
                     ->arrayNode('entry_endpoints')
                         ->info(
