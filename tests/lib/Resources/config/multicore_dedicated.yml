@@ -26,6 +26,8 @@ parameters:
     ezpublish.search.solr.default_endpoint: null
     ezpublish.search.solr.main_translations_endpoint: null
 
+    ezpublish.api.repository_configuration_provider.class: EzSystems\EzPlatformSolrSearchEngine\Tests\SetupFactory\RepositoryConfigurationTestProvider
+
 services:
     ezpublish.spi.search_engine:
         alias: ezpublish.spi.search.solr
@@ -41,3 +43,8 @@ services:
                 core: ezplatform
         tags:
             - {name: ezpublish.search.solr.endpoint, alias: endpoint0}
+
+    ezpublish.api.repository_configuration_provider:
+        class: "%ezpublish.api.repository_configuration_provider.class%"
+        arguments:
+            - "solr"
