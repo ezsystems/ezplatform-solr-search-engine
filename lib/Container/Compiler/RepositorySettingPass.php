@@ -45,7 +45,7 @@ class RepositorySettingPass implements CompilerPassInterface
         $repositoryConfiguration = $provider->getRepositoryConfig();
         $engine = $repositoryConfiguration['search']['engine'];
 
-        if( $engine == 'solrcloud') {
+        if ($engine == 'solrcloud') {
             $container->setAlias('ezpublish.search.solr.gateway', self::GATEWAY_SOLR_CLOUD_ID);
         } else {
             $container->setAlias('ezpublish.search.solr.gateway', self::GATEWAY_SOLR_ID);
@@ -70,7 +70,7 @@ class RepositorySettingPass implements CompilerPassInterface
     {
         $alias = 'ez_search_engine_solr';
 
-        if( $engine == 'solrcloud') {
+        if ($engine == 'solrcloud') {
             $gatewayServiceName = self::GATEWAY_SOLR_CLOUD_ID;
         } else {
             $gatewayServiceName = self::GATEWAY_SOLR_ID;
