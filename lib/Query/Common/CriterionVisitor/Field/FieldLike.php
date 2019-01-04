@@ -54,33 +54,20 @@ class FieldLike extends Field
 
         $queries = [];
         foreach ($searchFields as $name => $fieldType) {
-            $preparedValue = $this->escape(
+            $preparedValue = $this->escapeWildcard(
                 $this->toString(
                     $this->mapSearchFieldValue($criterion->value, $fieldType)
                 )
             );
 
-            $queries[] = $name . ':*' . $preparedValue . '*';
+            if (strpos($preparedValue, '%') !== false) {
+                $queries[] = $name . ':' . str_replace('%', '*', $preparedValue);
+            } else {
+                // BC with previus Solr Engine usage, however this is how CONTAINS should work, not LIKE
+                $queries[] = $name . ':*' . $preparedValue . '*';
+            }
         }
 
         return '(' . implode(' OR ', $queries) . ')';
-    }
-
-    /**
-     * Escapes value for use in wildcard search.
-     *
-     * @param $value
-     * @return mixed
-     */
-    private function escape($value)
-    {
-        $reservedCharacters = preg_quote('+-&|!(){}[]^"~*?:\\ ');
-
-        return preg_replace_callback(
-            '/([' . $reservedCharacters . '])/',
-            function ($matches) {
-                return '\\' . $matches[0];
-            },
-            $value);
     }
 }

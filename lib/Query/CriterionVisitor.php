@@ -132,4 +132,22 @@ abstract class CriterionVisitor
 
         return preg_replace($pattern, '\\\$1', $string);
     }
+
+    /**
+     * Escapes value for use in wildcard search.
+     *
+     * @param $value
+     * @return mixed
+     */
+    protected function escapeWildcard($value)
+    {
+        $reservedCharacters = preg_quote('+-&|!(){}[]^"~*?:\\ ');
+
+        return preg_replace_callback(
+            '/([' . $reservedCharacters . '])/',
+            function ($matches) {
+                return '\\' . $matches[0];
+            },
+            $value);
+    }
 }
