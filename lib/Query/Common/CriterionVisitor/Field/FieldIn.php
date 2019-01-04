@@ -61,15 +61,14 @@ class FieldIn extends Field
 
         foreach ($searchFields as $name => $fieldType) {
             foreach ($criterion->value as $value) {
-                $preparedValue = $this->toString($this->mapSearchFieldValue($value, $fieldType));
+                $preparedValue = $this->escapeQuote(
+                    $this->toString(
+                        $this->mapSearchFieldValue($value, $fieldType)
+                    ),
+                    true
+                );
 
-                if ($criterion->operator === Operator::CONTAINS) {
-                    $preparedValue = $this->escapeWildcard($preparedValue);
-                    $queries[] = $name . ':*' . $preparedValue . '*';
-                } else {
-                    $preparedValue = $this->escapeQuote($preparedValue, true);
-                    $queries[] = $name . ':"' . $preparedValue . '"';
-                }
+                $queries[] = $name . ':"' . $preparedValue . '"';
             }
         }
 

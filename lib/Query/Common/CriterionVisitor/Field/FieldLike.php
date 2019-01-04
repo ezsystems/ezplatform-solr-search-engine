@@ -60,10 +60,10 @@ class FieldLike extends Field
                 )
             );
 
+            // Todo: Verify (add integration tests) that % has actually worked with SQL engine before we add here & api doc
             if (strpos($preparedValue, '%') !== false) {
                 $queries[] = $name . ':' . str_replace('%', '*', $preparedValue);
             } else {
-                // BC with previus Solr Engine usage, however this is how CONTAINS should work, not LIKE
                 $queries[] = $name . ':*' . $preparedValue . '*';
             }
         }
