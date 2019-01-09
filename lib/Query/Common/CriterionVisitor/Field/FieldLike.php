@@ -60,7 +60,7 @@ class FieldLike extends Field
             if (strpos($preparedValue, '*') !== false) {
                 $queries[] = $name . ':' . $this->escapeExpressions($preparedValue, true);
             } else {
-                $queries[] = $name . ':"' . $this->escapeQuote($preparedValue) . '"';
+                $queries[] = $name . ':"' . $this->escapeQuote($preparedValue, true) . '"';
             }
         }
 
