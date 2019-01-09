@@ -134,20 +134,27 @@ abstract class CriterionVisitor
     }
 
     /**
-     * Escapes value for use in wildcard search.
+     * Escapes value for use in expressions.
      *
-     * @param $value
+     * @param string $string
+     * @param bool $allowWildcard Allow "*" in expression.
+     *
      * @return mixed
      */
-    protected function escapeWildcard($value)
+    protected function escapeExpressions($string, $allowWildcard = false)
     {
-        $reservedCharacters = preg_quote('+-&|!(){}[]^"~*?:\\ ');
+        if ($allowWildcard) {
+            $reservedCharacters = preg_quote('+-&|!(){}[]^"~?:\\ ');
+        } else {
+            $reservedCharacters = preg_quote('+-&|!(){}[]^"~*?:\\ ');
+        }
 
         return preg_replace_callback(
             '/([' . $reservedCharacters . '])/',
             function ($matches) {
                 return '\\' . $matches[0];
             },
-            $value);
+            $string
+        );
     }
 }

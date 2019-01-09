@@ -54,17 +54,13 @@ class FieldLike extends Field
 
         $queries = [];
         foreach ($searchFields as $name => $fieldType) {
-            $preparedValue = $this->escapeWildcard(
-                $this->toString(
-                    $this->mapSearchFieldValue($criterion->value, $fieldType)
-                )
-            );
+            $preparedValue = $this->toString($this->mapSearchFieldValue($criterion->value, $fieldType));
 
-            // Todo: Verify (add integration tests) that % has actually worked with SQL engine before we add here & api doc
-            if (strpos($preparedValue, '%') !== false) {
-                $queries[] = $name . ':' . str_replace('%', '*', $preparedValue);
+            // Check if there is user supplied wildcard or not
+            if (strpos($preparedValue, '*') !== false) {
+                $queries[] = $name . ':' . $this->escapeExpressions($preparedValue, true);
             } else {
-                $queries[] = $name . ':*' . $preparedValue . '*';
+                $queries[] = $name . ':"' . $this->escapeQuote($preparedValue) . '"';
             }
         }
 
