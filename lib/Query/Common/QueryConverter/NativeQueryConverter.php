@@ -79,6 +79,16 @@ class NativeQueryConverter extends QueryConverter
             $params = array_merge($facetParams, $params);
         }
 
+        if ($query->query instanceof Query\Criterion\FullText) {
+            // https://lucene.apache.org/solr/guide/6_6/highlighting.html
+            $params['hl'] = 'on';
+            $params['hl.fl'] = 'meta_content__text_t';
+            // @deprecated @todo Enable once we drop Solr 4.4 support
+            //$params['hl.method'] = 'unified';
+            // @todo Should this be somehow configurable? And should we take boost fields into account?
+
+        }
+
         return $params;
     }
 
