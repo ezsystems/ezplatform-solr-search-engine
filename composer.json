@@ -12,7 +12,7 @@
     ],
     "require": {
         "php": "~5.6|~7.0",
-        "ezsystems/ezpublish-kernel": "~6.7.8@dev|^6.13.5@dev|7.3.5@dev|^7.4.3@dev",
+        "ezsystems/ezpublish-kernel": "~6.7.8@dev|^6.13.5@dev|~7.3.5@dev|^7.4.3@dev",
         "netgen/query-translator": "^1.0"
     },
     "require-dev": {
