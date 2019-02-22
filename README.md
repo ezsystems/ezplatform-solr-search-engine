@@ -6,7 +6,7 @@
 [![License](https://img.shields.io/github/license/ezsystems/ezplatform-solr-search-engine.svg?style=flat-square)](LICENSE)
 
 Solr Search Engine Bundle for use with:
-- v1.5+: eZ Platform 1.7+ *(bundled out of the box)* with Solr 4.10.4 _or_ 6.x _(recommended: 6.x)_
+- v1.5+: eZ Platform 1.7+ *(bundled out of the box)* with Solr 6.x _(recommended: 6.6 which is an LTS)_
 - v1.0.x: eZ Publish Platform Enterprise 5.4.5+ *(optional, not as feature rich but helpful for scaling filtering queries)* with Solr 4.10.4
 
 #####  Overview of features
@@ -56,7 +56,6 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
 2. Get & extract Solr
 
    E.g. one of the following:
-   - [Solr 4.10.4](http://archive.apache.org/dist/lucene/solr/4.10.4/solr-4.10.4.tgz)
    - [Solr 6.6.5](http://archive.apache.org/dist/lucene/solr/6.6.0/solr-6.6.5.tgz)
 
 3. Configure Solr *(single core)*
@@ -64,17 +63,6 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
     *Note: See .travis.yml and bin/.travis/init_solr.sh for multi core setups*
 
     ```bash
-    # Solr 4.10
-    cd solr-4.10.4/example
-    mkdir -p multicore/collection1/conf
-    cp -R <ezplatform-solr-search-engine>/lib/Resources/config/solr/* multicore/collection1/conf
-    cp solr/collection1/conf/{currency.xml,stopwords.txt,synonyms.txt} multicore/collection1/conf
-    ## Remove default cores configuration and add core configuration
-    sed -i.bak 's/<core name=".*" instanceDir=".*" \/>//g' multicore/solr.xml
-    sed -i.bak "s/<shardHandlerFactory/<core name=\"collection1\" instanceDir=\"collection1\" \/><shardHandlerFactory/g" multicore/solr.xml
-    cp multicore/core0/conf/solrconfig.xml multicore/collection1/conf
-    sed -i.bak s/core0/collection1/g multicore/collection1/conf/solrconfig.xml
-
     # Solr 6
     cd solr-6.6.5
     mkdir -p server/ez/template
@@ -115,10 +103,6 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
 4. Start Solr
 
     ```bash
-    # Solr 4.10
-    cd solr-4.10.4/example
-    java -Djetty.port=8983 -Dsolr.solr.home=multicore -jar start.jar
-
     # Solr 6
     cd solr-6.6.5
     bin/solr -s ez
