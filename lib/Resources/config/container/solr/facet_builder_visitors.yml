@@ -2,7 +2,7 @@ parameters:
     ezpublish.search.solr.query.common.facet_builder_visitor.content_type.class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\FacetBuilderVisitor\ContentType
     ezpublish.search.solr.query.common.facet_builder_visitor.section.class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\FacetBuilderVisitor\Section
     ezpublish.search.solr.query.common.facet_builder_visitor.user.class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\FacetBuilderVisitor\User
-    ezpublish.search.solr.query.common.facet_builder_visitor.field.class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\FacetBuilderVisitor\User
+    ezpublish.search.solr.query.common.facet_builder_visitor.field.class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\FacetBuilderVisitor\Field
 
 services:
     ezpublish.search.solr.query.common.facet_builder_visitor.content_type:
