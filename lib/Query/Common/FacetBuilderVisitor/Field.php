@@ -24,7 +24,7 @@ use EzSystems\EzPlatformSolrSearchEngine\Query\FacetFieldVisitor;
 class Field extends FacetBuilderVisitor implements FacetFieldVisitor
 {
     /**
-     * @var FieldNameResolver
+     * @var \eZ\Publish\Core\Search\Common\FieldNameResolver
      */
     private $fieldNameResolver;
 
