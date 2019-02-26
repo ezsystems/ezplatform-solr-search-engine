@@ -80,32 +80,36 @@ class Field extends FacetBuilderVisitor implements FacetFieldVisitor
     public function visitBuilder(FacetBuilder $facetBuilder, $fieldId)
     {
         $parameters = [];
-        $criteria = new Criterion\MatchAll();
-        $fieldPaths = $facetBuilder->fieldPaths;
 
-        if (count($fieldPaths) > 1) {
-            $contentTypeIdentifier = array_shift($fieldPaths);
-            $criteria = new Criterion\ContentTypeIdentifier($contentTypeIdentifier);
-        }
+        foreach ($facetBuilder->fieldPaths as $fieldPath) {
+            $parts = explode('/', $fieldPath);
 
-        $fieldDefinitionIdentifier = array_shift($fieldPaths);
-        $name = array_shift($fieldPaths);
+            if (count($parts) > 1) {
+                $contentTypeIdentifier = array_shift($parts);
+                $criteria = new Criterion\ContentTypeIdentifier($contentTypeIdentifier);
+            } else {
+                $criteria = new Criterion\MatchAll();
+            }
 
-        $fieldTypes = $this->fieldNameResolver->getFieldTypes(
-            $criteria,
-            $fieldDefinitionIdentifier,
-            null,
-            $name
-        );
+            $fieldDefinitionIdentifier = array_shift($parts);
+            $name = array_shift($parts);
 
-        foreach ($fieldTypes as $fieldName => $fieldType) {
-            $parameters = array_merge($parameters, [
-                'facet.field' => "{!ex=dt key={$fieldId}}{$fieldName}",
-                "f.{$fieldName}.facet.limit" => $facetBuilder->limit,
-                "f.{$fieldName}.facet.mincount" => $facetBuilder->minCount,
-                "f.{$fieldName}.facet.sort" => $this->getSort($facetBuilder),
-                "f.{$fieldName}.facet.missing" => 'true',
-            ]);
+            $fieldTypes = $this->fieldNameResolver->getFieldTypes(
+                $criteria,
+                $fieldDefinitionIdentifier,
+                null,
+                $name
+            );
+
+            foreach ($fieldTypes as $fieldName => $fieldType) {
+                $parameters = array_merge($parameters, [
+                    'facet.field' => "{!ex=dt key={$fieldId}}{$fieldName}",
+                    "f.{$fieldName}.facet.limit" => $facetBuilder->limit,
+                    "f.{$fieldName}.facet.mincount" => $facetBuilder->minCount,
+                    "f.{$fieldName}.facet.sort" => $this->getSort($facetBuilder),
+                    "f.{$fieldName}.facet.missing" => 'true',
+                ]);
+            }
         }
 
         return $parameters;
