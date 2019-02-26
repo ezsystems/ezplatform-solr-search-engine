@@ -39,6 +39,20 @@ class Field extends FacetBuilderVisitor implements FacetFieldVisitor
         $totalCount = 0;
         $missingCount = 0;
 
+        /*
+         * Data is an array in following format
+         *
+         * [
+         *      [0] => 28   // facet x key
+         *      [1] => 31   // facet x count
+         *      [2] => 29   // facet x+1 key
+         *      [3] => 3    // facet x+1 count
+         *      ...
+         *      [20] =>     // null indicates total missing to follow
+         *      [21] => 287 // total missing
+         * ]
+         *
+         */
         reset($data);
         while ($key = current($data)) {
             $totalCount += $values[$key] = next($data);
