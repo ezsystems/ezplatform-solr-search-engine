@@ -1,7 +1,7 @@
 {
     "name": "ezsystems/ezplatform-solr-search-engine",
     "description": "Solr search engine implementation for eZ Platform",
-    "license": "GPL-2.0",
+    "license": "GPL-2.0-only",
     "type": "ezplatform-bundle",
     "homepage": "https://github.com/ezsystems/ezplatform-solr-search-engine",
     "authors": [
@@ -11,8 +11,8 @@
         }
     ],
     "require": {
-        "php": "~5.6|~7.0",
-        "ezsystems/ezpublish-kernel": "~6.7.10@dev|^6.13.6@dev|~7.3.5@dev|^7.4.3@dev",
+        "php": "^7.1",
+        "ezsystems/ezpublish-kernel": "^7.5@dev",
         "netgen/query-translator": "^1.0.2"
     },
     "require-dev": {
