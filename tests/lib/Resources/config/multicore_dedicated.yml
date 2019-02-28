@@ -23,6 +23,7 @@ parameters:
           eng-US: endpoint1
           por-PT: endpoint2
           ger-DE: endpoint3
+          nor-NO: endpoint4
     ezpublish.search.solr.default_endpoint: null
     ezpublish.search.solr.main_translations_endpoint: null
 
@@ -77,3 +78,15 @@ services:
                 core: core3
         tags:
             - {name: ezpublish.search.solr.endpoint, alias: endpoint3}
+
+    ezpublish.search.solr.endpoint.endpoint4:
+        class: "%ezpublish.solr.endpoint.class%"
+        arguments:
+            -
+                scheme: http
+                host: localhost
+                port: 8983
+                path: /solr
+                core: core4
+        tags:
+            - {name: ezpublish.search.solr.endpoint, alias: endpoint4}
