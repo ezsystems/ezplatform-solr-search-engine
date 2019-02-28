@@ -8,6 +8,7 @@ default_cores[0]='core0'
 default_cores[1]='core1'
 default_cores[2]='core2'
 default_cores[3]='core3'
+default_cores[4]='core4'
 
 SOLR_PORT=${SOLR_PORT:-8983}
 SOLR_VERSION=${SOLR_VERSION:-6.6.5}
