@@ -6,7 +6,8 @@
 [![License](https://img.shields.io/github/license/ezsystems/ezplatform-solr-search-engine.svg?style=flat-square)](LICENSE)
 
 Solr Search Engine Bundle for use with:
-- v1.5+: eZ Platform 1.7+ *(bundled out of the box)* with Solr 6.x _(recommended: 6.6 which is an LTS)_
+- v1.6+: eZ Platform 2.5LTS+ *(bundled out of the box)* with Solr 6.x _(recommended: 6.6 which is an LTS)_
+- v1.5: eZ Platform 1.7LTS & 1.13LTS *(bundled out of the box)* with Solr 6.x or 4.10.4 _(recommended: 6.6 which is an LTS, and certain features only work on Solr 6)_
 - v1.0.x: eZ Publish Platform Enterprise 5.4.5+ *(optional, not as feature rich but helpful for scaling filtering queries)* with Solr 4.10.4
 
 #####  Overview of features
@@ -56,7 +57,7 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
 2. Get & extract Solr
 
    E.g. one of the following:
-   - [Solr 6.6.5](http://archive.apache.org/dist/lucene/solr/6.6.0/solr-6.6.5.tgz)
+   - [Solr 6.6.5](https://archive.apache.org/dist/lucene/solr/6.6.5/solr-6.6.5.tgz)
 
 3. Configure Solr *(single core)*
 
