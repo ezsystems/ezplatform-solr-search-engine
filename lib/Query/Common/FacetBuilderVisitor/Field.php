@@ -10,6 +10,7 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\FacetBuilderVisitor;
 
+use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
 use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder\FieldFacetBuilder;
@@ -121,6 +122,8 @@ class Field extends FacetBuilderVisitor implements FacetFieldVisitor
                 return 'count';
             case FieldFacetBuilder::TERM_ASC:
                 return 'index';
+            default:
+                throw new NotImplementedException('Sort order not supported');
         }
 
         return 'index';
