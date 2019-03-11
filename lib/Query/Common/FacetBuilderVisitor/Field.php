@@ -91,8 +91,8 @@ class Field extends FacetBuilderVisitor implements FacetFieldVisitor
                 $criteria = new Criterion\MatchAll();
             }
 
-            $fieldDefinitionIdentifier = array_shift($fieldPaths);
-            $name = array_shift($fieldPaths);
+            $fieldDefinitionIdentifier = array_shift($parts);
+            $name = array_shift($parts);
 
             $fieldTypes = $this->fieldNameResolver->getFieldTypes(
                 $criteria,
@@ -109,6 +109,17 @@ class Field extends FacetBuilderVisitor implements FacetFieldVisitor
                     "f.{$fieldName}.facet.sort" => $this->getSort($facetBuilder),
                     "f.{$fieldName}.facet.missing" => 'true',
                 ]);
+                if (isset($facetBuilder->prefix) && $facetBuilder->prefix) {
+                    array_merge($parameters, [
+                        "f.{$fieldName}.facet.prefix" => '"' . $this->escapeQuote($facetBuilder->prefix, true) . '"',
+                    ]);
+                }
+                if (isset($facetBuilder->contains) && $facetBuilder->contains) {
+                    array_merge($parameters, [
+                        "f.{$fieldName}.facet.contains" => '"' . $this->escapeQuote($facetBuilder->contains, true) . '"',
+                        "f.{$fieldName}.facet.contains.ignoreCase" => $facetBuilder->containsIgnoreCase ? 'true' : 'false',
+                    ]);
+                }
             }
         }
 
@@ -125,5 +136,22 @@ class Field extends FacetBuilderVisitor implements FacetFieldVisitor
         }
 
         throw new NotImplementedException('Sort order not supported');
+    }
+
+    /**
+     * Escapes given $string for wrapping inside single or double quotes.
+     *
+     * Does not include quotes in the returned string, this needs to be done by the consumer code.
+     *
+     * @param string $string
+     * @param bool   $doubleQuote
+     *
+     * @return string
+     */
+    protected function escapeQuote($string, $doubleQuote = false)
+    {
+        $pattern = ($doubleQuote ? '/("|\\\)/' : '/(\'|\\\)/');
+
+        return preg_replace($pattern, '\\\$1', $string);
     }
 }
