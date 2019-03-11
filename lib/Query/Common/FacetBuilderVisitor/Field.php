@@ -85,14 +85,13 @@ class Field extends FacetBuilderVisitor implements FacetFieldVisitor
             $parts = explode('/', $fieldPath);
 
             if (count($parts) > 1) {
-                $contentTypeIdentifier = array_shift($parts);
-                $criteria = new Criterion\ContentTypeIdentifier($contentTypeIdentifier);
+                $criteria = new Criterion\ContentTypeIdentifier(array_shift($parts));
             } else {
                 $criteria = new Criterion\MatchAll();
             }
 
-            $fieldDefinitionIdentifier = array_shift($parts);
-            $name = array_shift($parts);
+            $fieldDefinitionIdentifier = array_shift($fieldPaths);
+            $name = array_shift($fieldPaths);
 
             $fieldTypes = $this->fieldNameResolver->getFieldTypes(
                 $criteria,
