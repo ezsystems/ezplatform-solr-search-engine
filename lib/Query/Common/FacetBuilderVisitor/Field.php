@@ -122,10 +122,8 @@ class Field extends FacetBuilderVisitor implements FacetFieldVisitor
                 return 'count';
             case FieldFacetBuilder::TERM_ASC:
                 return 'index';
-            default:
-                throw new NotImplementedException('Sort order not supported');
         }
 
-        return 'index';
+        throw new NotImplementedException('Sort order not supported');
     }
 }
