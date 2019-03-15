@@ -50,9 +50,11 @@ services:
         class: '%ezpublish.search.solr.field_mapper.content_translation.content_document_fulltext_fields.class%'
         arguments:
             - '@ezpublish.spi.persistence.content_type_handler'
+            - '@ezpublish.spi.persistence.content_handler'
             - '@ezpublish.search.common.field_registry'
             - '@ezpublish.search.common.field_name_generator'
             - '@ezpublish.search.solr.field_mapper.boost_factor_provider'
+            - '@ezpublish.search.solr.field_mapper.indexing_depth_provider'
         tags:
             - {name: ezpublish.search.solr.field_mapper.content_translation}
 

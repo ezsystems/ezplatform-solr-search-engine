@@ -248,6 +248,33 @@ class Configuration implements ConfigurationInterface
                             ->end()
                         ->end()
                     ->end()
+                    ->arrayNode('indexing_depth')
+                        ->info('Maximum level of the related content which is included while indexing content item.')
+                        ->addDefaultsIfNotSet()
+                        ->children()
+                            ->integerNode('default')
+                                ->defaultValue(0)
+                                ->min(0)
+                                ->max(3)
+                                ->info('Default value indexing depth')
+                            ->end()
+                            ->arrayNode('content_type')
+                                ->info('A map of ContentType identifiers and indexing depth')
+                                ->example(
+                                    [
+                                        'article' => 3,
+                                        'image' => 1,
+                                    ]
+                                )
+                                ->normalizeKeys(false)
+                                ->useAttributeAsKey('content_type_identifier')
+                                ->prototype('integer')
+                                    ->min(0)
+                                    ->max(3)
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
                     ->arrayNode('boost_factors')
                         ->addDefaultsIfNotSet()
                         ->info(

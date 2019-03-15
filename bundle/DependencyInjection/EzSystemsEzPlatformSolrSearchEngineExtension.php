@@ -137,6 +137,8 @@ class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
         foreach ($config['connections'] as $name => $params) {
             $this->configureSearchServices($container, $name, $params);
             $this->configureBoostMap($container, $name, $params);
+            $this->configureIndexingDepth($container, $name, $params);
+
             $container->setParameter("$alias.connection.$name", $params);
         }
 
@@ -200,6 +202,24 @@ class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
         $boostFactorMapId = "{$alias}.connection.{$connectionName}.boost_factor_map_id";
 
         $container->setParameter($boostFactorMapId, $boostFactorMap);
+    }
+
+    /**
+     * Creates indexing depth map parameter for a given $connectionName.
+     *
+     * @param ContainerBuilder $container
+     * @param string $connectionName
+     * @param array $connectionParams
+     */
+    private function configureIndexingDepth(ContainerBuilder $container, $connectionName, $connectionParams)
+    {
+        $alias = $this->getAlias();
+
+        $defaultIndexingDepthId = "{$alias}.connection.{$connectionName}.indexing_depth.default";
+        $contentTypeIndexingDepthMapId = "{$alias}.connection.{$connectionName}.indexing_depth.map";
+
+        $container->setParameter($defaultIndexingDepthId, $connectionParams['indexing_depth']['default']);
+        $container->setParameter($contentTypeIndexingDepthMapId, $connectionParams['indexing_depth']['content_type']);
     }
 
     /**

@@ -1,6 +1,7 @@
 parameters:
     ezpublish.solr.engine_factory.class: EzSystems\EzPlatformSolrSearchEngineBundle\ApiLoader\SolrEngineFactory
     ezpublish.solr.boost_factor_provider_factory.class: EzSystems\EzPlatformSolrSearchEngineBundle\ApiLoader\BoostFactorProviderFactory
+    ezpublish.solr.indexing_depth_provider_factory.class: EzSystems\EzPlatformSolrSearchEngineBundle\ApiLoader\IndexingDepthProviderFactory
     ez_search_engine_solr.default_connection: ~
 
 services:
@@ -21,3 +22,16 @@ services:
             - "%ezpublish.search.solr.boost_factor_provider.class%"
         calls:
             - [setContainer, ["@service_container"]]
+
+    ezpublish.search.solr.field_mapper.indexing_depth_provider_factory:
+        class: "%ezpublish.solr.indexing_depth_provider_factory.class%"
+        arguments:
+            - "@ezpublish.api.repository_configuration_provider"
+            - "%ez_search_engine_solr.default_connection%"
+            - "%ezpublish.search.solr.indexing_depth_provider.class%"
+        calls:
+            - [setContainer, ["@service_container"]]
+
+    ezpublish.search.solr.field_mapper.indexing_depth_provider:
+        class: "%ezpublish.search.solr.field_mapper.indexing_depth_provider.class%"
+        factory: 'ezpublish.search.solr.field_mapper.indexing_depth_provider_factory:buildService'
