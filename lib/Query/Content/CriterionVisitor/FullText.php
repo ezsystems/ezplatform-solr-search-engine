@@ -46,23 +46,31 @@ class FullText extends CriterionVisitor
     protected $generator;
 
     /**
+     * @var int
+     */
+    protected $maxDepth;
+
+    /**
      * Create from content type handler and field registry.
      *
      * @param \eZ\Publish\Core\Search\Common\FieldNameResolver $fieldNameResolver
      * @param \QueryTranslator\Languages\Galach\Tokenizer $tokenizer
      * @param \QueryTranslator\Languages\Galach\Parser $parser
      * @param \QueryTranslator\Languages\Galach\Generators\ExtendedDisMax $generator
+     * @param int $maxDepth
      */
     public function __construct(
         FieldNameResolver $fieldNameResolver,
         Tokenizer $tokenizer,
         Parser $parser,
-        ExtendedDisMax $generator
+        ExtendedDisMax $generator,
+        $maxDepth = 0
     ) {
         $this->fieldNameResolver = $fieldNameResolver;
         $this->tokenizer = $tokenizer;
         $this->parser = $parser;
         $this->generator = $generator;
+        $this->maxDepth = $maxDepth;
     }
 
     /**
@@ -121,6 +129,10 @@ class FullText extends CriterionVisitor
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\FullText $criterion */
         $queryFields = ['meta_content__text_t'];
 
+        for ($i = 1; $i <= $this->maxDepth; ++$i) {
+            $queryFields[] = "meta_related_content_{$i}__text_t^{$this->getBoostFactorForRelatedContent($i)}";
+        }
+
         foreach ($criterion->boost as $field => $boost) {
             $searchFields = $this->getSearchFields($criterion, $field);
 
@@ -130,5 +142,17 @@ class FullText extends CriterionVisitor
         }
 
         return implode(' ', $queryFields);
+    }
+
+    /**
+     * Returns boost factor for the related content.
+     *
+     * @param int $depth
+     *
+     * @return float
+     */
+    private function getBoostFactorForRelatedContent(int $depth): float
+    {
+        return 1.0 / pow(2.0, $depth);
     }
 }

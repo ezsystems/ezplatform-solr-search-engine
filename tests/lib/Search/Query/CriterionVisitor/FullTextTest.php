@@ -29,7 +29,7 @@ use QueryTranslator\Languages\Galach\Tokenizer;
  */
 class FullTextTest extends TestCase
 {
-    protected function getFullTextCriterionVisitor(array $fieldTypes = array())
+    protected function getFullTextCriterionVisitor(array $fieldTypes = array(), int $maxDepth = 0)
     {
         $fieldNames = array_keys($fieldTypes);
         $fieldNameResolver = $this->getMockBuilder(FieldNameResolver::class)
@@ -64,7 +64,8 @@ class FullTextTest extends TestCase
             $fieldNameResolver,
             $this->getTokenizer(),
             $this->getParser(),
-            $this->getGenerator()
+            $this->getGenerator(),
+            $maxDepth
         );
     }
 
@@ -274,6 +275,18 @@ class FullTextTest extends TestCase
 
         $this->assertEquals(
             "{!edismax v='Hello AND (and goodbye) as +always' qf='meta_content__text_t' uf=-*}",
+            $visitor->visit($criterion)
+        );
+    }
+
+    public function testVisitWithRelated()
+    {
+        $visitor = $this->getFullTextCriterionVisitor([], 3);
+
+        $criterion = new Criterion\FullText('Hello');
+
+        $this->assertEquals(
+            "{!edismax v='Hello' qf='meta_content__text_t meta_related_content_1__text_t^0.5 meta_related_content_2__text_t^0.25 meta_related_content_3__text_t^0.125' uf=-*}",
             $visitor->visit($criterion)
         );
     }

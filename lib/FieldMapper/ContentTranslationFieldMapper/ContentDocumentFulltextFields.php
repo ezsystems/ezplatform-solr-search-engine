@@ -14,9 +14,11 @@ use eZ\Publish\Core\Search\Common\FieldNameGenerator;
 use eZ\Publish\Core\Search\Common\FieldRegistry;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Type as ContentType;
+use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\FieldType;
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\IndexingDepthProvider;
 
 /**
  * Maps Content fulltext fields to Content document.
@@ -31,9 +33,21 @@ class ContentDocumentFulltextFields extends ContentTranslationFieldMapper
     private static $fieldName = 'meta_content__text';
 
     /**
+     * Field of related content name, untyped.
+     *
+     * @var string
+     */
+    private static $relatedContentFieldName = 'meta_related_content_%d__text';
+
+    /**
      * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
      */
     protected $contentTypeHandler;
+
+    /**
+     * @var \eZ\Publish\SPI\Persistence\Content\Handler
+     */
+    protected $contentHandler;
 
     /**
      * @var \eZ\Publish\Core\Search\Common\FieldRegistry
@@ -51,34 +65,72 @@ class ContentDocumentFulltextFields extends ContentTranslationFieldMapper
     protected $boostFactorProvider;
 
     /**
+     * @var \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\IndexingDepthProvider
+     */
+    protected $indexingDepthProvider;
+
+    /**
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
      * @param \eZ\Publish\Core\Search\Common\FieldRegistry $fieldRegistry
      * @param \eZ\Publish\Core\Search\Common\FieldNameGenerator $fieldNameGenerator
      * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider $boostFactorProvider
+     * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\IndexingDepthProvider $indexingDepthProvider
      */
     public function __construct(
         ContentTypeHandler $contentTypeHandler,
+        ContentHandler $contentHandler,
         FieldRegistry $fieldRegistry,
         FieldNameGenerator $fieldNameGenerator,
-        BoostFactorProvider $boostFactorProvider
+        BoostFactorProvider $boostFactorProvider,
+        IndexingDepthProvider $indexingDepthProvider
     ) {
         $this->contentTypeHandler = $contentTypeHandler;
+        $this->contentHandler = $contentHandler;
         $this->fieldRegistry = $fieldRegistry;
         $this->fieldNameGenerator = $fieldNameGenerator;
         $this->boostFactorProvider = $boostFactorProvider;
+        $this->indexingDepthProvider = $indexingDepthProvider;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function accept(Content $content, $languageCode)
     {
         return true;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function mapFields(Content $content, $languageCode)
     {
-        $fields = [];
         $contentType = $this->contentTypeHandler->load(
             $content->versionInfo->contentInfo->contentTypeId
         );
+
+        $maxDepth = $this->indexingDepthProvider->getMaxDepthForContent(
+            $contentType
+        );
+
+        return $this->doMapFields($content, $contentType, $languageCode, $maxDepth);
+    }
+
+    /**
+     * @param \eZ\Publish\SPI\Persistence\Content $content
+     * @param \eZ\Publish\SPI\Persistence\Content\Type $contentType
+     * @param string $languageCode
+     * @param int $maxDepth
+     * @param int $depth
+     *
+     * @return \eZ\Publish\SPI\Search\Field[]
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    private function doMapFields(Content $content, ContentType $contentType, $languageCode, $maxDepth, $depth = 0)
+    {
+        $fields = [];
 
         foreach ($content->fields as $field) {
             if ($field->languageCode !== $languageCode) {
@@ -103,7 +155,7 @@ class ContentDocumentFulltextFields extends ContentTranslationFieldMapper
                     }
 
                     $fields[] = new Field(
-                        self::$fieldName,
+                        $this->getIndexFieldName($depth),
                         $indexField->value,
                         $this->getIndexFieldType($contentType)
                     );
@@ -111,7 +163,71 @@ class ContentDocumentFulltextFields extends ContentTranslationFieldMapper
             }
         }
 
+        if ($depth < $maxDepth) {
+            $relatedFields = $this->doMapRelatedFields($content, $languageCode, $maxDepth, $depth + 1);
+            foreach ($relatedFields as $field) {
+                $fields[] = $field;
+            }
+        }
+
         return $fields;
+    }
+
+    /**
+     * Maps given $content relations to an array of search fields.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content $sourceContent
+     * @param string $languageCode
+     * @param int $maxDepth
+     * @param int $depth
+     *
+     * @return \eZ\Publish\SPI\Search\Field[]
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    private function doMapRelatedFields(Content $sourceContent, $languageCode, $maxDepth, $depth)
+    {
+        $relations = $this->contentHandler->loadRelations($sourceContent->versionInfo->contentInfo->id);
+
+        $relatedContents = $this->contentHandler->loadContentList(
+            array_map(function (Content\Relation $relation) {
+                return $relation->destinationContentId;
+            }, $relations)
+        );
+
+        $contentTypes = $this->contentTypeHandler->loadContentTypeList(
+            array_map(function (Content $content) {
+                return $content->versionInfo->contentInfo->contentTypeId;
+            }, $relatedContents)
+        );
+
+        $fields = [];
+        foreach ($relatedContents as $relatedContent) {
+            $contentTypeId = $relatedContent->versionInfo->contentInfo->contentTypeId;
+
+            $relatedFields = $this->doMapFields($relatedContent, $contentTypes[$contentTypeId], $languageCode, $maxDepth, $depth);
+            foreach ($relatedFields as $field) {
+                $fields[] = $field;
+            }
+        }
+
+        return $fields;
+    }
+
+    /**
+     * Returns field name base on given depth.
+     *
+     * @param int $depth
+     *
+     * @return string
+     */
+    private function getIndexFieldName(int $depth): string
+    {
+        if ($depth === 0) {
+            return self::$fieldName;
+        }
+
+        return sprintf(self::$relatedContentFieldName, $depth);
     }
 
     /**

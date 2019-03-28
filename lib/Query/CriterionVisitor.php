@@ -35,7 +35,7 @@ abstract class CriterionVisitor
      *
      * @return string
      */
-    abstract public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null);
+    abstract public function visit(Criterion $criterion, self $subVisitor = null);
 
     /**
      * Get Solr range.

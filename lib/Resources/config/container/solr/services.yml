@@ -10,6 +10,9 @@ parameters:
     ezpublish.search.solr.field_mapper.location.class: EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper\Aggregate
     ezpublish.search.solr.field_mapper.boost_factor_provider.class: EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider
     ezpublish.search.solr.field_mapper.boost_factor_provider.map: []
+    ezpublish.search.solr.field_mapper.indexing_depth_provider.class: \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\IndexingDepthProvider
+    ezpublish.search.solr.field_mapper.indexing_depth_provider.map: []
+    ezpublish.search.solr.field_mapper.indexing_depth_provider.default: 0
 
 services:
     ezpublish.search.solr.gateway.client.http.stream:
@@ -75,3 +78,9 @@ services:
         class: "%ezpublish.search.solr.field_mapper.boost_factor_provider.class%"
         arguments:
             - "%ezpublish.search.solr.field_mapper.boost_factor_provider.map%"
+
+    ezpublish.search.solr.field_mapper.indexing_depth_provider:
+        class: "%ezpublish.search.solr.field_mapper.indexing_depth_provider.class%"
+        arguments:
+            - "%ezpublish.search.solr.field_mapper.indexing_depth_provider.map%"
+            - "%ezpublish.search.solr.field_mapper.indexing_depth_provider.default%"

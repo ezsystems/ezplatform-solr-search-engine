@@ -20,6 +20,7 @@ parameters:
     ezpublish.search.solr.result_extractor.native.class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\NativeResultExtractor
     ezpublish.search.solr.query_converter.class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\QueryConverter\NativeQueryConverter
     ezpublish.search.solr.boost_factor_provider.class: EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider
+    ezpublish.search.solr.indexing_depth_provider.class: EzSystems\EzPlatformSolrSearchEngine\FieldMapper\IndexingDepthProvider
     # Endpoint resolver arguments must be set in order to be overrideable
     ezpublish.search.solr.entry_endpoints: []
     ezpublish.search.solr.cluster_endpoints: []
