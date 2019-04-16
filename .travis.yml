@@ -18,7 +18,8 @@ matrix:
           env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="6.5.1"  CORES_SETUP="shared"
         - php: 7.2
           env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="6.6.5"  CORES_SETUP="single" SOLR_CORES="collection1"
-
+        - php: 7.2
+          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="6.6.5"  CORES_SETUP="cloud" SOLR_CORES="collection1" SOLR_CLOUD="yes"
 # test only master and stable branches (+ Pull requests against those)
 branches:
     only:

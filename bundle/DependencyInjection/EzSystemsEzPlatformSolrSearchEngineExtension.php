@@ -10,7 +10,7 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngineBundle\DependencyInjection;
 
-use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider;
+use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Reference;
@@ -73,6 +73,21 @@ class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
      * @var string
      */
     const BOOST_FACTOR_PROVIDER_ID = 'ezpublish.search.solr.field_mapper.boost_factor_provider';
+
+    /**
+     * @var string
+     */
+    const STANDALONE_DISTRIBUTION_STRATEGY_ID = 'ezpublish.search.solr.gateway.distribution_strategy.abstract_standalone';
+
+    /**
+     * @var string
+     */
+    const CLOUD_DISTRIBUTION_STRATEGY_ID = 'ezpublish.search.solr.gateway.distribution_strategy.abstract_cloud';
+
+    /**
+     * @var string
+     */
+    const IMPLICIT_DOCUMENT_ROUTER_ID = 'ezpublish.search.solr.gateway.document_router.implicit';
 
     public function getAlias()
     {
@@ -181,9 +196,34 @@ class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
         $coreFilterId = "$alias.connection.$connectionName.core_filter_id";
         $container->setDefinition($coreFilterId, $coreFilterDefinition);
 
-        // Gateway
+        // Distribution Strategy
+        $distributionStrategyId = "$alias.connection.$connectionName.distribution_strategy";
+
+        switch ($connectionParams['distribution_strategy']) {
+            case 'standalone':
+                $distributionStrategyDefinition = new ChildDefinition(self::STANDALONE_DISTRIBUTION_STRATEGY_ID);
+                break;
+            case 'cloud':
+                $documentRouterDefinition = new ChildDefinition(self::IMPLICIT_DOCUMENT_ROUTER_ID);
+                $documentRouterDefinition->setArgument(0, new Reference($endpointResolverId));
+
+                $documentRouterId = $distributionStrategyId . '.document_router';
+                $container->setDefinition($documentRouterId, $documentRouterDefinition);
+
+                $distributionStrategyDefinition = new ChildDefinition(self::CLOUD_DISTRIBUTION_STRATEGY_ID);
+                $distributionStrategyDefinition->setArgument(0, new Reference($endpointResolverId));
+                $distributionStrategyDefinition->setArgument(1, new Reference($documentRouterId));
+                break;
+            default:
+                throw new \RuntimeException('Unknown distribution strategy');
+        }
+
+        $container->setDefinition($distributionStrategyId, $distributionStrategyDefinition);
+
         $gatewayDefinition = new DefinitionDecorator(self::GATEWAY_ID);
         $gatewayDefinition->replaceArgument(1, new Reference($endpointResolverId));
+        $gatewayDefinition->replaceArgument(6, new Reference($distributionStrategyId));
+
         $gatewayId = "$alias.connection.$connectionName.gateway_id";
         $container->setDefinition($gatewayId, $gatewayDefinition);
     }

@@ -63,12 +63,18 @@ class Native extends Gateway
     protected $updateSerializer;
 
     /**
+     * @var \EzSystems\EzPlatformSolrSearchEngine\Gateway\DistributionStrategy
+     */
+    protected $distributionStrategy;
+
+    /**
      * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\HttpClient $client
      * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointResolver $endpointResolver
      * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointRegistry $endpointRegistry
      * @param \EzSystems\EzPlatformSolrSearchEngine\Query\QueryConverter $contentQueryConverter
      * @param \EzSystems\EzPlatformSolrSearchEngine\Query\QueryConverter $locationQueryConverter
      * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\UpdateSerializer $updateSerializer
+     * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\DistributionStrategy $distributionStrategy
      */
     public function __construct(
         HttpClient $client,
@@ -76,7 +82,8 @@ class Native extends Gateway
         EndpointRegistry $endpointRegistry,
         QueryConverter $contentQueryConverter,
         QueryConverter $locationQueryConverter,
-        UpdateSerializer $updateSerializer
+        UpdateSerializer $updateSerializer,
+        DistributionStrategy $distributionStrategy
     ) {
         $this->client = $client;
         $this->endpointResolver = $endpointResolver;
@@ -84,6 +91,7 @@ class Native extends Gateway
         $this->contentQueryConverter = $contentQueryConverter;
         $this->locationQueryConverter = $locationQueryConverter;
         $this->updateSerializer = $updateSerializer;
+        $this->distributionStrategy = $distributionStrategy;
     }
 
     /**
@@ -187,13 +195,11 @@ class Native extends Gateway
             return '';
         }
 
-        $shards = array();
-        $endpoints = $this->endpointResolver->getSearchTargets($languageSettings);
+        $shards = [];
 
+        $endpoints = $this->endpointResolver->getSearchTargets($languageSettings);
         if (!empty($endpoints)) {
-            foreach ($endpoints as $endpoint) {
-                $shards[] = $this->endpointRegistry->getEndpoint($endpoint)->getIdentifier();
-            }
+            $shards = $this->distributionStrategy->getSearchTargets($endpoints);
         }
 
         return implode(',', $shards);
@@ -213,14 +219,13 @@ class Native extends Gateway
         }
 
         $shards = [];
-        $searchTargets = $this->endpointResolver->getEndpoints();
-        if (!empty($searchTargets)) {
-            foreach ($searchTargets as $endpointName) {
-                $shards[] = $this->endpointRegistry->getEndpoint($endpointName)->getIdentifier();
-            }
+
+        $endpoints = $this->endpointResolver->getEndpoints();
+        if (!empty($endpoints)) {
+            $shards = $this->distributionStrategy->getSearchTargets($endpoints);
         }
 
-        return  implode(',', $shards);
+        return implode(',', $shards);
     }
 
     /**
@@ -239,15 +244,19 @@ class Native extends Gateway
     public function bulkIndexDocuments(array $documents)
     {
         $documentMap = array();
+        $documentRouter = $this->distributionStrategy->getDocumentRouter();
+
         $mainTranslationsEndpoint = $this->endpointResolver->getMainLanguagesEndpoint();
         $mainTranslationsDocuments = array();
 
         foreach ($documents as $translationDocuments) {
             foreach ($translationDocuments as $document) {
-                $documentMap[$document->languageCode][] = $document;
+                $documentMap[$document->languageCode][] = $documentRouter->processDocument($document);
 
                 if ($mainTranslationsEndpoint !== null && $document->isMainTranslation) {
-                    $mainTranslationsDocuments[] = $this->getMainTranslationDocument($document);
+                    $mainTranslationsDocuments[] = $documentRouter->processMainTranslationDocument(
+                        $this->getMainTranslationDocument($document)
+                    );
                 }
             }
         }
@@ -378,9 +387,8 @@ class Native extends Gateway
     }
 
     /**
-     * @todo error handling
-     *
      * @param $endpoint
+     * @todo error handling
      */
     protected function purgeEndpoint($endpoint)
     {
