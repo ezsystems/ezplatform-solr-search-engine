@@ -92,6 +92,12 @@ services:
             - "@ezpublish.search.common.field_value_mapper.aggregate"
             - "@ezpublish.search.common.field_name_generator"
 
+    ezpublish.search.solr.gateway.distribution_strategy.standalone:
+        class: EzSystems\EzPlatformSolrSearchEngine\Gateway\DistributionStrategy\StandaloneDistributionStrategy
+        arguments:
+            - "@ezpublish.search.solr.gateway.endpoint_registry"
+            - "@ezpublish.search.solr.gateway.endpoint_resolver"
+
     ezpublish.search.solr.gateway.native:
         class: "%ezpublish.search.solr.gateway.native.class%"
         arguments:
@@ -101,6 +107,7 @@ services:
             - "@ezpublish.search.solr.query_converter.content"
             - "@ezpublish.search.solr.query_converter.location"
             - "@ezpublish.search.solr.gateway.update_serializer"
+            - "@ezpublish.search.solr.gateway.distribution_strategy.standalone"
 
     ezpublish.search.solr.gateway:
         alias: ezpublish.search.solr.gateway.native
@@ -127,3 +134,4 @@ services:
         tags:
             - {name: ezpublish.searchEngineIndexer, alias: solr}
         lazy: true
+

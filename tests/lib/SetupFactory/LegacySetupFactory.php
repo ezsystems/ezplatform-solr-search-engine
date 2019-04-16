@@ -108,8 +108,12 @@ class LegacySetupFactory extends CoreLegacySetupFactory
 
     protected function getTestConfigurationFile()
     {
-        $coresSetup = getenv('CORES_SETUP');
+        $isSolrCloud = getenv('SOLR_CLOUD');
+        if ($isSolrCloud) {
+            return 'cloud.yml';
+        }
 
+        $coresSetup = getenv('CORES_SETUP');
         switch ($coresSetup) {
             case SearchServiceTranslationLanguageFallbackTest::SETUP_DEDICATED:
                 return 'multicore_dedicated.yml';
