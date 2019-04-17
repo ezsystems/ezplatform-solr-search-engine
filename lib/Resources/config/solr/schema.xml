@@ -41,9 +41,40 @@ should not remove or drastically change the existing definitions.
         <filter class="solr.LowerCaseFilterFactory"/>
       </analyzer>
     </fieldType>
+
+    <fieldType name="text_general" class="solr.TextField" positionIncrementGap="100" multiValued="true" sortMissingLast="true">
+        <analyzer type="index">
+            <tokenizer class="solr.KeywordTokenizerFactory"/>
+            <filter class="solr.LowerCaseFilterFactory"/>
+        </analyzer>
+        <analyzer type="query">
+            <tokenizer class="solr.KeywordTokenizerFactory"/>
+            <filter class="solr.LowerCaseFilterFactory"/>
+        </analyzer>
+    </fieldType>
+
+    <fieldType name="pdate" class="solr.DatePointField" docValues="true"/>
+    <fieldType name="pdates" class="solr.DatePointField" docValues="true" multiValued="true"/>
+    <!--
+      Numeric field types that index values using KD-trees.
+      Point fields don't support FieldCache, so they must have docValues="true" if needed for sorting, faceting, functions, etc.
+    -->
+    <fieldType name="pint" class="solr.IntPointField" docValues="true"/>
+    <fieldType name="pfloat" class="solr.FloatPointField" docValues="true"/>
+    <fieldType name="plong" class="solr.LongPointField" docValues="true"/>
+    <fieldType name="pdouble" class="solr.DoublePointField" docValues="true"/>
+
+    <fieldType name="pints" class="solr.IntPointField" docValues="true" multiValued="true"/>
+    <fieldType name="pfloats" class="solr.FloatPointField" docValues="true" multiValued="true"/>
+    <fieldType name="plongs" class="solr.LongPointField" docValues="true" multiValued="true"/>
+    <fieldType name="pdoubles" class="solr.DoublePointField" docValues="true" multiValued="true"/>
+    <fieldType name="random" class="solr.RandomSortField" indexed="true"/>
+
     <fieldType name="identifier" class="solr.StrField" sortMissingLast="true" />
-    <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true"/>
+    <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true" multiValued="false"/>
+    <fieldType name="booleans" class="solr.BoolField" sortMissingLast="true" multiValued="true"/>
     <fieldtype name="binary" class="solr.BinaryField"/>
+    <!-- 1. Deprecated: All Trie* numeric and date field types have been deprecated in favor of *Point field types. -->
     <fieldType name="int" class="solr.TrieIntField" precisionStep="0" positionIncrementGap="0"/>
     <fieldType name="float" class="solr.TrieFloatField" precisionStep="0" positionIncrementGap="0"/>
     <fieldType name="long" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0"/>
@@ -52,10 +83,10 @@ should not remove or drastically change the existing definitions.
 
     <fieldtype name="ignored" stored="false" indexed="false" multiValued="true" class="solr.StrField" />
     <fieldType name="point" class="solr.PointType" dimension="2" subFieldSuffix="_d"/>
+    <!-- 19. Deprecated LatLonType, GeoHashField, SpatialPointVectorFieldType, and SpatialTermQueryPrefixTreeFieldType. Instead, switch to LatLonPointSpatialField or SpatialRecursivePrefixTreeFieldType or RptWithGeometrySpatialField. -->
     <fieldType name="location" class="solr.LatLonType" subFieldSuffix="_coordinate"/>
-
-    <fieldType name="currency" class="solr.CurrencyField" precisionStep="8" defaultCurrency="USD" currencyConfig="currency.xml" />
-
+    <!-- 40. SOLR-10503: CurrencyField has been deprecated in favor of new CurrencyFieldType. -->
+    <!-- <fieldType name="currency" class="solr.CurrencyField" precisionStep="8" defaultCurrency="USD" currencyConfig="currency.xml" /> -->
 
 
 
@@ -101,7 +132,7 @@ should not remove or drastically change the existing definitions.
     <dynamicField name="*_gl" type="location" indexed="true" stored="true"/>
     <dynamicField name="*_gl_0_coordinate" type="double" indexed="true" stored="true"/>
     <dynamicField name="*_gl_1_coordinate" type="double" indexed="true" stored="true"/>
-    <dynamicField name="*_c" type="currency" indexed="true" stored="true"/>
+<!--    <dynamicField name="*_c" type="currency" indexed="true" stored="true"/>-->
 
     <!--
       This field is required since Solr 4

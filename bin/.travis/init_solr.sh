@@ -44,7 +44,7 @@ fi
 download() {
     case ${SOLR_VERSION} in
         # PS!!: Append versions and don't remove old once, kernel uses this script!
-        6.3.0|6.4.1|6.4.2|6.5.1|6.6.0|6.6.5 )
+        6.3.0|6.4.1|6.4.2|6.5.1|6.6.0|6.6.5|7.7.2|8.2.0 )
             url="http://archive.apache.org/dist/lucene/solr/${SOLR_VERSION}/solr-${SOLR_VERSION}.tgz"
             ;;
         *)
@@ -136,7 +136,7 @@ solr_run() {
     echo "Running with version ${SOLR_VERSION} in standalone mode"
     echo "Starting solr on port ${SOLR_PORT}..."
 
-    ./${SOLR_INSTALL_DIR}/bin/solr -p ${SOLR_PORT} -s ${SOLR_HOME} || exit_on_error "Can't start Solr"
+    ./${SOLR_INSTALL_DIR}/bin/solr -p ${SOLR_PORT} -s ${SOLR_HOME} -Dsolr.disable.shardsWhitelist=true || exit_on_error "Can't start Solr"
 
     echo "Started"
 
@@ -218,13 +218,23 @@ solr_cloud_configure_collection() {
     create_dir ${TEMPLATE_DIR}
 
     local files=("${SOLR_CONFIG[@]}")
-    local config_dir="${INSTALL_DIR}/server/solr/configsets/basic_configs/conf"
 
-    files+=("${config_dir}/currency.xml")
+    if [[ $SOLR_VERSION =~ ^(7|8) ]]; then
+          local config_dir="${INSTALL_DIR}/server/solr/configsets/_default/conf"
+    else
+          local config_dir="${INSTALL_DIR}/server/solr/configsets/basic_configs/conf"
+    fi
+
+    echo $config_dir;
+
+    files+=("${config_dir}/solrconfig.xml")
     files+=("${config_dir}/stopwords.txt")
     files+=("${config_dir}/synonyms.txt")
-    files+=("${config_dir}/elevate.xml")
-    files+=("${config_dir}/solrconfig.xml")
+
+    if [[ ! $SOLR_VERSION =~ ^(7|8) ]]; then
+      files+=("${config_dir}/currency.xml")
+      files+=("${config_dir}/elevate.xml")
+    fi
 
     copy_files ${TEMPLATE_DIR} "${files[*]}"
 
@@ -281,6 +291,7 @@ download
 if [ "$SOLR_CLOUD" = "no" ]; then
     $SCRIPT_DIR/../generate-solr-config.sh \
             --solr-install-dir="${SOLR_INSTALL_DIR}" \
+            --solr-version="${SOLR_VERSION}" \
             --destination-dir="${SOLR_INSTALL_DIR}/server/${SOLR_HOME}/template"
     solr_run
 else

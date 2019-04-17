@@ -62,7 +62,18 @@ class NativeQueryConverter extends QueryConverter
     public function convert(Query $query)
     {
         $params = array(
-            'defType' => 'edismax',
+            /**
+             * v7.7.0: 1. SOLR-11501: Starting a query string with local-params {!myparser ...} is used to switch the
+             * query parser to another, and is intended for use by Solr system developers, not end users doing searches.
+             * To reduce negative side-effects of unintended hack-ability, we've limited the cases that local-params
+             * will be parsed to only contexts in which the default parser is "lucene" or "func". So if defType=edismax
+             * then q={!myparser ...} won't work. In that example, put the desired query parser into defType. Another
+             * example is if deftype=edismax then hl.q={!myparser ...} won't work for the same reason. In that example,
+             * either put the desired query parser into hl.qparser or set hl.qparser=lucene. Most users won't run into
+             * these cases but some will and must change. If you must have full backwards compatibility, use
+             * luceneMatchVersion=7.1.0 or something earlier.
+             */
+            //'defType' => 'edismax',
             'q' => '{!lucene}' . $this->criterionVisitor->visit($query->query),
             'fq' => '{!lucene}' . $this->criterionVisitor->visit($query->filter),
             'sort' => $this->getSortClauses($query->sortClauses),
