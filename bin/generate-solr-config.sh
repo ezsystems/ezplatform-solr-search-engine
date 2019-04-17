@@ -4,7 +4,7 @@ set -e
 
 # Default paramters, if not overloaded by user arguments
 DESTINATION_DIR=.platform/configsets/solr6/conf
-SOLR_VERSION=6.6.5
+SOLR_VERSION=7.7.2
 FORCE=false
 SOLR_INSTALL_DIR=""
 
@@ -20,7 +20,7 @@ Help (this text):
 Usage with eZ Platform Cloud (arguments here can be skipped as they have default values):
 ./vendor/ezsystems/ezplatform-solr-search-engine/bin/generate-solr-config.sh \\
   --destination-dir=.platform/configsets/solr6/conf \\
-  --solr-version=6.6.5
+  --solr-version=7.7.2
 
 Usage with on-premise version of Solr:
 ./vendor/ezsystems/ezplatform-solr-search-engine/bin/generate-solr-config.sh \\
@@ -28,7 +28,7 @@ Usage with on-premise version of Solr:
   --solr-install-dir=/opt/solr
 
 Warning:
- This script only supports Solr 6 and higher !!
+ This script only supports Solr 7 and higher !!
 
 
 Arguments:
@@ -94,7 +94,7 @@ if [ -e $DESTINATION_DIR ]; then
 fi
 
 if [ "$SOLR_INSTALL_DIR" == "" ]; then
-    # If we where not provided existing install directory we'll temporary download version of solr 6 to generate config.
+    # If we where not provided existing install directory we'll temporary download version of solr 7 to generate config.
     GENERATE_SOLR_TMPDIR=`mktemp -d`
     echo "Downloading solr bundle:"
     curl http://archive.apache.org/dist/lucene/solr/${SOLR_VERSION}/solr-${SOLR_VERSION}.tgz > $GENERATE_SOLR_TMPDIR/solr-${SOLR_VERSION}.tgz
@@ -109,7 +109,7 @@ fi
 
 mkdir -p $DESTINATION_DIR
 cp -a ${EZ_BUNDLE_PATH}/lib/Resources/config/solr/* $DESTINATION_DIR
-cp ${SOLR_INSTALL_DIR}/server/solr/configsets/basic_configs/conf/{currency.xml,solrconfig.xml,stopwords.txt,synonyms.txt,elevate.xml} $DESTINATION_DIR
+cp ${SOLR_INSTALL_DIR}/server/solr/configsets/_default/conf/{solrconfig.xml,stopwords.txt,synonyms.txt} $DESTINATION_DIR
 
 if [[ ! $DESTINATION_DIR =~ ^\.platform ]]; then
     # If we are not targeting .platform(.sh) config, we also output default solr.xml
@@ -119,7 +119,7 @@ else
 fi
 
 # Adapt autoSoftCommit to have a recommended value, and remove add-unknown-fields-to-the-schema
-sed -i.bak '/<updateRequestProcessorChain name="add-unknown-fields-to-the-schema">/,/<\/updateRequestProcessorChain>/d' $DESTINATION_DIR/solrconfig.xml
+sed -i.bak '/<updateRequestProcessorChain name="add-unknown-fields-to-the-schema".*/,/<\/updateRequestProcessorChain>/d' $DESTINATION_DIR/solrconfig.xml
 sed -i.bak2 's/${solr.autoSoftCommit.maxTime:-1}/${solr.autoSoftCommit.maxTime:20}/' $DESTINATION_DIR/solrconfig.xml
 
 if [ "$GENERATE_SOLR_TMPDIR" != "" ]; then
