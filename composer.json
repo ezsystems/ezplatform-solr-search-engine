@@ -14,7 +14,7 @@
     "prefer-stable": true,
     "require": {
         "php": "^7.1",
-        "ezsystems/ezpublish-kernel": "^8.0@dev",
+        "ezsystems/ezpublish-kernel": "dev-ezp_30463_solr_cloud as 7.5",
         "netgen/query-translator": "^1.0.2"
     },
     "require-dev": {
@@ -36,7 +36,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "2.0.x-dev"
+            "dev-master": "1.6.x-dev"
         }
     }
 }
