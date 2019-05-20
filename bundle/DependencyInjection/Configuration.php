@@ -244,7 +244,7 @@ class Configuration implements ConfigurationInterface
                                     'number of Solr endpoints that the query is ' .
                                     'distributed to when using always available fallback ' .
                                     "or searching only on the main languages.\n\n" .
-                                    'Make sure main translations endpoint is not used in any other context, ' .
+                                    'Make sure the main_translations endpoint is not used in any other context, ' .
                                     'otherwise results might be duplicated.'
                                 )
                             ->end()
