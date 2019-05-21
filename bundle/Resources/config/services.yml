@@ -45,6 +45,8 @@ services:
     ezpublish.search.solr.gateway.distribution_strategy.abstract_cloud:
         abstract: true
         class: EzSystems\EzPlatformSolrSearchEngine\Gateway\DistributionStrategy\CloudDistributionStrategy
+        arguments:
+            - "@ezpublish.search.solr.gateway.endpoint_registry"
 
     ezpublish.search.solr.gateway.document_router.implicit:
         abstract: true

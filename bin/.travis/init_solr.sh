@@ -4,14 +4,14 @@ default_config_files[1]='lib/Resources/config/solr/schema.xml'
 default_config_files[2]='lib/Resources/config/solr/custom-fields-types.xml'
 default_config_files[3]='lib/Resources/config/solr/language-fieldtypes.xml'
 
-default_cores[0]='core0'
-default_cores[1]='core1'
-default_cores[2]='core2'
-default_cores[3]='core3'
-default_cores[4]='core4'
+default_cores[0]='en'
+default_cores[1]='pl'
+default_cores[2]='de'
+default_cores[3]='fr'
+default_cores[4]='main'
 
-default_nodes=('node1:8983' 'node2:8984' 'node3:8985' 'node3:8986')
-default_shards=('shard0' 'shard1' 'shard2' 'shard3')
+default_nodes=('alpha:8983' 'beta:8984')
+default_shards=('primary' 'secondary')
 
 SOLR_PORT=${SOLR_PORT:-8983}
 SOLR_DIR=${SOLR_DIR:-'__solr'}
@@ -237,21 +237,31 @@ solr_cloud_upload_collection_configuration() {
     echo "Uploaded configuration to Zookeeper"
 }
 
+solr_cloud_create_collections() {
+    for solr_core in ${SOLR_CORES} ; do
+        solr_cloud_create_collection "${solr_core}"
+    done
+}
+
 solr_cloud_create_collection() {
+    local collection_name=$1
     local shards="${SOLR_SHARDS[@]// /,}"
     local nodes_tmp=("${SOLR_NODES[@]/*:/localhost:}")
     local nodes="${nodes_tmp[@]/%/_solr}"
     nodes="${nodes[@]// /,}"
 
     local parameters=(
-        "name=${SOLR_COLLECTION_NAME}"
+        "name=${collection_name}"
         "collection.configName=${SOLR_CONFIGURATION_NAME}"
         "createNodeSet=${nodes}"
         "shards=${shards}"
         "maxShardsPerNode=${SOLR_MAX_SHARDS_PER_NODE}"
         "replicationFactor=${SOLR_REPLICATION_FACTOR}"
-        "router.name=implicit"
-        "router.field=router_field_id"
+        "router.name=compositeId"
+        # TODO: Hardcoded numShards
+        "numShards=2"
+        #"router.name=implicit"
+        #"router.field=router_field_id"
         "createNodeSet.shuffle=false"
         "wt=json"
         "indent=on"
@@ -277,7 +287,7 @@ else
     solr_cloud_start_nodes
     solr_cloud_configure_collection
     solr_cloud_upload_collection_configuration
-    solr_cloud_create_collection
+    solr_cloud_create_collections
 fi
 
 

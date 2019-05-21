@@ -47,17 +47,6 @@ class CloudDistributionStrategyTest extends TestCase
         ], $this->distributionStrategy->getSearchTargets(['default@shard-a', 'default@shard-b', 'default@shard-c']));
     }
 
-    public function testGetSearchTargetsThrowsRuntimeException()
-    {
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Multiple entry endpoint are not supported by Solr Cloud');
-
-        $this->distributionStrategy->getSearchTargets([
-            'default@shard-a',
-            'another@shard-b',
-        ]);
-    }
-
     public function testGetDocumentRouter()
     {
         $this->assertEquals($this->documentRouter, $this->distributionStrategy->getDocumentRouter());

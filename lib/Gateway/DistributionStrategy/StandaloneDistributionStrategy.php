@@ -11,7 +11,10 @@ namespace EzSystems\EzPlatformSolrSearchEngine\Gateway\DistributionStrategy;
 use EzSystems\EzPlatformSolrSearchEngine\Gateway\DistributionStrategy;
 use EzSystems\EzPlatformSolrSearchEngine\Gateway\DistributionStrategy\DocumentRouter\NullDocumentRouter;
 use EzSystems\EzPlatformSolrSearchEngine\Gateway\DocumentRouter;
+use EzSystems\EzPlatformSolrSearchEngine\Gateway\Endpoint;
 use EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointRegistry;
+use EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointResolver;
+use EzSystems\EzPlatformSolrSearchEngine\Gateway\SingleEndpointResolver;
 
 /**
  * Standalone setup of distributed search.
@@ -20,12 +23,19 @@ use EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointRegistry;
  */
 final class StandaloneDistributionStrategy implements DistributionStrategy
 {
+    private const SHARD_SEPARATOR = ',';
+
     /**
      * Endpoint registry service.
      *
      * @var \EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointRegistry
      */
     private $endpointRegistry;
+
+    /**
+     * @var \EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointResolver
+     */
+    private $endpointResolver;
 
     /**
      * @var \EzSystems\EzPlatformSolrSearchEngine\Gateway\DocumentRouter
@@ -41,15 +51,29 @@ final class StandaloneDistributionStrategy implements DistributionStrategy
         $this->documentRouter = new NullDocumentRouter();
     }
 
-    public function getSearchTargets(array $endpoints): array
-    {
-        return array_map(function (string $name) {
-            return $this->endpointRegistry->getEndpoint($name)->getIdentifier();
-        }, $endpoints);
-    }
-
     public function getDocumentRouter(): DocumentRouter
     {
         return $this->documentRouter;
+    }
+
+    public function getSearchParameters(array $parameters, ?array $languageSettings = null): array
+    {
+        if ($this->endpointResolver instanceof SingleEndpointResolver && !$this->endpointResolver->hasMultipleEndpoints()) {
+            return $parameters;
+        }
+
+        $searchTargets = $languageSettings !== null ?
+            $this->endpointResolver->getSearchTargets($languageSettings) :
+            $this->endpointResolver->getEndpoints();
+
+        if (!empty($searchTargets)) {
+            $shards = array_map(function(Endpoint $endpoint) {
+                return $endpoint->getIdentifier();
+            }, $searchTargets);
+
+            $parameters['shards'] = implode(self::SHARD_SEPARATOR, $shards);
+        }
+
+        return $parameters;
     }
 }

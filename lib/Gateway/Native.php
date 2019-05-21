@@ -137,10 +137,7 @@ class Native extends Gateway
      */
     protected function internalFind(array $parameters, array $languageSettings = array())
     {
-        $searchTargets = $this->getSearchTargets($languageSettings);
-        if (!empty($searchTargets)) {
-            $parameters['shards'] = $searchTargets;
-        }
+        $parameters = $this->distributionStrategy->getSearchParameters($parameters, $languageSettings);
 
         return $this->search($parameters);
     }
@@ -148,11 +145,7 @@ class Native extends Gateway
     public function searchAllEndpoints(Query $query)
     {
         $parameters = $this->contentQueryConverter->convert($query);
-
-        $searchTargets = $this->getAllSearchTargets();
-        if (!empty($searchTargets)) {
-            $parameters['shards'] = $searchTargets;
-        }
+        $parameters = $this->distributionStrategy->getSearchParameters($parameters);
 
         return $this->search($parameters);
     }
@@ -195,11 +188,13 @@ class Native extends Gateway
             return '';
         }
 
-        $shards = [];
-
+        $shards = array();
         $endpoints = $this->endpointResolver->getSearchTargets($languageSettings);
+
         if (!empty($endpoints)) {
-            $shards = $this->distributionStrategy->getSearchTargets($endpoints);
+            foreach ($endpoints as $endpoint) {
+                $shards[] = $this->endpointRegistry->getEndpoint($endpoint)->getIdentifier();
+            }
         }
 
         return implode(',', $shards);
@@ -219,13 +214,14 @@ class Native extends Gateway
         }
 
         $shards = [];
-
-        $endpoints = $this->endpointResolver->getEndpoints();
-        if (!empty($endpoints)) {
-            $shards = $this->distributionStrategy->getSearchTargets($endpoints);
+        $searchTargets = $this->endpointResolver->getEndpoints();
+        if (!empty($searchTargets)) {
+            foreach ($searchTargets as $endpointName) {
+                $shards[] = $this->endpointRegistry->getEndpoint($endpointName)->getIdentifier();
+            }
         }
 
-        return implode(',', $shards);
+        return  implode(',', $shards);
     }
 
     /**
@@ -451,6 +447,7 @@ class Native extends Gateway
      */
     protected function search(array $parameters)
     {
+        dump($parameters);
         $queryString = $this->generateQueryString($parameters);
 
         $response = $this->client->request(
