@@ -202,17 +202,11 @@ class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
         switch ($connectionParams['distribution_strategy']) {
             case 'standalone':
                 $distributionStrategyDefinition = new ChildDefinition(self::STANDALONE_DISTRIBUTION_STRATEGY_ID);
+                $distributionStrategyDefinition->setArgument(1, new Reference($endpointResolverId));
                 break;
             case 'cloud':
-                $documentRouterDefinition = new ChildDefinition(self::IMPLICIT_DOCUMENT_ROUTER_ID);
-                $documentRouterDefinition->setArgument(0, new Reference($endpointResolverId));
-
-                $documentRouterId = $distributionStrategyId . '.document_router';
-                $container->setDefinition($documentRouterId, $documentRouterDefinition);
-
                 $distributionStrategyDefinition = new ChildDefinition(self::CLOUD_DISTRIBUTION_STRATEGY_ID);
                 $distributionStrategyDefinition->setArgument(1, new Reference($endpointResolverId));
-                $distributionStrategyDefinition->setArgument(2, new Reference($documentRouterId));
                 break;
             default:
                 throw new \RuntimeException('Unknown distribution strategy');

@@ -240,19 +240,16 @@ class Native extends Gateway
     public function bulkIndexDocuments(array $documents)
     {
         $documentMap = array();
-        $documentRouter = $this->distributionStrategy->getDocumentRouter();
 
         $mainTranslationsEndpoint = $this->endpointResolver->getMainLanguagesEndpoint();
         $mainTranslationsDocuments = array();
 
         foreach ($documents as $translationDocuments) {
             foreach ($translationDocuments as $document) {
-                $documentMap[$document->languageCode][] = $documentRouter->processDocument($document);
+                $documentMap[$document->languageCode][] = $document;
 
                 if ($mainTranslationsEndpoint !== null && $document->isMainTranslation) {
-                    $mainTranslationsDocuments[] = $documentRouter->processMainTranslationDocument(
-                        $this->getMainTranslationDocument($document)
-                    );
+                    $mainTranslationsDocuments[] = $this->getMainTranslationDocument($document);
                 }
             }
         }
@@ -447,7 +444,6 @@ class Native extends Gateway
      */
     protected function search(array $parameters)
     {
-        dump($parameters);
         $queryString = $this->generateQueryString($parameters);
 
         $response = $this->client->request(

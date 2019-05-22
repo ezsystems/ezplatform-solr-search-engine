@@ -19,18 +19,21 @@ parameters:
     ezpublish.search.solr.default.distribution_strategy: cloud
 
     ezpublish.search.solr.entry_endpoints:
-          - cloud
+          - eng
+          - ger
+          - default
+          - main
     ezpublish.search.solr.cluster_endpoints:
-          eng-GB: cloud@shard0
-          ger-DE: cloud@shard3
-    ezpublish.search.solr.default_endpoint: cloud@shard2
-    ezpublish.search.solr.main_translations_endpoint: cloud@shard1
+          eng-GB: eng # cloud@shard0
+          ger-DE: ger # cloud@shard3
+    ezpublish.search.solr.default_endpoint: default # cloud@shard2
+    ezpublish.search.solr.main_translations_endpoint: main # cloud@shard1
 
 services:
     ezpublish.spi.search_engine:
         alias: ezpublish.spi.search.solr
 
-    ezpublish.search.solr.endpoint.cloud:
+    ezpublish.search.solr.endpoint.eng:
         class: "%ezpublish.solr.endpoint.class%"
         arguments:
             -
@@ -38,20 +41,51 @@ services:
                 host: localhost
                 port: 8983
                 path: /solr
-                core: ezplatform
+                core: core0
         tags:
-            - {name: ezpublish.search.solr.endpoint, alias: cloud}
+            - {name: ezpublish.search.solr.endpoint, alias: eng}
 
-    ezpublish.search.solr.gateway.document_router.implicit:
-        class: EzSystems\EzPlatformSolrSearchEngine\Gateway\DistributionStrategy\DocumentRouter\ImplicitDocumentRouter
+    ezpublish.search.solr.endpoint.ger:
+        class: "%ezpublish.solr.endpoint.class%"
         arguments:
-            - "@ezpublish.search.solr.gateway.endpoint_resolver"
+            -
+                scheme: http
+                host: localhost
+                port: 8983
+                path: /solr
+                core: core1
+        tags:
+            - {name: ezpublish.search.solr.endpoint, alias: ger}
+
+    ezpublish.search.solr.endpoint.default:
+        class: "%ezpublish.solr.endpoint.class%"
+        arguments:
+            -
+                scheme: http
+                host: localhost
+                port: 8983
+                path: /solr
+                core: core2
+        tags:
+            - {name: ezpublish.search.solr.endpoint, alias: default}
+
+    ezpublish.search.solr.endpoint.main:
+        class: "%ezpublish.solr.endpoint.class%"
+        arguments:
+            -
+                scheme: http
+                host: localhost
+                port: 8983
+                path: /solr
+                core: core3
+        tags:
+            - {name: ezpublish.search.solr.endpoint, alias: main}
 
     ezpublish.search.solr.gateway.distribution_strategy.cloud:
         class: EzSystems\EzPlatformSolrSearchEngine\Gateway\DistributionStrategy\CloudDistributionStrategy
         arguments:
+            - "@ezpublish.search.solr.gateway.endpoint_registry"
             - "@ezpublish.search.solr.gateway.endpoint_resolver"
-            - "@ezpublish.search.solr.gateway.document_router.implicit"
 
     ezpublish.search.solr.gateway.native:
         class: "%ezpublish.search.solr.gateway.native.class%"

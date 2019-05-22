@@ -8,10 +8,10 @@ declare(strict_types=1);
 
 namespace EzSystems\EzPlatformSolrSearchEngine\Tests\Search\Gateway\DistributionStrategy;
 
-use EzSystems\EzPlatformSolrSearchEngine\Gateway\DistributionStrategy\DocumentRouter\NullDocumentRouter;
 use EzSystems\EzPlatformSolrSearchEngine\Gateway\DistributionStrategy\StandaloneDistributionStrategy;
 use EzSystems\EzPlatformSolrSearchEngine\Gateway\Endpoint;
 use EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointRegistry;
+use EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointResolver;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -21,26 +21,63 @@ class StandaloneDistributionStrategyTest extends TestCase
     private $distributionStrategy;
 
     /** @var \EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointRegistry|\PHPUnit\Framework\MockObject\MockObject */
+    private $endpointRegistry;
+
+    /** @var \EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointResolver|\PHPUnit\Framework\MockObject\MockObject */
     private $endpointResolver;
 
     protected function setUp()
     {
-        $this->endpointResolver = $this->createEndpointRegistry();
-        $this->distributionStrategy = new StandaloneDistributionStrategy($this->endpointResolver);
+        $this->endpointRegistry = $this->createEndpointRegistry();
+        $this->endpointResolver = $this->createMock(EndpointResolver::class);
+
+        $this->distributionStrategy = new StandaloneDistributionStrategy(
+            $this->endpointRegistry,
+            $this->endpointResolver
+        );
     }
 
     public function testGetSearchTargets()
     {
+        $this->endpointResolver
+            ->expects($this->once())
+            ->method('getEndpoints')
+            ->willReturn(['A', 'B', 'C']);
+
+        $actual = $this->distributionStrategy->getSearchParameters([
+            'wt' => 'json',
+            'indent' => true,
+        ]);
+
         $this->assertEquals([
-            '127.0.0.65:8983/solr/collection1',
-            '127.0.0.66:8983/solr/collection1',
-            '127.0.0.67:8983/solr/collection1',
-        ], $this->distributionStrategy->getSearchTargets(['A', 'B', 'C']));
+            'wt' => 'json',
+            'indent' => true,
+            'shards' => '127.0.0.65:8983/solr/collection1,127.0.0.66:8983/solr/collection1,127.0.0.67:8983/solr/collection1'
+        ], $actual);
     }
 
-    public function testGetDocumentRouter()
+    public function testGetSearchParametersWithLanguageSettings()
     {
-        $this->assertInstanceOf(NullDocumentRouter::class, $this->distributionStrategy->getDocumentRouter());
+        $languagesSettings = [
+            'languages' => ['eng-GB', 'pol-PL']
+        ];
+
+        $this->endpointResolver
+            ->expects($this->once())
+            ->method('getSearchTargets')
+            ->with($languagesSettings)
+            ->willReturn(['A', 'B']);
+
+        $parameters = [
+            'wt' => 'json',
+            'indent' => true,
+        ];
+
+        $this->assertEquals([
+            'wt' => 'json',
+            'indent' => true,
+            'shards' => '127.0.0.65:8983/solr/collection1,127.0.0.66:8983/solr/collection1'
+        ], $this->distributionStrategy->getSearchParameters($parameters, $languagesSettings));
     }
 
     private function createEndpointRegistry(): MockObject

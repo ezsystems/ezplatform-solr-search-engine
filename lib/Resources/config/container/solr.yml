@@ -96,6 +96,7 @@ services:
         class: EzSystems\EzPlatformSolrSearchEngine\Gateway\DistributionStrategy\StandaloneDistributionStrategy
         arguments:
             - "@ezpublish.search.solr.gateway.endpoint_registry"
+            - "@ezpublish.search.solr.gateway.endpoint_resolver"
 
     ezpublish.search.solr.gateway.native:
         class: "%ezpublish.search.solr.gateway.native.class%"

@@ -56,13 +56,11 @@ class EndpointRegistry
      */
     public function getEndpoint($name)
     {
-        $reference = EndpointReference::fromString($name);
-
-        if (!isset($this->endpoint[$reference->endpoint])) {
+        if (!isset($this->endpoint[$name])) {
             throw new OutOfBoundsException("No Endpoint registered for '{$name}'.");
         }
 
-        return $this->endpoint[$reference->endpoint];
+        return $this->endpoint[$name];
     }
 
     /**
