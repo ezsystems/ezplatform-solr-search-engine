@@ -13,7 +13,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": "^7.1",
+        "php": "^7.3",
         "ezsystems/ezpublish-kernel": "^8.0@dev",
         "netgen/query-translator": "^1.0.2"
     },
