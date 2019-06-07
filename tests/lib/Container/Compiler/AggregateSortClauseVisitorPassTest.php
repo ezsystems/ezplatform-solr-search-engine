@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class AggregateSortClauseVisitorPassTest extends AbstractCompilerPassTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->setDefinition(
@@ -33,7 +33,7 @@ class AggregateSortClauseVisitorPassTest extends AbstractCompilerPassTestCase
      *
      *   $container->addCompilerPass(new MyCompilerPass());
      */
-    protected function registerCompilerPass(ContainerBuilder $container)
+    protected function registerCompilerPass(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new AggregateSortClauseVisitorPass());
     }

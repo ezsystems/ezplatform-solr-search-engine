@@ -26,14 +26,14 @@ class RemoveTranslationTest extends TestCase
     /**
      * Check if required signal exists due to BC.
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         if (!class_exists(RemoveTranslationSignal::class)) {
             self::markTestSkipped('RemoveTranslationSignal does not exist');
         }
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
