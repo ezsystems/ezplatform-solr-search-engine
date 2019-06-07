@@ -12,7 +12,7 @@ namespace EzSystems\EzPlatformSolrSearchEngineBundle\DependencyInjection;
 
 use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
+use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -167,7 +167,7 @@ class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
         $alias = $this->getAlias();
 
         // Endpoint resolver
-        $endpointResolverDefinition = new DefinitionDecorator(self::ENDPOINT_RESOLVER_ID);
+        $endpointResolverDefinition = new ChildDefinition(self::ENDPOINT_RESOLVER_ID);
         $endpointResolverDefinition->replaceArgument(0, $connectionParams['entry_endpoints']);
         $endpointResolverDefinition->replaceArgument(1, $connectionParams['mapping']['translations']);
         $endpointResolverDefinition->replaceArgument(2, $connectionParams['mapping']['default']);
@@ -176,13 +176,13 @@ class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
         $container->setDefinition($endpointResolverId, $endpointResolverDefinition);
 
         // Core filter
-        $coreFilterDefinition = new DefinitionDecorator(self::CORE_FILTER_ID);
+        $coreFilterDefinition = new ChildDefinition(self::CORE_FILTER_ID);
         $coreFilterDefinition->replaceArgument(0, new Reference($endpointResolverId));
         $coreFilterId = "$alias.connection.$connectionName.core_filter_id";
         $container->setDefinition($coreFilterId, $coreFilterDefinition);
 
         // Gateway
-        $gatewayDefinition = new DefinitionDecorator(self::GATEWAY_ID);
+        $gatewayDefinition = new ChildDefinition(self::GATEWAY_ID);
         $gatewayDefinition->replaceArgument(1, new Reference($endpointResolverId));
         $gatewayId = "$alias.connection.$connectionName.gateway_id";
         $container->setDefinition($gatewayId, $gatewayDefinition);
