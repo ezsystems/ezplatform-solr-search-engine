@@ -36,11 +36,9 @@ class NativeEndpointResolverTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testGetEntryEndpointThrowsRuntimeException()
     {
+        $this->expectException(RuntimeException::class);
         $entryEndpoints = array();
 
         $endpointResolver = $this->getEndpointResolver($entryEndpoints);
@@ -920,7 +918,6 @@ class NativeEndpointResolverTest extends TestCase
 
     /**
      * @dataProvider providerForTestGetSearchTargetsThrowsRuntimeException
-     * @expectedException \RuntimeException
      *
      * @param string[] $endpointMap
      * @param null|string $defaultEndpoint
@@ -935,6 +932,8 @@ class NativeEndpointResolverTest extends TestCase
         $languageSettings,
         $message
     ) {
+        $this->expectException(RuntimeException::class);
+
         $endpointResolver = $this->getEndpointResolver(
             array(),
             $endpointMap,
@@ -1041,11 +1040,9 @@ class NativeEndpointResolverTest extends TestCase
         $this->assertEquals($expected, $endpoints);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testGetEndpointsThrowsRuntimeException()
     {
+        $this->expectException(RuntimeException::class);
         $endpointResolver = $this->getEndpointResolver(
             array(),
             array(),

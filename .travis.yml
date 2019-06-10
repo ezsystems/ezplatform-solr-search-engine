@@ -10,13 +10,13 @@ cache:
 
 matrix:
     include:
-        - php: 7.2
+        - php: 7.3
           env: TEST_CONFIG="phpunit.xml"
-        - php: 7.1
+        - php: 7.3
           env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="6.4.2"  CORES_SETUP="dedicated"
-        - php: 7.2
+        - php: 7.3
           env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="6.5.1"  CORES_SETUP="shared"
-        - php: 7.2
+        - php: 7.3
           env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="6.6.5"  CORES_SETUP="single" SOLR_CORES="collection1"
 
 # test only master and stable branches (+ Pull requests against those)

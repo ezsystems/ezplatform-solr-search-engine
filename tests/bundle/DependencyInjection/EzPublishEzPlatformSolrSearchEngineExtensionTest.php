@@ -12,6 +12,7 @@ namespace EzSystems\EzPlatformSolrSearchEngineBundle\Tests\DependencyInjection;
 
 use EzSystems\EzPlatformSolrSearchEngineBundle\DependencyInjection\EzSystemsEzPlatformSolrSearchEngineExtension;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtensionTestCase
 {
@@ -20,19 +21,19 @@ class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtension
      */
     private $extension;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->extension = new EzSystemsEzPlatformSolrSearchEngineExtension();
 
         parent::setUp();
     }
 
-    protected function getContainerExtensions()
+    protected function getContainerExtensions(): array
     {
         return array($this->extension);
     }
 
-    protected function getMinimalConfiguration()
+    protected function getMinimalConfiguration(): array
     {
         return [];
     }
@@ -149,11 +150,10 @@ class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtension
         );
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     */
     public function testEndpointCoreRequired()
     {
+        $this->expectException(InvalidConfigurationException::class);
+
         $this->load(
             array(
                 'endpoints' => array(

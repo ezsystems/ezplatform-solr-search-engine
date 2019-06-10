@@ -10,6 +10,7 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Tests\Search\Gateway;
 
+use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException;
 use EzSystems\EzPlatformSolrSearchEngine\Gateway\Endpoint;
 use EzSystems\EzPlatformSolrSearchEngine\Tests\Search\TestCase;
 
@@ -91,11 +92,10 @@ class EndpointTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /**
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
-     */
     public function testEndpointDsnParsingWithQuery()
     {
+        $this->expectException(PropertyNotFoundException::class);
+
         $actual = new Endpoint(['dsn' => 'https://10.10.10.10:5434/jolr?query']);
     }
 }
