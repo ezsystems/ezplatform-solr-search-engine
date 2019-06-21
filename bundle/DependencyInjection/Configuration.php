@@ -171,6 +171,10 @@ class Configuration implements ConfigurationInterface
                     )
                 ->end()
                 ->children()
+                    ->enumNode('distribution_strategy')
+                        ->values(['standalone', 'cloud'])
+                        ->defaultValue('standalone')
+                    ->end()
                     ->arrayNode('entry_endpoints')
                         ->info(
                             "A set of entry endpoint names.\n\n" .
