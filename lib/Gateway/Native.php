@@ -63,12 +63,18 @@ class Native extends Gateway
     protected $updateSerializer;
 
     /**
+     * @var \EzSystems\EzPlatformSolrSearchEngine\Gateway\DistributionStrategy
+     */
+    protected $distributionStrategy;
+
+    /**
      * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\HttpClient $client
      * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointResolver $endpointResolver
      * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointRegistry $endpointRegistry
      * @param \EzSystems\EzPlatformSolrSearchEngine\Query\QueryConverter $contentQueryConverter
      * @param \EzSystems\EzPlatformSolrSearchEngine\Query\QueryConverter $locationQueryConverter
      * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\UpdateSerializer $updateSerializer
+     * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\DistributionStrategy $distributionStrategy
      */
     public function __construct(
         HttpClient $client,
@@ -76,7 +82,8 @@ class Native extends Gateway
         EndpointRegistry $endpointRegistry,
         QueryConverter $contentQueryConverter,
         QueryConverter $locationQueryConverter,
-        UpdateSerializer $updateSerializer
+        UpdateSerializer $updateSerializer,
+        DistributionStrategy $distributionStrategy
     ) {
         $this->client = $client;
         $this->endpointResolver = $endpointResolver;
@@ -84,6 +91,7 @@ class Native extends Gateway
         $this->contentQueryConverter = $contentQueryConverter;
         $this->locationQueryConverter = $locationQueryConverter;
         $this->updateSerializer = $updateSerializer;
+        $this->distributionStrategy = $distributionStrategy;
     }
 
     /**
@@ -129,10 +137,7 @@ class Native extends Gateway
      */
     protected function internalFind(array $parameters, array $languageSettings = array())
     {
-        $searchTargets = $this->getSearchTargets($languageSettings);
-        if (!empty($searchTargets)) {
-            $parameters['shards'] = $searchTargets;
-        }
+        $parameters = $this->distributionStrategy->getSearchParameters($parameters, $languageSettings);
 
         return $this->search($parameters);
     }
@@ -140,11 +145,7 @@ class Native extends Gateway
     public function searchAllEndpoints(Query $query)
     {
         $parameters = $this->contentQueryConverter->convert($query);
-
-        $searchTargets = $this->getAllSearchTargets();
-        if (!empty($searchTargets)) {
-            $parameters['shards'] = $searchTargets;
-        }
+        $parameters = $this->distributionStrategy->getSearchParameters($parameters);
 
         return $this->search($parameters);
     }
@@ -239,6 +240,7 @@ class Native extends Gateway
     public function bulkIndexDocuments(array $documents)
     {
         $documentMap = array();
+
         $mainTranslationsEndpoint = $this->endpointResolver->getMainLanguagesEndpoint();
         $mainTranslationsDocuments = array();
 
@@ -378,9 +380,8 @@ class Native extends Gateway
     }
 
     /**
-     * @todo error handling
-     *
      * @param $endpoint
+     * @todo error handling
      */
     protected function purgeEndpoint($endpoint)
     {
