@@ -187,6 +187,7 @@ class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
         // Core filter
         $coreFilterDefinition = new ChildDefinition(self::CORE_FILTER_ID);
         $coreFilterDefinition->replaceArgument(0, new Reference($endpointResolverId));
+        $coreFilterDefinition->addTag('ezpublish.search.solr.core_filter', ['connection' => $connectionName]);
         $coreFilterId = "$alias.connection.$connectionName.core_filter_id";
         $container->setDefinition($coreFilterId, $coreFilterDefinition);
 
@@ -212,6 +213,7 @@ class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
         $gatewayDefinition = new ChildDefinition(self::GATEWAY_ID);
         $gatewayDefinition->replaceArgument(1, new Reference($endpointResolverId));
         $gatewayDefinition->replaceArgument(6, new Reference($distributionStrategyId));
+        $gatewayDefinition->addTag('ezpublish.search.solr.gateway', ['connection' => $connectionName]);
 
         $gatewayId = "$alias.connection.$connectionName.gateway_id";
         $container->setDefinition($gatewayId, $gatewayDefinition);

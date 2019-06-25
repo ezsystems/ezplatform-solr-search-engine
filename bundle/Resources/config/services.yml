@@ -8,11 +8,14 @@ services:
     ezpublish.solr.engine_factory:
         class: "%ezpublish.solr.engine_factory.class%"
         arguments:
-            - "@ezpublish.api.repository_configuration_provider"
-            - "%ez_search_engine_solr.default_connection%"
-            - "%ezpublish.spi.search.solr.class%"
-        calls:
-            - [setContainer, ["@service_container"]]
+            $repositoryConfigurationProvider: "@ezpublish.api.repository_configuration_provider"
+            $defaultConnection: "%ez_search_engine_solr.default_connection%"
+            $searchEngineClass: "%ezpublish.spi.search.solr.class%"
+            $gatewayRegistry: "@ezpublish.search.solr.gateway.registry"
+            $coreFilterRegistry: "@ezpublish.search.solr.core_filter.registry"
+            $contentHandler: "@ezpublish.spi.persistence.content_handler"
+            $documentMapper: "@ezpublish.search.solr.document_mapper"
+            $resultExtractor: "@ezpublish.search.solr.result_extractor"
 
     ezpublish.solr.boost_factor_provider_factory:
         class: "%ezpublish.solr.boost_factor_provider_factory.class%"
