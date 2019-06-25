@@ -270,14 +270,17 @@ services:
 
     ezpublish.search.solr.query.content.criterion_visitor.full_text:
         class: "%ezpublish.search.solr.query.content.criterion_visitor.full_text.class%"
+        factory: ['@EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor\Factory\FullTextFactory', 'createCriterionVisitor']
+        tags:
+            - {name: ezpublish.search.solr.query.content.criterion_visitor}
+
+    EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor\Factory\FullTextFactory:
         arguments:
             - "@ezpublish.search.common.field_name_resolver"
             - "@ezpublish.search.solr.query.query_translator.galach.tokenizer"
             - "@ezpublish.search.solr.query.query_translator.galach.parser"
             - "@ezpublish.search.solr.query.query_translator.galach.generator.edismax"
-            - "@=service('ezpublish.search.solr.field_mapper.indexing_depth_provider').getMaxDepth()"
-        tags:
-            - {name: ezpublish.search.solr.query.content.criterion_visitor}
+            - "@ezpublish.search.solr.field_mapper.indexing_depth_provider"
 
     ezpublish.search.solr.query.content.criterion_visitor.visibility:
         class: "%ezpublish.search.solr.query.content.criterion_visitor.visibility.class%"
