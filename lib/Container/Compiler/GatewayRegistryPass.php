@@ -8,6 +8,7 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Container\Compiler;
 
+use EzSystems\EzPlatformSolrSearchEngine\Gateway\GatewayRegistry;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -15,6 +16,8 @@ use LogicException;
 
 class GatewayRegistryPass implements CompilerPassInterface
 {
+    public const SOLR_GATEWAY_SERVICE_TAG = 'ezpublish.search.solr.gateway';
+
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      *
@@ -22,13 +25,13 @@ class GatewayRegistryPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('ezpublish.search.solr.gateway.registry')) {
+        if (!$container->hasDefinition(GatewayRegistry::class)) {
             return;
         }
 
-        $gatewayRegistryDefinition = $container->getDefinition('ezpublish.search.solr.gateway.registry');
+        $gatewayRegistryDefinition = $container->getDefinition(GatewayRegistry::class);
 
-        $gateways = $container->findTaggedServiceIds('ezpublish.search.solr.gateway');
+        $gateways = $container->findTaggedServiceIds(self::SOLR_GATEWAY_SERVICE_TAG);
 
         foreach ($gateways as $id => $attributes) {
             foreach ($attributes as $attribute) {

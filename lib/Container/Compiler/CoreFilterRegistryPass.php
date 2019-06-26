@@ -8,6 +8,7 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Container\Compiler;
 
+use EzSystems\EzPlatformSolrSearchEngine\CoreFilter\CoreFilterRegistry;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -15,6 +16,8 @@ use LogicException;
 
 class CoreFilterRegistryPass implements CompilerPassInterface
 {
+    public const CORE_FILTER_SERVICE_TAG = 'ezpublish.search.solr.core_filter';
+
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      *
@@ -22,13 +25,13 @@ class CoreFilterRegistryPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('ezpublish.search.solr.core_filter.registry')) {
+        if (!$container->hasDefinition(CoreFilterRegistry::class)) {
             return;
         }
 
-        $coreFilterRegistryDefinition = $container->getDefinition('ezpublish.search.solr.core_filter.registry');
+        $coreFilterRegistryDefinition = $container->getDefinition(CoreFilterRegistry::class);
 
-        $coreFilters = $container->findTaggedServiceIds('ezpublish.search.solr.core_filter');
+        $coreFilters = $container->findTaggedServiceIds(self::CORE_FILTER_SERVICE_TAG);
 
         foreach ($coreFilters as $id => $attributes) {
             foreach ($attributes as $attribute) {
