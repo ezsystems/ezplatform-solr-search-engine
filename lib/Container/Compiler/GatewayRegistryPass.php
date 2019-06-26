@@ -16,7 +16,7 @@ use LogicException;
 
 final class GatewayRegistryPass implements CompilerPassInterface
 {
-    public const SOLR_GATEWAY_SERVICE_TAG = 'ezpublish.search.solr.gateway';
+    public const GATEWAY_SERVICE_TAG = 'ezpublish.search.solr.gateway';
 
     public function process(ContainerBuilder $container): void
     {
@@ -26,7 +26,7 @@ final class GatewayRegistryPass implements CompilerPassInterface
 
         $gatewayRegistryDefinition = $container->getDefinition(GatewayRegistry::class);
 
-        $gateways = $container->findTaggedServiceIds(self::SOLR_GATEWAY_SERVICE_TAG);
+        $gateways = $container->findTaggedServiceIds(self::GATEWAY_SERVICE_TAG);
 
         foreach ($gateways as $id => $attributes) {
             foreach ($attributes as $attribute) {
