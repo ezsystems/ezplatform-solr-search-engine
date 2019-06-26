@@ -11,8 +11,8 @@ services:
             $repositoryConfigurationProvider: "@ezpublish.api.repository_configuration_provider"
             $defaultConnection: "%ez_search_engine_solr.default_connection%"
             $searchEngineClass: "%ezpublish.spi.search.solr.class%"
-            $gatewayRegistry: "@EzSystems\EzPlatformSolrSearchEngine\Gateway\GatewayRegistry"
-            $coreFilterRegistry: "@EzSystems\EzPlatformSolrSearchEngine\CoreFilter\CoreFilterRegistry"
+            $gatewayRegistry: '@EzSystems\EzPlatformSolrSearchEngine\Gateway\GatewayRegistry'
+            $coreFilterRegistry: '@EzSystems\EzPlatformSolrSearchEngine\CoreFilter\CoreFilterRegistry'
             $contentHandler: "@ezpublish.spi.persistence.content_handler"
             $documentMapper: "@ezpublish.search.solr.document_mapper"
             $resultExtractor: "@ezpublish.search.solr.result_extractor"
