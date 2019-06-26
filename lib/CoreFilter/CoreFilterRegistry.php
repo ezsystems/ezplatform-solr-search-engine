@@ -24,23 +24,12 @@ final class CoreFilterRegistry
         $this->coreFilters = $coreFilters;
     }
 
-    public function addCoreFilter(string $connectionName, CoreFilter $coreFilter): void
+    /**
+     * @return \EzSystems\EzPlatformSolrSearchEngine\CoreFilter[] $coreFilters
+     */
+    public function getCoreFilters(): array
     {
-        $this->coreFilters[$connectionName] = $coreFilter;
-    }
-
-    public function getCoreFilter(string $connectionName): CoreFilter
-    {
-        if (!isset($this->coreFilters[$connectionName])) {
-            throw new OutOfBoundsException(sprintf('No Gateway registered for connection \'%s\'', $connectionName));
-        }
-
-        return $this->coreFilters[$connectionName];
-    }
-
-    public function hasCoreFilter(string $connectionName): bool
-    {
-        return isset($this->coreFilters[$connectionName]);
+        return $this->coreFilters;
     }
 
     /**
@@ -49,5 +38,24 @@ final class CoreFilterRegistry
     public function setCoreFilters(array $coreFilters): void
     {
         $this->coreFilters = $coreFilters;
+    }
+
+    public function getCoreFilter(string $connectionName): CoreFilter
+    {
+        if (!isset($this->coreFilters[$connectionName])) {
+            throw new OutOfBoundsException(sprintf('No CoreFilter registered for connection \'%s\'', $connectionName));
+        }
+
+        return $this->coreFilters[$connectionName];
+    }
+
+    public function addCoreFilter(string $connectionName, CoreFilter $coreFilter): void
+    {
+        $this->coreFilters[$connectionName] = $coreFilter;
+    }
+
+    public function hasCoreFilter(string $connectionName): bool
+    {
+        return isset($this->coreFilters[$connectionName]);
     }
 }

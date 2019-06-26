@@ -27,9 +27,20 @@ final class GatewayRegistry
         $this->gateways = $gateways;
     }
 
-    public function addGateway(string $connectionName, Gateway $gateway): void
+    /**
+     * @return \EzSystems\EzPlatformSolrSearchEngine\Gateway[]
+     */
+    public function getGateways(): array
     {
-        $this->gateways[$connectionName] = $gateway;
+        return $this->gateways;
+    }
+
+    /**
+     * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway[] $gateways
+     */
+    public function setGateways(array $gateways): void
+    {
+        $this->gateways = $gateways;
     }
 
     public function getGateway(string $connectionName): Gateway
@@ -41,13 +52,13 @@ final class GatewayRegistry
         return $this->gateways[$connectionName];
     }
 
+    public function addGateway(string $connectionName, Gateway $gateway): void
+    {
+        $this->gateways[$connectionName] = $gateway;
+    }
+
     public function hasGateway(string $connectionName): bool
     {
         return isset($this->gateways[$connectionName]);
-    }
-
-    public function setGateways(array $gateways): void
-    {
-        $this->gateways = $gateways;
     }
 }
