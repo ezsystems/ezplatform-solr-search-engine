@@ -11,7 +11,7 @@ namespace EzSystems\EzPlatformSolrSearchEngine\CoreFilter;
 use EzSystems\EzPlatformSolrSearchEngine\CoreFilter;
 use OutOfBoundsException;
 
-class CoreFilterRegistry
+final class CoreFilterRegistry
 {
     /** @var \EzSystems\EzPlatformSolrSearchEngine\CoreFilter[] */
     protected $coreFilters;

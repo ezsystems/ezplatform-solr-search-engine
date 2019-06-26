@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use LogicException;
 
-class GatewayRegistryPass implements CompilerPassInterface
+final class GatewayRegistryPass implements CompilerPassInterface
 {
     public const SOLR_GATEWAY_SERVICE_TAG = 'ezpublish.search.solr.gateway';
 

@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use LogicException;
 
-class CoreFilterRegistryPass implements CompilerPassInterface
+final class CoreFilterRegistryPass implements CompilerPassInterface
 {
     public const CORE_FILTER_SERVICE_TAG = 'ezpublish.search.solr.core_filter';
 

@@ -14,7 +14,7 @@ use OutOfBoundsException;
 /**
  * Registry for Solr search engine coreFilters.
  */
-class GatewayRegistry
+final class GatewayRegistry
 {
     /**
      * @var \EzSystems\EzPlatformSolrSearchEngine\Gateway[]
