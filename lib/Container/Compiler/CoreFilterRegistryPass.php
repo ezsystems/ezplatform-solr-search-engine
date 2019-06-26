@@ -18,12 +18,7 @@ final class CoreFilterRegistryPass implements CompilerPassInterface
 {
     public const CORE_FILTER_SERVICE_TAG = 'ezpublish.search.solr.core_filter';
 
-    /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     *
-     * @throws \LogicException
-     */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (!$container->hasDefinition(CoreFilterRegistry::class)) {
             return;

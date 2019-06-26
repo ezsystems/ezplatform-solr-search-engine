@@ -16,9 +16,7 @@ use OutOfBoundsException;
  */
 final class GatewayRegistry
 {
-    /**
-     * @var \EzSystems\EzPlatformSolrSearchEngine\Gateway[]
-     */
+    /** @var \EzSystems\EzPlatformSolrSearchEngine\Gateway[] */
     protected $gateways;
 
     /**
