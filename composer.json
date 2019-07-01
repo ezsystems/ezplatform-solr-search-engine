@@ -14,7 +14,7 @@
     "prefer-stable": true,
     "require": {
         "php": "^7.3",
-        "ezsystems/ezpublish-kernel": "^8.0@dev",
+        "ezsystems/ezpublish-kernel": "^8.0@beta",
         "netgen/query-translator": "^1.0.2",
         "symfony/http-kernel": "^4.3",
         "symfony/dependency-injection": "^4.3",
