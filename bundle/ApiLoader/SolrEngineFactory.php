@@ -11,53 +11,73 @@
 namespace EzSystems\EzPlatformSolrSearchEngineBundle\ApiLoader;
 
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use eZ\Publish\SPI\Persistence\Content\Handler;
+use EzSystems\EzPlatformSolrSearchEngine\CoreFilter\CoreFilterRegistry;
+use EzSystems\EzPlatformSolrSearchEngine\DocumentMapper;
+use EzSystems\EzPlatformSolrSearchEngine\Gateway\GatewayRegistry;
+use EzSystems\EzPlatformSolrSearchEngine\ResultExtractor;
 
-class SolrEngineFactory implements ContainerAwareInterface
+class SolrEngineFactory
 {
-    use ContainerAwareTrait;
-
-    /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider
-     */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider */
     private $repositoryConfigurationProvider;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $defaultConnection;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $searchEngineClass;
+
+    /** @var \EzSystems\EzPlatformSolrSearchEngine\Gateway\GatewayRegistry */
+    private $gatewayRegistry;
+
+    /** @var \EzSystems\EzPlatformSolrSearchEngine\CoreFilter\CoreFilterRegistry */
+    private $coreFilterRegistry;
+
+    /** @var \eZ\Publish\SPI\Persistence\Content\Handler */
+    private $contentHandler;
+
+    /** @var \EzSystems\EzPlatformSolrSearchEngine\DocumentMapper */
+    private $documentMapper;
+
+    /** @var \EzSystems\EzPlatformSolrSearchEngine\ResultExtractor */
+    private $resultExtractor;
 
     public function __construct(
         RepositoryConfigurationProvider $repositoryConfigurationProvider,
         $defaultConnection,
-        $searchEngineClass
+        $searchEngineClass,
+        GatewayRegistry $gatewayRegistry,
+        CoreFilterRegistry $coreFilterRegistry,
+        Handler $contentHandler,
+        DocumentMapper $documentMapper,
+        ResultExtractor $resultExtractor
     ) {
         $this->repositoryConfigurationProvider = $repositoryConfigurationProvider;
         $this->defaultConnection = $defaultConnection;
         $this->searchEngineClass = $searchEngineClass;
+        $this->gatewayRegistry = $gatewayRegistry;
+        $this->coreFilterRegistry = $coreFilterRegistry;
+        $this->contentHandler = $contentHandler;
+        $this->documentMapper = $documentMapper;
+        $this->resultExtractor = $resultExtractor;
     }
 
     public function buildEngine()
     {
         $repositoryConfig = $this->repositoryConfigurationProvider->getRepositoryConfig();
 
-        $connection = $this->defaultConnection;
-        if (isset($repositoryConfig['search']['connection'])) {
-            $connection = $repositoryConfig['search']['connection'];
-        }
+        $connection = $repositoryConfig['search']['connection'] ?? $this->defaultConnection;
+
+        $gateway = $this->gatewayRegistry->getGateway($connection);
+        $coreFilter = $this->coreFilterRegistry->getCoreFilter($connection);
 
         return new $this->searchEngineClass(
-            $this->container->get("ez_search_engine_solr.connection.$connection.gateway_id"),
-            $this->container->get('ezpublish.spi.persistence.content_handler'),
-            $this->container->get('ezpublish.search.solr.document_mapper'),
-            $this->container->get('ezpublish.search.solr.result_extractor'),
-            $this->container->get("ez_search_engine_solr.connection.$connection.core_filter_id")
+            $gateway,
+            $this->contentHandler,
+            $this->documentMapper,
+            $this->resultExtractor,
+            $coreFilter
         );
     }
 }

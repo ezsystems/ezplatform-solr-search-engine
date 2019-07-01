@@ -28,6 +28,8 @@ parameters:
     ezpublish.search.solr.main_translations_endpoint: null
 
 services:
+    EzSystems\EzPlatformSolrSearchEngine\Gateway\GatewayRegistry: ~
+
     ezpublish.search.solr.gateway.endpoint_registry:
         class: "%ezpublish.search.solr.gateway.endpoint_registry.class%"
 
@@ -41,6 +43,8 @@ services:
 
     ezpublish.search.solr.gateway.endpoint_resolver:
         alias: ezpublish.search.solr.gateway.endpoint_resolver.native
+
+    EzSystems\EzPlatformSolrSearchEngine\CoreFilter\CoreFilterRegistry: ~
 
     ezpublish.search.solr.core_filter.native:
         class: "%ezpublish.search.solr.core_filter.native.class%"
