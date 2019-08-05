@@ -5,7 +5,6 @@ imports:
     - {resource: solr/query_translator.yml}
     - {resource: solr/services.yml}
     - {resource: solr/sort_clause_visitors.yml}
-    - {resource: solr/slots.yml}
 
 parameters:
     ezpublish.search.solr.connection.server: http://localhost:8983/solr/core0
