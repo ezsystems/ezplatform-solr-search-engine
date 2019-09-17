@@ -56,19 +56,27 @@ class FieldIn extends Field
             );
         }
 
-        $criterion->value = (array)$criterion->value;
+        if ($criterion->value === null) {
+            $criterion->value[] = null;
+        } else {
+            $criterion->value = (array)$criterion->value;
+        }
         $queries = array();
 
         foreach ($searchFields as $name => $fieldType) {
             foreach ($criterion->value as $value) {
-                $preparedValue = $this->escapeQuote(
-                    $this->toString(
-                        $this->mapSearchFieldValue($value, $fieldType)
-                    ),
-                    true
-                );
+                if ($value === null) {
+                    $queries[] = '*:* NOT ' . $name . ':[* TO *]';
+                } else {
+                    $preparedValue = $this->escapeQuote(
+                        $this->toString(
+                            $this->mapSearchFieldValue($value, $fieldType)
+                        ),
+                        true
+                    );
 
-                $queries[] = $name . ':"' . $preparedValue . '"';
+                    $queries[] = $name . ':"' . $preparedValue . '"';
+                }
             }
         }
 
