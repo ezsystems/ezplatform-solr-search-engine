@@ -45,6 +45,8 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
  */
 class Handler implements SearchHandlerInterface, Capable
 {
+    const SOLR_BULK_REMOVE_LIMIT = 1000;
+
     /**
      * Content locator gateway.
      *
@@ -340,9 +342,15 @@ class Handler implements SearchHandlerInterface, Capable
             $this->gateway->searchAllEndpoints($query)
         );
 
+        $contentDocumentIds = [];
+
         foreach ($searchResult->searchHits as $hit) {
-            $idPrefix = $this->mapper->generateContentDocumentId($hit->valueObject->id);
-            $this->gateway->deleteByQuery("_root_:{$idPrefix}*");
+            $contentDocumentIds[] = $this->mapper->generateContentDocumentId($hit->valueObject->id) . '*';
+        }
+
+        foreach (\array_chunk($contentDocumentIds, self::SOLR_BULK_REMOVE_LIMIT) as $ids) {
+            $query = '_root_:(' . implode(' OR ', $ids) . ')';
+            $this->gateway->deleteByQuery($query);
         }
     }
 
