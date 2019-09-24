@@ -445,7 +445,7 @@ class Handler implements SearchHandlerInterface, Capable
         $this->gateway->bulkIndexDocuments($documents);
     }
 
-    public function supports($capabilityFlag)
+    public function supports(int $capabilityFlag): bool
     {
         switch ($capabilityFlag) {
             case SearchService::CAPABILITY_SCORING:
@@ -457,7 +457,7 @@ class Handler implements SearchHandlerInterface, Capable
             case SearchService::CAPABILITY_ADVANCED_FULLTEXT:
                 return true;
             default:
-               return false;
+                return false;
         }
     }
 }
