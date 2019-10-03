@@ -37,7 +37,7 @@ services:
 
     ezpublish.search.solr.field_mapper.indexing_depth_provider:
         class: "%ezpublish.search.solr.field_mapper.indexing_depth_provider.class%"
-        factory: 'ezpublish.search.solr.field_mapper.indexing_depth_provider_factory:buildService'
+        factory: ['@ezpublish.search.solr.field_mapper.indexing_depth_provider_factory', 'buildService']
 
     ezpublish.search.solr.gateway.distribution_strategy.abstract_standalone:
         abstract: true
