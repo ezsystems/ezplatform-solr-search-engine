@@ -47,8 +47,8 @@ class Handler implements SearchHandlerInterface, Capable
 {
     /* Solr's maxBooleanClauses config value is 1024 */
     const SOLR_BULK_REMOVE_LIMIT = 1000;
-    /* 32b max integer value due to Solr (JVM) limitations */
-    const SOLR_MAX_QUERY_LIMIT = PHP_INT_MAX >> 32;
+    /* 16b max unsigned integer value due to Solr (JVM) limitations */
+    const SOLR_MAX_QUERY_LIMIT = 65535;
     const DEFAULT_QUERY_LIMIT = 1000;
 
     /**
