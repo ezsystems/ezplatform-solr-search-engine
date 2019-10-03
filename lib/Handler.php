@@ -45,6 +45,12 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
  */
 class Handler implements SearchHandlerInterface, Capable
 {
+    /* Solr's maxBooleanClauses config value is 1024 */
+    const SOLR_BULK_REMOVE_LIMIT = 1000;
+    /* 16b max unsigned integer value due to Solr (JVM) limitations */
+    const SOLR_MAX_QUERY_LIMIT = 65535;
+    const DEFAULT_QUERY_LIMIT = 1000;
+
     /**
      * Content locator gateway.
      *
@@ -328,7 +334,7 @@ class Handler implements SearchHandlerInterface, Capable
      */
     protected function deleteAllItemsWithoutAdditionalLocation($locationId)
     {
-        $query = $this->prepareQuery();
+        $query = $this->prepareQuery(self::SOLR_MAX_QUERY_LIMIT);
         $query->filter = new Criterion\LogicalAnd(
             [
                 $this->allItemsWithinLocation($locationId),
@@ -340,9 +346,15 @@ class Handler implements SearchHandlerInterface, Capable
             $this->gateway->searchAllEndpoints($query)
         );
 
+        $contentDocumentIds = [];
+
         foreach ($searchResult->searchHits as $hit) {
-            $idPrefix = $this->mapper->generateContentDocumentId($hit->valueObject->id);
-            $this->gateway->deleteByQuery("_root_:{$idPrefix}*");
+            $contentDocumentIds[] = $this->mapper->generateContentDocumentId($hit->valueObject->id) . '*';
+        }
+
+        foreach (\array_chunk(\array_unique($contentDocumentIds), self::SOLR_BULK_REMOVE_LIMIT) as $ids) {
+            $query = '_root_:(' . implode(' OR ', $ids) . ')';
+            $this->gateway->deleteByQuery($query);
         }
     }
 
@@ -351,7 +363,7 @@ class Handler implements SearchHandlerInterface, Capable
      */
     protected function updateAllElementsWithAdditionalLocation($locationId)
     {
-        $query = $this->prepareQuery();
+        $query = $this->prepareQuery(self::SOLR_MAX_QUERY_LIMIT);
         $query->filter = new Criterion\LogicalAnd(
             [
                 $this->allItemsWithinLocation($locationId),
@@ -380,14 +392,16 @@ class Handler implements SearchHandlerInterface, Capable
     /**
      * Prepare standard query for delete purpose.
      *
+     * @param int $limit
+     *
      * @return Query
      */
-    protected function prepareQuery()
+    protected function prepareQuery($limit = self::DEFAULT_QUERY_LIMIT)
     {
         return new Query(
             [
                 'query' => new Criterion\MatchAll(),
-                'limit' => 1000,
+                'limit' => $limit,
                 'offset' => 0,
             ]
         );
