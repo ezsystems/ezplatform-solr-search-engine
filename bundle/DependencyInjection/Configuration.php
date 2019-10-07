@@ -247,7 +247,9 @@ class Configuration implements ConfigurationInterface
                                     'This setting is optional. Use it to reduce the ' .
                                     'number of Solr endpoints that the query is ' .
                                     'distributed to when using always available fallback ' .
-                                    'or searching only on the main languages.'
+                                    "or searching only on the main languages.\n\n" .
+                                    'Make sure the main_translations endpoint is not used in any other context, ' .
+                                    'otherwise results might be duplicated.'
                                 )
                             ->end()
                         ->end()
