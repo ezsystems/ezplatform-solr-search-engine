@@ -6,10 +6,11 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+
 namespace EzSystems\EzPlatformSolrSearchEngine\FieldMapper;
 
-use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\Type as ContentType;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 
 /**
  * BoostFactorProvider provides boost factors for indexed fields.
@@ -90,19 +91,28 @@ class BoostFactorProvider
         $this->map = $map;
     }
 
-    /**
-     * Get boost factor for a Content field by the given $contentType and $fieldDefinition.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Type $contentType
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
-     *
-     * @return float
-     */
-    public function getContentFieldBoostFactor(ContentType $contentType, FieldDefinition $fieldDefinition)
+    public function getContentFieldBoostFactors(): array
     {
-        $typeIdentifier = $contentType->identifier;
-        $fieldIdentifier = $fieldDefinition->identifier;
+        $result = [];
 
+        foreach ($this->map[self::$keyContentFields] as $typeIdentifier => $typeBoostFactor) {
+            if (!is_array($typeBoostFactor)) {
+                // TODO: Expand to the full list of fields with result factor = $contentTypeFactor
+                continue;
+            }
+
+
+            $result[$typeIdentifier] = [];
+            foreach ($typeBoostFactor as $fieldIdentifier => $fieldBoostFactor) {
+                $result[$typeIdentifier][$fieldIdentifier] = $this->getContentFieldBoostFactorByIdentifiers($typeIdentifier, $fieldIdentifier);
+            }
+        }
+
+        return $result;
+    }
+
+    private function getContentFieldBoostFactorByIdentifiers(string $typeIdentifier, string $fieldIdentifier): float
+    {
         if (!isset($this->map[self::$keyContentFields][$typeIdentifier])) {
             $typeIdentifier = self::$keyAny;
         }
@@ -116,6 +126,19 @@ class BoostFactorProvider
         }
 
         return $this->defaultBoostFactor;
+    }
+
+    /**
+     * Get boost factor for a Content field by the given $contentType and $fieldDefinition.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Type $contentType
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
+     *
+     * @return float
+     */
+    public function getContentFieldBoostFactor(ContentType $contentType, FieldDefinition $fieldDefinition)
+    {
+        return $this->getContentFieldBoostFactorByIdentifiers($contentType->identifier, $fieldDefinition->identifier);
     }
 
     /**

@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor\Factory;
 
 use eZ\Publish\Core\Search\Common\FieldNameResolver;
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider;
 use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\IndexingDepthProvider;
 use EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor\FullText;
 use QueryTranslator\Languages\Galach\Generators\ExtendedDisMax;
@@ -30,6 +31,11 @@ final class FullTextFactory
      * @var \eZ\Publish\Core\Search\Common\FieldNameResolver
      */
     private $fieldNameResolver;
+
+    /**
+     * @var \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider
+     */
+    private $boostFactorProvider;
 
     /**
      * @var \QueryTranslator\Languages\Galach\Tokenizer
@@ -55,6 +61,7 @@ final class FullTextFactory
      * Create from content type handler and field registry.
      *
      * @param \eZ\Publish\Core\Search\Common\FieldNameResolver $fieldNameResolver
+     * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider $boostFactorProvider
      * @param \QueryTranslator\Languages\Galach\Tokenizer $tokenizer
      * @param \QueryTranslator\Languages\Galach\Parser $parser
      * @param \QueryTranslator\Languages\Galach\Generators\ExtendedDisMax $generator
@@ -62,12 +69,14 @@ final class FullTextFactory
      */
     public function __construct(
         FieldNameResolver $fieldNameResolver,
+        BoostFactorProvider $boostFactorProvider,
         Tokenizer $tokenizer,
         Parser $parser,
         ExtendedDisMax $generator,
         IndexingDepthProvider $indexingDepthProvider
     ) {
         $this->fieldNameResolver = $fieldNameResolver;
+        $this->boostFactorProvider = $boostFactorProvider;
         $this->tokenizer = $tokenizer;
         $this->parser = $parser;
         $this->generator = $generator;
@@ -83,6 +92,7 @@ final class FullTextFactory
     {
         return new FullText(
             $this->fieldNameResolver,
+            $this->boostFactorProvider,
             $this->tokenizer,
             $this->parser,
             $this->generator,

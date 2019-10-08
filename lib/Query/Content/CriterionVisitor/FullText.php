@@ -10,6 +10,7 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor;
 
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider;
 use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 use eZ\Publish\Core\Search\Common\FieldNameResolver;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -29,6 +30,11 @@ class FullText extends CriterionVisitor
      * @var \eZ\Publish\Core\Search\Common\FieldNameResolver
      */
     protected $fieldNameResolver;
+
+    /**
+     * @var \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider
+     */
+    protected $boostFactorProvider;
 
     /**
      * @var \QueryTranslator\Languages\Galach\Tokenizer
@@ -54,6 +60,7 @@ class FullText extends CriterionVisitor
      * Create from content type handler and field registry.
      *
      * @param \eZ\Publish\Core\Search\Common\FieldNameResolver $fieldNameResolver
+     * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider $boostFactorProvider
      * @param \QueryTranslator\Languages\Galach\Tokenizer $tokenizer
      * @param \QueryTranslator\Languages\Galach\Parser $parser
      * @param \QueryTranslator\Languages\Galach\Generators\ExtendedDisMax $generator
@@ -61,12 +68,14 @@ class FullText extends CriterionVisitor
      */
     public function __construct(
         FieldNameResolver $fieldNameResolver,
+        BoostFactorProvider $boostFactorProvider,
         Tokenizer $tokenizer,
         Parser $parser,
         ExtendedDisMax $generator,
         $maxDepth = 0
     ) {
         $this->fieldNameResolver = $fieldNameResolver;
+        $this->boostFactorProvider = $boostFactorProvider;
         $this->tokenizer = $tokenizer;
         $this->parser = $parser;
         $this->generator = $generator;
@@ -133,12 +142,8 @@ class FullText extends CriterionVisitor
             $queryFields[] = "meta_related_content_{$i}__text_t^{$this->getBoostFactorForRelatedContent($i)}";
         }
 
-        foreach ($criterion->boost as $field => $boost) {
-            $searchFields = $this->getSearchFields($criterion, $field);
-
-            foreach ($searchFields as $name => $fieldType) {
-                $queryFields[] = "{$name}^{$boost}";
-            }
+        foreach ($this->getBoostedFields($criterion) as $name => $boost) {
+            $queryFields[] = "{$name}^{$boost}";
         }
 
         return implode(' ', $queryFields);
@@ -154,5 +159,30 @@ class FullText extends CriterionVisitor
     private function getBoostFactorForRelatedContent(int $depth): float
     {
         return 1.0 / pow(2.0, $depth);
+    }
+
+    private function getBoostedFields(Criterion $criterion): array
+    {
+        $boostedFields = [];
+
+        $configuredBoosting = $this->boostFactorProvider->getContentFieldBoostFactors();
+        foreach ($configuredBoosting as $type => $typeBoostFactors) {
+            foreach ($typeBoostFactors as $field => $boost) {
+                $name = $this->fieldNameResolver->getFieldName($criterion, $type, $field);
+                if ($name !== null) {
+                    $boostedFields[$name] = $boost;
+                }
+            }
+        }
+
+        foreach ($criterion->boost as $field => $boost) {
+            $searchFields = $this->getSearchFields($criterion, $field);
+
+            foreach ($searchFields as $name => $fieldType) {
+                $boostedFields[$name] = $boost;
+            }
+        }
+
+        return $boostedFields;
     }
 }

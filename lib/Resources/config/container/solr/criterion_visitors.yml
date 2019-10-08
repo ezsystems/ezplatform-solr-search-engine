@@ -265,6 +265,7 @@ services:
     EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor\Factory\FullTextFactory:
         arguments:
             - "@ezpublish.search.common.field_name_resolver"
+            - "@ezpublish.search.solr.field_mapper.boost_factor_provider"
             - "@ezpublish.search.solr.query.query_translator.galach.tokenizer"
             - "@ezpublish.search.solr.query.query_translator.galach.parser"
             - "@ezpublish.search.solr.query.query_translator.galach.generator.edismax"
@@ -335,6 +336,7 @@ services:
         class: "%ezpublish.search.solr.query.location.criterion_visitor.full_text.class%"
         arguments:
             - "@ezpublish.search.common.field_name_resolver"
+            - "@ezpublish.search.solr.field_mapper.boost_factor_provider"
             - "@ezpublish.search.solr.query.query_translator.galach.tokenizer"
             - "@ezpublish.search.solr.query.query_translator.galach.parser"
             - "@ezpublish.search.solr.query.query_translator.galach.generator.edismax"
