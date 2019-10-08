@@ -95,7 +95,7 @@ class BoostFactorProvider
     {
         $result = [];
 
-        foreach ($this->map[self::$keyContentFields] as $typeIdentifier => $typeBoostFactor) {
+        foreach ($this->map[self::$keyContentFields] ?? [] as $typeIdentifier => $typeBoostFactor) {
             if (!is_array($typeBoostFactor)) {
                 // TODO: Expand to the full list of fields with result factor = $contentTypeFactor
                 continue;
