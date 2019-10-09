@@ -168,7 +168,8 @@ class FullText extends CriterionVisitor
         $configuredBoosting = $this->boostFactorProvider->getContentFieldBoostFactors();
         foreach ($configuredBoosting as $type => $typeBoostFactors) {
             foreach ($typeBoostFactors as $field => $boost) {
-                $name = $this->fieldNameResolver->getFieldName($criterion, $type, $field);
+                //$name = $this->fieldNameResolver->getFieldName($criterion, $type, $field);
+                $name = sprintf('meta_content_%s_%s__text_t', $type, $field);
                 if ($name !== null) {
                     $boostedFields[$name] = $boost;
                 }

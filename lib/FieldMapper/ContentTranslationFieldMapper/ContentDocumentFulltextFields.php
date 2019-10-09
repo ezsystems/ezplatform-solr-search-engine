@@ -154,6 +154,14 @@ class ContentDocumentFulltextFields extends ContentTranslationFieldMapper
                         continue;
                     }
 
+                    if ($depth === 0) {
+                        $fields[] = new Field(
+                            sprintf('meta_content_%s_%s__text', $contentType->identifier, $fieldDefinition->identifier),
+                            $indexField->value,
+                            new FieldType\TextField()
+                        );
+                    }
+
                     $fields[] = new Field(
                         $this->getIndexFieldName($depth),
                         $indexField->value,
