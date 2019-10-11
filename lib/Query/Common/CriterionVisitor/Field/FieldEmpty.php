@@ -9,6 +9,7 @@
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\Field;
 
 use eZ\Publish\SPI\Search\FieldType\BooleanField;
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper\ContentDocumentEmptyFields;
 use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper\ContentDocumentNullFields;
 use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 use EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\Field;
@@ -20,9 +21,9 @@ use eZ\Publish\Core\Search\Common\FieldNameResolver;
 use eZ\Publish\Core\Search\Common\FieldNameGenerator;
 
 /**
- * Visits the Field criterion.
+ * Visits the IsFieldEmpty criterion.
  */
-class FieldIn extends Field
+class FieldEmpty extends Field
 {
     /**
      * @var \eZ\Publish\Core\Search\Common\FieldNameGenerator
@@ -50,11 +51,7 @@ class FieldIn extends Field
      */
     public function canVisit(Criterion $criterion)
     {
-        return
-            $criterion instanceof Criterion\Field &&
-            (($criterion->operator ?: Operator::IN) === Operator::IN ||
-                $criterion->operator === Operator::EQ ||
-                $criterion->operator === Operator::CONTAINS);
+        return $criterion instanceof Criterion\IsFieldEmpty && Operator::EQ;
     }
 
     /**
@@ -78,33 +75,19 @@ class FieldIn extends Field
             );
         }
 
-        if ($criterion->value === null) {
-            $criterion->value[] = null;
-        } else {
-            $criterion->value = (array)$criterion->value;
-        }
+        $criterion->value = (array)$criterion->value;
         $queries = array();
 
         foreach ($searchFields as $name => $fieldType) {
             foreach ($criterion->value as $value) {
-                if ($value === null) {
-                    $name = $this->fieldNameGenerator->getTypedName(
-                        $this->fieldNameGenerator->getName(
-                            ContentDocumentNullFields::IS_NULL_NAME,
-                            $criterion->target
-                        ),
-                        new BooleanField()
-                    );
-                    $queries[] = $name . ':true';
-                } else {
-                    $preparedValue = $this->escapeQuote(
-                        $this->toString(
-                            $this->mapSearchFieldValue($value, $fieldType)
-                        ),
-                        true
-                    );
-                    $queries[] = $name . ':"' . $preparedValue . '"';
-                }
+                $name = $this->fieldNameGenerator->getTypedName(
+                    $this->fieldNameGenerator->getName(
+                        ContentDocumentEmptyFields::IS_EMPTY_NAME,
+                        $criterion->target
+                    ),
+                    new BooleanField()
+                );
+                $queries[] = $name . ':' . $value;
             }
         }
 
