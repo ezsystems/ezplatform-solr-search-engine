@@ -68,10 +68,10 @@ class ContentDocumentNullFields extends ContentTranslationFieldMapper
             }
 
             foreach ($contentType->fieldDefinitions as $fieldDefinition) {
-                if ($fieldDefinition->id !== $field->fieldDefinitionId) {
+                if ($fieldDefinition->isRequired) {
                     continue;
                 }
-                if ($fieldDefinition->isRequired) {
+                if ($fieldDefinition->id !== $field->fieldDefinitionId) {
                     continue;
                 }
 
@@ -80,7 +80,7 @@ class ContentDocumentNullFields extends ContentTranslationFieldMapper
                         self::IS_NULL_NAME,
                         $fieldDefinition->identifier
                     ),
-                    (null == $field->value->data),
+                    (null === $field->value->data),
                     new FieldType\BooleanField()
                 );
             }
