@@ -50,11 +50,21 @@ class ContentDocumentNullFields extends ContentTranslationFieldMapper
         $this->fieldTypeRegistry = $fieldTypeRegistry;
     }
 
+    /**
+     * @param \eZ\Publish\SPI\Persistence\Content $content
+     * @param string $languageCode
+     * @return bool
+     */
     public function accept(Content $content, $languageCode)
     {
         return true;
     }
 
+    /**
+     * @param \eZ\Publish\SPI\Persistence\Content $content
+     * @param string $languageCode
+     * @return \eZ\Publish\SPI\Search\Field[]
+     */
     public function mapFields(Content $content, $languageCode)
     {
         $fields = [];

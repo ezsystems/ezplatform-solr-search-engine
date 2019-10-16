@@ -10,7 +10,6 @@ namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\Fie
 
 use eZ\Publish\SPI\Search\FieldType\BooleanField;
 use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper\ContentDocumentEmptyFields;
-use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper\ContentDocumentNullFields;
 use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 use EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\Field;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
