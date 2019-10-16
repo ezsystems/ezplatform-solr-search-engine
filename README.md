@@ -6,21 +6,23 @@
 [![License](https://img.shields.io/github/license/ezsystems/ezplatform-solr-search-engine.svg?style=flat-square)](LICENSE)
 
 Solr Search Engine Bundle for use with:
-- v1.6+: eZ Platform 2.5LTS+ *(bundled out of the box)* with Solr 6.x _(recommended: 6.6 which is an LTS)_
+- v3.0: eZ Platform 3.X with Solr 7.x _(recommended: 7.7. which is an LTS)_ 
+- v2.0: eZ Platform 2.5LTS with Solr 7.x _(recommended: 7.7. which is an LTS)_
+- v1.7: eZ Platform 2.5LTS+ *(bundled out of the box)* with Solr 6.x _(recommended: 6.6 which is an LTS)_
 - v1.5: eZ Platform 1.7LTS & 1.13LTS *(bundled out of the box)* with Solr 6.x or 4.10.4 _(recommended: 6.6 which is an LTS, and certain features only work on Solr 6)_
 - v1.0.x: eZ Publish Platform Enterprise 5.4.5+ *(optional, not as feature rich but helpful for scaling filtering queries)* with Solr 4.10.4
 
 #####  Overview of features
 
-| Feature                       | Solr Search Engine        | Legacy Search Engine _(SQL)_ |
-|:------------------------------|:-------------------------:|:----------------------------:|
-| Filtering                     | Yes                       | Yes, but limited*            |
-| Query _(filter with scoring)_ | Yes                       | Only filters, no scoring     |
-| Fulltext                      | Yes, incl advance features| Partly**                     |
-| Faceting                      | [Partly as of v1.4][1]    | No                           |
-| Spellchecking                 | Planned _(TBD when)_      | No                           |
-| Highlighting                  | Planned _(TBD when)_      | No                           |
-| Index time boosting           | [Yes, as of v1.4][4]      | No                           |
+| Feature                       | Solr Search Engine             | Legacy Search Engine _(SQL)_ |
+|:------------------------------|:------------------------------:|:----------------------------:|
+| Filtering                     | Yes                            | Yes, but limited*            |
+| Query _(filter with scoring)_ | Yes                            | Only filters, no scoring     |
+| Fulltext                      | Yes, incl. advance features     | Partly**                     |
+| Faceting                      | [Partly as of v1.4][1]         | No                           |
+| Spellchecking                 | Planned _(TBD when)_           | No                           |
+| Highlighting                  | Planned _(TBD when)_           | No                           |
+| Index time boosting           | [Yes, in >= v1.4,< v2.0][4]*** | No                           |
 
 _* Usage of Criterion and SortClause for Fields does not perform well on medium to larger amount of data with Legacy
 Search Engine (SQL), use Solr for this._
@@ -28,6 +30,9 @@ Search Engine (SQL), use Solr for this._
 _** Does not include full set of full text features includes: Scoring/Ranking _(Solr Search Engine does sorting on scoring
 by default, for location search available as of [v1.3][3] with Solr 6.x)_, and as of [Solr Search Engine v1.5][5]
 supports advanced full text capabilities such as `word "phrase" (group) +mandatory -prohibited AND && OR || NOT !`_
+
+_*** Index-time boosts have been removed from Lucene and are no longer available from Solr 7, we plan to introduce query time boosting instead in future 2.x and 3.x release.
+See https://lucene.apache.org/solr/guide/7_2/major-changes-in-solr-7.html for more information._
 
 ## Install
 
