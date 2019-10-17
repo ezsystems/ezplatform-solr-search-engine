@@ -105,7 +105,6 @@ services:
         arguments:
             - "@ezpublish.search.common.field_name_resolver"
             - "@ezpublish.search.common.field_value_mapper.aggregate"
-            - "@ezpublish.search.common.field_name_generator"
         tags:
             - {name: ezpublish.search.solr.query.content.criterion_visitor}
             - {name: ezpublish.search.solr.query.location.criterion_visitor}

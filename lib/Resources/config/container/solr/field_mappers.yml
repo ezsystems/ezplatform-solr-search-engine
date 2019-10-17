@@ -73,15 +73,6 @@ services:
         tags:
             - {name: ezpublish.search.solr.field_mapper.location}
 
-    ezpublish.search.solr.field_mapper.content_translation.content_document_null_fields:
-        class: EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper\ContentDocumentNullFields
-        arguments:
-            - '@ezpublish.spi.persistence.content_type_handler'
-            - '@ezpublish.search.common.field_name_generator'
-            - '@ezpublish.persistence.field_type_registry'
-        tags:
-            - {name: ezpublish.search.solr.field_mapper.content_translation}
-
     ezpublish.search.solr.field_mapper.content_translation.content_document_empty_fields:
         class: EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper\ContentDocumentEmptyFields
         arguments:
