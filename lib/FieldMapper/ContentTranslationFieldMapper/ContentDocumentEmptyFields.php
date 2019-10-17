@@ -50,11 +50,21 @@ class ContentDocumentEmptyFields extends ContentTranslationFieldMapper
         $this->fieldTypeRegistry = $fieldTypeRegistry;
     }
 
+    /**
+     * @param Content $content
+     * @param $languageCode
+     * @return bool
+     */
     public function accept(Content $content, $languageCode)
     {
         return true;
     }
 
+    /**
+     * @param Content $content
+     * @param string $languageCode
+     * @return array|Field[]
+     */
     public function mapFields(Content $content, $languageCode)
     {
         $fields = [];
