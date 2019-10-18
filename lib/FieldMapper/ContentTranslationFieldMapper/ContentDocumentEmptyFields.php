@@ -18,7 +18,7 @@ use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapp
  */
 class ContentDocumentEmptyFields extends ContentTranslationFieldMapper
 {
-    const IS_EMPTY_NAME = 'is_empty';
+    public const IS_EMPTY_NAME = 'is_empty';
 
     /**
      * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
@@ -51,8 +51,9 @@ class ContentDocumentEmptyFields extends ContentTranslationFieldMapper
     }
 
     /**
-     * @param Content $content
+     * @param \eZ\Publish\SPI\Persistence\Content $content
      * @param $languageCode
+     *
      * @return bool
      */
     public function accept(Content $content, $languageCode)
@@ -61,9 +62,10 @@ class ContentDocumentEmptyFields extends ContentTranslationFieldMapper
     }
 
     /**
-     * @param Content $content
+     * @param \eZ\Publish\SPI\Persistence\Content $content
      * @param string $languageCode
-     * @return array|Field[]
+     *
+     * @return array|\eZ\Publish\SPI\Search\Field[]
      */
     public function mapFields(Content $content, $languageCode)
     {

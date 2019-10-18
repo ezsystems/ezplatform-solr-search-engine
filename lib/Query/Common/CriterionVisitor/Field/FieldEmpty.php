@@ -44,7 +44,7 @@ class FieldEmpty extends Field
     /**
      * Check if visitor is applicable to current criterion.
      *
-     * @param Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *
      * @return bool
      */
