@@ -88,7 +88,7 @@ class FieldEmpty extends Field
                     ),
                     new BooleanField()
                 );
-                $queries[] = $name . ':' . $value;
+                $queries[] = $name . ':' . (int) $value;
             }
         }
 
