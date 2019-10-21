@@ -1,8 +1,11 @@
 <?php
 
 /**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
 
 use eZ\Publish\Core\Persistence\FieldTypeRegistry;
@@ -80,10 +83,10 @@ class ContentDocumentEmptyFields extends ContentTranslationFieldMapper
             }
 
             foreach ($contentType->fieldDefinitions as $fieldDefinition) {
-                if ($fieldDefinition->id !== $field->fieldDefinitionId) {
+                if ($fieldDefinition->isRequired) {
                     continue;
                 }
-                if ($fieldDefinition->isRequired) {
+                if ($fieldDefinition->id !== $field->fieldDefinitionId) {
                     continue;
                 }
 

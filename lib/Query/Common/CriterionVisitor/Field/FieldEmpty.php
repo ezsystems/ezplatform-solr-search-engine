@@ -1,11 +1,11 @@
 <?php
 
 /**
- * This file is part of the eZ Platform Solr Search Engine package.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\Field;
 
 use eZ\Publish\SPI\Search\FieldType\BooleanField;
@@ -13,7 +13,6 @@ use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapp
 use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 use EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\Field;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Search\Common\FieldValueMapper;
 use eZ\Publish\Core\Search\Common\FieldNameResolver;
@@ -34,8 +33,11 @@ class FieldEmpty extends Field
      * @param \eZ\Publish\Core\Search\Common\FieldValueMapper $fieldValueMapper
      * @param \eZ\Publish\Core\Search\Common\FieldNameGenerator $fieldNameGenerator
      */
-    public function __construct(FieldNameResolver $fieldNameResolver, FieldValueMapper $fieldValueMapper, FieldNameGenerator $fieldNameGenerator)
-    {
+    public function __construct(
+        FieldNameResolver $fieldNameResolver,
+        FieldValueMapper $fieldValueMapper,
+        FieldNameGenerator $fieldNameGenerator
+    ) {
         parent::__construct($fieldNameResolver, $fieldValueMapper);
 
         $this->fieldNameGenerator = $fieldNameGenerator;
@@ -50,13 +52,13 @@ class FieldEmpty extends Field
      */
     public function canVisit(Criterion $criterion)
     {
-        return $criterion instanceof Criterion\IsFieldEmpty && Operator::EQ;
+        return $criterion instanceof Criterion\IsFieldEmpty;
     }
 
     /**
      * Map field value to a proper Solr representation.
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given criterion target.
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If no searchable fields are found for the given criterion target.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor $subVisitor
