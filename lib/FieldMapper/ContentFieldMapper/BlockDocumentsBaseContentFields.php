@@ -43,21 +43,29 @@ class BlockDocumentsBaseContentFields extends ContentFieldMapper
     protected $sectionHandler;
 
     /**
+     * @var string
+     */
+    private $invalidCharactersPattern;
+
+    /**
      * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler $objectStateHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Section\Handler $sectionHandler
+     * @param string $invalidCharactersPattern
      */
     public function __construct(
         LocationHandler $locationHandler,
         ContentTypeHandler $contentTypeHandler,
         ObjectStateHandler $objectStateHandler,
-        SectionHandler $sectionHandler
+        SectionHandler $sectionHandler,
+        $invalidCharactersPattern
     ) {
         $this->locationHandler = $locationHandler;
         $this->contentTypeHandler = $contentTypeHandler;
         $this->objectStateHandler = $objectStateHandler;
         $this->sectionHandler = $sectionHandler;
+        $this->invalidCharactersPattern = $invalidCharactersPattern;
     }
 
     public function accept(Content $content)
@@ -104,7 +112,7 @@ class BlockDocumentsBaseContentFields extends ContentFieldMapper
             ),
             new Field(
                 'content_name',
-                $contentInfo->name,
+                preg_replace($this->invalidCharactersPattern, '', $contentInfo->name),
                 new FieldType\StringField()
             ),
             new Field(

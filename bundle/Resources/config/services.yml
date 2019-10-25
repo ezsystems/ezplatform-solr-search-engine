@@ -2,6 +2,7 @@ parameters:
     ezpublish.solr.engine_factory.class: EzSystems\EzPlatformSolrSearchEngineBundle\ApiLoader\SolrEngineFactory
     ezpublish.solr.boost_factor_provider_factory.class: EzSystems\EzPlatformSolrSearchEngineBundle\ApiLoader\BoostFactorProviderFactory
     ez_search_engine_solr.default_connection: ~
+    ez_search_engine_solr.invalid_characters_pattern: "#\\x1b[[][^A-Za-z]*[A-Za-z]#"
 
 services:
     ezpublish.solr.engine_factory:
