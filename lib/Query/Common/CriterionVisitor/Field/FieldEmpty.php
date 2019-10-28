@@ -21,7 +21,7 @@ use eZ\Publish\Core\Search\Common\FieldNameGenerator;
 /**
  * Visits the IsFieldEmpty criterion.
  */
-class FieldEmpty extends Field
+final class FieldEmpty extends Field
 {
     /**
      * @var \eZ\Publish\Core\Search\Common\FieldNameGenerator
@@ -45,12 +45,8 @@ class FieldEmpty extends Field
 
     /**
      * Check if visitor is applicable to current criterion.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     *
-     * @return bool
      */
-    public function canVisit(Criterion $criterion)
+    public function canVisit(Criterion $criterion): bool
     {
         return $criterion instanceof Criterion\IsFieldEmpty;
     }
@@ -65,7 +61,7 @@ class FieldEmpty extends Field
      *
      * @return string
      */
-    public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null)
+    public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null): string
     {
         $searchFields = $this->getSearchFields($criterion);
 
