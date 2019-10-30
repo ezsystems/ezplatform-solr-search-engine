@@ -55,7 +55,7 @@ class ContentDocumentEmptyFields extends ContentTranslationFieldMapper
 
     /**
      * @param \eZ\Publish\SPI\Persistence\Content $content
-     * @param $languageCode
+     * @param string $languageCode
      *
      * @return bool
      */
@@ -90,7 +90,7 @@ class ContentDocumentEmptyFields extends ContentTranslationFieldMapper
                     continue;
                 }
 
-                /** @var \eZ\Publish\Core\Persistence\IsEmptyFieldType $fieldType */
+                /** @var \eZ\Publish\Core\Persistence\FieldType $fieldType */
                 $fieldType = $this->fieldTypeRegistry->getFieldType($fieldDefinition->fieldType);
                 $fields[] = new Field(
                     $name = $this->fieldNameGenerator->getName(
