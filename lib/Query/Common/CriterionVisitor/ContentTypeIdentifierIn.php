@@ -11,6 +11,7 @@
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor;
 
 use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler;
@@ -70,10 +71,20 @@ class ContentTypeIdentifierIn extends CriterionVisitor
             implode(
                 ' OR ',
                 array_map(
-                    function ($value) use ($contentTypeHandler) {
-                        return 'content_type_id_id:"' . $contentTypeHandler->loadByIdentifier($value)->id . '"';
+                    function ($id) {
+                        return 'content_type_id_id:"' . $id . '"';
                     },
-                    $criterion->value
+                    array_filter(
+                        $criterion->value,
+                        function ($value) use ($contentTypeHandler) {
+                            try {
+                                return $contentTypeHandler->loadByIdentifier($value)->id;
+                            } catch (NotFoundException $e) {
+                                // Filter out non-existing content types
+                                return false;
+                            }
+                        }
+                    )
                 )
             ) .
             ')';
