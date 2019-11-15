@@ -28,7 +28,7 @@ abstract class FacetBuilderVisitor
      */
     public function canMap($field)
     {
-        throw new \LogicException('Deprecated in favour of FacetFieldVisitor, and not in use if that is implemented');
+        throw new \LogicException('Deprecated in favour of FacetFieldVisitor, not in use if FacetFieldVisitor is implemented');
     }
 
     /**
@@ -43,7 +43,7 @@ abstract class FacetBuilderVisitor
      */
     public function map($field, array $data)
     {
-        throw new \LogicException('Deprecated in favour of FacetFieldVisitor, and not in use if that is implemented');
+        throw new \LogicException('Deprecated in favour of FacetFieldVisitor, not in use if FacetFieldVisitor is implemented');
     }
 
     /**
@@ -66,7 +66,7 @@ abstract class FacetBuilderVisitor
      */
     public function visit(FacetBuilder $facetBuilder)
     {
-        throw new \LogicException('Deprecated in favour of FacetFieldVisitor, and not in use if that is implemented');
+        throw new \LogicException('Deprecated in favour of FacetFieldVisitor, not in use if FacetFieldVisitor is implemented');
     }
 
     /**

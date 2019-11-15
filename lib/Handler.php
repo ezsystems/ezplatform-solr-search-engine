@@ -174,9 +174,9 @@ class Handler implements SearchHandlerInterface, Capable
         );
 
         if (!$result->totalCount) {
-            throw new NotFoundException('Content', 'findSingle() found no content for given $filter');
+            throw new NotFoundException('Content', 'findSingle() found no content for the given $filter');
         } elseif ($result->totalCount > 1) {
-            throw new InvalidArgumentException('totalCount', 'findSingle() found more then one item for given $filter');
+            throw new InvalidArgumentException('totalCount', 'findSingle() found more then one Content item for the given $filter');
         }
 
         $first = reset($result->searchHits);

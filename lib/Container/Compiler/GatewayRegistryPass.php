@@ -32,8 +32,8 @@ final class GatewayRegistryPass implements CompilerPassInterface
             foreach ($attributes as $attribute) {
                 if (!isset($attribute['connection'])) {
                     throw new LogicException(
-                        "'ezpublish.search.solr.gateway' service tag needs an 'connection' attribute " .
-                        'to identify the Gateway. None given.'
+                        "'ezpublish.search.solr.gateway' service tag needs a 'connection' attribute " .
+                        'to identify the Gateway.'
                     );
                 }
 

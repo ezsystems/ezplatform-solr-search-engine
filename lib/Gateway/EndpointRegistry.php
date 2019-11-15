@@ -57,7 +57,7 @@ class EndpointRegistry
     public function getEndpoint($name)
     {
         if (!isset($this->endpoint[$name])) {
-            throw new OutOfBoundsException("No Endpoint registered for '{$name}'.");
+            throw new OutOfBoundsException("No endpoint registered for '{$name}'.");
         }
 
         return $this->endpoint[$name];

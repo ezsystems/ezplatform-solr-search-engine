@@ -46,7 +46,7 @@ class EndpointRegistryPass implements CompilerPassInterface
                 if (!isset($attribute['alias'])) {
                     throw new LogicException(
                         "'ezpublish.search.solr.endpoint' service tag needs an 'alias' attribute " .
-                        'to identify the Endpoint. None given.'
+                        'to identify the endpoint.'
                     );
                 }
 

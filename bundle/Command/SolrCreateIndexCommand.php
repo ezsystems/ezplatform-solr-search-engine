@@ -60,15 +60,15 @@ EOT
         $purge = !$input->getOption('no-purge');
         $bulkCount = $input->getArgument('bulk_count');
         if (!is_numeric($bulkCount) || (int)$bulkCount < 1) {
-            throw new RuntimeException("'bulk_count' argument should be > 0, got '{$bulkCount}'");
+            throw new RuntimeException("The 'bulk_count' argument should be > 0, you provided '{$bulkCount}'");
         }
 
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandler */
         $searchHandler = $this->getContainer()->get('ezpublish.spi.search');
         if (!$searchHandler instanceof SolrSearchEngineHandler) {
             throw new RuntimeException(
-                'Expected to find Solr Search Engine but found something else. ' .
-                "Did you forget to configure the repository with 'solr' search engine?"
+                'Did not find Solr Search Engine. ' .
+                "Did you configure the Repository with the 'solr' search engine?"
             );
         }
 

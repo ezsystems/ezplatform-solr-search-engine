@@ -85,7 +85,7 @@ class NativeEndpointResolver implements EndpointResolver, SingleEndpointResolver
     public function getEntryEndpoint()
     {
         if (empty($this->entryEndpoints)) {
-            throw new RuntimeException('Not entry endpoints defined');
+            throw new RuntimeException('No entry endpoints defined');
         }
 
         return reset($this->entryEndpoints);

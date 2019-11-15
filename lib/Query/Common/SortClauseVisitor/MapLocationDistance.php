@@ -105,7 +105,7 @@ class MapLocationDistance extends SortClauseVisitor
         if ($fieldName === null) {
             throw new InvalidArgumentException(
                 '$sortClause->targetData',
-                'No searchable fields found for the given sort clause target ' .
+                'No searchable Fields found for the provided Sort Clause target ' .
                 "'{$target->fieldIdentifier}' on '{$target->typeIdentifier}'."
             );
         }
