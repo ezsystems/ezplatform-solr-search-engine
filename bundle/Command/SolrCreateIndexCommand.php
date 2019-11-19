@@ -60,7 +60,7 @@ EOT
         $purge = !$input->getOption('no-purge');
         $bulkCount = $input->getArgument('bulk_count');
         if (!is_numeric($bulkCount) || (int)$bulkCount < 1) {
-            throw new RuntimeException("The 'bulk_count' argument should be > 0, you provided '{$bulkCount}'");
+            throw new RuntimeException("The 'bulk_count' argument should be > 0. You provided '{$bulkCount}'");
         }
 
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandler */
