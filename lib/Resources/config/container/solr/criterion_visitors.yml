@@ -7,6 +7,7 @@ parameters:
     ezpublish.search.solr.query.common.criterion_visitor.custom_field_in.class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\CustomField\CustomFieldIn
     ezpublish.search.solr.query.common.criterion_visitor.custom_field_range.class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\CustomField\CustomFieldRange
     ezpublish.search.solr.query.common.criterion_visitor.field_in.class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\Field\FieldIn
+    ezpublish.search.solr.query.common.criterion_visitor.field_empty.class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\Field\FieldEmpty
     ezpublish.search.solr.query.common.criterion_visitor.field_range.class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\Field\FieldRange
     ezpublish.search.solr.query.common.criterion_visitor.field_like.class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\Field\FieldLike
     ezpublish.search.solr.query.common.criterion_visitor.field_relation.class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\Field\FieldRelation
@@ -104,6 +105,16 @@ services:
         arguments:
             - "@ezpublish.search.common.field_name_resolver"
             - "@ezpublish.search.common.field_value_mapper.aggregate"
+        tags:
+            - {name: ezpublish.search.solr.query.content.criterion_visitor}
+            - {name: ezpublish.search.solr.query.location.criterion_visitor}
+
+    ezpublish.search.solr.query.common.criterion_visitor.field_empty:
+        class: "%ezpublish.search.solr.query.common.criterion_visitor.field_empty.class%"
+        arguments:
+            - "@ezpublish.search.common.field_name_resolver"
+            - "@ezpublish.search.common.field_value_mapper.aggregate"
+            - "@ezpublish.search.common.field_name_generator"
         tags:
             - {name: ezpublish.search.solr.query.content.criterion_visitor}
             - {name: ezpublish.search.solr.query.location.criterion_visitor}
