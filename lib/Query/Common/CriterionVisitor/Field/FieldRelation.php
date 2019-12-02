@@ -53,7 +53,7 @@ class FieldRelation extends Field
         if (empty($searchFields)) {
             throw new InvalidArgumentException(
                 '$criterion->target',
-                "No searchable fields found for the given criterion target '{$criterion->target}'."
+                "No searchable Fields found for the provided Criterion target '{$criterion->target}'."
             );
         }
 
