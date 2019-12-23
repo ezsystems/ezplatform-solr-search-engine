@@ -13,6 +13,7 @@ use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Search\Common\IncrementalIndexer;
 use EzSystems\EzPlatformSolrSearchEngine\Handler as SolrSearchHandler;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
+use eZ\Publish\SPI\FieldType\Exceptions\InvalidIndexDataException;
 use Psr\Log\LoggerInterface;
 
 class Indexer extends IncrementalIndexer
@@ -45,6 +46,7 @@ class Indexer extends IncrementalIndexer
     {
         $documents = [];
         $contentHandler = $this->persistenceHandler->contentHandler();
+
         foreach ($contentIds as $contentId) {
             try {
                 $info = $contentHandler->loadContentInfo($contentId);
@@ -56,6 +58,11 @@ class Indexer extends IncrementalIndexer
                 }
             } catch (NotFoundException $e) {
                 $this->searchHandler->deleteContent($contentId);
+            } catch (InvalidIndexDataException $e) {
+                if (!$this->errorCollector->collect($info, $e->getMessage())) {
+                    break;
+                }
+                $this->logger->warning($e->getMessage());
             }
         }
 
