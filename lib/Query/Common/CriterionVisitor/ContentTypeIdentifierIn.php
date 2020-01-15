@@ -67,26 +67,27 @@ class ContentTypeIdentifierIn extends CriterionVisitor
     {
         $contentTypeHandler = $this->contentTypeHandler;
 
-        return '(' .
-            implode(
-                ' OR ',
-                array_map(
-                    function ($id) {
-                        return 'content_type_id_id:"' . $id . '"';
-                    },
-                    array_filter(
-                        $criterion->value,
-                        function ($value) use ($contentTypeHandler) {
-                            try {
-                                return $contentTypeHandler->loadByIdentifier($value)->id;
-                            } catch (NotFoundException $e) {
-                                // Filter out non-existing content types
-                                return false;
-                            }
-                        }
-                    )
-                )
-            ) .
-            ')';
+        $idQueries = array_map(
+            function ($id) {
+                return 'content_type_id_id:"' . $id . '"';
+            },
+            array_filter(
+                $criterion->value,
+                function ($value) use ($contentTypeHandler) {
+                    try {
+                        return $contentTypeHandler->loadByIdentifier($value)->id;
+                    } catch (NotFoundException $e) {
+                        // Filter out non-existing content types
+                        return false;
+                    }
+                }
+            )
+        );
+
+        if (count($idQueries) === 0) {
+            return '(NOT *:*)';
+        }
+
+        return '(' . implode(' OR ', $idQueries) . ')';
     }
 }
