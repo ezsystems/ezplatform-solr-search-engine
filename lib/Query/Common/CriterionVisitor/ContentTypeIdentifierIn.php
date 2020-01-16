@@ -68,7 +68,7 @@ class ContentTypeIdentifierIn extends CriterionVisitor
         $contentTypeHandler = $this->contentTypeHandler;
 
         $idQueries = array_map(
-            function ($id) {
+            static function ($id) {
                 return 'content_type_id_id:"' . $id . '"';
             },
             array_filter(
