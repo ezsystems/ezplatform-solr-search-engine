@@ -15,6 +15,8 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 /**
  * Visits the ContentTypeIdentifier criterion.
@@ -29,13 +31,20 @@ class ContentTypeIdentifierIn extends CriterionVisitor
     protected $contentTypeHandler;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * Create from content type handler and field registry.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
+     * @param \Psr\Log\LoggerInterface|null $logger
      */
-    public function __construct(Handler $contentTypeHandler)
+    public function __construct(Handler $contentTypeHandler, LoggerInterface $logger = null)
     {
         $this->contentTypeHandler = $contentTypeHandler;
+        $this->logger = $logger ?? new NullLogger();
     }
 
     /**
@@ -65,6 +74,7 @@ class ContentTypeIdentifierIn extends CriterionVisitor
      */
     public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null)
     {
+        $invalidIdentifiers = [];
         $contentTypeHandler = $this->contentTypeHandler;
 
         $idQueries = array_map(
@@ -73,16 +83,27 @@ class ContentTypeIdentifierIn extends CriterionVisitor
             },
             array_filter(
                 $criterion->value,
-                function ($value) use ($contentTypeHandler) {
+                function ($value) use ($contentTypeHandler, &$invalidIdentifiers) {
                     try {
                         return $contentTypeHandler->loadByIdentifier($value)->id;
                     } catch (NotFoundException $e) {
-                        // Filter out non-existing content types
+                        // Filter out non-existing content types, but track for code below
+                        $invalidIdentifiers[] = $value;
+
                         return false;
                     }
                 }
             )
         );
+
+        if (count($invalidIdentifiers) > 0) {
+            $this->logger->warning(
+                sprintf(
+                    'Invalid content type identifiers provided for ContentTypeIdentifier criterion: %s',
+                    implode(', ', $invalidIdentifiers)
+                )
+            );
+        }
 
         if (count($idQueries) === 0) {
             return '(NOT *:*)';
