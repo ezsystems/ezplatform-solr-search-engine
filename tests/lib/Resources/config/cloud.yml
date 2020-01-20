@@ -28,6 +28,7 @@ parameters:
           ger-DE: ger # cloud@shard3
     ezpublish.search.solr.default_endpoint: default # cloud@shard2
     ezpublish.search.solr.main_translations_endpoint: main # cloud@shard1
+    ezpublish.search.solr.field_mapper.indexing_depth_provider.default: 2
 
 services:
     ezpublish.spi.search_engine:

@@ -8,7 +8,7 @@
  *
  * @version //autogentag//
  */
-namespace EzSystems\EzPlatformSolrSearchEngine\Tests\Search\Query\CriterionVisitor;
+namespace EzSystems\EzPlatformSolrSearchEngine\Tests\Search\Query\Content\CriterionVisitor;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\FieldType\TextLine\SearchField;

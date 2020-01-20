@@ -347,5 +347,6 @@ services:
             - "@ezpublish.search.solr.query.query_translator.galach.tokenizer"
             - "@ezpublish.search.solr.query.query_translator.galach.parser"
             - "@ezpublish.search.solr.query.query_translator.galach.generator.edismax"
+            - "@=service('ezpublish.search.solr.field_mapper.indexing_depth_provider').getMaxDepth()"
         tags:
             - {name: ezpublish.search.solr.query.location.criterion_visitor}

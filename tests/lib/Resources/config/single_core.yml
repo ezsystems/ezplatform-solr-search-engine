@@ -21,6 +21,7 @@ parameters:
     ezpublish.search.solr.cluster_endpoints: []
     ezpublish.search.solr.default_endpoint: endpoint0
     ezpublish.search.solr.main_translations_endpoint: null
+    ezpublish.search.solr.field_mapper.indexing_depth_provider.default: 2
 
 services:
     ezpublish.spi.search_engine:

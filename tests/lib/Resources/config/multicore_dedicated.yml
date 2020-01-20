@@ -26,6 +26,7 @@ parameters:
           nor-NO: endpoint4
     ezpublish.search.solr.default_endpoint: null
     ezpublish.search.solr.main_translations_endpoint: null
+    ezpublish.search.solr.field_mapper.indexing_depth_provider.default: 2
 
 services:
     ezpublish.spi.search_engine:
