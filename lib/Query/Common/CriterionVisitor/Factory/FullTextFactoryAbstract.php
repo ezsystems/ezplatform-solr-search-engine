@@ -6,11 +6,11 @@
  */
 declare(strict_types=1);
 
-namespace EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor\Factory;
+namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\Factory;
 
 use eZ\Publish\Core\Search\Common\FieldNameResolver;
 use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\IndexingDepthProvider;
-use EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor\FullText;
+use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 use QueryTranslator\Languages\Galach\Generators\ExtendedDisMax;
 use QueryTranslator\Languages\Galach\Parser;
 use QueryTranslator\Languages\Galach\Tokenizer;
@@ -19,37 +19,38 @@ use QueryTranslator\Languages\Galach\Tokenizer;
  * Factory for FullText Criterion Visitor.
  *
  * @see \EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor\FullText
+ * @see \EzSystems\EzPlatformSolrSearchEngine\Query\Location\CriterionVisitor\FullText
  *
  * @internal
  */
-final class FullTextFactory
+abstract class FullTextFactoryAbstract
 {
     /**
      * Field map.
      *
      * @var \eZ\Publish\Core\Search\Common\FieldNameResolver
      */
-    private $fieldNameResolver;
+    protected $fieldNameResolver;
 
     /**
      * @var \QueryTranslator\Languages\Galach\Tokenizer
      */
-    private $tokenizer;
+    protected $tokenizer;
 
     /**
      * @var \QueryTranslator\Languages\Galach\Parser
      */
-    private $parser;
+    protected $parser;
 
     /**
      * @var \QueryTranslator\Languages\Galach\Generators\ExtendedDisMax
      */
-    private $generator;
+    protected $generator;
 
     /**
      * @var \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\IndexingDepthProvider
      */
-    private $indexingDepthProvider;
+    protected $indexingDepthProvider;
 
     /**
      * Create from content type handler and field registry.
@@ -77,16 +78,7 @@ final class FullTextFactory
     /**
      * Create FullText Criterion Visitor.
      *
-     * @return \EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor\FullText
+     * @return \EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor
      */
-    public function createCriterionVisitor(): FullText
-    {
-        return new FullText(
-            $this->fieldNameResolver,
-            $this->tokenizer,
-            $this->parser,
-            $this->generator,
-            $this->indexingDepthProvider->getMaxDepth()
-        );
-    }
+    abstract public function createCriterionVisitor(): CriterionVisitor;
 }

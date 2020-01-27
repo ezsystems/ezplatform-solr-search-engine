@@ -242,6 +242,15 @@ services:
             - {name: ezpublish.search.solr.query.content.criterion_visitor}
             - {name: ezpublish.search.solr.query.location.criterion_visitor}
 
+    EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\Factory\FullTextFactoryAbstract:
+        abstract: true
+        arguments:
+            - "@ezpublish.search.common.field_name_resolver"
+            - "@ezpublish.search.solr.query.query_translator.galach.tokenizer"
+            - "@ezpublish.search.solr.query.query_translator.galach.parser"
+            - "@ezpublish.search.solr.query.query_translator.galach.generator.edismax"
+            - "@ezpublish.search.solr.field_mapper.indexing_depth_provider"
+
     # Content search
     ezpublish.search.solr.query.content.criterion_visitor.ancestor:
         class: "%ezpublish.search.solr.query.content.criterion_visitor.ancestor.class%"
@@ -270,17 +279,12 @@ services:
 
     ezpublish.search.solr.query.content.criterion_visitor.full_text:
         class: "%ezpublish.search.solr.query.content.criterion_visitor.full_text.class%"
-        factory: ['@EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor\Factory\FullTextFactory', 'createCriterionVisitor']
+        factory: ['@EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor\Factory\ContentFullTextFactory', 'createCriterionVisitor']
         tags:
             - {name: ezpublish.search.solr.query.content.criterion_visitor}
 
-    EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor\Factory\FullTextFactory:
-        arguments:
-            - "@ezpublish.search.common.field_name_resolver"
-            - "@ezpublish.search.solr.query.query_translator.galach.tokenizer"
-            - "@ezpublish.search.solr.query.query_translator.galach.parser"
-            - "@ezpublish.search.solr.query.query_translator.galach.generator.edismax"
-            - "@ezpublish.search.solr.field_mapper.indexing_depth_provider"
+    EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor\Factory\ContentFullTextFactory:
+        parent: EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\Factory\FullTextFactoryAbstract
 
     ezpublish.search.solr.query.content.criterion_visitor.visibility:
         class: "%ezpublish.search.solr.query.content.criterion_visitor.visibility.class%"
@@ -345,11 +349,9 @@ services:
 
     ezpublish.search.solr.query.location.criterion_visitor.full_text:
         class: "%ezpublish.search.solr.query.location.criterion_visitor.full_text.class%"
-        arguments:
-            - "@ezpublish.search.common.field_name_resolver"
-            - "@ezpublish.search.solr.query.query_translator.galach.tokenizer"
-            - "@ezpublish.search.solr.query.query_translator.galach.parser"
-            - "@ezpublish.search.solr.query.query_translator.galach.generator.edismax"
-            - "@=service('ezpublish.search.solr.field_mapper.indexing_depth_provider').getMaxDepth()"
+        factory: ['@EzSystems\EzPlatformSolrSearchEngine\Query\Location\CriterionVisitor\Factory\LocationFullTextFactory', 'createCriterionVisitor']
         tags:
             - {name: ezpublish.search.solr.query.location.criterion_visitor}
+
+    EzSystems\EzPlatformSolrSearchEngine\Query\Location\CriterionVisitor\Factory\LocationFullTextFactory:
+        parent: EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\Factory\FullTextFactoryAbstract
