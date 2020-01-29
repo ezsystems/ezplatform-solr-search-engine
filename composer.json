@@ -12,7 +12,7 @@
     ],
     "require": {
         "php": "^7.1",
-        "ezsystems/ezpublish-kernel": "^7.5.6@dev",
+        "ezsystems/ezpublish-kernel": "dev-fixed_solr_cloud_intergration_tests_on_665",
         "netgen/query-translator": "^1.0.2"
     },
     "require-dev": {
