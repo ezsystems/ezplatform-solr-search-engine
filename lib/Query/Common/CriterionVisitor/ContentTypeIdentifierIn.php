@@ -74,27 +74,18 @@ class ContentTypeIdentifierIn extends CriterionVisitor
      */
     public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null)
     {
+        $validIds = [];
         $invalidIdentifiers = [];
         $contentTypeHandler = $this->contentTypeHandler;
 
-        $idQueries = array_map(
-            static function ($id) {
-                return 'content_type_id_id:"' . $id . '"';
-            },
-            array_filter(
-                $criterion->value,
-                function ($value) use ($contentTypeHandler, &$invalidIdentifiers) {
-                    try {
-                        return $contentTypeHandler->loadByIdentifier($value)->id;
-                    } catch (NotFoundException $e) {
-                        // Filter out non-existing content types, but track for code below
-                        $invalidIdentifiers[] = $value;
-
-                        return false;
-                    }
-                }
-            )
-        );
+        foreach ($criterion->value as $identifier) {
+            try {
+                $validIds[] = $contentTypeHandler->loadByIdentifier($identifier)->id;
+            } catch (NotFoundException $e) {
+                // Filter out non-existing content types, but track for code below
+                $invalidIdentifiers[] = $identifier;
+            }
+        }
 
         if (count($invalidIdentifiers) > 0) {
             $this->logger->warning(
@@ -105,10 +96,20 @@ class ContentTypeIdentifierIn extends CriterionVisitor
             );
         }
 
-        if (count($idQueries) === 0) {
+        if (count($validIds) === 0) {
             return '(NOT *:*)';
         }
 
-        return '(' . implode(' OR ', $idQueries) . ')';
+        return '(' .
+            implode(
+                ' OR ',
+                array_map(
+                    static function ($value) {
+                        return 'content_type_id_id:"' . $value . '"';
+                    },
+                    $validIds
+                )
+            ) .
+            ')';
     }
 }
