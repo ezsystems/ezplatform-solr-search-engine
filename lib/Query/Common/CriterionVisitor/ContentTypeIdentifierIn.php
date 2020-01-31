@@ -11,9 +11,12 @@
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor;
 
 use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 /**
  * Visits the ContentTypeIdentifier criterion.
@@ -28,13 +31,20 @@ class ContentTypeIdentifierIn extends CriterionVisitor
     protected $contentTypeHandler;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * Create from content type handler and field registry.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
+     * @param \Psr\Log\LoggerInterface|null $logger
      */
-    public function __construct(Handler $contentTypeHandler)
+    public function __construct(Handler $contentTypeHandler, LoggerInterface $logger = null)
     {
         $this->contentTypeHandler = $contentTypeHandler;
+        $this->logger = $logger ?? new NullLogger();
     }
 
     /**
@@ -64,16 +74,40 @@ class ContentTypeIdentifierIn extends CriterionVisitor
      */
     public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null)
     {
+        $validIds = [];
+        $invalidIdentifiers = [];
         $contentTypeHandler = $this->contentTypeHandler;
+
+        foreach ($criterion->value as $identifier) {
+            try {
+                $validIds[] = $contentTypeHandler->loadByIdentifier($identifier)->id;
+            } catch (NotFoundException $e) {
+                // Filter out non-existing content types, but track for code below
+                $invalidIdentifiers[] = $identifier;
+            }
+        }
+
+        if (count($invalidIdentifiers) > 0) {
+            $this->logger->warning(
+                sprintf(
+                    'Invalid content type identifiers provided for ContentTypeIdentifier criterion: %s',
+                    implode(', ', $invalidIdentifiers)
+                )
+            );
+        }
+
+        if (count($validIds) === 0) {
+            return '(NOT *:*)';
+        }
 
         return '(' .
             implode(
                 ' OR ',
                 array_map(
-                    function ($value) use ($contentTypeHandler) {
-                        return 'content_type_id_id:"' . $contentTypeHandler->loadByIdentifier($value)->id . '"';
+                    static function ($value) {
+                        return 'content_type_id_id:"' . $value . '"';
                     },
-                    $criterion->value
+                    $validIds
                 )
             ) .
             ')';

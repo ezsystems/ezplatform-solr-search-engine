@@ -75,6 +75,7 @@ services:
         class: "%ezpublish.search.solr.query.common.criterion_visitor.content_type_identifier_in.class%"
         arguments:
             - "@ezpublish.spi.persistence.content_type_handler"
+            - "@?logger"
         tags:
             - {name: ezpublish.search.solr.query.content.criterion_visitor}
             - {name: ezpublish.search.solr.query.location.criterion_visitor}
