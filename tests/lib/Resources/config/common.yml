@@ -1,3 +1,6 @@
+parameters:
+    ezpublish.search.solr.field_mapper.indexing_depth_provider.default: 2
+
 services:
     logger:
         class: Psr\Log\NullLogger
