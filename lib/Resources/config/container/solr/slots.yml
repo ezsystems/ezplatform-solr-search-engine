@@ -188,3 +188,8 @@ services:
         parent: ezpublish.search.solr.slot
         tags:
             - {name: ezpublish.search.solr.slot, signal: ContentService\RevealContentSignal}
+
+    eZ\Publish\Core\Search\Common\Slot\AssignSectionToSubtree:
+        parent: ezpublish.search.solr.slot
+        tags:
+            - {name: ezpublish.search.solr.slot, signal: SectionService\AssignSectionToSubtreeSignal}
