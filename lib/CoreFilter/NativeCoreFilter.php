@@ -222,7 +222,7 @@ class NativeCoreFilter extends CoreFilter
             ),
             // Exclude all given languages
             new LogicalNot(
-                new CustomField(self::FIELD_LANGUAGES, Operator::IN, $languageCodes)
+                new CustomField(self::FIELD_LANGUAGE, Operator::IN, $languageCodes)
             ),
         );
 
