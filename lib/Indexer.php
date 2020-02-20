@@ -14,6 +14,7 @@ use eZ\Publish\Core\Search\Common\IncrementalIndexer;
 use EzSystems\EzPlatformSolrSearchEngine\Handler as SolrSearchHandler;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use Psr\Log\LoggerInterface;
+use Exception;
 
 class Indexer extends IncrementalIndexer
 {
@@ -56,6 +57,12 @@ class Indexer extends IncrementalIndexer
                 }
             } catch (NotFoundException $e) {
                 $this->searchHandler->deleteContent($contentId);
+            } catch (Exception $e) {
+                $context = [
+                    'contentId' => $contentId,
+                    'error' => $e->getMessage(),
+                ];
+                $this->logger->error('Unable to index the content', $context);
             }
         }
 
