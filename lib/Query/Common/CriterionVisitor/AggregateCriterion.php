@@ -13,12 +13,12 @@ use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 
 class AggregateCriterion extends CriterionVisitor
 {
-    public function canVisit(Criterion $criterion)
+    public function canVisit(Criterion $criterion): bool
     {
         return $criterion instanceof Criterion\AggregateCriterion;
     }
 
-    public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null)
+    public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null): string
     {
         return $subVisitor->visit($criterion->criteria, $subVisitor);
     }
