@@ -12,6 +12,7 @@ namespace EzSystems\EzPlatformSolrSearchEngine\CoreFilter;
 
 use EzSystems\EzPlatformSolrSearchEngine\CoreFilter;
 use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalNot;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOr;
@@ -103,9 +104,16 @@ class NativeCoreFilter extends CoreFilter
             $languageSettings['useAlwaysAvailable'] === true
         );
 
+        $excludeTranslationsFromAlwaysAvailable =
+            $languageSettings['excludeTranslationsFromAlwaysAvailable'] ?? true;
+
         $criteria = [
             new CustomField(self::FIELD_DOCUMENT_TYPE, Operator::EQ, $documentTypeIdentifier),
-            $this->getCoreCriterion($languages, $useAlwaysAvailable),
+            $this->getCoreCriterion(
+                $languages,
+                $useAlwaysAvailable,
+                $excludeTranslationsFromAlwaysAvailable
+            ),
         ];
 
         if ($query->filter !== null) {
@@ -123,11 +131,15 @@ class NativeCoreFilter extends CoreFilter
      *
      * @param string[] $languageCodes
      * @param bool $useAlwaysAvailable
+     * @param bool $excludeTranslationsFromAlwaysAvailable
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion
      */
-    private function getCoreCriterion(array $languageCodes, $useAlwaysAvailable)
-    {
+    private function getCoreCriterion(
+        array $languageCodes,
+        bool $useAlwaysAvailable,
+        bool $excludeTranslationsFromAlwaysAvailable = true
+    ): Criterion {
         // Handle languages if given
         if (!empty($languageCodes)) {
             // Get condition for prioritized languages fallback
@@ -137,10 +149,13 @@ class NativeCoreFilter extends CoreFilter
             if ($useAlwaysAvailable) {
                 // Combine conditions with OR
                 $filter = new LogicalOr(
-                    array(
+                    [
                         $filter,
-                        $this->getAlwaysAvailableFilter($languageCodes),
-                    )
+                        $this->getAlwaysAvailableFilter(
+                            $languageCodes,
+                            $excludeTranslationsFromAlwaysAvailable
+                        ),
+                    ]
                 );
             }
 
@@ -208,11 +223,21 @@ class NativeCoreFilter extends CoreFilter
      * Returns criteria for always available translation fallback.
      *
      * @param string[] $languageCodes
+     * @param bool $excludeTranslationsFromAlwaysAvailable
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion
      */
-    private function getAlwaysAvailableFilter(array $languageCodes)
-    {
+    private function getAlwaysAvailableFilter(
+        array $languageCodes,
+        bool $excludeTranslationsFromAlwaysAvailable = true
+    ): Criterion {
+        $excludeOnField = $excludeTranslationsFromAlwaysAvailable
+            // Exclude all translations by given languages
+            ? self::FIELD_LANGUAGES
+            // Exclude only main translation by given languages
+            : self::FIELD_LANGUAGE
+        ;
+
         $conditions = array(
             // Include always available main language translations
             new CustomField(
@@ -220,9 +245,9 @@ class NativeCoreFilter extends CoreFilter
                 Operator::EQ,
                 true
             ),
-            // Exclude all given languages
+
             new LogicalNot(
-                new CustomField(self::FIELD_LANGUAGES, Operator::IN, $languageCodes)
+                new CustomField($excludeOnField, Operator::IN, $languageCodes)
             ),
         );
 
