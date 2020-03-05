@@ -34,6 +34,11 @@ class RemoveTranslation extends Slot
             return;
         }
 
+        $this->searchHandler->deleteContent(
+            $contentInfo->id,
+            $contentInfo->currentVersionNo
+        );
+
         $this->searchHandler->indexContent(
             $this->persistenceHandler->contentHandler()->load(
                 $contentInfo->id,
