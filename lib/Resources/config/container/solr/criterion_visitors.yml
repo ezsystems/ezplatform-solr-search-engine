@@ -356,7 +356,7 @@ services:
     EzSystems\EzPlatformSolrSearchEngine\Query\Location\CriterionVisitor\Factory\LocationFullTextFactory:
         parent: EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\Factory\FullTextFactoryAbstract
 
-    EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\AggregateCriterion:
+    EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\CompositeCriterion:
         tags:
             - {name: ezpublish.search.solr.query.content.criterion_visitor}
             - {name: ezpublish.search.solr.query.location.criterion_visitor}

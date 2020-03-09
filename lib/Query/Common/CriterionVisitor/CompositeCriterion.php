@@ -11,11 +11,11 @@ namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 
-class AggregateCriterion extends CriterionVisitor
+class CompositeCriterion extends CriterionVisitor
 {
     public function canVisit(Criterion $criterion): bool
     {
-        return $criterion instanceof Criterion\AggregateCriterion;
+        return $criterion instanceof Criterion\CompositeCriterion;
     }
 
     public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null): string
