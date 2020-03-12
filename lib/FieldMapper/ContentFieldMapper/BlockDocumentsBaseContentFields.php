@@ -177,6 +177,11 @@ class BlockDocumentsBaseContentFields extends ContentFieldMapper
                 $this->getObjectStateIds($contentInfo->id),
                 new FieldType\MultipleIdentifierField()
             ),
+            new Field(
+                'content_object_state_identifiers',
+                $this->getObjectStateIdentifiers($contentInfo->id),
+                new FieldType\MultipleStringField()
+            ),
         ];
     }
 
@@ -199,6 +204,27 @@ class BlockDocumentsBaseContentFields extends ContentFieldMapper
         }
 
         return $objectStateIds;
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function getObjectStateIdentifiers(int $contentId): array
+    {
+        $identifiers = [];
+
+        foreach ($this->objectStateHandler->loadAllGroups() as $objectStateGroup) {
+            $identifiers[] = sprintf(
+                '%s:%s',
+                $objectStateGroup->identifier,
+                $this->objectStateHandler->getContentState(
+                    $contentId,
+                    $objectStateGroup->id
+                )->identifier
+            );
+        }
+
+        return $identifiers;
     }
 
     /**

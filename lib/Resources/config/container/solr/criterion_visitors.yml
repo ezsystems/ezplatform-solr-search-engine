@@ -212,6 +212,11 @@ services:
             - {name: ezpublish.search.solr.query.content.criterion_visitor}
             - {name: ezpublish.search.solr.query.location.criterion_visitor}
 
+    EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\ObjectStateIdentifierIn:
+        tags:
+            - {name: ezpublish.search.solr.query.content.criterion_visitor}
+            - {name: ezpublish.search.solr.query.location.criterion_visitor}
+
     ezpublish.search.solr.query.common.criterion_visitor.published_between:
         class: "%ezpublish.search.solr.query.common.criterion_visitor.published_between.class%"
         tags:
@@ -232,6 +237,11 @@ services:
 
     ezpublish.search.solr.query.common.criterion_visitor.section_in:
         class: "%ezpublish.search.solr.query.common.criterion_visitor.section_in.class%"
+        tags:
+            - {name: ezpublish.search.solr.query.content.criterion_visitor}
+            - {name: ezpublish.search.solr.query.location.criterion_visitor}
+
+    EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\SectionIdentifierIn:
         tags:
             - {name: ezpublish.search.solr.query.content.criterion_visitor}
             - {name: ezpublish.search.solr.query.location.criterion_visitor}
