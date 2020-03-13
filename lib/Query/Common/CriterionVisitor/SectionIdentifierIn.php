@@ -34,7 +34,7 @@ class SectionIdentifierIn extends CriterionVisitor
                     static function (string $value) {
                         return 'content_section_identifier_id:"'.$value.'"';
                     },
-                    $criterion->value
+                    (array) $criterion->value
                 )
             )
         );
