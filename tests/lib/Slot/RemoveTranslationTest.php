@@ -79,6 +79,13 @@ class RemoveTranslationTest extends TestCase
         $this
             ->getSearchHandlerMock()
             ->expects($this->once())
+            ->method('deleteContent')
+            ->with(2, 1)
+        ;
+
+        $this
+            ->getSearchHandlerMock()
+            ->expects($this->once())
             ->method('indexContent')
             ->with($content)
         ;
