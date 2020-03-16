@@ -13,12 +13,10 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "repositories": [
-        {"type": "vcs", "url": "https://github.com/webhdx/JMSTranslationBundle.git"},
-        {"type": "vcs", "url": "https://github.com/webhdx/Routing.git"}
+        {"type": "vcs", "url": "https://github.com/ezsystems/Routing.git"}
     ],
     "require": {
         "php": "^7.3",
-        "ezsystems/doctrine-dbal-schema": "dev-symfony5 as 1.0.x-dev",
         "ezsystems/ezpublish-kernel": "dev-symfony5 as 8.0.x-dev",
         "netgen/query-translator": "^1.0.2",
         "symfony/http-kernel": "^5.0",
