@@ -39,7 +39,7 @@ before_script:
 
 script:
     - if [ "$SOLR_VERSION" = "" ] ; then php vendor/bin/phpunit --bootstrap tests/bootstrap.php -c $TEST_CONFIG ; fi
-    - if [ "$SOLR_VERSION" != "" ] ; then php -d memory_limit=-1 vendor/bin/phpunit --bootstrap tests/bootstrap.php -c vendor/ezsystems/ezpublish-kernel/$TEST_CONFIG ; fi
+    - if [ "$SOLR_VERSION" != "" ] ; then php -d memory_limit=-1 vendor/bin/phpunit --bootstrap tests/bootstrap.php -c vendor/ezsystems/ezplatform-kernel/$TEST_CONFIG ; fi
 
 notifications:
     email: false

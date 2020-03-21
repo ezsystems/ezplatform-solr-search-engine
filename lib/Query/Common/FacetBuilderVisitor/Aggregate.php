@@ -89,7 +89,7 @@ class Aggregate extends FacetBuilderVisitor implements FacetFieldVisitor
         }
 
         // Ignore unsupported FacetBuilders, don't block the query for it
-        // ref: https://github.com/ezsystems/ezpublish-kernel/commit/435624d6fb8aa03ec219818ff7cb6755944b8d7b
+        // ref: https://github.com/ezsystems/ezplatform-kernel/commit/435624d6fb8aa03ec219818ff7cb6755944b8d7b
         return [];
     }
 }
