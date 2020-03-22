@@ -44,7 +44,7 @@ For how to install and configure see:
 
 ### Testing locally
 
-For Contributing to this Bundle, you should make sure to run both unit and integration tests *(from ezpublish-kernel repo)*.
+For Contributing to this Bundle, you should make sure to run both unit and integration tests *(from ezplatform-kernel repo)*.
 
 1. Setup this repository locally
 
@@ -120,7 +120,7 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
 
     ```bash
     export CORES_SETUP="single"
-    php -d memory_limit=-1 vendor/bin/phpunit --bootstrap tests/bootstrap.php -vc vendor/ezsystems/ezpublish-kernel/phpunit-integration-legacy-solr.xml
+    php -d memory_limit=-1 vendor/bin/phpunit --bootstrap tests/bootstrap.php -vc vendor/ezsystems/ezplatform-kernel/phpunit-integration-legacy-solr.xml
     ```
 
 ## Copyright & license
