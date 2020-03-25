@@ -1,24 +1,25 @@
 <?php
 
 /**
- * This file is part of the eZ Platform Solr Search Engine package.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Tests\SetupFactory;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\FetchMode;
+use eZ\Publish\API\Repository\Tests\SearchServiceTranslationLanguageFallbackTest;
 use eZ\Publish\API\Repository\Tests\SetupFactory\Legacy as CoreLegacySetupFactory;
 use eZ\Publish\Core\Base\Container\Compiler as BaseCompiler;
+use eZ\Publish\Core\Base\ServiceContainer;
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
+use eZ\Publish\SPI\Persistence;
 use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler;
-use PDO;
+use EzSystems\EzPlatformSolrSearchEngine\Handler as SolrSearchHandler;
 use RuntimeException;
-use eZ\Publish\API\Repository\Tests\SearchServiceTranslationLanguageFallbackTest;
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use Symfony\Component\Config\FileLocator;
 
 /**
  * Used to setup the infrastructure for Repository Public API integration tests,
@@ -69,39 +70,58 @@ class LegacySetupFactory extends CoreLegacySetupFactory
         $containerBuilder->addCompilerPass(new BaseCompiler\Search\FieldRegistryPass());
     }
 
+    private function getPersistenceContentHandler(
+        ServiceContainer $serviceContainer
+    ): Persistence\Content\Handler {
+        /** @var \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler */
+        $contentHandler = $serviceContainer->get('ezpublish.spi.persistence.content_handler');
+
+        return $contentHandler;
+    }
+
+    private function getSearchHandler(ServiceContainer $serviceContainer): SolrSearchHandler
+    {
+        /** @var \EzSystems\EzPlatformSolrSearchEngine\Handler $searchHandler */
+        $searchHandler = $serviceContainer->get('ezpublish.spi.search.solr');
+
+        return $searchHandler;
+    }
+
+    private function getDatabaseConnection(ServiceContainer $serviceContainer): Connection
+    {
+        /** @var \Doctrine\DBAL\Connection $connection */
+        $connection = $serviceContainer->get('ezpublish.persistence.connection');
+
+        return $connection;
+    }
+
     /**
      * Indexes all Content objects.
      */
-    protected function indexAll()
+    protected function indexAll(): void
     {
-        // @todo: Is there a nicer way to get access to all content objects? We
-        // require this to run a full index here.
-        /** @var \eZ\Publish\SPI\Persistence\Handler $persistenceHandler */
-        $persistenceHandler = $this->getServiceContainer()->get('ezpublish.spi.persistence.legacy');
-        /** @var \eZ\Publish\SPI\Search\Handler $searchHandler */
-        $searchHandler = $this->getServiceContainer()->get('ezpublish.spi.search.solr');
-        /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler $databaseHandler */
-        $databaseHandler = $this->getServiceContainer()->get('ezpublish.api.storage_engine.legacy.dbhandler');
+        $serviceContainer = $this->getServiceContainer();
+        $contentHandler = $this->getPersistenceContentHandler($serviceContainer);
+        $searchHandler = $this->getSearchHandler($serviceContainer);
+        $connection = $this->getDatabaseConnection($serviceContainer);
 
-        $query = $databaseHandler
-            ->createSelectQuery()
+        $query = $connection->createQueryBuilder();
+        $query
             ->select('id', 'current_version')
-            ->from('ezcontentobject');
+            ->from(ContentGateway::CONTENT_ITEM_TABLE);
 
-        $stmt = $query->prepare();
-        $stmt->execute();
+        $stmt = $query->execute();
 
-        $contentObjects = array();
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $contentObjects[] = $persistenceHandler->contentHandler()->load(
+        $contentItems = [];
+        while ($row = $stmt->fetch(FetchMode::ASSOCIATIVE)) {
+            $contentItems[] = $contentHandler->load(
                 $row['id'],
                 $row['current_version']
             );
         }
 
-        /** @var \EzSystems\EzPlatformSolrSearchEngine\Handler $searchHandler */
         $searchHandler->purgeIndex();
-        $searchHandler->bulkIndexContent($contentObjects);
+        $searchHandler->bulkIndexContent($contentItems);
         $searchHandler->commit();
     }
 
