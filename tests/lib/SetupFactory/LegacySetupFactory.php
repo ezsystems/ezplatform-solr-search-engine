@@ -107,18 +107,12 @@ class LegacySetupFactory extends CoreLegacySetupFactory
 
         $query = $connection->createQueryBuilder();
         $query
-            ->select('id', 'current_version')
+            ->select('id')
             ->from(ContentGateway::CONTENT_ITEM_TABLE);
 
-        $stmt = $query->execute();
+        $contentIds = array_map('intval', $query->execute()->fetchAll(FetchMode::COLUMN));
 
-        $contentItems = [];
-        while ($row = $stmt->fetch(FetchMode::ASSOCIATIVE)) {
-            $contentItems[] = $contentHandler->load(
-                $row['id'],
-                $row['current_version']
-            );
-        }
+        $contentItems = $contentHandler->loadContentList($contentIds);
 
         $searchHandler->purgeIndex();
         $searchHandler->bulkIndexContent($contentItems);
