@@ -27,6 +27,13 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
  */
 class LegacySetupFactory extends CoreLegacySetupFactory
 {
+    public const CONFIGURATION_FILES_MAP = [
+        SearchServiceTranslationLanguageFallbackTest::SETUP_DEDICATED => 'multicore_dedicated.yml',
+        SearchServiceTranslationLanguageFallbackTest::SETUP_SHARED => 'multicore_shared.yml',
+        SearchServiceTranslationLanguageFallbackTest::SETUP_SINGLE => 'single_core.yml',
+        SearchServiceTranslationLanguageFallbackTest::SETUP_CLOUD => 'cloud.yml',
+    ];
+
     /**
      * Returns a configured repository for testing.
      *
@@ -119,23 +126,17 @@ class LegacySetupFactory extends CoreLegacySetupFactory
         $searchHandler->commit();
     }
 
-    protected function getTestConfigurationFile()
+    protected function getTestConfigurationFile(): string
     {
-        $isSolrCloud = getenv('SOLR_CLOUD');
-        if ($isSolrCloud) {
-            return 'cloud.yml';
+        $isSolrCloud = getenv('SOLR_CLOUD') === 'yes';
+        $coresSetup = $isSolrCloud
+            ? SearchServiceTranslationLanguageFallbackTest::SETUP_CLOUD
+            : getenv('CORES_SETUP');
+
+        if (!isset(self::CONFIGURATION_FILES_MAP[$coresSetup])) {
+            throw new RuntimeException("Backend cores setup '{$coresSetup}' is not handled");
         }
 
-        $coresSetup = getenv('CORES_SETUP');
-        switch ($coresSetup) {
-            case SearchServiceTranslationLanguageFallbackTest::SETUP_DEDICATED:
-                return 'multicore_dedicated.yml';
-            case SearchServiceTranslationLanguageFallbackTest::SETUP_SHARED:
-                return 'multicore_shared.yml';
-            case SearchServiceTranslationLanguageFallbackTest::SETUP_SINGLE:
-                return 'single_core.yml';
-        }
-
-        throw new RuntimeException("Backend cores setup '{$coresSetup}' is not handled");
+        return self::CONFIGURATION_FILES_MAP[$coresSetup];
     }
 }
