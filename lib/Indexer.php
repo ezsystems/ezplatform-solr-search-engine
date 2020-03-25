@@ -1,16 +1,15 @@
 <?php
 
 /**
- * This file is part of the eZ Platform Solr Search Engine package.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace EzSystems\EzPlatformSolrSearchEngine;
 
+use Doctrine\DBAL\Connection;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Search\Common\IncrementalIndexer;
+use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use EzSystems\EzPlatformSolrSearchEngine\Handler as SolrSearchHandler;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use Psr\Log\LoggerInterface;
@@ -26,10 +25,10 @@ class Indexer extends IncrementalIndexer
     public function __construct(
         LoggerInterface $logger,
         PersistenceHandler $persistenceHandler,
-        DatabaseHandler $databaseHandler,
+        Connection $connection,
         SolrSearchHandler $searchHandler
     ) {
-        parent::__construct($logger, $persistenceHandler, $databaseHandler, $searchHandler);
+        parent::__construct($logger, $persistenceHandler, $connection, $searchHandler);
     }
 
     public function getName()
