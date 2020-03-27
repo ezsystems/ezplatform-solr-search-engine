@@ -67,13 +67,6 @@ class RemoveTranslationTest extends TestCase
             )
         ;
 
-        $this
-            ->getSearchHandlerMock()
-            ->expects($this->once())
-            ->method('deleteContent')
-            ->with(2, 1)
-        ;
-
         $content = new SPIContent();
 
         $contentHandlerMock
