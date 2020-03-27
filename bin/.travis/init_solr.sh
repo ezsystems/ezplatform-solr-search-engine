@@ -161,7 +161,7 @@ solr_create_core() {
     core_name=$1
     config_dir=$2
 
-    ./${SOLR_INSTALL_DIR}/bin/solr create_core -c ${core_name} -d ${config_dir} || exit_on_error "Can't create core"
+    ./${SOLR_INSTALL_DIR}/bin/solr create_core -p ${SOLR_PORT} -c ${core_name} -d ${config_dir} || exit_on_error "Can't create core"
 }
 
 solr_cloud_configure_nodes() {
