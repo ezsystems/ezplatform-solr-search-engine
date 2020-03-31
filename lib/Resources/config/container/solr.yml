@@ -9,7 +9,6 @@ imports:
 parameters:
     ezpublish.search.solr.connection.server: http://localhost:8983/solr/core0
     ezpublish.spi.search.solr.class: EzSystems\EzPlatformSolrSearchEngine\Handler
-    ezpublish.spi.search.solr.indexer.class: EzSystems\EzPlatformSolrSearchEngine\Indexer
     ezpublish.search.solr.gateway.native.class: EzSystems\EzPlatformSolrSearchEngine\Gateway\Native
     ezpublish.search.solr.gateway.endpoint_registry.class: EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointRegistry
     ezpublish.search.solr.gateway.endpoint_resolver.native.class: EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointResolver\NativeEndpointResolver
@@ -128,12 +127,12 @@ services:
         lazy: true
 
     ezpublish.spi.search.solr.indexer:
-        class: "%ezpublish.spi.search.solr.indexer.class%"
+        class: EzSystems\EzPlatformSolrSearchEngine\Indexer
         arguments:
-            - "@logger"
-            - "@ezpublish.api.storage_engine"
-            - "@ezpublish.api.storage_engine.legacy.dbhandler"
-            - "@ezpublish.spi.search.solr"
+            $logger: "@logger"
+            $persistenceHandler: "@ezpublish.api.storage_engine"
+            $connection: "@ezpublish.persistence.connection"
+            $searchHandler: "@ezpublish.spi.search.solr"
         tags:
             - {name: ezpublish.searchEngineIndexer, alias: solr}
         lazy: true
