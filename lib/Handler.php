@@ -478,11 +478,8 @@ class Handler implements SearchHandlerInterface, Capable, ContentTranslationHand
 
     /**
      * Deletes a translation content object from the index.
-     *
-     * @param int $contentId
-     * @param string $languageCode
      */
-    public function deleteTranslation($contentId, $languageCode)
+    public function deleteTranslation(int $contentId, string $languageCode): void
     {
         $languageCode = preg_replace('([^A-Za-z0-9/]+)', '', $languageCode);
         $idPrefix = $this->mapper->generateContentDocumentId($contentId, $languageCode);
