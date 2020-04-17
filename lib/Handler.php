@@ -481,10 +481,16 @@ class Handler implements SearchHandlerInterface, Capable, ContentTranslationHand
      */
     public function deleteTranslation(int $contentId, string $languageCode): void
     {
-        $languageCode = preg_replace('([^A-Za-z0-9/]+)', '', $languageCode);
-        $idPrefix = $this->mapper->generateContentDocumentId($contentId, $languageCode);
+        $idPrefix = $this->mapper->generateContentDocumentId($contentId, $this->sanitizeInput($languageCode));
 
         $this->gateway->deleteByQuery("_root_:{$idPrefix}*");
     }
 
+    /**
+     * Sanitize string before injecting into Search Engine query
+     */
+    protected function sanitizeInput(string $input): string
+    {
+        return preg_replace('([^A-Za-z0-9/]+)', '', $input);
+    }
 }
