@@ -8,6 +8,7 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
 
+use OutOfBoundsException;
 use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider;
 use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
 use eZ\Publish\Core\Search\Common\FieldNameGenerator;
@@ -142,7 +143,12 @@ class ContentDocumentFulltextFields extends ContentTranslationFieldMapper
                     continue;
                 }
 
-                $fieldType = $this->fieldRegistry->getType($field->type);
+                try {
+                    $fieldType = $this->fieldRegistry->getType($field->type);
+                } catch (OutOfBoundsException $e) {
+                    continue;
+                }
+
                 $indexFields = $fieldType->getIndexData($field, $fieldDefinition);
 
                 foreach ($indexFields as $indexField) {
