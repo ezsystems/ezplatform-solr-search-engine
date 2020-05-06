@@ -10,6 +10,7 @@ namespace EzSystems\EzPlatformSolrSearchEngine\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\Search\Common\Slot;
+use eZ\Publish\SPI\Search\ContentTranslationHandler;
 
 /**
  * A Search Engine Slot handling RemoveTranslationSignal.
@@ -32,6 +33,13 @@ class RemoveTranslation extends Slot
         );
         if (!$contentInfo->isPublished) {
             return;
+        }
+
+        if ($this->searchHandler instanceof ContentTranslationHandler) {
+            $this->searchHandler->deleteTranslation(
+                $contentInfo->id,
+                $signal->languageCode
+            );
         }
 
         $this->searchHandler->indexContent(
