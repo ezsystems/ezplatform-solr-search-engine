@@ -48,6 +48,12 @@ class LocationDocumentBaseFields extends LocationFieldMapper
                 $location->id,
                 new FieldType\IdentifierField()
             ),
+            // explicit integer representation to allow sorting
+            new Field(
+                'location_id_normalized',
+                $location->id,
+                new FieldType\IntegerField()
+            ),
             new Field(
                 'document_type',
                 DocumentMapper::DOCUMENT_TYPE_IDENTIFIER_LOCATION,
