@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\SearchService;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
+use eZ\Publish\SPI\Search\ContentTranslationHandler;
 use eZ\Publish\SPI\Search\Handler as SearchHandlerInterface;
 use eZ\Publish\SPI\Search\Capable;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -43,7 +44,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
  * content objects based on criteria, which could not be converted in to
  * database statements.
  */
-class Handler implements SearchHandlerInterface, Capable
+class Handler implements SearchHandlerInterface, Capable, ContentTranslationHandler
 {
     /* Solr's maxBooleanClauses config value is 1024 */
     const SOLR_BULK_REMOVE_LIMIT = 1000;
@@ -473,5 +474,23 @@ class Handler implements SearchHandlerInterface, Capable
             default:
                 return false;
         }
+    }
+
+    /**
+     * Deletes a translation content object from the index.
+     */
+    public function deleteTranslation(int $contentId, string $languageCode): void
+    {
+        $idPrefix = $this->mapper->generateContentDocumentId($contentId, $this->sanitizeInput($languageCode));
+
+        $this->gateway->deleteByQuery("_root_:{$idPrefix}*");
+    }
+
+    /**
+     * Sanitize string before injecting into Search Engine query
+     */
+    protected function sanitizeInput(string $input): string
+    {
+        return preg_replace('([^A-Za-z0-9/]+)', '', $input);
     }
 }
