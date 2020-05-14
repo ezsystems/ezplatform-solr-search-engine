@@ -41,4 +41,9 @@ script:
     - if [ "$SOLR_VERSION" != "" ] ; then php -d memory_limit=-1 vendor/bin/phpunit --bootstrap tests/bootstrap.php -c vendor/ezsystems/ezpublish-kernel/$TEST_CONFIG ; fi
 
 notifications:
-    email: false
+  slack:
+    rooms:
+      - secure: F+SDUD8se903A7MZlEOr5JdQzVI6EcEmMxEe/Y8v8kX4HKl7VuzqHpLHoJAVbuP/P8rGwOojn9VIeCxs6vemn9sV+MWEMleaet+nZ+sxi7cZwT3VWG8LuKIWueVsbl9WU8S5i0iiafN96Tf8ZWIOAz8cAFqL0V6LDFeM7cIP7ENbcR7d52Key7MXej1X5Ssee1HnMVx+doQfYCxIXEYmtSHMRCNX/67ClvjzI6/OPLQJ/Wb60vMxpxdoxdSWs6hF9joHMTqRe6i4h8cmHr1Z6yRtmP48i+Nzp7Dg0JdPV4oJjXzRzKjDQhfRzMjdRbEaevLOVai8wwpICfzWHobF2DS9lnUt+JgPH6eK+tT4YEkvpqY/Sw/KlClF8BhDYQgEGTF9zS4mX/tWhCdajIiY80PrpsIoZ8cRtbTENJ83EUqk4T4x2jh91qnXQ1NhvwCg4SCPQ1rsJ9/XoTrjBsvQeVSgXVh9+a3WAsEttqk9+kOw2vCU2iIe21MRxFyb3RVb6kXm8pTcWJvCkc7FdhIjfxFdzqqdgO2LBfvCqZW0E4CMrfB1VUJXYVZbYoCw+5w3Fdtcxko6lYFWl0SHSO8anU6wIc5aMe4vn09Dv0brhRmEXsJTHs43QgTcqk2L7B2VAyyIXARR6mxCu1tc/3wS0BrYaeEWQ1E3lBI6riNYWbk=
+    on_success: change
+    on_failure: always
+    on_pull_requests: false
