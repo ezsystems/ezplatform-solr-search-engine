@@ -74,7 +74,7 @@ class ContentDocumentLocationFields extends ContentFieldMapper
             $fields[] = new Field(
                 'location_remote_id',
                 $locationData['remote_ids'],
-                new FieldType\MultipleIdentifierField()
+                new FieldType\MultipleRemoteIdentifierField()
             );
             $fields[] = new Field(
                 'location_path_string',
@@ -97,7 +97,7 @@ class ContentDocumentLocationFields extends ContentFieldMapper
             $fields[] = new Field(
                 'main_location_remote_id',
                 $mainLocation->remoteId,
-                new FieldType\IdentifierField()
+                new FieldType\RemoteIdentifierField()
             );
             $fields[] = new Field(
                 'main_location_visible',
