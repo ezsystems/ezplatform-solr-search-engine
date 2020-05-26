@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace EzSystems\EzPlatformSolrSearchEngine;
 
@@ -481,16 +479,8 @@ class Handler implements SearchHandlerInterface, Capable, ContentTranslationHand
      */
     public function deleteTranslation(int $contentId, string $languageCode): void
     {
-        $idPrefix = $this->mapper->generateContentDocumentId($contentId, $this->sanitizeInput($languageCode));
-
-        $this->gateway->deleteByQuery("_root_:{$idPrefix}*");
-    }
-
-    /**
-     * Sanitize string before injecting into Search Engine query
-     */
-    protected function sanitizeInput(string $input): string
-    {
-        return preg_replace('([^A-Za-z0-9/]+)', '', $input);
+        $this->gateway->deleteByQuery(
+            "content_id_id:{$contentId} AND meta_indexed_language_code_s:{$languageCode}"
+        );
     }
 }

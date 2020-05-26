@@ -71,7 +71,7 @@ class LocationDocumentBaseFields extends LocationFieldMapper
             new Field(
                 'remote_id',
                 $location->remoteId,
-                new FieldType\IdentifierField()
+                new FieldType\RemoteIdentifierField()
             ),
             new Field(
                 'parent_id',

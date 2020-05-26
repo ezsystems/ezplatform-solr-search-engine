@@ -125,7 +125,7 @@ class BlockDocumentsBaseContentFields extends ContentFieldMapper
             new Field(
                 'content_remote_id',
                 $contentInfo->remoteId,
-                new FieldType\IdentifierField()
+                new FieldType\RemoteIdentifierField()
             ),
             new Field(
                 'content_modification_date',
