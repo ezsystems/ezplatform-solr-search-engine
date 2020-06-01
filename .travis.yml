@@ -13,13 +13,22 @@ matrix:
         - php: 7.3
           env: TEST_CONFIG="phpunit.xml"
         - php: 7.3
-          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="7.7.2"  CORES_SETUP="dedicated"
+          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="7.7.3"  CORES_SETUP="dedicated"
         - php: 7.3
-          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="7.7.2"  CORES_SETUP="shared"
+          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="7.7.3"  CORES_SETUP="shared"
         - php: 7.3
-          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="7.7.2"  CORES_SETUP="single" SOLR_CORES="collection1"
+          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="7.7.3"  CORES_SETUP="single" SOLR_CORES="collection1"
         - php: 7.3
-          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="7.7.2"  CORES_SETUP="cloud" SOLR_CLOUD="yes"
+          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="7.7.3"  CORES_SETUP="cloud" SOLR_CLOUD="yes"
+        # Solr 8.5.2
+        - php: 7.3
+          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="8.5.2"  CORES_SETUP="dedicated"
+        - php: 7.3
+          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="8.5.2"  CORES_SETUP="shared"
+        - php: 7.3
+          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="8.5.2"  CORES_SETUP="single" SOLR_CORES="collection1"
+        - php: 7.3
+          env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="8.5.2"  CORES_SETUP="cloud" SOLR_CLOUD="yes"
 
 # test only master and stable branches (+ Pull requests against those)
 branches:
