@@ -16,7 +16,7 @@ default_shards=('shard0')
 
 SOLR_PORT=${SOLR_PORT:-8983}
 SOLR_DIR=${SOLR_DIR:-'__solr'}
-SOLR_VERSION=${SOLR_VERSION:-'7.7.2'}
+SOLR_VERSION=${SOLR_VERSION:-'7.7.3'}
 SOLR_INSTALL_DIR="${SOLR_DIR}/${SOLR_VERSION}"
 SOLR_DEBUG=${SOLR_DEBUG:-false}
 SOLR_HOME=${SOLR_HOME:-'ezcloud'}
@@ -45,7 +45,7 @@ fi
 download() {
     case ${SOLR_VERSION} in
         # PS!!: Append versions and don't remove old once, kernel uses this script!
-        7.7.2 )
+        7.7.2|7.7.3 )
             url="http://archive.apache.org/dist/lucene/solr/${SOLR_VERSION}/solr-${SOLR_VERSION}.tgz"
             ;;
         *)
