@@ -39,6 +39,6 @@ class Visibility extends SortClauseVisitor
      */
     public function visit(SortClause $sortClause)
     {
-        return 'hidden_b' . $this->getDirection($sortClause);
+        return 'invisible_b' . $this->getDirection($sortClause);
     }
 }
