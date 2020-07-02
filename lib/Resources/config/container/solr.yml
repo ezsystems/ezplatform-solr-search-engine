@@ -123,7 +123,7 @@ services:
             - "@ezpublish.search.solr.result_extractor"
             - "@ezpublish.search.solr.core_filter"
         tags:
-            - {name: ezpublish.searchEngine, alias: solr}
+            - {name: ezplatform.search_engine, alias: solr}
         lazy: true
 
     ezpublish.spi.search.solr.indexer:
@@ -134,6 +134,6 @@ services:
             $connection: "@ezpublish.persistence.connection"
             $searchHandler: "@ezpublish.spi.search.solr"
         tags:
-            - {name: ezpublish.searchEngineIndexer, alias: solr}
+            - {name: ezplatform.search_engine.indexer, alias: solr}
         lazy: true
 
