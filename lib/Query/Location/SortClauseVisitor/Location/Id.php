@@ -39,6 +39,6 @@ class Id extends SortClauseVisitor
      */
     public function visit(SortClause $sortClause)
     {
-        return 'location_id' . $this->getDirection($sortClause);
+        return 'location_id_normalized_i' . $this->getDirection($sortClause);
     }
 }

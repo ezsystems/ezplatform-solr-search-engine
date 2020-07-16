@@ -8,6 +8,10 @@ cache:
   directories:
     - $HOME/.composer/cache/files
 
+env:
+    global:
+        - COMPOSER_MEMORY_LIMIT=6G
+
 matrix:
     include:
         - php: 7.2
@@ -32,6 +36,7 @@ before_script:
     - composer config -g github-oauth.github.com "d0285ed5c8644f30547572ead2ed897431c1fc09"
     # Avoid memory issues on composer install
     - echo "memory_limit=-1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+    - ./bin/.travis/enable_swap.sh
     - if [ "$COMPOSER_REQUIRE" != "" ] ; then composer require --no-update $COMPOSER_REQUIRE ; fi
     - travis_retry composer update --prefer-dist --no-interaction
     - if [ "$SOLR_VERSION" != "" ] ; then ./bin/.travis/init_solr.sh ; fi
