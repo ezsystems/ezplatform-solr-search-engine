@@ -87,6 +87,12 @@ class BlockDocumentsBaseContentFields extends ContentFieldMapper
                 $contentInfo->id,
                 new FieldType\IdentifierField()
             ),
+            // explicit integer representation to allow sorting
+            new Field(
+                'content_id_normalized',
+                $contentInfo->id,
+                new FieldType\IntegerField()
+            ),
             new Field(
                 'content_type_id',
                 $contentInfo->contentTypeId,
