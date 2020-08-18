@@ -1,0 +1,41 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  ezpublish.search.solr.query.content.aggregation_visitor.dispatcher:
+    class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\DispatcherAggregationVisitor
+    arguments:
+      $visitors: !tagged ezplatform.search.solr.query.content.aggregation_visitor
+
+  ezpublish.search.solr.query.location.aggregation_visitor.dispatcher:
+    class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\DispatcherAggregationVisitor
+    arguments:
+      $visitors: !tagged ezplatform.search.solr.query.location.aggregation_visitor
+
+  ### Factories
+
+  EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\Factory\SearchFieldAggregationVisitorFactory: ~
+
+  ### Aggregation visitors
+
+  ezpublish.search.solr.query.common.aggregation_visitor.content_type:
+    class: 'EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\TermAggregationVisitor'
+    factory: ['@EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\Factory\SearchFieldAggregationVisitorFactory', 'createTermAggregationVisitor']
+    arguments:
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\ContentTypeTermAggregation'
+      $searchIndexFieldName: 'content_type_id_id'
+    tags:
+      - { name: ezplatform.search.solr.query.content.aggregation_visitor }
+      - { name: ezplatform.search.solr.query.location.aggregation_visitor }
+
+  ezpublish.search.solr.query.common.aggregation_visitor.section:
+    class: 'EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\TermAggregationVisitor'
+    factory: ['@EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\Factory\SearchFieldAggregationVisitorFactory', 'createTermAggregationVisitor']
+    arguments:
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\SectionTermAggregation'
+      $searchIndexFieldName: 'section_id_id'
+    tags:
+      - { name: ezplatform.search.solr.query.content.aggregation_visitor }
+      - { name: ezplatform.search.solr.query.location.aggregation_visitor }

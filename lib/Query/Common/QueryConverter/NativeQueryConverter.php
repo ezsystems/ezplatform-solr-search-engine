@@ -10,7 +10,9 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\QueryConverter;
 
+use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\API\Repository\Values\Content\Query;
+use EzSystems\EzPlatformSolrSearchEngine\Query\AggregationVisitor;
 use EzSystems\EzPlatformSolrSearchEngine\Query\QueryConverter;
 use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 use EzSystems\EzPlatformSolrSearchEngine\Query\SortClauseVisitor;
@@ -43,6 +45,11 @@ class NativeQueryConverter extends QueryConverter
     protected $facetBuilderVisitor;
 
     /**
+     * @var \EzSystems\EzPlatformSolrSearchEngine\Query\AggregationVisitor
+     */
+    private $aggregationVisitor;
+
+    /**
      * Construct from visitors.
      *
      * @param \EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor $criterionVisitor
@@ -52,11 +59,13 @@ class NativeQueryConverter extends QueryConverter
     public function __construct(
         CriterionVisitor $criterionVisitor,
         SortClauseVisitor $sortClauseVisitor,
-        FacetFieldVisitor $facetBuilderVisitor
+        FacetFieldVisitor $facetBuilderVisitor,
+        AggregationVisitor  $aggregationVisitor
     ) {
         $this->criterionVisitor = $criterionVisitor;
         $this->sortClauseVisitor = $sortClauseVisitor;
         $this->facetBuilderVisitor = $facetBuilderVisitor;
+        $this->aggregationVisitor = $aggregationVisitor;
     }
 
     public function convert(Query $query)
@@ -76,6 +85,25 @@ class NativeQueryConverter extends QueryConverter
             $params['facet'] = 'true';
             $params['facet.sort'] = 'count';
             $params = array_merge($facetParams, $params);
+        }
+
+        if (!empty($query->aggregations)) {
+            $aggregations = [];
+
+            foreach ($query->aggregations as $aggregation) {
+                // TODO: Language filter argument is missing
+                try {
+                    $aggregations[$aggregation->getName()] = $this->aggregationVisitor->visit(
+                        $this->aggregationVisitor,
+                        $aggregation,
+                        []
+                    );
+                } catch(NotImplementedException $e) {
+                    // Ignore
+                }
+            }
+
+            $params['json.facet'] = json_encode($aggregations);
         }
 
         return $params;

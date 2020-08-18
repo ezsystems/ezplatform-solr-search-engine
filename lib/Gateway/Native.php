@@ -469,6 +469,8 @@ class Native extends Gateway
             );
         }
 
+        dump($result);
+
         return $result;
     }
 }
