@@ -20,7 +20,10 @@ abstract class QueryConverter
     /**
      * Map query to a proper Solr representation.
      *
+     * @param array $languageSettings - a map of filters for the returned fields.
+     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
+     *
      * @return array
      */
-    abstract public function convert(Query $query);
+    abstract public function convert(Query $query, array $languageSettings = []);
 }

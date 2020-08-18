@@ -11,7 +11,7 @@ namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 
-class CompositeCriterion extends CriterionVisitor
+final class CompositeCriterion extends CriterionVisitor
 {
     public function canVisit(Criterion $criterion): bool
     {

@@ -102,7 +102,7 @@ class Native extends Gateway
      */
     public function findContent(Query $query, array $languageSettings = [])
     {
-        $parameters = $this->contentQueryConverter->convert($query);
+        $parameters = $this->contentQueryConverter->convert($query, $languageSettings);
 
         return $this->internalFind($parameters, $languageSettings);
     }
