@@ -103,7 +103,9 @@ class NativeQueryConverter extends QueryConverter
                 }
             }
 
-            $params['json.facet'] = json_encode($aggregations);
+            if (!empty($aggregations)) {
+                $params['json.facet'] = json_encode($aggregations);
+            }
         }
 
         return $params;

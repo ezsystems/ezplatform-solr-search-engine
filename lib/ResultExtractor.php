@@ -10,10 +10,13 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine;
 
+use eZ\Publish\API\Repository\Values\Content\Query\AggregationInterface;
+use eZ\Publish\API\Repository\Values\Content\Search\AggregationResultCollection;
 use EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointRegistry;
 use EzSystems\EzPlatformSolrSearchEngine\Query\FacetFieldVisitor;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
+use EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor;
 
 /**
  * Abstract implementation of Search Extractor, which extracts search result
@@ -24,12 +27,19 @@ abstract class ResultExtractor
     /** @var \EzSystems\EzPlatformSolrSearchEngine\Query\FacetFieldVisitor */
     protected $facetBuilderVisitor;
 
+    /** @var \EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor */
+    protected $aggregationResultExtractor;
+
     /** @var \EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointRegistry */
     protected $endpointRegistry;
 
-    public function __construct(FacetFieldVisitor $facetBuilderVisitor, EndpointRegistry $endpointRegistry)
-    {
+    public function __construct(
+        FacetFieldVisitor $facetBuilderVisitor,
+        AggregationResultExtractor $aggregationResultExtractor,
+        EndpointRegistry $endpointRegistry
+    ) {
         $this->facetBuilderVisitor = $facetBuilderVisitor;
+        $this->aggregationResultExtractor = $aggregationResultExtractor;
         $this->endpointRegistry = $endpointRegistry;
     }
 
@@ -38,10 +48,11 @@ abstract class ResultExtractor
      *
      * @param mixed $data
      * @param \eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder[] $facetBuilders
+     * @param AggregationInterface[] $aggregations
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function extract($data, array $facetBuilders = [])
+    public function extract($data, array $facetBuilders = [], array $aggregations = [])
     {
         $result = new SearchResult(
             array(
@@ -78,6 +89,21 @@ abstract class ResultExtractor
                 }
             }
         }
+
+        $aggregationsResults = [];
+        foreach ($aggregations as $aggregation) {
+            $name = $aggregation->getName();
+
+            if (isset($data->facets->{$name})) {
+                $aggregationsResults[] = $this->aggregationResultExtractor->extract(
+                    $aggregation,
+                    [],
+                    $data->facets->{$name}
+                );
+            }
+        }
+
+        $result->aggregations = new AggregationResultCollection($aggregationsResults);
 
         foreach ($data->response->docs as $doc) {
             $searchHit = new SearchHit(

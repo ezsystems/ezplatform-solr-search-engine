@@ -135,7 +135,8 @@ class Handler implements SearchHandlerInterface, Capable, ContentTranslationHand
 
         return $this->resultExtractor->extract(
             $this->gateway->findContent($query, $languageFilter),
-            $query->facetBuilders
+            $query->facetBuilders,
+            $query->aggregations
         );
     }
 
@@ -207,7 +208,8 @@ class Handler implements SearchHandlerInterface, Capable, ContentTranslationHand
 
         return $this->resultExtractor->extract(
             $this->gateway->findLocations($query, $languageFilter),
-            $query->facetBuilders
+            $query->facetBuilders,
+            $query->aggregations
         );
     }
 

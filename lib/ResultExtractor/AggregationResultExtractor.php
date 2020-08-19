@@ -10,10 +10,11 @@ namespace EzSystems\EzPlatformSolrSearchEngine\ResultExtractor;
 
 use eZ\Publish\API\Repository\Values\Content\Query\AggregationInterface;
 use eZ\Publish\API\Repository\Values\Content\Search\AggregationResult;
+use stdClass;
 
 interface AggregationResultExtractor
 {
     public function canVisit(AggregationInterface $aggregation, array $languageFilter): bool;
 
-    public function extract(AggregationInterface $aggregation, array $languageFilter, array $data): AggregationResult;
+    public function extract(AggregationInterface $aggregation, array $languageFilter, stdClass $data): AggregationResult;
 }

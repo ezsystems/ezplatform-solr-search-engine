@@ -9,40 +9,37 @@ declare(strict_types=1);
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\Factory;
 
 use EzSystems\EzPlatformSolrSearchEngine\Query\AggregationVisitor;
-use EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\AggregationFieldResolver\SearchFieldAggregationFieldResolver;
+use EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\AggregationFieldResolver\RawAggregationFieldResolver;
 use EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\RangeAggregationVisitor;
 use EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\StatsAggregationVisitor;
 use EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\TermAggregationVisitor;
 
-final class SearchFieldAggregationVisitorFactory
+final class RawAggregationVisitorFactory
 {
     public function createRangeAggregationVisitor(
-        string $aggregationClass,
-        string $searchIndexFieldName
+        string $aggregationClass
     ): AggregationVisitor {
         return new RangeAggregationVisitor(
             $aggregationClass,
-            new SearchFieldAggregationFieldResolver($searchIndexFieldName)
+            new RawAggregationFieldResolver()
         );
     }
 
     public function createStatsAggregationVisitor(
-        string $aggregationClass,
-        string $searchIndexFieldName
+        string $aggregationClass
     ): AggregationVisitor {
         return new StatsAggregationVisitor(
             $aggregationClass,
-            new SearchFieldAggregationFieldResolver($searchIndexFieldName)
+            new RawAggregationFieldResolver()
         );
     }
 
     public function createTermAggregationVisitor(
-        string $aggregationClass,
-        string $searchIndexFieldName
+        string $aggregationClass
     ): AggregationVisitor {
         return new TermAggregationVisitor(
             $aggregationClass,
-            new SearchFieldAggregationFieldResolver($searchIndexFieldName)
+            new RawAggregationFieldResolver()
         );
     }
 }
