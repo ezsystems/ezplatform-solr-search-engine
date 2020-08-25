@@ -188,7 +188,7 @@ services:
     factory: ['@EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\Factory\SearchFieldAggregationVisitorFactory', 'createTermAggregationVisitor']
     arguments:
       $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\SectionTermAggregation'
-      $searchIndexFieldName: 'section_id_id'
+      $searchIndexFieldName: 'content_section_id_id'
     tags:
       - { name: ezplatform.search.solr.query.content.aggregation_visitor }
       - { name: ezplatform.search.solr.query.location.aggregation_visitor }
