@@ -34,8 +34,13 @@ final class ObjectStateAggregationKeyMapper implements TermAggregationKeyMapper
 
         $mapped = [];
         foreach ($keys as $key) {
+            list(, $stateIdentifier) = explode(':', $key, 2);
+
             try {
-                $mapped[$key] = $this->objectStateService->loadObjectStateByIdentifier($objectStateGroup, $key);
+                $mapped[$key] = $this->objectStateService->loadObjectStateByIdentifier(
+                    $objectStateGroup,
+                    $stateIdentifier
+                );
             } catch (NotFoundException $e) {
                 // Skip non-existing object states
             }

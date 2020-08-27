@@ -29,7 +29,7 @@ final class UserTermAggregationVisitor extends AbstractTermAggregationVisitor
             case UserTermAggregation::OWNER:
                 return 'content_owner_user_id_id';
             case UserTermAggregation::GROUP:
-                return 'content_owner_user_group_id_mid';
+                return 'content_owner_user_group_ids_mid';
             case UserTermAggregation::MODIFIER:
                 return 'content_version_creator_user_id_id';
             default:

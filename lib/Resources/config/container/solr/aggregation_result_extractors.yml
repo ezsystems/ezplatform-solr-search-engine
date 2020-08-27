@@ -22,13 +22,13 @@ services:
 
   EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\ContentTypeGroupAggregationKeyMapper: ~
 
+  EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\LanguageAggregationKeyMapper: ~
+
   EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\ObjectStateAggregationKeyMapper: ~
 
   EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\SectionAggregationKeyMapper: ~
 
   EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\UserAggregationKeyMapper: ~
-
-  EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\UserGroupAggregationKeyMapper: ~
 
   ### Extractors
 
@@ -46,6 +46,15 @@ services:
     arguments:
       $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\ContentTypeGroupTermAggregation'
       $keyMapper: '@EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\ContentTypeGroupAggregationKeyMapper'
+    tags:
+      - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
+      - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
+
+  ezplatform.search.solr.query.common.aggregation_result_extractor.langauge_term:
+    class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationResultExtractor
+    arguments:
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\LanguageTermAggregation'
+      $keyMapper: '@EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\LanguageAggregationKeyMapper'
     tags:
       - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
       - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
@@ -192,6 +201,15 @@ services:
     class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\RangeAggregationResultExtractor
     arguments:
       $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\Field\TimeRangeAggregation'
+    tags:
+      - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
+      - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
+
+  ezplatform.search.solr.query.common.aggregation_result_extractor.visibility:
+    class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationResultExtractor
+    arguments:
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\VisibilityTermAggregation'
+      $keyMapper: '@EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\BooleanAggregationKeyMapper'
     tags:
       - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
       - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }

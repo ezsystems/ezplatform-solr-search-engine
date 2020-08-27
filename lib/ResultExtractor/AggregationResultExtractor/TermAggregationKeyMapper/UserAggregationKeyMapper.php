@@ -11,6 +11,7 @@ namespace EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResult
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\UserService;
+use eZ\Publish\API\Repository\Values\Content\Query\Aggregation\UserTermAggregation;
 use eZ\Publish\API\Repository\Values\Content\Query\AggregationInterface;
 use EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper;
 
@@ -32,15 +33,28 @@ final class UserAggregationKeyMapper implements TermAggregationKeyMapper
      */
     public function map(AggregationInterface $aggregation, array $languageFilter, array $keys): array
     {
+        $loader = $this->resolveKeyLoader($aggregation);
+
         $results = [];
         foreach ($keys as $key) {
             try {
-                $results[$key] = $this->userService->loadUser((int)$key);
+                $results[$key] = $loader((int)$key);
             } catch (NotFoundException | UnauthorizedException $e) {
-                // Skip missing users
+                // Skip missing users / user groups
             }
         }
 
         return $results;
+    }
+
+    private function resolveKeyLoader(AggregationInterface $aggregation): callable
+    {
+        switch($aggregation->getType()) {
+            case UserTermAggregation::OWNER:
+            case UserTermAggregation::MODIFIER:
+                return [$this->userService, 'loadUser'];
+            case UserTermAggregation::GROUP:
+                return [$this->userService, 'loadUserGroup'];
+        }
     }
 }
