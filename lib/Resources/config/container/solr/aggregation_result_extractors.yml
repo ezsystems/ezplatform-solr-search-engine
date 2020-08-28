@@ -28,7 +28,7 @@ services:
 
   EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\SectionAggregationKeyMapper: ~
 
-  EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\UserAggregationKeyMapper: ~
+  EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\UserMetadataAggregationKeyMapper: ~
 
   ### Extractors
 
@@ -101,11 +101,11 @@ services:
       - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
       - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
 
-  ezplatform.search.solr.query.common.aggregation_result_extractor.user_term:
+  ezplatform.search.solr.query.common.aggregation_result_extractor.user_metadata_term:
     class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationResultExtractor
     arguments:
-      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\UserTermAggregation'
-      $keyMapper: '@EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\UserAggregationKeyMapper'
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\UserMetadataTermAggregation'
+      $keyMapper: '@EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\UserMetadataAggregationKeyMapper'
     tags:
       - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
       - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }

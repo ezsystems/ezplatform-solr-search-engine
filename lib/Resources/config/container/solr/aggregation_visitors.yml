@@ -208,7 +208,7 @@ services:
       - { name: ezplatform.search.solr.query.content.aggregation_visitor }
       - { name: ezplatform.search.solr.query.location.aggregation_visitor }
 
-  EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\UserTermAggregationVisitor:
+  EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\UserMetadataTermAggregationVisitor:
     tags:
       - { name: ezplatform.search.solr.query.content.aggregation_visitor }
       - { name: ezplatform.search.solr.query.location.aggregation_visitor }

@@ -11,11 +11,11 @@ namespace EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResult
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\UserService;
-use eZ\Publish\API\Repository\Values\Content\Query\Aggregation\UserTermAggregation;
+use eZ\Publish\API\Repository\Values\Content\Query\Aggregation\UserMetadataTermAggregation;
 use eZ\Publish\API\Repository\Values\Content\Query\AggregationInterface;
 use EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper;
 
-final class UserAggregationKeyMapper implements TermAggregationKeyMapper
+final class UserMetadataAggregationKeyMapper implements TermAggregationKeyMapper
 {
     /** @var \eZ\Publish\API\Repository\UserService */
     private $userService;
@@ -26,7 +26,7 @@ final class UserAggregationKeyMapper implements TermAggregationKeyMapper
     }
 
     /**
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Aggregation\UserTermAggregation $aggregation
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Aggregation\UserMetadataTermAggregation $aggregation
      * @param string[] $keys
      *
      * @return \eZ\Publish\API\Repository\Values\User\User[]
@@ -50,10 +50,10 @@ final class UserAggregationKeyMapper implements TermAggregationKeyMapper
     private function resolveKeyLoader(AggregationInterface $aggregation): callable
     {
         switch($aggregation->getType()) {
-            case UserTermAggregation::OWNER:
-            case UserTermAggregation::MODIFIER:
+            case UserMetadataTermAggregation::OWNER:
+            case UserMetadataTermAggregation::MODIFIER:
                 return [$this->userService, 'loadUser'];
-            case UserTermAggregation::GROUP:
+            case UserMetadataTermAggregation::GROUP:
                 return [$this->userService, 'loadUserGroup'];
         }
     }
