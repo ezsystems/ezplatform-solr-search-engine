@@ -203,6 +203,11 @@ services:
       - { name: ezplatform.search.solr.query.content.aggregation_visitor }
       - { name: ezplatform.search.solr.query.location.aggregation_visitor }
 
+  EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\DateMetadataRangeAggregationVisitor:
+    tags:
+      - { name: ezplatform.search.solr.query.content.aggregation_visitor }
+      - { name: ezplatform.search.solr.query.location.aggregation_visitor }
+
   EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\ObjectStateGroupAggregationVisitor:
     tags:
       - { name: ezplatform.search.solr.query.content.aggregation_visitor }

@@ -50,6 +50,15 @@ services:
       - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
       - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
 
+  ezplatform.search.solr.query.common.aggregation_result_extractor.data_metadata_range:
+    class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\DateRangeAggregationResultExtractor
+    arguments:
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\DateMetadataRangeAggregation'
+      # FIXME: Missing $keyMapper for DateRangeAggregation
+    tags:
+      - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
+      - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
+
   ezplatform.search.solr.query.common.aggregation_result_extractor.langauge_term:
     class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationResultExtractor
     arguments:
