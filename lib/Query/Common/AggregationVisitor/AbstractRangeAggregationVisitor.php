@@ -32,7 +32,7 @@ abstract class AbstractRangeAggregationVisitor implements AggregationVisitor
 
             $rangeFacets["${from}_${to}"] = [
                 'type' => 'query',
-                'q' => "$field:[$from TO $to]",
+                'q' => sprintf('%s:{%s TO %s]', $field, $from, $to),
             ];
         }
 

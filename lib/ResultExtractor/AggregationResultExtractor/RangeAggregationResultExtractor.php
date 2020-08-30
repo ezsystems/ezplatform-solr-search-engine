@@ -8,9 +8,11 @@ declare(strict_types=1);
 
 namespace EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor;
 
+use eZ\Publish\API\Repository\Values\Content\Query\Aggregation\Range;
 use eZ\Publish\API\Repository\Values\Content\Query\AggregationInterface;
 use eZ\Publish\API\Repository\Values\Content\Search\AggregationResult;
 use eZ\Publish\API\Repository\Values\Content\Search\AggregationResult\RangeAggregationResult;
+use eZ\Publish\API\Repository\Values\Content\Search\AggregationResult\RangeAggregationResultEntry;
 use EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor;
 use stdClass;
 
@@ -33,8 +35,32 @@ final class RangeAggregationResultExtractor implements AggregationResultExtracto
     {
         $entries = [];
 
-        // TODO: Map ranges
+        foreach ($data as $key => $bucket) {
+            if ($key === 'count') {
+                continue;
+            }
+
+            list($from, $to) = explode('_', $key);
+
+            $entries[] = new RangeAggregationResultEntry(
+                new Range(
+                    $this->getRangeBorderFromString($from),
+                    $this->getRangeBorderFromString($to),
+                ),
+                $bucket->count
+            );
+        }
 
         return new RangeAggregationResult($aggregation->getName(), $entries);
+    }
+
+    private function getRangeBorderFromString(string $from): ?int
+    {
+        if ($from === '*') {
+            return null;
+        }
+
+        // TODO: Support from float values
+        return (int)$from;
     }
 }
