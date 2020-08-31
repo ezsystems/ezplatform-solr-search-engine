@@ -38,15 +38,23 @@ class ContentDocumentTranslatedContentNameField extends ContentTranslationFieldM
     protected $boostFactorProvider;
 
     /**
+     * @var string
+     */
+    private $invalidCharactersPattern;
+
+    /**
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider $boostFactorProvider
+     * @param $invalidCharactersPattern
      */
     public function __construct(
         ContentTypeHandler $contentTypeHandler,
-        BoostFactorProvider $boostFactorProvider
+        BoostFactorProvider $boostFactorProvider,
+        $invalidCharactersPattern
     ) {
         $this->contentTypeHandler = $contentTypeHandler;
         $this->boostFactorProvider = $boostFactorProvider;
+        $this->invalidCharactersPattern = $invalidCharactersPattern;
     }
 
     public function accept(Content $content, $languageCode)
@@ -60,7 +68,7 @@ class ContentDocumentTranslatedContentNameField extends ContentTranslationFieldM
             return [];
         }
 
-        $contentName = $content->versionInfo->names[$languageCode];
+        $contentName = preg_replace($this->invalidCharactersPattern, '', $content->versionInfo->names[$languageCode]);
         $contentType = $this->contentTypeHandler->load(
             $content->versionInfo->contentInfo->contentTypeId
         );

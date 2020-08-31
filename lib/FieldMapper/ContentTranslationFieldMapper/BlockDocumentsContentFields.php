@@ -45,21 +45,29 @@ class BlockDocumentsContentFields extends ContentTranslationFieldMapper
     protected $boostFactorProvider;
 
     /**
+     * @var string
+     */
+    private $invalidCharactersPattern;
+
+    /**
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\Core\Search\Common\FieldRegistry $fieldRegistry
      * @param \eZ\Publish\Core\Search\Common\FieldNameGenerator $fieldNameGenerator
      * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider $boostFactorProvider
+     * @param string $invalidCharactersPattern
      */
     public function __construct(
         ContentTypeHandler $contentTypeHandler,
         FieldRegistry $fieldRegistry,
         FieldNameGenerator $fieldNameGenerator,
-        BoostFactorProvider $boostFactorProvider
+        BoostFactorProvider $boostFactorProvider,
+        $invalidCharactersPattern
     ) {
         $this->contentTypeHandler = $contentTypeHandler;
         $this->fieldRegistry = $fieldRegistry;
         $this->fieldNameGenerator = $fieldNameGenerator;
         $this->boostFactorProvider = $boostFactorProvider;
+        $this->invalidCharactersPattern = $invalidCharactersPattern;
     }
 
     public function accept(Content $content, $languageCode)
@@ -102,7 +110,7 @@ class BlockDocumentsContentFields extends ContentTranslationFieldMapper
                             $fieldDefinition->identifier,
                             $contentType->identifier
                         ),
-                        $indexField->value,
+                        preg_replace($this->invalidCharactersPattern, '', $indexField->value),
                         $this->getIndexFieldType($contentType, $fieldDefinition, $indexField->type)
                     );
                 }

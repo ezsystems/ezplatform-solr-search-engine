@@ -10,6 +10,7 @@ parameters:
     ezpublish.search.solr.field_mapper.location.class: EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper\Aggregate
     ezpublish.search.solr.field_mapper.boost_factor_provider.class: EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider
     ezpublish.search.solr.field_mapper.boost_factor_provider.map: []
+    ez_search_engine_solr.invalid_characters_pattern: "#\\x1b[[][^A-Za-z]*[A-Za-z]#"
 
 services:
     ezpublish.search.solr.gateway.client.http.stream:
