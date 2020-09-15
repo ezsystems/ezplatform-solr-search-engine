@@ -73,9 +73,31 @@ services:
             - "@ezpublish.search.solr.query.content.facet_builder_visitor.aggregate"
             - "@ezpublish.search.solr.query.content.aggregation_result_extractor.dispatcher"
             - "@ezpublish.search.solr.gateway.endpoint_registry"
+        deprecated: 'The "%service_id%" service is deprecated since eZ Platform 3.2.0, to be removed in eZ Platform 4.0.0., use ezpublish.search.solr.result_extractor.content.native or ezpublish.search.solr.result_extractor.location.native instead.'
+
+    ezpublish.search.solr.result_extractor.content.native:
+        class: "%ezpublish.search.solr.result_extractor.native.class%"
+        arguments:
+            - "@ezpublish.search.solr.query.content.facet_builder_visitor.aggregate"
+            - "@ezpublish.search.solr.query.content.aggregation_result_extractor.dispatcher"
+            - "@ezpublish.search.solr.gateway.endpoint_registry"
+
+    ezpublish.search.solr.result_extractor.location.native:
+        class: "%ezpublish.search.solr.result_extractor.native.class%"
+        arguments:
+            - "@ezpublish.search.solr.query.content.facet_builder_visitor.aggregate"
+            - "@ezpublish.search.solr.query.location.aggregation_result_extractor.dispatcher"
+            - "@ezpublish.search.solr.gateway.endpoint_registry"
 
     ezpublish.search.solr.result_extractor:
         alias: ezpublish.search.solr.result_extractor.native
+        deprecated: 'The "%alias_id%" alias is deprecated since eZ Platform 3.2.0, to be removed in eZ Platform 4.0.0. Use ezpublish.search.solr.result_extractor.content or ezpublish.search.solr.result_extractor.location instead'
+
+    ezpublish.search.solr.result_extractor.content:
+        alias: ezpublish.search.solr.result_extractor.content.native
+
+    ezpublish.search.solr.result_extractor.location:
+        alias: ezpublish.search.solr.result_extractor.location.native
 
     ezpublish.search.solr.query_converter.content:
         class: "%ezpublish.search.solr.query_converter.class%"
@@ -125,7 +147,8 @@ services:
             - "@ezpublish.search.solr.gateway"
             - "@ezpublish.spi.persistence.content_handler"
             - "@ezpublish.search.solr.document_mapper"
-            - "@ezpublish.search.solr.result_extractor"
+            - "@ezpublish.search.solr.result_extractor.content"
+            - "@ezpublish.search.solr.result_extractor.location"
             - "@ezpublish.search.solr.core_filter"
         tags:
             - {name: ezplatform.search_engine, alias: solr}

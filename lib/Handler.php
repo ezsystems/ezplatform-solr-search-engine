@@ -74,9 +74,25 @@ class Handler implements SearchHandlerInterface, Capable, ContentTranslationHand
     /**
      * Result extractor.
      *
+     * @deprecated since eZ Platform 3.2.0, to be removed in eZ Platform 4.0.0. Use $contentResultExtractor or $locationResultExtractor instead of $resultExtractor.
+     *
      * @var \EzSystems\EzPlatformSolrSearchEngine\ResultExtractor
      */
     protected $resultExtractor;
+
+    /**
+     * Content result extractor.
+     *
+     * @var \EzSystems\EzPlatformSolrSearchEngine\ResultExtractor
+     */
+    protected $contentResultExtractor;
+
+    /**
+     * Location result extractor.
+     *
+     * @var \EzSystems\EzPlatformSolrSearchEngine\ResultExtractor
+     */
+    protected $locationResultExtractor;
 
     /**
      * Core filter service.
@@ -98,14 +114,19 @@ class Handler implements SearchHandlerInterface, Capable, ContentTranslationHand
         Gateway $gateway,
         ContentHandler $contentHandler,
         DocumentMapper $mapper,
-        ResultExtractor $resultExtractor,
+        ResultExtractor $contentResultExtractor,
+        ResultExtractor $locationResultExtractor,
         CoreFilter $coreFilter
     ) {
         $this->gateway = $gateway;
         $this->contentHandler = $contentHandler;
         $this->mapper = $mapper;
-        $this->resultExtractor = $resultExtractor;
+        $this->contentResultExtractor = $contentResultExtractor;
+        $this->locationResultExtractor = $locationResultExtractor;
         $this->coreFilter = $coreFilter;
+
+        // For BC these are still set
+        $this->resultExtractor = $contentResultExtractor;
     }
 
     /**
@@ -133,7 +154,7 @@ class Handler implements SearchHandlerInterface, Capable, ContentTranslationHand
             DocumentMapper::DOCUMENT_TYPE_IDENTIFIER_CONTENT
         );
 
-        return $this->resultExtractor->extract(
+        return $this->contentResultExtractor->extract(
             $this->gateway->findContent($query, $languageFilter),
             $query->facetBuilders,
             $query->aggregations
@@ -206,7 +227,7 @@ class Handler implements SearchHandlerInterface, Capable, ContentTranslationHand
             DocumentMapper::DOCUMENT_TYPE_IDENTIFIER_LOCATION
         );
 
-        return $this->resultExtractor->extract(
+        return $this->locationResultExtractor->extract(
             $this->gateway->findLocations($query, $languageFilter),
             $query->facetBuilders,
             $query->aggregations

@@ -228,7 +228,6 @@ services:
       $searchIndexFieldName: 'location_visible_b'
     tags:
       - { name: ezplatform.search.solr.query.content.aggregation_visitor }
-      - { name: ezplatform.search.solr.query.location.aggregation_visitor }
 
   ### Location specific visitors
 
@@ -239,5 +238,4 @@ services:
       $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\VisibilityTermAggregation'
       $searchIndexFieldName: 'invisible_b'
     tags:
-      - { name: ezplatform.search.solr.query.content.aggregation_visitor }
       - { name: ezplatform.search.solr.query.location.aggregation_visitor }
