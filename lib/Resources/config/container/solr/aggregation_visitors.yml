@@ -81,7 +81,7 @@ services:
     factory: ['@EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\Factory\ContentFieldAggregationVisitorFactory', 'createTermAggregationVisitor']
     arguments:
       $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\Field\CountryTermAggregation'
-      $searchIndexFieldName: 'alpha2'
+      $searchIndexFieldName: 'idc'
     tags:
       - { name: ezplatform.search.solr.query.content.aggregation_visitor }
       - { name: ezplatform.search.solr.query.location.aggregation_visitor }
@@ -100,7 +100,7 @@ services:
     class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\StatsAggregationVisitor
     factory: ['@EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\Factory\ContentFieldAggregationVisitorFactory', 'createStatsAggregationVisitor']
     arguments:
-      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\Field\FloatRangeAggregation'
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\Field\FloatStatsAggregation'
       $searchIndexFieldName: 'value'
     tags:
       - { name: ezplatform.search.solr.query.content.aggregation_visitor }

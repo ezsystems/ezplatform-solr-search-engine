@@ -18,6 +18,10 @@ services:
 
   EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\BooleanAggregationKeyMapper: ~
 
+  EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\CountryAggregationKeyMapper:
+    arguments:
+      $countriesInfo: '%ezpublish.fieldType.ezcountry.data%'
+
   EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\ContentTypeAggregationKeyMapper: ~
 
   EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\ContentTypeGroupAggregationKeyMapper: ~
@@ -136,25 +140,23 @@ services:
     class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationResultExtractor
     arguments:
       $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\Field\CountryTermAggregation'
-      # FIXME: Missing $keyMapper for CountryTermAggregation
+      $keyMapper: '@EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\CountryAggregationKeyMapper'
     tags:
       - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
       - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
 
   ezplatform.search.solr.query.common.aggregation_result_extractor.field.date_range:
-    class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\RangeAggregationResultExtractor
+    class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\DateRangeAggregationResultExtractor
     arguments:
       $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\Field\DateRangeAggregation'
-      # FIXME: Missing $keyMapper for DateRangeAggregation
     tags:
       - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
       - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
 
   ezplatform.search.solr.query.common.aggregation_result_extractor.field.datetime_range:
-    class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\RangeAggregationResultExtractor
+    class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\DateRangeAggregationResultExtractor
     arguments:
       $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\Field\DateTimeRangeAggregation'
-      # FIXME: Missing $keyMapper for DateTimeRangeAggregation
     tags:
       - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
       - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
