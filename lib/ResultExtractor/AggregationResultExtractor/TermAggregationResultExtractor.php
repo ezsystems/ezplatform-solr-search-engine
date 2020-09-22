@@ -18,7 +18,7 @@ use stdClass;
 
 final class TermAggregationResultExtractor implements AggregationResultExtractor
 {
-    /** @var TermAggregationKeyMapper */
+    /** @var \EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper */
     private $keyMapper;
 
     /** @var string */
