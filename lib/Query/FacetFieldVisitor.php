@@ -13,7 +13,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
 /**
  * Visits Solr results into correct facet and facet builder combination.
  *
- * NOTE: Will be deprecated in 2.0 and methods will be moved into FacetBuilderVisitor.
+ * @deprecated since eZ Platform 3.2.0, to be removed in eZ Platform 4.0.0.
  */
 interface FacetFieldVisitor
 {
