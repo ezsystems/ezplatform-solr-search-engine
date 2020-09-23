@@ -12,7 +12,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Aggregation\ObjectStateTermAg
 use eZ\Publish\API\Repository\Values\Content\Query\AggregationInterface;
 use EzSystems\EzPlatformSolrSearchEngine\Query\AggregationVisitor;
 
-final class ObjectStateGroupAggregationVisitor implements AggregationVisitor
+final class ObjectStateAggregationVisitor implements AggregationVisitor
 {
     public function canVisit(AggregationInterface $aggregation, array $languageFilter): bool
     {
