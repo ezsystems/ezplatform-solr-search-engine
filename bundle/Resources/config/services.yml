@@ -15,7 +15,8 @@ services:
             $coreFilterRegistry: '@EzSystems\EzPlatformSolrSearchEngine\CoreFilter\CoreFilterRegistry'
             $contentHandler: "@ezpublish.spi.persistence.content_handler"
             $documentMapper: "@ezpublish.search.solr.document_mapper"
-            $resultExtractor: "@ezpublish.search.solr.result_extractor"
+            $contentResultExtractor: "@ezpublish.search.solr.result_extractor.content"
+            $locationResultExtractor: "@ezpublish.search.solr.result_extractor.location"
 
     ezpublish.solr.boost_factor_provider_factory:
         class: "%ezpublish.solr.boost_factor_provider_factory.class%"
