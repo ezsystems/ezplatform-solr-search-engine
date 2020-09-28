@@ -10,15 +10,15 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Tests\SetupFactory;
 
+use eZ\Publish\API\Repository\Tests\SearchServiceTranslationLanguageFallbackTest;
 use eZ\Publish\API\Repository\Tests\SetupFactory\Legacy as CoreLegacySetupFactory;
 use eZ\Publish\Core\Base\Container\Compiler as BaseCompiler;
 use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler;
 use PDO;
 use RuntimeException;
-use eZ\Publish\API\Repository\Tests\SearchServiceTranslationLanguageFallbackTest;
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use Symfony\Component\Config\FileLocator;
 
 /**
  * Used to setup the infrastructure for Repository Public API integration tests,
@@ -92,7 +92,7 @@ class LegacySetupFactory extends CoreLegacySetupFactory
         $stmt = $query->prepare();
         $stmt->execute();
 
-        $contentObjects = array();
+        $contentObjects = [];
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $contentObjects[] = $persistenceHandler->contentHandler()->load(
                 $row['id'],

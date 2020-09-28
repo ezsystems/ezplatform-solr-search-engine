@@ -10,9 +10,9 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\ResultExtractor;
 
-use EzSystems\EzPlatformSolrSearchEngine\ResultExtractor;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Location;
+use EzSystems\EzPlatformSolrSearchEngine\ResultExtractor;
 use RuntimeException;
 
 /**
@@ -40,9 +40,7 @@ class NativeResultExtractor extends ResultExtractor
             return $this->extractLocationFromHit($hit);
         }
 
-        throw new RuntimeException(
-            "Could not extract: document of type '{$hit->document_type_id}' is not handled."
-        );
+        throw new RuntimeException("Could not extract: document of type '{$hit->document_type_id}' is not handled.");
     }
 
     /**
@@ -84,7 +82,7 @@ class NativeResultExtractor extends ResultExtractor
     protected function extractLocationFromHit($hit)
     {
         return new Location(
-            array(
+            [
                 'id' => (int)$hit->location_id,
                 'priority' => $hit->priority_i,
                 'hidden' => $hit->hidden_b,
@@ -96,7 +94,7 @@ class NativeResultExtractor extends ResultExtractor
                 'depth' => $hit->depth_i,
                 'sortField' => (int)$hit->sort_field_id,
                 'sortOrder' => (int)$hit->sort_order_id,
-            )
+            ]
         );
     }
 }

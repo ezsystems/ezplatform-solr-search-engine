@@ -8,12 +8,12 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
 
-use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider;
-use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\FieldType;
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider;
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
 
 /**
  * Maps Content fulltext fields to Content document.
@@ -37,10 +37,6 @@ class ContentDocumentTranslatedContentNameField extends ContentTranslationFieldM
      */
     protected $boostFactorProvider;
 
-    /**
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
-     * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider $boostFactorProvider
-     */
     public function __construct(
         ContentTypeHandler $contentTypeHandler,
         BoostFactorProvider $boostFactorProvider

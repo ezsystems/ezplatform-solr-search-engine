@@ -10,8 +10,8 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Location\SortClauseVisitor\Location;
 
-use EzSystems\EzPlatformSolrSearchEngine\Query\SortClauseVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
+use EzSystems\EzPlatformSolrSearchEngine\Query\SortClauseVisitor;
 
 /**
  * Visits the sortClause tree into a Solr query.
@@ -20,8 +20,6 @@ class Path extends SortClauseVisitor
 {
     /**
      * Check if visitor is applicable to current sortClause.
-     *
-     * @param SortClause $sortClause
      *
      * @return bool
      */
@@ -32,8 +30,6 @@ class Path extends SortClauseVisitor
 
     /**
      * Map field value to a proper Solr representation.
-     *
-     * @param SortClause $sortClause
      *
      * @return string
      */

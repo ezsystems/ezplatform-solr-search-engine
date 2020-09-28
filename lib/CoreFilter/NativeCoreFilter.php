@@ -10,14 +10,14 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\CoreFilter;
 
-use EzSystems\EzPlatformSolrSearchEngine\CoreFilter;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalNot;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOr;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\CustomField;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalNot;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOr;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
+use EzSystems\EzPlatformSolrSearchEngine\CoreFilter;
 use EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointResolver;
 
 /**
@@ -96,7 +96,7 @@ class NativeCoreFilter extends CoreFilter
     {
         $languages = (
             empty($languageSettings['languages']) ?
-                array() :
+                [] :
                 $languageSettings['languages']
         );
         $useAlwaysAvailable = (
@@ -130,10 +130,6 @@ class NativeCoreFilter extends CoreFilter
      * targeted translation endpoints.
      *
      * @param string[] $languageCodes
-     * @param bool $useAlwaysAvailable
-     * @param bool $excludeTranslationsFromAlwaysAvailable
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion
      */
     private function getCoreCriterion(
         array $languageCodes,
@@ -176,7 +172,7 @@ class NativeCoreFilter extends CoreFilter
      */
     private function getLanguageFilter(array $languageCodes)
     {
-        $languageFilters = array();
+        $languageFilters = [];
 
         foreach ($languageCodes as $languageCode) {
             // Include language
@@ -187,12 +183,12 @@ class NativeCoreFilter extends CoreFilter
             // Combine if list is not empty
             if (!empty($excluded)) {
                 $condition = new LogicalAnd(
-                    array(
+                    [
                         $condition,
                         new LogicalNot(
                             new CustomField(self::FIELD_LANGUAGES, Operator::IN, $excluded)
                         ),
-                    )
+                    ]
                 );
             }
 
@@ -200,8 +196,8 @@ class NativeCoreFilter extends CoreFilter
         }
 
         // Combine language fallback conditions with OR
-        if (count($languageFilters) > 1) {
-            $languageFilters = array(new LogicalOr($languageFilters));
+        if (\count($languageFilters) > 1) {
+            $languageFilters = [new LogicalOr($languageFilters)];
         }
 
         // Exclude main languages index if used
@@ -212,7 +208,7 @@ class NativeCoreFilter extends CoreFilter
         }
 
         // Combine conditions
-        if (count($languageFilters) > 1) {
+        if (\count($languageFilters) > 1) {
             return new LogicalAnd($languageFilters);
         }
 
@@ -223,9 +219,6 @@ class NativeCoreFilter extends CoreFilter
      * Returns criteria for always available translation fallback.
      *
      * @param string[] $languageCodes
-     * @param bool $excludeTranslationsFromAlwaysAvailable
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion
      */
     private function getAlwaysAvailableFilter(
         array $languageCodes,
@@ -238,7 +231,7 @@ class NativeCoreFilter extends CoreFilter
             : self::FIELD_LANGUAGE
         ;
 
-        $conditions = array(
+        $conditions = [
             // Include always available main language translations
             new CustomField(
                 self::FIELD_IS_ALWAYS_AVAILABLE,
@@ -249,7 +242,7 @@ class NativeCoreFilter extends CoreFilter
             new LogicalNot(
                 new CustomField($excludeOnField, Operator::IN, $languageCodes)
             ),
-        );
+        ];
 
         // Include only from main languages index if used
         if ($this->hasMainLanguagesEndpoint) {
@@ -271,13 +264,13 @@ class NativeCoreFilter extends CoreFilter
      * If $selectedLanguageCode is omitted, all languages will be returned.
      *
      * @param string[] $languageCodes
-     * @param null|string $selectedLanguageCode
+     * @param string|null $selectedLanguageCode
      *
      * @return string[]
      */
     private function getExcludedLanguageCodes(array $languageCodes, $selectedLanguageCode = null)
     {
-        $excludedLanguageCodes = array();
+        $excludedLanguageCodes = [];
 
         foreach ($languageCodes as $languageCode) {
             if ($selectedLanguageCode !== null && $languageCode === $selectedLanguageCode) {

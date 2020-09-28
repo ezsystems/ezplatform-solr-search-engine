@@ -22,8 +22,6 @@ class FieldLike extends Field
     /**
      * Check if visitor is applicable to current criterion.
      *
-     * @param Criterion $criterion
-     *
      * @return bool
      */
     public function canVisit(Criterion $criterion)
@@ -36,7 +34,6 @@ class FieldLike extends Field
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given criterion target.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor $subVisitor
      *
      * @return string
@@ -46,10 +43,7 @@ class FieldLike extends Field
         $searchFields = $this->getSearchFields($criterion);
 
         if (empty($searchFields)) {
-            throw new InvalidArgumentException(
-                '$criterion->target',
-                "No searchable fields found for the given criterion target '{$criterion->target}'."
-            );
+            throw new InvalidArgumentException('$criterion->target', "No searchable fields found for the given criterion target '{$criterion->target}'.");
         }
 
         $queries = [];

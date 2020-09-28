@@ -11,10 +11,10 @@
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\QueryConverter;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
-use EzSystems\EzPlatformSolrSearchEngine\Query\QueryConverter;
 use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
-use EzSystems\EzPlatformSolrSearchEngine\Query\SortClauseVisitor;
 use EzSystems\EzPlatformSolrSearchEngine\Query\FacetFieldVisitor;
+use EzSystems\EzPlatformSolrSearchEngine\Query\QueryConverter;
+use EzSystems\EzPlatformSolrSearchEngine\Query\SortClauseVisitor;
 
 /**
  * Native implementation of Query Converter.
@@ -44,10 +44,6 @@ class NativeQueryConverter extends QueryConverter
 
     /**
      * Construct from visitors.
-     *
-     * @param \EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor $criterionVisitor
-     * @param \EzSystems\EzPlatformSolrSearchEngine\Query\SortClauseVisitor $sortClauseVisitor
-     * @param \EzSystems\EzPlatformSolrSearchEngine\Query\FacetFieldVisitor $facetBuilderVisitor
      */
     public function __construct(
         CriterionVisitor $criterionVisitor,
@@ -61,7 +57,7 @@ class NativeQueryConverter extends QueryConverter
 
     public function convert(Query $query)
     {
-        $params = array(
+        $params = [
             'defType' => 'edismax',
             'q' => '{!lucene}' . $this->criterionVisitor->visit($query->query),
             'fq' => '{!lucene}' . $this->criterionVisitor->visit($query->filter),
@@ -70,7 +66,7 @@ class NativeQueryConverter extends QueryConverter
             'rows' => $query->limit,
             'fl' => '*,score,[shard]',
             'wt' => 'json',
-        );
+        ];
 
         $facetParams = $this->getFacetParams($query->facetBuilders);
         if (!empty($facetParams)) {
@@ -94,7 +90,7 @@ class NativeQueryConverter extends QueryConverter
         return implode(
             ', ',
             array_map(
-                array($this->sortClauseVisitor, 'visit'),
+                [$this->sortClauseVisitor, 'visit'],
                 $sortClauses
             )
         );
@@ -119,14 +115,14 @@ class NativeQueryConverter extends QueryConverter
             $facetBuilders
         );
 
-        $facetParams = array();
+        $facetParams = [];
 
         // In case when facet sets contain same keys, merge them in an array
         foreach ($facetSets as $facetSet) {
             foreach ($facetSet as $key => $value) {
                 if (isset($facetParams[$key])) {
-                    if (!is_array($facetParams[$key])) {
-                        $facetParams[$key] = array($facetParams[$key]);
+                    if (!\is_array($facetParams[$key])) {
+                        $facetParams[$key] = [$facetParams[$key]];
                     }
                     $facetParams[$key][] = $value;
                 } else {

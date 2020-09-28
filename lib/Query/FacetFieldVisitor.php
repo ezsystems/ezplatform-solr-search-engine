@@ -21,8 +21,6 @@ interface FacetFieldVisitor
      * Map Solr facet result back to facet objects.
      *
      * @param string $field
-     * @param array $data
-     * @param FacetBuilder $facetBuilder
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\Facet
      */
@@ -38,7 +36,6 @@ interface FacetFieldVisitor
      *            'f.content_type_id_id.facet.mincount' => $facetBuilder->minCount,
      *        );
      *
-     * @param FacetBuilder $facetBuilder
      * @param string $fieldId Id to identify the field in Solr facet.
      *
      * @return string[]

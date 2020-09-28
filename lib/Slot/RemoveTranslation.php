@@ -8,8 +8,8 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Slot;
 
-use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\Search\Common\Slot;
+use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\SPI\Search\ContentTranslationHandler;
 
 /**
@@ -19,8 +19,6 @@ class RemoveTranslation extends Slot
 {
     /**
      * Receive the given $signal and react on it.
-     *
-     * @param \eZ\Publish\Core\SignalSlot\Signal $signal
      */
     public function receive(Signal $signal)
     {

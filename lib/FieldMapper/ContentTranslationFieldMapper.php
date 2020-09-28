@@ -21,7 +21,6 @@ abstract class ContentTranslationFieldMapper
     /**
      * Indicates if the mapper accepts given $content and $languageCode for mapping.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content $content
      * @param string $languageCode
      *
      * @return bool
@@ -31,7 +30,6 @@ abstract class ContentTranslationFieldMapper
     /**
      * Maps given $content for $languageCode to an array of search fields.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content $content
      * @param string $languageCode
      *
      * @return \eZ\Publish\SPI\Search\Field[]

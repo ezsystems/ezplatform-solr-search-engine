@@ -10,18 +10,18 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngineBundle\Command;
 
+use DateTime;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\SPI\Persistence\Content\ContentInfo;
+use EzSystems\EzPlatformSolrSearchEngine\Handler as SolrSearchEngineHandler;
+use PDO;
+use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Helper\ProgressBar;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use eZ\Publish\SPI\Persistence\Content\ContentInfo;
-use eZ\Publish\Core\Base\Exceptions\NotFoundException;
-use EzSystems\EzPlatformSolrSearchEngine\Handler as SolrSearchEngineHandler;
-use DateTime;
-use RuntimeException;
-use PDO;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @deprecated since 1.2, use ezplatform:reindex command instead.
@@ -66,10 +66,7 @@ EOT
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandler */
         $searchHandler = $this->getContainer()->get('ezpublish.spi.search');
         if (!$searchHandler instanceof SolrSearchEngineHandler) {
-            throw new RuntimeException(
-                'Expected to find Solr Search Engine but found something else. ' .
-                "Did you forget to configure the repository with 'solr' search engine?"
-            );
+            throw new RuntimeException('Expected to find Solr Search Engine but found something else. ' . "Did you forget to configure the repository with 'solr' search engine?");
         }
 
         /** @var \eZ\Publish\SPI\Persistence\Handler $persistenceHandler */
@@ -115,7 +112,7 @@ EOT
         $progress->start($totalCount);
         $i = 0;
         do {
-            $contentObjects = array();
+            $contentObjects = [];
 
             for ($k = 0; $k < $bulkCount; ++$k) {
                 if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -161,8 +158,6 @@ EOT
     /**
      * Log warning while progress helper is running.
      *
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param \Symfony\Component\Console\Helper\ProgressBar $progress
      * @param $message
      */
     private function logWarning(OutputInterface $output, ProgressBar $progress, $message)

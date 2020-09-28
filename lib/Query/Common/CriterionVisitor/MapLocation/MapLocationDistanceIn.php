@@ -10,11 +10,11 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\MapLocation;
 
-use EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\MapLocation;
-use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\MapLocation;
+use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 
 /**
  * Visits the MapLocationDistance criterion.
@@ -23,8 +23,6 @@ class MapLocationDistanceIn extends MapLocation
 {
     /**
      * Check if visitor is applicable to current criterion.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *
      * @return bool
      */
@@ -41,7 +39,6 @@ class MapLocationDistanceIn extends MapLocation
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given criterion target.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor $subVisitor
      *
      * @return string
@@ -60,13 +57,10 @@ class MapLocationDistanceIn extends MapLocation
         );
 
         if (empty($searchFields)) {
-            throw new InvalidArgumentException(
-                '$criterion->target',
-                "No searchable fields found for the given criterion target '{$criterion->target}'."
-            );
+            throw new InvalidArgumentException('$criterion->target', "No searchable fields found for the given criterion target '{$criterion->target}'.");
         }
 
-        $queries = array();
+        $queries = [];
         foreach ($criterion->value as $value) {
             foreach ($searchFields as $name => $fieldType) {
                 $queries[] = sprintf('geodist(%s,%F,%F):%s', $name, $location->latitude, $location->longitude, $value);
