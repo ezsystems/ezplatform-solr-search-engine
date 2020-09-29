@@ -10,10 +10,10 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\DateMetadata;
 
-use EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\DateMetadata;
-use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
+use EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\DateMetadata;
+use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 
 /**
  * Visits the DateMetadata criterion.
@@ -22,8 +22,6 @@ class ModifiedIn extends DateMetadata
 {
     /**
      * Check if visitor is applicable to current criterion.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *
      * @return bool
      */
@@ -41,14 +39,13 @@ class ModifiedIn extends DateMetadata
     /**
      * Map field value to a proper Solr representation.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor $subVisitor
      *
      * @return string
      */
     public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null)
     {
-        $values = array();
+        $values = [];
         foreach ($criterion->value as $value) {
             $values[] = 'content_modification_date_dt:"' . $this->getSolrTime($value) . '"';
         }

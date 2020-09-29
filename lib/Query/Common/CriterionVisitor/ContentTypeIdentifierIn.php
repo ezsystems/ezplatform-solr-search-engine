@@ -10,11 +10,11 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor;
 
-use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler;
+use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
@@ -37,9 +37,6 @@ class ContentTypeIdentifierIn extends CriterionVisitor
 
     /**
      * Create from content type handler and field registry.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
-     * @param \Psr\Log\LoggerInterface|null $logger
      */
     public function __construct(Handler $contentTypeHandler, LoggerInterface $logger = null)
     {
@@ -49,8 +46,6 @@ class ContentTypeIdentifierIn extends CriterionVisitor
 
     /**
      * Check if visitor is applicable to current criterion.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *
      * @return bool
      */
@@ -67,7 +62,6 @@ class ContentTypeIdentifierIn extends CriterionVisitor
     /**
      * Map field value to a proper Solr representation.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor $subVisitor
      *
      * @return string
@@ -87,7 +81,7 @@ class ContentTypeIdentifierIn extends CriterionVisitor
             }
         }
 
-        if (count($invalidIdentifiers) > 0) {
+        if (\count($invalidIdentifiers) > 0) {
             $this->logger->warning(
                 sprintf(
                     'Invalid content type identifiers provided for ContentTypeIdentifier criterion: %s',
@@ -96,7 +90,7 @@ class ContentTypeIdentifierIn extends CriterionVisitor
             );
         }
 
-        if (count($validIds) === 0) {
+        if (\count($validIds) === 0) {
             return '(NOT *:*)';
         }
 

@@ -21,8 +21,6 @@ abstract class CriterionVisitor
     /**
      * CHeck if visitor is applicable to current criterion.
      *
-     * @param Criterion $criterion
-     *
      * @return bool
      */
     abstract public function canVisit(Criterion $criterion);
@@ -30,7 +28,6 @@ abstract class CriterionVisitor
     /**
      * Map field value to a proper Solr representation.
      *
-     * @param Criterion $criterion
      * @param CriterionVisitor $subVisitor
      *
      * @return string
@@ -105,7 +102,7 @@ abstract class CriterionVisitor
      */
     protected function toString($value)
     {
-        switch (gettype($value)) {
+        switch (\gettype($value)) {
             case 'boolean':
                 return $value ? 'true' : 'false';
             case 'double':

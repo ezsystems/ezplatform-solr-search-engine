@@ -14,7 +14,7 @@ use OutOfBoundsException;
 final class CoreFilterRegistry
 {
     /** @var \EzSystems\EzPlatformSolrSearchEngine\CoreFilter[] */
-    protected $coreFilters;
+    private $coreFilters;
 
     /**
      * @param \EzSystems\EzPlatformSolrSearchEngine\CoreFilter[] $coreFilters

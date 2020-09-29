@@ -262,8 +262,8 @@ class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
      */
     protected function defineEndpoint(ContainerBuilder $container, $alias, $params)
     {
-        $definition = new Definition(self::ENDPOINT_CLASS, array($params));
-        $definition->addTag(self::ENDPOINT_TAG, array('alias' => $alias));
+        $definition = new Definition(self::ENDPOINT_CLASS, [$params]);
+        $definition->addTag(self::ENDPOINT_TAG, ['alias' => $alias]);
 
         $container->setDefinition(
             sprintf($this->getAlias() . '.endpoints.%s', $alias),

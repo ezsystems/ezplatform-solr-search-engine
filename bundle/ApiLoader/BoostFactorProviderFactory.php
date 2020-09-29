@@ -35,7 +35,6 @@ class BoostFactorProviderFactory implements ContainerAwareInterface
     private $boostFactorProviderClass;
 
     /**
-     * @param \eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider $repositoryConfigurationProvider
      * @param string $defaultConnection
      * @param string $boostFactorProviderClass
      */

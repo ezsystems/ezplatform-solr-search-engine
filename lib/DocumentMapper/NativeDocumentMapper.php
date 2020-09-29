@@ -10,14 +10,14 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\DocumentMapper;
 
-use EzSystems\EzPlatformSolrSearchEngine\DocumentMapper;
-use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper;
-use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
-use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\SPI\Search\Document;
+use EzSystems\EzPlatformSolrSearchEngine\DocumentMapper;
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper;
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper;
 
 /**
  * NativeDocumentMapper maps Solr backend documents per Content translation.
@@ -58,13 +58,6 @@ class NativeDocumentMapper implements DocumentMapper
 
     /**
      * Creates a new document mapper.
-     *
-     * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper $blockFieldMapper
-     * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper $blockTranslationFieldMapper
-     * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper $contentFieldMapper
-     * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper $contentTranslationFieldMapper
-     * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper $locationFieldMapper
-     * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
      */
     public function __construct(
         ContentFieldMapper $blockFieldMapper,
@@ -84,8 +77,6 @@ class NativeDocumentMapper implements DocumentMapper
 
     /**
      * Maps given Content to a Document.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content $content
      *
      * @return \eZ\Publish\SPI\Search\Document[]
      */
@@ -108,17 +99,17 @@ class NativeDocumentMapper implements DocumentMapper
                 $languageCode
             );
 
-            $translationLocationDocuments = array();
+            $translationLocationDocuments = [];
             foreach ($locations as $location) {
                 $translationLocationDocuments[] = new Document(
-                    array(
+                    [
                         'id' => $this->generateLocationDocumentId($location->id, $languageCode),
                         'fields' => array_merge(
                             $blockFields,
                             $locationFieldsMap[$location->id],
                             $blockTranslationFields
                         ),
-                    )
+                    ]
                 );
             }
 
@@ -130,7 +121,7 @@ class NativeDocumentMapper implements DocumentMapper
             );
 
             $documents[] = new Document(
-                array(
+                [
                     'id' => $this->generateContentDocumentId(
                         $contentInfo->id,
                         $languageCode
@@ -145,7 +136,7 @@ class NativeDocumentMapper implements DocumentMapper
                         $contentTranslationFields
                     ),
                     'documents' => $translationLocationDocuments,
-                )
+                ]
             );
         }
 
@@ -163,7 +154,7 @@ class NativeDocumentMapper implements DocumentMapper
      * risk matching other documents (as was the case in EZP-26484).
      *
      * @param int|string $contentId
-     * @param null|string $languageCode
+     * @param string|null $languageCode
      *
      * @return string
      */
@@ -183,7 +174,7 @@ class NativeDocumentMapper implements DocumentMapper
      * risk matching other documents (as was the case in EZP-26484).
      *
      * @param int|string $locationId
-     * @param null|string $languageCode
+     * @param string|null $languageCode
      *
      * @return string
      */
@@ -195,8 +186,6 @@ class NativeDocumentMapper implements DocumentMapper
     /**
      * Returns an array of fields for the given $content, to be added to the
      * corresponding block documents.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content $content
      *
      * @return \eZ\Publish\SPI\Search\Field[]
      */
@@ -215,7 +204,6 @@ class NativeDocumentMapper implements DocumentMapper
      * Returns an array of fields for the given $content and $languageCode, to be added to the
      * corresponding block documents.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content $content
      * @param string $languageCode
      *
      * @return \eZ\Publish\SPI\Search\Field[]
@@ -235,8 +223,6 @@ class NativeDocumentMapper implements DocumentMapper
      * Returns an array of fields for the given $content, to be added to the corresponding
      * Content document.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content $content
-     *
      * @return \eZ\Publish\SPI\Search\Field[]
      */
     private function getContentFields(Content $content)
@@ -254,7 +240,6 @@ class NativeDocumentMapper implements DocumentMapper
      * Returns an array of fields for the given $content and $languageCode, to be added to the
      * corresponding Content document.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content $content
      * @param string $languageCode
      *
      * @return \eZ\Publish\SPI\Search\Field[]
@@ -273,8 +258,6 @@ class NativeDocumentMapper implements DocumentMapper
     /**
      * Returns an array of fields for the given $location, to be added to the corresponding
      * Location document.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Location $location
      *
      * @return \eZ\Publish\SPI\Search\Field[]
      */

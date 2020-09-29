@@ -44,14 +44,14 @@ class NativeEndpointResolver implements EndpointResolver, SingleEndpointResolver
     /**
      * Holds a name of the default Endpoint used for translations, if configured.
      *
-     * @var null|string
+     * @var string|null
      */
     private $defaultEndpoint;
 
     /**
      * Holds a name of the Endpoint used to index translations in main languages, if configured.
      *
-     * @var null|string
+     * @var string|null
      */
     private $mainLanguagesEndpoint;
 
@@ -67,12 +67,12 @@ class NativeEndpointResolver implements EndpointResolver, SingleEndpointResolver
      *
      * @param string[] $entryEndpoints
      * @param string[] $endpointMap
-     * @param null|string $defaultEndpoint
-     * @param null|string $mainLanguagesEndpoint
+     * @param string|null $defaultEndpoint
+     * @param string|null $mainLanguagesEndpoint
      */
     public function __construct(
-        array $entryEndpoints = array(),
-        array $endpointMap = array(),
+        array $entryEndpoints = [],
+        array $endpointMap = [],
         $defaultEndpoint = null,
         $mainLanguagesEndpoint = null
     ) {
@@ -101,9 +101,7 @@ class NativeEndpointResolver implements EndpointResolver, SingleEndpointResolver
             return $this->defaultEndpoint;
         }
 
-        throw new RuntimeException(
-            "Language '{$languageCode}' is not mapped to Solr endpoint"
-        );
+        throw new RuntimeException("Language '{$languageCode}' is not mapped to Solr endpoint");
     }
 
     public function getMainLanguagesEndpoint()
@@ -115,7 +113,7 @@ class NativeEndpointResolver implements EndpointResolver, SingleEndpointResolver
     {
         $languages = (
             empty($languageSettings['languages']) ?
-                array() :
+                [] :
                 $languageSettings['languages']
         );
         $useAlwaysAvailable = (
@@ -127,7 +125,7 @@ class NativeEndpointResolver implements EndpointResolver, SingleEndpointResolver
             return $this->getEndpoints();
         }
 
-        $targetSet = array();
+        $targetSet = [];
 
         foreach ($languages as $languageCode) {
             if (isset($this->endpointMap[$languageCode])) {
@@ -135,9 +133,7 @@ class NativeEndpointResolver implements EndpointResolver, SingleEndpointResolver
             } elseif (isset($this->defaultEndpoint)) {
                 $targetSet[$this->defaultEndpoint] = true;
             } else {
-                throw new RuntimeException(
-                    "Language '{$languageCode}' is not mapped to Solr endpoint"
-                );
+                throw new RuntimeException("Language '{$languageCode}' is not mapped to Solr endpoint");
             }
         }
 
@@ -192,6 +188,6 @@ class NativeEndpointResolver implements EndpointResolver, SingleEndpointResolver
             $endpointSet[$this->mainLanguagesEndpoint] = true;
         }
 
-        return $this->hasMultiple = count($endpointSet) > 1;
+        return $this->hasMultiple = \count($endpointSet) > 1;
     }
 }

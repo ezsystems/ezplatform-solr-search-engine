@@ -30,7 +30,7 @@ class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtension
 
     protected function getContainerExtensions(): array
     {
-        return array($this->extension);
+        return [$this->extension];
     }
 
     protected function getMinimalConfiguration(): array
@@ -45,14 +45,14 @@ class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtension
 
     public function dataProviderForTestEndpoint()
     {
-        return array(
-            array(
+        return [
+            [
                 'endpoint_dsn',
-                array(
+                [
                     'dsn' => 'https://jura:pura@10.10.10.10:5434/jolr',
                     'core' => 'core0',
-                ),
-                array(
+                ],
+                [
                     'dsn' => 'https://jura:pura@10.10.10.10:5434/jolr',
                     'scheme' => 'http',
                     'host' => '127.0.0.1',
@@ -61,11 +61,11 @@ class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtension
                     'pass' => null,
                     'path' => '/solr',
                     'core' => 'core0',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'endpoint_standalone',
-                array(
+                [
                     'scheme' => 'https',
                     'host' => '22.22.22.22',
                     'port' => 1232,
@@ -73,8 +73,8 @@ class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtension
                     'pass' => 'pura',
                     'path' => '/holr',
                     'core' => 'core1',
-                ),
-                array(
+                ],
+                [
                     'dsn' => null,
                     'scheme' => 'https',
                     'host' => '22.22.22.22',
@@ -83,11 +83,11 @@ class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtension
                     'pass' => 'pura',
                     'path' => '/holr',
                     'core' => 'core1',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'endpoint_override',
-                array(
+                [
                     'dsn' => 'https://miles:teg@257.258.259.400:5555/noship',
                     'scheme' => 'http',
                     'host' => 'farm.com',
@@ -96,8 +96,8 @@ class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtension
                     'user' => 'darwi',
                     'pass' => 'odrade',
                     'path' => '/dunr',
-                ),
-                array(
+                ],
+                [
                     'dsn' => 'https://miles:teg@257.258.259.400:5555/noship',
                     'scheme' => 'http',
                     'host' => 'farm.com',
@@ -106,14 +106,14 @@ class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtension
                     'pass' => 'odrade',
                     'path' => '/dunr',
                     'core' => 'core2',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'endpoint_defaults',
-                array(
+                [
                     'core' => 'core3',
-                ),
-                array(
+                ],
+                [
                     'dsn' => null,
                     'scheme' => 'http',
                     'host' => '127.0.0.1',
@@ -122,9 +122,9 @@ class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtension
                     'pass' => null,
                     'path' => '/solr',
                     'core' => 'core3',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -136,12 +136,12 @@ class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtension
      */
     public function testEndpoint($endpointName, $endpointValues, $expectedArgument)
     {
-        $this->load(array('endpoints' => array($endpointName => $endpointValues)));
+        $this->load(['endpoints' => [$endpointName => $endpointValues]]);
 
         $this->assertContainerBuilderHasServiceDefinitionWithTag(
             "ez_search_engine_solr.endpoints.{$endpointName}",
             'ezpublish.search.solr.endpoint',
-            array('alias' => $endpointName)
+            ['alias' => $endpointName]
         );
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
             "ez_search_engine_solr.endpoints.{$endpointName}",
@@ -155,52 +155,52 @@ class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtension
         $this->expectException(InvalidConfigurationException::class);
 
         $this->load(
-            array(
-                'endpoints' => array(
-                    'endpoint0' => array(
+            [
+                'endpoints' => [
+                    'endpoint0' => [
                         'dsn' => 'https://12.13.14.15:4444/solr',
-                    ),
-                ),
-            )
+                    ],
+                ],
+            ]
         );
     }
 
     public function dataProviderForTestConnection()
     {
-        return array(
-            array(
-                array(
-                    'connections' => array(),
-                ),
-            ),
-            array(
-                array(
-                    'connections' => array(
-                        'connection1' => array(),
-                    ),
-                ),
-            ),
-            array(
-                array(
-                    'connections' => array(
-                        'connection1' => array(
-                            'entry_endpoints' => array(),
-                            'mapping' => array(),
-                        ),
-                    ),
-                ),
-            ),
-            array(
-                array(
-                    'connections' => array(
-                        'connection1' => array(
-                            'entry_endpoints' => array(),
-                            'mapping' => array(),
-                        ),
-                    ),
-                ),
-            ),
-        );
+        return [
+            [
+                [
+                    'connections' => [],
+                ],
+            ],
+            [
+                [
+                    'connections' => [
+                        'connection1' => [],
+                    ],
+                ],
+            ],
+            [
+                [
+                    'connections' => [
+                        'connection1' => [
+                            'entry_endpoints' => [],
+                            'mapping' => [],
+                        ],
+                    ],
+                ],
+            ],
+            [
+                [
+                    'connections' => [
+                        'connection1' => [
+                            'entry_endpoints' => [],
+                            'mapping' => [],
+                        ],
+                    ],
+                ],
+            ],
+        ];
     }
 
     /**
@@ -215,25 +215,25 @@ class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtension
 
     public function testConnection()
     {
-        $configurationValues = array(
-            'connections' => array(
-                'connection1' => array(
-                    'entry_endpoints' => array(
+        $configurationValues = [
+            'connections' => [
+                'connection1' => [
+                    'entry_endpoints' => [
                         'endpoint1',
                         'endpoint2',
-                    ),
-                    'mapping' => array(
-                        'translations' => array(
+                    ],
+                    'mapping' => [
+                        'translations' => [
                             'cro-HR' => 'endpoint1',
                             'eng-GB' => 'endpoint2',
                             'gal-MW' => 'endpoint3',
-                        ),
+                        ],
                         'default' => 'endpoint4',
                         'main_translations' => 'endpoint5',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $this->load($configurationValues);
 
@@ -245,19 +245,19 @@ class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtension
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
             'ez_search_engine_solr.connection.connection1.endpoint_resolver_id',
             0,
-            array(
+            [
                 'endpoint1',
                 'endpoint2',
-            )
+            ]
         );
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
             'ez_search_engine_solr.connection.connection1.endpoint_resolver_id',
             1,
-            array(
+            [
                 'cro-HR' => 'endpoint1',
                 'eng-GB' => 'endpoint2',
                 'gal-MW' => 'endpoint3',
-            )
+            ]
         );
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
             'ez_search_engine_solr.connection.connection1.endpoint_resolver_id',
@@ -279,20 +279,20 @@ class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtension
 
     public function testConnectionEndpointDefaults()
     {
-        $configurationValues = array(
-            'connections' => array(
-                'connection1' => array(
-                    'mapping' => array(
-                        'translations' => array(
+        $configurationValues = [
+            'connections' => [
+                'connection1' => [
+                    'mapping' => [
+                        'translations' => [
                             'cro-HR' => 'endpoint1',
                             'eng-GB' => 'endpoint2',
-                        ),
+                        ],
                         'default' => 'endpoint3',
                         'main_translations' => 'endpoint4',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $this->load($configurationValues);
 
@@ -304,20 +304,20 @@ class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtension
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
             'ez_search_engine_solr.connection.connection1.endpoint_resolver_id',
             0,
-            array(
+            [
                 'endpoint1',
                 'endpoint2',
                 'endpoint3',
                 'endpoint4',
-            )
+            ]
         );
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
             'ez_search_engine_solr.connection.connection1.endpoint_resolver_id',
             1,
-            array(
+            [
                 'cro-HR' => 'endpoint1',
                 'eng-GB' => 'endpoint2',
-            )
+            ]
         );
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
             'ez_search_engine_solr.connection.connection1.endpoint_resolver_id',
@@ -339,20 +339,20 @@ class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtension
 
     public function testConnectionEndpointUniqueDefaults()
     {
-        $configurationValues = array(
-            'connections' => array(
-                'connection1' => array(
-                    'mapping' => array(
-                        'translations' => array(
+        $configurationValues = [
+            'connections' => [
+                'connection1' => [
+                    'mapping' => [
+                        'translations' => [
                             'cro-HR' => 'endpoint1',
                             'eng-GB' => 'endpoint2',
-                        ),
+                        ],
                         'default' => 'endpoint2',
                         'main_translations' => 'endpoint2',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $this->load($configurationValues);
 
@@ -364,18 +364,18 @@ class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtension
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
             'ez_search_engine_solr.connection.connection1.endpoint_resolver_id',
             0,
-            array(
+            [
                 'endpoint1',
                 'endpoint2',
-            )
+            ]
         );
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
             'ez_search_engine_solr.connection.connection1.endpoint_resolver_id',
             1,
-            array(
+            [
                 'cro-HR' => 'endpoint1',
                 'eng-GB' => 'endpoint2',
-            )
+            ]
         );
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
             'ez_search_engine_solr.connection.connection1.endpoint_resolver_id',
@@ -397,13 +397,13 @@ class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtension
 
     public function testConnectionMappingDefaults()
     {
-        $configurationValues = array(
-            'connections' => array(
-                'connection1' => array(
+        $configurationValues = [
+            'connections' => [
+                'connection1' => [
                     'mapping' => 'endpoint1',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $this->load($configurationValues);
 
@@ -415,14 +415,14 @@ class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtension
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
             'ez_search_engine_solr.connection.connection1.endpoint_resolver_id',
             0,
-            array(
+            [
                 'endpoint1',
-            )
+            ]
         );
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
             'ez_search_engine_solr.connection.connection1.endpoint_resolver_id',
             1,
-            array()
+            []
         );
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
             'ez_search_engine_solr.connection.connection1.endpoint_resolver_id',
@@ -631,9 +631,6 @@ class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtension
 
     /**
      * @dataProvider dataProvideForTestBoostFactorMap
-     *
-     * @param array $configuration
-     * @param array $map
      */
     public function testBoostFactorMap(array $configuration, array $map)
     {

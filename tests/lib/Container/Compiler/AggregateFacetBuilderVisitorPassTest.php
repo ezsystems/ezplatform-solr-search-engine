@@ -59,13 +59,13 @@ class AggregateFacetBuilderVisitorPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.search.solr.query.content.facet_builder_visitor.aggregate',
             'addVisitor',
-            array(new Reference($serviceId))
+            [new Reference($serviceId)]
         );
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.search.solr.query.location.facet_builder_visitor.aggregate',
             'addVisitor',
-            array(new Reference($serviceId2))
+            [new Reference($serviceId2)]
         );
     }
 }

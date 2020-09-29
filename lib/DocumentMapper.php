@@ -41,8 +41,6 @@ interface DocumentMapper
      *
      * Each Content Document contains nested Documents representing it's Locations.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content $content
-     *
      * @return \eZ\Publish\SPI\Search\Document[]
      */
     public function mapContentBlock(Content $content);

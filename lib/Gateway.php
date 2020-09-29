@@ -21,29 +21,26 @@ abstract class Gateway
     /**
      * Returns search hits for the given query.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
      * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      *
      * @return mixed
      */
-    abstract public function findContent(Query $query, array $fieldFilters = array());
+    abstract public function findContent(Query $query, array $fieldFilters = []);
 
     /**
      * Returns search hits for the given query.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
      * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      *
      * @return mixed
      */
-    abstract public function findLocations(Query $query, array $fieldFilters = array());
+    abstract public function findLocations(Query $query, array $fieldFilters = []);
 
     /**
      * Returns all search hits for given query, that will be performed on all endpoints.
      *
-     * @param Query $query
      * @return mixed
      */
     abstract public function searchAllEndpoints(Query $query);

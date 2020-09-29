@@ -20,16 +20,12 @@ abstract class ContentFieldMapper
     /**
      * Indicates if the mapper accepts the given $content for mapping.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content $content
-     *
      * @return bool
      */
     abstract public function accept(SPIContent $content);
 
     /**
      * Maps given $content to an array of search fields.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content $content
      *
      * @return \eZ\Publish\SPI\Search\Field[]
      */

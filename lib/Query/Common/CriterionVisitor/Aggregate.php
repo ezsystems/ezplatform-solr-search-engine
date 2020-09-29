@@ -10,9 +10,9 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor;
 
-use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 
 /**
  * Visits the criterion tree into a Solr query.
@@ -24,14 +24,14 @@ class Aggregate extends CriterionVisitor
      *
      * @var \EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor[]
      */
-    protected $visitors = array();
+    protected $visitors = [];
 
     /**
      * Construct from optional visitor array.
      *
      * @param \EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor[] $visitors
      */
-    public function __construct(array $visitors = array())
+    public function __construct(array $visitors = [])
     {
         foreach ($visitors as $visitor) {
             $this->addVisitor($visitor);
@@ -40,8 +40,6 @@ class Aggregate extends CriterionVisitor
 
     /**
      * Adds visitor.
-     *
-     * @param \EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor $visitor
      */
     public function addVisitor(CriterionVisitor $visitor)
     {
@@ -50,8 +48,6 @@ class Aggregate extends CriterionVisitor
 
     /**
      * Check if visitor is applicable to current criterion.
-     *
-     * @param Criterion $criterion
      *
      * @return bool
      */
@@ -65,7 +61,6 @@ class Aggregate extends CriterionVisitor
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor $subVisitor
      *
      * @return string
@@ -78,8 +73,6 @@ class Aggregate extends CriterionVisitor
             }
         }
 
-        throw new NotImplementedException(
-            'No visitor available for: ' . get_class($criterion) . ' with operator ' . $criterion->operator
-        );
+        throw new NotImplementedException('No visitor available for: ' . \get_class($criterion) . ' with operator ' . $criterion->operator);
     }
 }

@@ -38,6 +38,7 @@ class Random extends SortClauseVisitor
     public function visit(SortClause $sortClause)
     {
         $seed = $sortClause->targetData->seed ?? mt_rand();
+
         return 'random_' . (string)$seed . ' ' . $this->getDirection($sortClause);
     }
 }

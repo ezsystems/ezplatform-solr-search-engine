@@ -12,11 +12,11 @@ namespace EzSystems\EzPlatformSolrSearchEngine\Tests\Search\Query\Content\Criter
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\FieldType\TextLine\SearchField;
+use eZ\Publish\Core\Search\Common\FieldNameResolver;
 use eZ\Publish\SPI\Search\FieldType\StringField;
 use EzSystems\EzPlatformSolrSearchEngine\Query\Common\QueryTranslator\Generator\WordVisitor;
 use EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor\FullText;
 use EzSystems\EzPlatformSolrSearchEngine\Tests\Search\TestCase;
-use eZ\Publish\Core\Search\Common\FieldNameResolver;
 use QueryTranslator\Languages\Galach\Generators;
 use QueryTranslator\Languages\Galach\Parser;
 use QueryTranslator\Languages\Galach\TokenExtractor\Text;
@@ -29,7 +29,7 @@ use QueryTranslator\Languages\Galach\Tokenizer;
  */
 class FullTextTest extends TestCase
 {
-    protected function getFullTextCriterionVisitor(array $fieldTypes = array(), int $maxDepth = 0)
+    protected function getFullTextCriterionVisitor(array $fieldTypes = [], int $maxDepth = 0)
     {
         $fieldNames = array_keys($fieldTypes);
         $fieldNameResolver = $this->getMockBuilder(FieldNameResolver::class)
@@ -44,8 +44,8 @@ class FullTextTest extends TestCase
                 $this->isInstanceOf(Criterion::class),
                 $this->isType('string')
             )
-            ->will(
-                $this->returnValue($fieldNames)
+            ->willReturn(
+                $fieldNames
             );
 
         $fieldNameResolver
@@ -55,8 +55,8 @@ class FullTextTest extends TestCase
                 $this->isInstanceOf(Criterion::class),
                 $this->isType('string')
             )
-            ->will(
-                $this->returnValue($fieldTypes)
+            ->willReturn(
+                $fieldTypes
             );
 
         /** @var \eZ\Publish\Core\Search\Common\FieldNameResolver $fieldNameResolver */
@@ -165,14 +165,14 @@ class FullTextTest extends TestCase
     {
         $ftTextLine = new SearchField();
         $visitor = $this->getFullTextCriterionVisitor(
-            array(
+            [
                 'title_1_s' => $ftTextLine,
                 'title_2_s' => $ftTextLine,
-            )
+            ]
         );
 
         $criterion = new Criterion\FullText('Hello');
-        $criterion->boost = array('title' => 2);
+        $criterion->boost = ['title' => 2];
 
         $this->assertEquals(
             "{!edismax v='Hello' qf='meta_content__text_t title_1_s^2 title_2_s^2' uf=-*}",
@@ -184,14 +184,14 @@ class FullTextTest extends TestCase
     {
         $ftTextLine = new SearchField();
         $visitor = $this->getFullTextCriterionVisitor(
-            array(
+            [
                 'title_1_s' => $ftTextLine,
                 'title_2_s' => $ftTextLine,
-            )
+            ]
         );
 
         $criterion = new Criterion\FullText('Hello World');
-        $criterion->boost = array('title' => 2);
+        $criterion->boost = ['title' => 2];
 
         $this->assertEquals(
             "{!edismax v='Hello World' qf='meta_content__text_t title_1_s^2 title_2_s^2' uf=-*}",
@@ -204,9 +204,9 @@ class FullTextTest extends TestCase
         $visitor = $this->getFullTextCriterionVisitor();
 
         $criterion = new Criterion\FullText('Hello');
-        $criterion->boost = array(
+        $criterion->boost = [
             'unknown_field' => 2,
-        );
+        ];
 
         $this->assertEquals(
             "{!edismax v='Hello' qf='meta_content__text_t' uf=-*}",
@@ -219,9 +219,9 @@ class FullTextTest extends TestCase
         $visitor = $this->getFullTextCriterionVisitor();
 
         $criterion = new Criterion\FullText('Hello World');
-        $criterion->boost = array(
+        $criterion->boost = [
             'unknown_field' => 2,
-        );
+        ];
 
         $this->assertEquals(
             "{!edismax v='Hello World' qf='meta_content__text_t' uf=-*}",
@@ -233,14 +233,14 @@ class FullTextTest extends TestCase
     {
         $stringField = new StringField();
         $visitor = $this->getFullTextCriterionVisitor(
-            array(
+            [
                 'title_1_s' => $stringField,
                 'title_2_s' => $stringField,
-            )
+            ]
         );
         $criterion = new Criterion\FullText('Hello');
         $criterion->fuzziness = .5;
-        $criterion->boost = array('title' => 2);
+        $criterion->boost = ['title' => 2];
 
         $this->assertEquals(
             "{!edismax v='Hello~0.5' qf='meta_content__text_t title_1_s^2 title_2_s^2' uf=-*}",
@@ -252,14 +252,14 @@ class FullTextTest extends TestCase
     {
         $stringField = new StringField();
         $visitor = $this->getFullTextCriterionVisitor(
-            array(
+            [
                 'title_1_s' => $stringField,
                 'title_2_s' => $stringField,
-            )
+            ]
         );
         $criterion = new Criterion\FullText('Hello World');
         $criterion->fuzziness = .5;
-        $criterion->boost = array('title' => 2);
+        $criterion->boost = ['title' => 2];
 
         $this->assertEquals(
             "{!edismax v='Hello~0.5 World~0.5' qf='meta_content__text_t title_1_s^2 title_2_s^2' uf=-*}",

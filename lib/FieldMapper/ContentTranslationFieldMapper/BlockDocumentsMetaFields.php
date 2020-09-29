@@ -8,10 +8,10 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
 
-use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\FieldType;
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
 
 /**
  * Maps meta fields to block documents (Content and Location).

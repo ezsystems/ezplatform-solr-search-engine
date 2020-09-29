@@ -59,7 +59,7 @@ class FieldRelation extends Field
 
         $criterion->value = (array)$criterion->value;
 
-        $queries = array();
+        $queries = [];
         foreach ($searchFields as $name => $fieldType) {
             foreach ($criterion->value as $value) {
                 $preparedValues = (array)$this->mapSearchFieldvalue($value, $fieldType);

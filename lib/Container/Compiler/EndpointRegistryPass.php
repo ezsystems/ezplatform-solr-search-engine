@@ -52,10 +52,10 @@ class EndpointRegistryPass implements CompilerPassInterface
 
                 $fieldRegistryDefinition->addMethodCall(
                     'registerEndpoint',
-                    array(
+                    [
                         $attribute['alias'],
                         new Reference($id),
-                    )
+                    ]
                 );
             }
         }

@@ -37,7 +37,6 @@ abstract class FacetBuilderVisitor
      * @deprecated Will be removed in 2.0, replaced by {@link FacetFieldVisitor::mapField()}.
      *
      * @param string $field
-     * @param array $data
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\Facet
      */
@@ -49,8 +48,6 @@ abstract class FacetBuilderVisitor
     /**
      * Check if visitor is applicable to current facet builder.
      *
-     * @param FacetBuilder $facetBuilder
-     *
      * @return bool
      */
     abstract public function canVisit(FacetBuilder $facetBuilder);
@@ -59,8 +56,6 @@ abstract class FacetBuilderVisitor
      * Map field value to a proper Solr representation.
      *
      * @deprecated Will be removed in 2.0, replaced by {@link FacetFieldVisitor::visitBuilder()}.
-     *
-     * @param FacetBuilder $facetBuilder
      *
      * @return string[]
      */
@@ -72,13 +67,11 @@ abstract class FacetBuilderVisitor
     /**
      * Map Solr return array into a sane hash map.
      *
-     * @param array $data
-     *
      * @return array
      */
     protected function mapData(array $data)
     {
-        $values = array();
+        $values = [];
         reset($data);
         while ($key = current($data)) {
             $values[$key] = next($data);
