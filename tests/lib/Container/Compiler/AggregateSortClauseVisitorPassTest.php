@@ -50,7 +50,7 @@ class AggregateSortClauseVisitorPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.search.solr.query.content.sort_clause_visitor.aggregate',
             'addVisitor',
-            array(new Reference($serviceId))
+            [new Reference($serviceId)]
         );
     }
 }

@@ -8,11 +8,11 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Gateway;
 
-use eZ\Publish\Core\Search\Common\FieldValueMapper;
 use eZ\Publish\Core\Search\Common\FieldNameGenerator;
+use eZ\Publish\Core\Search\Common\FieldValueMapper;
+use eZ\Publish\SPI\Search\Document;
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\FieldType;
-use eZ\Publish\SPI\Search\Document;
 use XMLWriter;
 
 /**
@@ -31,10 +31,6 @@ class UpdateSerializer
      */
     protected $nameGenerator;
 
-    /**
-     * @param \eZ\Publish\Core\Search\Common\FieldValueMapper $fieldValueMapper
-     * @param \eZ\Publish\Core\Search\Common\FieldNameGenerator $nameGenerator
-     */
     public function __construct(
         FieldValueMapper $fieldValueMapper,
         FieldNameGenerator $nameGenerator
@@ -115,10 +111,12 @@ class UpdateSerializer
      * Not intended to be matched or returned as a search result.
      *
      * For more info see:
-     * @link http://grokbase.com/t/lucene/solr-user/14chqr73nv/converting-to-parent-child-block-indexing
-     * @link https://issues.apache.org/jira/browse/SOLR-5211
+     *
+     * @see http://grokbase.com/t/lucene/solr-user/14chqr73nv/converting-to-parent-child-block-indexing
+     * @see https://issues.apache.org/jira/browse/SOLR-5211
      *
      * @param string $id
+     *
      * @return \eZ\Publish\SPI\Search\Document
      */
     private function getNestedDummyDocument($id)

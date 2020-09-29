@@ -10,11 +10,11 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\MapLocation;
 
-use EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\MapLocation;
-use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\MapLocation;
+use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 
 /**
  * Visits the MapLocationDistance criterion.
@@ -23,8 +23,6 @@ class MapLocationDistanceRange extends MapLocation
 {
     /**
      * Check if visitor is applicable to current criterion.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *
      * @return bool
      */
@@ -44,7 +42,6 @@ class MapLocationDistanceRange extends MapLocation
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If no searchable fields are found for the given criterion target.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor $subVisitor
      *
      * @return string
@@ -70,16 +67,13 @@ class MapLocationDistanceRange extends MapLocation
         );
 
         if (empty($searchFields)) {
-            throw new InvalidArgumentException(
-                '$criterion->target',
-                "No searchable fields found for the given criterion target '{$criterion->target}'."
-            );
+            throw new InvalidArgumentException('$criterion->target', "No searchable fields found for the given criterion target '{$criterion->target}'.");
         }
 
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Value\MapLocationValue $location */
         $location = $criterion->valueData;
 
-        $queries = array();
+        $queries = [];
         foreach ($searchFields as $name => $fieldType) {
             // @todo in future it should become possible to specify ranges directly on the filter (donut shape)
             $query = sprintf('{!geofilt sfield=%s pt=%F,%F d=%s}', $name, $location->latitude, $location->longitude, $end);

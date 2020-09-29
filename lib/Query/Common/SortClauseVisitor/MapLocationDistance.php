@@ -10,10 +10,10 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\SortClauseVisitor;
 
-use EzSystems\EzPlatformSolrSearchEngine\Query\SortClauseVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
-use eZ\Publish\Core\Search\Common\FieldNameResolver;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Search\Common\FieldNameResolver;
+use EzSystems\EzPlatformSolrSearchEngine\Query\SortClauseVisitor;
 
 /**
  * Visits the sortClause tree into a Solr query.
@@ -37,7 +37,6 @@ class MapLocationDistance extends SortClauseVisitor
     /**
      * Create from field name resolver and field name.
      *
-     * @param \eZ\Publish\Core\Search\Common\FieldNameResolver $fieldNameResolver
      * @param string $fieldName
      */
     public function __construct(FieldNameResolver $fieldNameResolver, $fieldName)
@@ -49,7 +48,6 @@ class MapLocationDistance extends SortClauseVisitor
     /**
      * Get sort field name.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      * @param string $contentTypeIdentifier
      * @param string $fieldDefinitionIdentifier
      * @param string $name
@@ -73,8 +71,6 @@ class MapLocationDistance extends SortClauseVisitor
     /**
      * Check if visitor is applicable to current sortClause.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
-     *
      * @return bool
      */
     public function canVisit(SortClause $sortClause)
@@ -86,8 +82,6 @@ class MapLocationDistance extends SortClauseVisitor
      * Map field value to a proper Solr representation.
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no sortable fields are found for the given sort clause target.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      *
      * @return string
      */
@@ -103,11 +97,7 @@ class MapLocationDistance extends SortClauseVisitor
         );
 
         if ($fieldName === null) {
-            throw new InvalidArgumentException(
-                '$sortClause->targetData',
-                'No searchable fields found for the given sort clause target ' .
-                "'{$target->fieldIdentifier}' on '{$target->typeIdentifier}'."
-            );
+            throw new InvalidArgumentException('$sortClause->targetData', 'No searchable fields found for the given sort clause target ' . "'{$target->fieldIdentifier}' on '{$target->typeIdentifier}'.");
         }
 
         return "geodist({$fieldName},{$target->latitude},{$target->longitude})" . $this->getDirection($sortClause);

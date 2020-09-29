@@ -31,11 +31,6 @@ class IndexingDepthProviderFactory implements ContainerAwareInterface
      */
     private $indexingDepthProviderClass;
 
-    /**
-     * @param \eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider $repositoryConfigurationProvider
-     * @param string $defaultConnection
-     * @param string $indexingDepthProviderClass
-     */
     public function __construct(
         RepositoryConfigurationProvider $repositoryConfigurationProvider,
         string $defaultConnection,

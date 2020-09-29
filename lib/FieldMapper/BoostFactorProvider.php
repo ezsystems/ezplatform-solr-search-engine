@@ -8,8 +8,8 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\FieldMapper;
 
-use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\Type as ContentType;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 
 /**
  * BoostFactorProvider provides boost factors for indexed fields.
@@ -82,9 +82,6 @@ class BoostFactorProvider
      */
     private $defaultBoostFactor = 1.0;
 
-    /**
-     * @param array $map
-     */
     public function __construct(array $map = [])
     {
         $this->map = $map;
@@ -92,9 +89,6 @@ class BoostFactorProvider
 
     /**
      * Get boost factor for a Content field by the given $contentType and $fieldDefinition.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Type $contentType
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      *
      * @return float
      */
@@ -121,7 +115,6 @@ class BoostFactorProvider
     /**
      * Get boost factor for a Content meta field by the given $fieldName.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\Type $contentType
      * @param string $fieldName
      *
      * @return float

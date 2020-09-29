@@ -9,8 +9,8 @@
 namespace EzSystems\EzPlatformSolrSearchEngine\Tests\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\RemoveTranslationSignal;
-use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content as SPIContent;
+use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use EzSystems\EzPlatformSolrSearchEngine\Slot\RemoveTranslation;
 
 /**

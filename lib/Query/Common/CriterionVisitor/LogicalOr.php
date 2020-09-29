@@ -10,8 +10,8 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor;
 
-use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 use RuntimeException;
 
 /**
@@ -21,8 +21,6 @@ class LogicalOr extends CriterionVisitor
 {
     /**
      * CHeck if visitor is applicable to current criterion.
-     *
-     * @param Criterion $criterion
      *
      * @return bool
      */
@@ -34,7 +32,6 @@ class LogicalOr extends CriterionVisitor
     /**
      * Map field value to a proper Solr representation.
      *
-     * @param Criterion $criterion
      * @param CriterionVisitor $subVisitor
      *
      * @return string
@@ -53,7 +50,7 @@ class LogicalOr extends CriterionVisitor
             $criterion->criteria
         );
 
-        if (count($subCriteria) === 1) {
+        if (\count($subCriteria) === 1) {
             return reset($subCriteria);
         }
 

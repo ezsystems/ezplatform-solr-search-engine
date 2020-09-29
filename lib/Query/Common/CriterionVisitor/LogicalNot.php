@@ -10,8 +10,8 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor;
 
-use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 
 /**
  * Visits the LogicalNot criterion.
@@ -20,8 +20,6 @@ class LogicalNot extends CriterionVisitor
 {
     /**
      * CHeck if visitor is applicable to current criterion.
-     *
-     * @param Criterion $criterion
      *
      * @return bool
      */
@@ -33,7 +31,6 @@ class LogicalNot extends CriterionVisitor
     /**
      * Map field value to a proper Solr representation.
      *
-     * @param Criterion $criterion
      * @param CriterionVisitor $subVisitor
      *
      * @return string
@@ -41,7 +38,7 @@ class LogicalNot extends CriterionVisitor
     public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null)
     {
         if (!isset($criterion->criteria[0]) ||
-             (count($criterion->criteria) > 1)) {
+             (\count($criterion->criteria) > 1)) {
             throw new \RuntimeException('Invalid aggregation in LogicalNot criterion.');
         }
 

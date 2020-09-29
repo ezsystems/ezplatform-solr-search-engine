@@ -8,13 +8,13 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine;
 
+use Exception;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Search\Common\IncrementalIndexer;
-use EzSystems\EzPlatformSolrSearchEngine\Handler as SolrSearchHandler;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
+use EzSystems\EzPlatformSolrSearchEngine\Handler as SolrSearchHandler;
 use Psr\Log\LoggerInterface;
-use Exception;
 
 class Indexer extends IncrementalIndexer
 {

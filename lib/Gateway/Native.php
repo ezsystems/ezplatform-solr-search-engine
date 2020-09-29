@@ -10,12 +10,12 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Gateway;
 
-use EzSystems\EzPlatformSolrSearchEngine\Gateway;
-use EzSystems\EzPlatformSolrSearchEngine\Query\QueryConverter;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\SPI\Search\Document;
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\FieldType;
+use EzSystems\EzPlatformSolrSearchEngine\Gateway;
+use EzSystems\EzPlatformSolrSearchEngine\Query\QueryConverter;
 use RuntimeException;
 
 /**
@@ -71,8 +71,6 @@ class Native extends Gateway
      * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\HttpClient $client
      * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointResolver $endpointResolver
      * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointRegistry $endpointRegistry
-     * @param \EzSystems\EzPlatformSolrSearchEngine\Query\QueryConverter $contentQueryConverter
-     * @param \EzSystems\EzPlatformSolrSearchEngine\Query\QueryConverter $locationQueryConverter
      * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\UpdateSerializer $updateSerializer
      * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\DistributionStrategy $distributionStrategy
      */
@@ -97,13 +95,12 @@ class Native extends Gateway
     /**
      * Returns search hits for the given query.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
      * @param array $languageSettings - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      *
      * @return mixed
      */
-    public function findContent(Query $query, array $languageSettings = array())
+    public function findContent(Query $query, array $languageSettings = [])
     {
         $parameters = $this->contentQueryConverter->convert($query);
 
@@ -113,13 +110,12 @@ class Native extends Gateway
     /**
      * Returns search hits for the given query.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
      * @param array $languageSettings - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      *
      * @return mixed
      */
-    public function findLocations(Query $query, array $languageSettings = array())
+    public function findLocations(Query $query, array $languageSettings = [])
     {
         $parameters = $this->locationQueryConverter->convert($query);
 
@@ -129,13 +125,12 @@ class Native extends Gateway
     /**
      * Returns search hits for the given array of Solr query parameters.
      *
-     * @param array $parameters
      * @param array $languageSettings - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      *
      * @return mixed
      */
-    protected function internalFind(array $parameters, array $languageSettings = array())
+    protected function internalFind(array $parameters, array $languageSettings = [])
     {
         $parameters = $this->distributionStrategy->getSearchParameters($parameters, $languageSettings);
 
@@ -155,8 +150,6 @@ class Native extends Gateway
      *
      * Array markers, possibly added for the facet parameters,
      * will be removed from the result.
-     *
-     * @param array $parameters
      *
      * @return string
      */
@@ -188,7 +181,7 @@ class Native extends Gateway
             return '';
         }
 
-        $shards = array();
+        $shards = [];
         $endpoints = $this->endpointResolver->getSearchTargets($languageSettings);
 
         if (!empty($endpoints)) {
@@ -239,10 +232,10 @@ class Native extends Gateway
      */
     public function bulkIndexDocuments(array $documents)
     {
-        $documentMap = array();
+        $documentMap = [];
 
         $mainTranslationsEndpoint = $this->endpointResolver->getMainLanguagesEndpoint();
-        $mainTranslationsDocuments = array();
+        $mainTranslationsDocuments = [];
 
         foreach ($documents as $translationDocuments) {
             foreach ($translationDocuments as $document) {
@@ -274,15 +267,13 @@ class Native extends Gateway
     /**
      * Returns version of the $document to be indexed in the always available core.
      *
-     * @param \eZ\Publish\SPI\Search\Document $document
-     *
      * @return \eZ\Publish\SPI\Search\Document
      */
     protected function getMainTranslationDocument(Document $document)
     {
         // Clone to prevent mutation
         $document = clone $document;
-        $subDocuments = array();
+        $subDocuments = [];
 
         $document->id .= 'mt';
         $document->fields[] = new Field(
@@ -322,20 +313,15 @@ class Native extends Gateway
             $endpoint,
             '/update?wt=json',
             new Message(
-                array(
+                [
                     'Content-Type' => 'text/xml',
-                ),
+                ],
                 $updates
             )
         );
 
         if ($result->headers['status'] !== 200) {
-            throw new RuntimeException(
-                'Wrong HTTP status received from Solr: ' . $result->headers['status'] . ' on ' . $endpoint->getURL() . "\n"
-                . var_export($endpoint, true) . "\n"
-                . var_export($result, true) . "\n"
-                . var_export($updates, true)
-            );
+            throw new RuntimeException('Wrong HTTP status received from Solr: ' . $result->headers['status'] . ' on ' . $endpoint->getURL() . "\n" . var_export($endpoint, true) . "\n" . var_export($result, true) . "\n" . var_export($updates, true));
         }
     }
 
@@ -354,9 +340,9 @@ class Native extends Gateway
                 $this->endpointRegistry->getEndpoint($endpointName),
                 '/update?wt=json',
                 new Message(
-                    array(
+                    [
                         'Content-Type' => 'text/xml',
-                    ),
+                    ],
                     "<delete><query>{$query}</query></delete>"
                 )
             );
@@ -381,6 +367,7 @@ class Native extends Gateway
 
     /**
      * @param $endpoint
+     *
      * @todo error handling
      */
     protected function purgeEndpoint($endpoint)
@@ -390,9 +377,9 @@ class Native extends Gateway
             $endpoint,
             '/update?wt=json',
             new Message(
-                array(
+                [
                     'Content-Type' => 'text/xml',
-                ),
+                ],
                 '<delete><query>*:*</query></delete>'
             )
         );
@@ -419,26 +406,21 @@ class Native extends Gateway
                 $this->endpointRegistry->getEndpoint($endpointName),
                 '/update',
                 new Message(
-                    array(
+                    [
                         'Content-Type' => 'text/xml',
-                    ),
+                    ],
                     $payload
                 )
             );
 
             if ($result->headers['status'] !== 200) {
-                throw new RuntimeException(
-                    'Wrong HTTP status received from Solr: ' .
-                    $result->headers['status'] . var_export($result, true)
-                );
+                throw new RuntimeException('Wrong HTTP status received from Solr: ' . $result->headers['status'] . var_export($result, true));
             }
         }
     }
 
     /**
      * Perform request to client to search for records with query string.
-     *
-     * @param array $parameters
      *
      * @return mixed
      */
@@ -464,9 +446,7 @@ class Native extends Gateway
         $result = json_decode($response->body);
 
         if (!isset($result->response)) {
-            throw new RuntimeException(
-                '->response not set: ' . var_export(array($result, $parameters), true)
-            );
+            throw new RuntimeException('->response not set: ' . var_export([$result, $parameters], true));
         }
 
         return $result;

@@ -8,8 +8,8 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor;
 
-use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 
 /**
  * Visits the MatchNone criterion.
@@ -18,8 +18,6 @@ class MatchNone extends CriterionVisitor
 {
     /**
      * CHeck if visitor is applicable to current criterion.
-     *
-     * @param Criterion $criterion
      *
      * @return bool
      */
@@ -31,7 +29,6 @@ class MatchNone extends CriterionVisitor
     /**
      * Map field value to a proper Solr representation.
      *
-     * @param Criterion $criterion
      * @param CriterionVisitor $subVisitor
      *
      * @return string

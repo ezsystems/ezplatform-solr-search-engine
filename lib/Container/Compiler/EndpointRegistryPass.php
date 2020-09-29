@@ -10,10 +10,10 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Container\Compiler;
 
+use LogicException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
-use LogicException;
 
 /**
  * This compiler pass will register Solr Endpoints.
@@ -21,8 +21,6 @@ use LogicException;
 class EndpointRegistryPass implements CompilerPassInterface
 {
     /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     *
      * @throws \LogicException
      */
     public function process(ContainerBuilder $container)
@@ -44,18 +42,15 @@ class EndpointRegistryPass implements CompilerPassInterface
         foreach ($endpoints as $id => $attributes) {
             foreach ($attributes as $attribute) {
                 if (!isset($attribute['alias'])) {
-                    throw new LogicException(
-                        "'ezpublish.search.solr.endpoint' service tag needs an 'alias' attribute " .
-                        'to identify the Endpoint. None given.'
-                    );
+                    throw new LogicException("'ezpublish.search.solr.endpoint' service tag needs an 'alias' attribute " . 'to identify the Endpoint. None given.');
                 }
 
                 $fieldRegistryDefinition->addMethodCall(
                     'registerEndpoint',
-                    array(
+                    [
                         $attribute['alias'],
                         new Reference($id),
-                    )
+                    ]
                 );
             }
         }

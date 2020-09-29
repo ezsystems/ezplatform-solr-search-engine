@@ -10,11 +10,11 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\FacetBuilderVisitor;
 
-use EzSystems\EzPlatformSolrSearchEngine\Query\FacetBuilderVisitor;
-use EzSystems\EzPlatformSolrSearchEngine\Query\FacetFieldVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
 use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder\UserFacetBuilder;
 use eZ\Publish\API\Repository\Values\Content\Search\Facet;
+use EzSystems\EzPlatformSolrSearchEngine\Query\FacetBuilderVisitor;
+use EzSystems\EzPlatformSolrSearchEngine\Query\FacetFieldVisitor;
 
 /**
  * Visits the User facet builder.
@@ -36,10 +36,10 @@ class User extends FacetBuilderVisitor implements FacetFieldVisitor
     public function mapField($field, array $data, FacetBuilder $facetBuilder)
     {
         return new Facet\UserFacet(
-            array(
+            [
                 'name' => $facetBuilder->name,
                 'entries' => $this->mapData($data),
-            )
+            ]
         );
     }
 
@@ -59,10 +59,10 @@ class User extends FacetBuilderVisitor implements FacetFieldVisitor
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder\UserFacetBuilder $facetBuilder */
         $field = self::DOC_FIELD_MAP[$facetBuilder->type];
 
-        return array(
+        return [
             'facet.field' => "{!ex=dt key=${fieldId}}$field",
             "f.${field}.facet.limit" => $facetBuilder->limit,
             "f.${field}.facet.mincount" => $facetBuilder->minCount,
-        );
+        ];
     }
 }

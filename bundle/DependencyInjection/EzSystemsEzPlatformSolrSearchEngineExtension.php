@@ -10,14 +10,14 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngineBundle\DependencyInjection;
 
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ChildDefinition;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use Symfony\Component\Config\FileLocator;
 
 class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
 {
@@ -123,9 +123,6 @@ class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
     /**
      * Processes connection configuration by flattening connection parameters
      * and setting them to the container as parameters.
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     * @param array $config
      */
     protected function processConnectionConfiguration(ContainerBuilder $container, array $config)
     {
@@ -168,7 +165,6 @@ class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
     /**
      * Creates needed search services for given connection name and parameters.
      *
-     * @param ContainerBuilder $container
      * @param string $connectionName
      * @param array $connectionParams
      */
@@ -220,7 +216,6 @@ class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
     /**
      * Creates boost factor map parameter for a given $connectionName.
      *
-     * @param ContainerBuilder $container
      * @param string $connectionName
      * @param array $connectionParams
      */
@@ -236,7 +231,6 @@ class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
     /**
      * Creates indexing depth map parameter for a given $connectionName.
      *
-     * @param ContainerBuilder $container
      * @param string $connectionName
      * @param array $connectionParams
      */
@@ -254,14 +248,13 @@ class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
     /**
      * Creates Endpoint definition in the service container.
      *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      * @param string $alias
      * @param array $params
      */
     protected function defineEndpoint(ContainerBuilder $container, $alias, $params)
     {
-        $definition = new Definition(self::ENDPOINT_CLASS, array($params));
-        $definition->addTag(self::ENDPOINT_TAG, array('alias' => $alias));
+        $definition = new Definition(self::ENDPOINT_CLASS, [$params]);
+        $definition->addTag(self::ENDPOINT_TAG, ['alias' => $alias]);
 
         $container->setDefinition(
             sprintf($this->getAlias() . '.endpoints.%s', $alias),
@@ -278,8 +271,6 @@ class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
      * Builds boost factor map from the given $config.
      *
      * @see \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider::$map
-     *
-     * @param array $config
      *
      * @return array
      */

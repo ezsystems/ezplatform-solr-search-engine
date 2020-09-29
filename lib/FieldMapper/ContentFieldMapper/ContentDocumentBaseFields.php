@@ -8,11 +8,11 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper;
 
-use EzSystems\EzPlatformSolrSearchEngine\DocumentMapper;
-use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\FieldType;
+use EzSystems\EzPlatformSolrSearchEngine\DocumentMapper;
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper;
 
 /**
  * Maps base Content related fields to a Content document.
