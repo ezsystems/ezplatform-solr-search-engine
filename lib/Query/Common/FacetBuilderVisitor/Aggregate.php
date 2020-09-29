@@ -10,9 +10,9 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\FacetBuilderVisitor;
 
+use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
 use EzSystems\EzPlatformSolrSearchEngine\Query\FacetBuilderVisitor;
 use EzSystems\EzPlatformSolrSearchEngine\Query\FacetFieldVisitor;
-use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
 
 /**
  * Visits the facet builder tree into a Solr query.
@@ -24,14 +24,14 @@ class Aggregate extends FacetBuilderVisitor implements FacetFieldVisitor
      *
      * @var \EzSystems\EzPlatformSolrSearchEngine\Query\FacetBuilderVisitor[]
      */
-    protected $visitors = array();
+    protected $visitors = [];
 
     /**
      * Construct from optional visitor array.
      *
      * @param \EzSystems\EzPlatformSolrSearchEngine\Query\FacetBuilderVisitor[] $visitors
      */
-    public function __construct(array $visitors = array())
+    public function __construct(array $visitors = [])
     {
         foreach ($visitors as $visitor) {
             $this->addVisitor($visitor);
@@ -40,8 +40,6 @@ class Aggregate extends FacetBuilderVisitor implements FacetFieldVisitor
 
     /**
      * Adds visitor.
-     *
-     * @param \EzSystems\EzPlatformSolrSearchEngine\Query\FacetBuilderVisitor $visitor
      */
     public function addVisitor(FacetBuilderVisitor $visitor)
     {

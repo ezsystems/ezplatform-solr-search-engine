@@ -10,9 +10,9 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor;
 
-use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
-use eZ\Publish\Core\Search\Common\FieldNameResolver;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\Core\Search\Common\FieldNameResolver;
+use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 
 /**
  * Visits the MapLocation criterion.
@@ -43,7 +43,6 @@ abstract class MapLocation extends CriterionVisitor
     /**
      * Create from FieldNameResolver, FieldType identifier and field name.
      *
-     * @param \eZ\Publish\Core\Search\Common\FieldNameResolver $fieldNameResolver
      * @param string $fieldTypeIdentifier
      * @param string $fieldName
      */
@@ -58,7 +57,6 @@ abstract class MapLocation extends CriterionVisitor
     /**
      * Get array of search fields.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param string $fieldDefinitionIdentifier
      * @param string $fieldTypeIdentifier
      * @param string $name

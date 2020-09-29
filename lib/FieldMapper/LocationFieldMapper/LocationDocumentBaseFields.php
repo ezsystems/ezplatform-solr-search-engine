@@ -8,12 +8,12 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper;
 
-use EzSystems\EzPlatformSolrSearchEngine\DocumentMapper;
-use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper;
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\FieldType;
+use EzSystems\EzPlatformSolrSearchEngine\DocumentMapper;
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper;
 
 /**
  * Maps base Location related fields to a Location document.
@@ -25,9 +25,6 @@ class LocationDocumentBaseFields extends LocationFieldMapper
      */
     protected $contentHandler;
 
-    /**
-     * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
-     */
     public function __construct(ContentHandler $contentHandler)
     {
         $this->contentHandler = $contentHandler;

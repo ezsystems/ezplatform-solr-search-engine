@@ -54,12 +54,6 @@ abstract class FullTextFactoryAbstract
 
     /**
      * Create from content type handler and field registry.
-     *
-     * @param \eZ\Publish\Core\Search\Common\FieldNameResolver $fieldNameResolver
-     * @param \QueryTranslator\Languages\Galach\Tokenizer $tokenizer
-     * @param \QueryTranslator\Languages\Galach\Parser $parser
-     * @param \QueryTranslator\Languages\Galach\Generators\ExtendedDisMax $generator
-     * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\IndexingDepthProvider $indexingDepthProvider
      */
     public function __construct(
         FieldNameResolver $fieldNameResolver,
@@ -77,8 +71,6 @@ abstract class FullTextFactoryAbstract
 
     /**
      * Create FullText Criterion Visitor.
-     *
-     * @return \EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor
      */
     abstract public function createCriterionVisitor(): CriterionVisitor;
 }

@@ -10,10 +10,10 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine;
 
+use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointRegistry;
 use EzSystems\EzPlatformSolrSearchEngine\Query\FacetFieldVisitor;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 
 /**
  * Abstract implementation of Search Extractor, which extracts search result
@@ -44,11 +44,11 @@ abstract class ResultExtractor
     public function extract($data, array $facetBuilders = [])
     {
         $result = new SearchResult(
-            array(
+            [
                 'time' => $data->responseHeader->QTime / 1000,
                 'maxScore' => $data->response->maxScore,
                 'totalCount' => $data->response->numFound,
-            )
+            ]
         );
 
         if (isset($data->facet_counts)) {
@@ -81,12 +81,12 @@ abstract class ResultExtractor
 
         foreach ($data->response->docs as $doc) {
             $searchHit = new SearchHit(
-                array(
+                [
                     'score' => $doc->score,
                     'index' => $this->getIndexIdentifier($doc),
                     'matchedTranslation' => $this->getMatchedLanguageCode($doc),
                     'valueObject' => $this->extractHit($doc),
-                )
+                ]
             );
             $result->searchHits[] = $searchHit;
         }

@@ -10,10 +10,10 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor;
 
-use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
+use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 
 /**
  * Visits the UserMetadata criterion.
@@ -22,8 +22,6 @@ class UserMetadataIn extends CriterionVisitor
 {
     /**
      * Check if visitor is applicable to current criterion.
-     *
-     * @param Criterion $criterion
      *
      * @return bool
      */
@@ -40,7 +38,6 @@ class UserMetadataIn extends CriterionVisitor
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor $subVisitor
      *
      * @return string
@@ -59,9 +56,7 @@ class UserMetadataIn extends CriterionVisitor
                 break;
 
             default:
-                throw new NotImplementedException(
-                    'No visitor available for target: ' . $criterion->target . ' with operator: ' . $criterion->operator
-                );
+                throw new NotImplementedException('No visitor available for target: ' . $criterion->target . ' with operator: ' . $criterion->operator);
         }
 
         return '(' .

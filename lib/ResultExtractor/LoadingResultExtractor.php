@@ -10,11 +10,11 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\ResultExtractor;
 
-use EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointRegistry;
-use EzSystems\EzPlatformSolrSearchEngine\ResultExtractor;
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
+use EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointRegistry;
 use EzSystems\EzPlatformSolrSearchEngine\Query\FacetBuilderVisitor;
+use EzSystems\EzPlatformSolrSearchEngine\ResultExtractor;
 use RuntimeException;
 
 /**
@@ -68,8 +68,6 @@ class LoadingResultExtractor extends ResultExtractor
             return $this->locationHandler->load($hit->location_id_id);
         }
 
-        throw new RuntimeException(
-            "Could not extract: document of type '{$hit->document_type_id}' is not handled."
-        );
+        throw new RuntimeException("Could not extract: document of type '{$hit->document_type_id}' is not handled.");
     }
 }

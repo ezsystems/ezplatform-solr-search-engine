@@ -8,8 +8,6 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
 
-use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider;
-use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
 use eZ\Publish\Core\Search\Common\FieldNameGenerator;
 use eZ\Publish\Core\Search\Common\FieldRegistry;
 use eZ\Publish\SPI\Persistence\Content;
@@ -18,6 +16,8 @@ use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\FieldType;
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider;
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
 
 /**
  * Maps Content fields to block documents (Content and Location).
@@ -44,12 +44,6 @@ class BlockDocumentsContentFields extends ContentTranslationFieldMapper
      */
     protected $boostFactorProvider;
 
-    /**
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
-     * @param \eZ\Publish\Core\Search\Common\FieldRegistry $fieldRegistry
-     * @param \eZ\Publish\Core\Search\Common\FieldNameGenerator $fieldNameGenerator
-     * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider $boostFactorProvider
-     */
     public function __construct(
         ContentTypeHandler $contentTypeHandler,
         FieldRegistry $fieldRegistry,
@@ -114,10 +108,6 @@ class BlockDocumentsContentFields extends ContentTranslationFieldMapper
 
     /**
      * Return index field type for the given arguments.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Type $contentType
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
-     * @param \eZ\Publish\SPI\Search\FieldType $fieldType
      *
      * @return \eZ\Publish\SPI\Search\FieldType
      */

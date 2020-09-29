@@ -22,14 +22,14 @@ class EndpointRegistry
      *
      * @var array(string => Endpoint)
      */
-    protected $endpoint = array();
+    protected $endpoint = [];
 
     /**
      * Construct from optional array of Endpoints.
      *
      * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\Endpoint[] $endpoints
      */
-    public function __construct(array $endpoints = array())
+    public function __construct(array $endpoints = [])
     {
         foreach ($endpoints as $name => $endpoint) {
             $this->registerEndpoint($name, $endpoint);

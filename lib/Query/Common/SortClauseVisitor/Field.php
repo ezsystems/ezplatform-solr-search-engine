@@ -10,10 +10,10 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\SortClauseVisitor;
 
-use EzSystems\EzPlatformSolrSearchEngine\Query\SortClauseVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
-use eZ\Publish\Core\Search\Common\FieldNameResolver;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Search\Common\FieldNameResolver;
+use EzSystems\EzPlatformSolrSearchEngine\Query\SortClauseVisitor;
 
 /**
  * Visits the sort clause into a Solr query.
@@ -29,8 +29,6 @@ class Field extends SortClauseVisitor
 
     /**
      * Create from field name resolver.
-     *
-     * @param \eZ\Publish\Core\Search\Common\FieldNameResolver $fieldNameResolver
      */
     public function __construct(FieldNameResolver $fieldNameResolver)
     {
@@ -40,7 +38,6 @@ class Field extends SortClauseVisitor
     /**
      * Get sort field name.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      * @param string $contentTypeIdentifier
      * @param string $fieldDefinitionIdentifier
      *
@@ -61,8 +58,6 @@ class Field extends SortClauseVisitor
     /**
      * Check if visitor is applicable to the $sortClause.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
-     *
      * @return bool
      */
     public function canVisit(SortClause $sortClause)
@@ -75,8 +70,6 @@ class Field extends SortClauseVisitor
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no sortable fields are
      *         found for the given sort clause target.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      *
      * @return string
      */
@@ -91,11 +84,7 @@ class Field extends SortClauseVisitor
         );
 
         if ($fieldName === null) {
-            throw new InvalidArgumentException(
-                '$sortClause->targetData',
-                'No searchable fields found for the given sort clause target ' .
-                "'{$target->fieldIdentifier}' on '{$target->typeIdentifier}'."
-            );
+            throw new InvalidArgumentException('$sortClause->targetData', 'No searchable fields found for the given sort clause target ' . "'{$target->fieldIdentifier}' on '{$target->typeIdentifier}'.");
         }
 
         return $fieldName . $this->getDirection($sortClause);

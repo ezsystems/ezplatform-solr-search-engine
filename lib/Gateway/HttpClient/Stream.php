@@ -10,9 +10,9 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Gateway\HttpClient;
 
+use EzSystems\EzPlatformSolrSearchEngine\Gateway\Endpoint;
 use EzSystems\EzPlatformSolrSearchEngine\Gateway\HttpClient;
 use EzSystems\EzPlatformSolrSearchEngine\Gateway\Message;
-use EzSystems\EzPlatformSolrSearchEngine\Gateway\Endpoint;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -43,7 +43,6 @@ class Stream implements HttpClient
     /**
      * Stream constructor.
      *
-     * @param \Psr\Log\LoggerInterface|null $logger
      * @param int $timeout Timeout for connection in seconds.
      * @param int $retry Number of times to re-try connection.
      * @param int $retryWaitMs Time in milli seconds.
@@ -62,7 +61,6 @@ class Stream implements HttpClient
      * Returns the result from the remote server.
      *
      * @param string $method
-     * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\Endpoint $endpoint
      * @param string $path
      * @param Message $message
      *
@@ -95,15 +93,15 @@ class Stream implements HttpClient
     private function requestStream($method, Endpoint $endpoint, $path, Message $message)
     {
         $requestHeaders = $this->getRequestHeaders($message, $endpoint);
-        $contextOptions = array(
-            'http' => array(
+        $contextOptions = [
+            'http' => [
                 'method' => $method,
                 'content' => $message->body,
                 'ignore_errors' => true,
                 'timeout' => $this->connectionTimeout,
                 'header' => $requestHeaders,
-            ),
-        );
+            ],
+        ];
 
         $httpFilePointer = @fopen(
             $endpoint->getURL() . $path,
@@ -128,7 +126,7 @@ class Stream implements HttpClient
         $rawHeaders = isset($metaData['wrapper_data']['headers']) ?
             $metaData['wrapper_data']['headers'] :
             $metaData['wrapper_data'];
-        $headers = array();
+        $headers = [];
 
         foreach ($rawHeaders as $lineContent) {
             // Extract header values
@@ -151,9 +149,6 @@ class Stream implements HttpClient
      * Get formatted request headers.
      *
      * Merged with the default values.
-     *
-     * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\Message $message
-     * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\Endpoint $endpoint
      *
      * @return string
      */

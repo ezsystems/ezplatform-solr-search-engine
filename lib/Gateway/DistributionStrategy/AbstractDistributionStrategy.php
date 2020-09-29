@@ -27,10 +27,6 @@ abstract class AbstractDistributionStrategy implements DistributionStrategy
      */
     protected $endpointResolver;
 
-    /**
-     * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointRegistry $endpointRegistry
-     * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointResolver $endpointResolver
-     */
     public function __construct(EndpointRegistry $endpointRegistry, EndpointResolver $endpointResolver)
     {
         $this->endpointRegistry = $endpointRegistry;
@@ -54,5 +50,5 @@ abstract class AbstractDistributionStrategy implements DistributionStrategy
         return $parameters;
     }
 
-    protected abstract function appendSearchTargets(array $parameters, array $searchTargets): array;
+    abstract protected function appendSearchTargets(array $parameters, array $searchTargets): array;
 }

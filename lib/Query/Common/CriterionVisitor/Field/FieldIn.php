@@ -8,11 +8,11 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\Field;
 
-use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
-use EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\Field;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\Field;
+use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 
 /**
  * Visits the Field criterion.
@@ -21,8 +21,6 @@ class FieldIn extends Field
 {
     /**
      * Check if visitor is applicable to current criterion.
-     *
-     * @param Criterion $criterion
      *
      * @return bool
      */
@@ -40,7 +38,6 @@ class FieldIn extends Field
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given criterion target.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor $subVisitor
      *
      * @return string
@@ -50,14 +47,11 @@ class FieldIn extends Field
         $searchFields = $this->getSearchFields($criterion);
 
         if (empty($searchFields)) {
-            throw new InvalidArgumentException(
-                '$criterion->target',
-                "No searchable fields found for the given criterion target '{$criterion->target}'."
-            );
+            throw new InvalidArgumentException('$criterion->target', "No searchable fields found for the given criterion target '{$criterion->target}'.");
         }
 
         $criterion->value = (array)$criterion->value;
-        $queries = array();
+        $queries = [];
 
         foreach ($searchFields as $name => $fieldType) {
             foreach ($criterion->value as $value) {
