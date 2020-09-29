@@ -8,8 +8,8 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper;
 
-use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper;
 use eZ\Publish\SPI\Persistence\Content\Location;
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper;
 
 /**
  * Aggregate implementation of Location document field mapper.
@@ -36,8 +36,6 @@ class Aggregate extends LocationFieldMapper
 
     /**
      * Adds given $mapper to the internal array as the next one in priority.
-     *
-     * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper $mapper
      */
     public function addMapper(LocationFieldMapper $mapper)
     {

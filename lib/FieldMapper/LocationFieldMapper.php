@@ -20,16 +20,12 @@ abstract class LocationFieldMapper
     /**
      * Indicates if the mapper accepts given $location for mapping.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\Location $location
-     *
      * @return bool
      */
     abstract public function accept(SPILocation $location);
 
     /**
      * Maps given $location to an array of search fields.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Location $location
      *
      * @return \eZ\Publish\SPI\Search\Field[]
      */

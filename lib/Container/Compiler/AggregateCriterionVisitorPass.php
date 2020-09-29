@@ -12,17 +12,14 @@ namespace EzSystems\EzPlatformSolrSearchEngine\Container\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * This compiler pass will register Solr Storage criterion visitors.
  */
 class AggregateCriterionVisitorPass implements CompilerPassInterface
 {
-    /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     */
     public function process(ContainerBuilder $container)
     {
         if (
@@ -60,7 +57,7 @@ class AggregateCriterionVisitorPass implements CompilerPassInterface
     protected function addHandlers(Definition $definition, $handlers)
     {
         foreach ($handlers as $id => $attributes) {
-            $definition->addMethodCall('addVisitor', array(new Reference($id)));
+            $definition->addMethodCall('addVisitor', [new Reference($id)]);
         }
     }
 }

@@ -10,10 +10,10 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\FacetBuilderVisitor;
 
-use EzSystems\EzPlatformSolrSearchEngine\Query\FacetBuilderVisitor;
-use EzSystems\EzPlatformSolrSearchEngine\Query\FacetFieldVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
 use eZ\Publish\API\Repository\Values\Content\Search\Facet;
+use EzSystems\EzPlatformSolrSearchEngine\Query\FacetBuilderVisitor;
+use EzSystems\EzPlatformSolrSearchEngine\Query\FacetFieldVisitor;
 
 /**
  * Visits the ContentType facet builder.
@@ -26,10 +26,10 @@ class ContentType extends FacetBuilderVisitor implements FacetFieldVisitor
     public function mapField($field, array $data, FacetBuilder $facetBuilder)
     {
         return new Facet\ContentTypeFacet(
-            array(
+            [
                 'name' => $facetBuilder->name,
                 'entries' => $this->mapData($data),
-            )
+            ]
         );
     }
 
@@ -46,10 +46,10 @@ class ContentType extends FacetBuilderVisitor implements FacetFieldVisitor
      */
     public function visitBuilder(FacetBuilder $facetBuilder, $fieldId)
     {
-        return array(
+        return [
             'facet.field' => "{!ex=dt key=${fieldId}}content_type_id_id",
             'f.content_type_id_id.facet.limit' => $facetBuilder->limit,
             'f.content_type_id_id.facet.mincount' => $facetBuilder->minCount,
-        );
+        ];
     }
 }

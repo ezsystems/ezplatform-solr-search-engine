@@ -19,9 +19,6 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class AggregateFacetBuilderVisitorPass implements CompilerPassInterface
 {
-    /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     */
     public function process(ContainerBuilder $container)
     {
         $this->processVisitors($container, 'content');
@@ -41,9 +38,9 @@ class AggregateFacetBuilderVisitorPass implements CompilerPassInterface
         foreach ($container->findTaggedServiceIds("ezpublish.search.solr.query.${name}.facet_builder_visitor") as $id => $attributes) {
             $aggregateFacetBuilderVisitorDefinition->addMethodCall(
                 'addVisitor',
-                array(
+                [
                     new Reference($id),
-                )
+                ]
             );
         }
     }

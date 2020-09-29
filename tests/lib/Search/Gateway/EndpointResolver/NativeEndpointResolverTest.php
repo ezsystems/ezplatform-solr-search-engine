@@ -22,11 +22,11 @@ class NativeEndpointResolverTest extends TestCase
 {
     public function testGetEntryEndpoint()
     {
-        $entryEndpoints = array(
+        $entryEndpoints = [
             'endpoint2',
             'endpoint0',
             'endpoint1',
-        );
+        ];
 
         $endpointResolver = $this->getEndpointResolver($entryEndpoints);
 
@@ -39,7 +39,7 @@ class NativeEndpointResolverTest extends TestCase
     public function testGetEntryEndpointThrowsRuntimeException()
     {
         $this->expectException(RuntimeException::class);
-        $entryEndpoints = array();
+        $entryEndpoints = [];
 
         $endpointResolver = $this->getEndpointResolver($entryEndpoints);
 
@@ -48,11 +48,11 @@ class NativeEndpointResolverTest extends TestCase
 
     public function testGetIndexingTarget()
     {
-        $endpointMap = array(
+        $endpointMap = [
             'eng-GB' => 'endpoint3',
-        );
+        ];
 
-        $endpointResolver = $this->getEndpointResolver(array(), $endpointMap);
+        $endpointResolver = $this->getEndpointResolver([], $endpointMap);
 
         $this->assertEquals(
             'endpoint3',
@@ -62,10 +62,10 @@ class NativeEndpointResolverTest extends TestCase
 
     public function testGetIndexingTargetReturnsDefaultEndpoint()
     {
-        $endpointMap = array();
+        $endpointMap = [];
         $defaultEndpoint = 'endpoint4';
 
-        $endpointResolver = $this->getEndpointResolver(array(), $endpointMap, $defaultEndpoint);
+        $endpointResolver = $this->getEndpointResolver([], $endpointMap, $defaultEndpoint);
 
         $this->assertEquals(
             'endpoint4',
@@ -84,7 +84,7 @@ class NativeEndpointResolverTest extends TestCase
     {
         $mainLanguagesEndpoint = 'endpoint5';
 
-        $endpointResolver = $this->getEndpointResolver(array(), array(), null, $mainLanguagesEndpoint);
+        $endpointResolver = $this->getEndpointResolver([], [], null, $mainLanguagesEndpoint);
 
         $this->assertEquals(
             'endpoint5',
@@ -101,710 +101,710 @@ class NativeEndpointResolverTest extends TestCase
 
     public function providerForTestGetSearchTargets()
     {
-        return array(
+        return [
             // Will return all endpoints (for always available fallback without main languages endpoint)
-            0 => array(
-                array(
+            0 => [
+                [
                     'eng-GB' => 'endpoint_en_GB',
                     'ger-DE' => 'endpoint_de_DE',
-                ),
+                ],
                 null,
                 null,
-                array(
-                    'languages' => array(
+                [
+                    'languages' => [
                         'eng-GB',
                         'ger-DE',
-                    ),
+                    ],
                     'useAlwaysAvailable' => true,
-                ),
-                array(
+                ],
+                [
                     'endpoint_en_GB',
                     'endpoint_de_DE',
-                ),
-            ),
+                ],
+            ],
             // Will return all endpoints (for always available fallback without main languages endpoint)
-            1 => array(
-                array(
+            1 => [
+                [
                     'eng-GB' => 'endpoint_en_GB',
                     'ger-DE' => 'endpoint_de_DE',
-                ),
+                ],
                 null,
                 null,
-                array(
-                    'languages' => array(
+                [
+                    'languages' => [
                         'ger-DE',
-                    ),
+                    ],
                     'useAlwaysAvailable' => true,
-                ),
-                array(
+                ],
+                [
                     'endpoint_en_GB',
                     'endpoint_de_DE',
-                ),
-            ),
+                ],
+            ],
             // Will return all endpoints (for always available fallback without main languages endpoint)
-            2 => array(
-                array(
+            2 => [
+                [
                     'eng-GB' => 'endpoint_en_GB',
-                ),
+                ],
                 null,
                 null,
-                array(
-                    'languages' => array(
+                [
+                    'languages' => [
                         'eng-GB',
-                    ),
+                    ],
                     'useAlwaysAvailable' => true,
-                ),
-                array(
+                ],
+                [
                     'endpoint_en_GB',
-                ),
+                ],
                 false,
-            ),
+            ],
             // Will return all endpoints (for always available fallback without main languages endpoint)
-            3 => array(
-                array(
+            3 => [
+                [
                     'eng-GB' => 'endpoint_en_GB',
                     'ger-DE' => 'endpoint_de_DE',
-                ),
+                ],
                 'default_endpoint',
                 null,
-                array(
-                    'languages' => array(
+                [
+                    'languages' => [
                         'eng-GB',
                         'ger-DE',
-                    ),
+                    ],
                     'useAlwaysAvailable' => true,
-                ),
-                array(
+                ],
+                [
                     'endpoint_en_GB',
                     'endpoint_de_DE',
                     'default_endpoint',
-                ),
-            ),
+                ],
+            ],
             // Will return all endpoints (for always available fallback without main languages endpoint)
-            4 => array(
-                array(
+            4 => [
+                [
                     'eng-GB' => 'endpoint_en_GB',
                     'ger-DE' => 'endpoint_de_DE',
-                ),
+                ],
                 'default_endpoint',
                 null,
-                array(
-                    'languages' => array(
+                [
+                    'languages' => [
                         'eng-GB',
-                    ),
+                    ],
                     'useAlwaysAvailable' => true,
-                ),
-                array(
+                ],
+                [
                     'endpoint_en_GB',
                     'endpoint_de_DE',
                     'default_endpoint',
-                ),
-            ),
+                ],
+            ],
             // Will return mapped endpoints matched by languages + main languages endpoint
-            5 => array(
-                array(
+            5 => [
+                [
                     'eng-GB' => 'endpoint_en_GB',
                     'ger-DE' => 'endpoint_de_DE',
-                ),
+                ],
                 'default_endpoint',
                 'main_languages_endpoint',
-                array(
-                    'languages' => array(
+                [
+                    'languages' => [
                         'eng-GB',
                         'ger-DE',
-                    ),
+                    ],
                     'useAlwaysAvailable' => true,
-                ),
-                array(
+                ],
+                [
                     'endpoint_en_GB',
                     'endpoint_de_DE',
                     'main_languages_endpoint',
-                ),
-            ),
+                ],
+            ],
             // Will return mapped endpoints matched by languages + main languages endpoint
-            6 => array(
-                array(
+            6 => [
+                [
                     'eng-GB' => 'endpoint_en_GB',
                     'ger-DE' => 'endpoint_de_DE',
-                ),
+                ],
                 'default_endpoint',
                 'main_languages_endpoint',
-                array(
-                    'languages' => array(
+                [
+                    'languages' => [
                         'ger-DE',
-                    ),
+                    ],
                     'useAlwaysAvailable' => true,
-                ),
-                array(
+                ],
+                [
                     'endpoint_de_DE',
                     'main_languages_endpoint',
-                ),
-            ),
+                ],
+            ],
             // Will return mapped endpoints matched by languages + main languages endpoint
-            7 => array(
-                array(
+            7 => [
+                [
                     'eng-GB' => 'endpoint_en_GB',
                     'ger-DE' => 'endpoint_de_DE',
-                ),
+                ],
                 null,
                 'main_languages_endpoint',
-                array(
-                    'languages' => array(
+                [
+                    'languages' => [
                         'eng-GB',
                         'ger-DE',
-                    ),
+                    ],
                     'useAlwaysAvailable' => true,
-                ),
-                array(
+                ],
+                [
                     'endpoint_en_GB',
                     'endpoint_de_DE',
                     'main_languages_endpoint',
-                ),
-            ),
+                ],
+            ],
             // Will return mapped endpoints matched by languages + main languages endpoint
-            8 => array(
-                array(
+            8 => [
+                [
                     'eng-GB' => 'endpoint_en_GB',
                     'ger-DE' => 'endpoint_de_DE',
-                ),
+                ],
                 null,
                 'main_languages_endpoint',
-                array(
-                    'languages' => array(
+                [
+                    'languages' => [
                         'eng-GB',
-                    ),
+                    ],
                     'useAlwaysAvailable' => true,
-                ),
-                array(
+                ],
+                [
                     'endpoint_en_GB',
                     'main_languages_endpoint',
-                ),
-            ),
+                ],
+            ],
             // Will return mapped endpoints matched by languages
-            9 => array(
-                array(
+            9 => [
+                [
                     'eng-GB' => 'endpoint_en_GB',
                     'ger-DE' => 'endpoint_de_DE',
-                ),
+                ],
                 null,
                 null,
-                array(
-                    'languages' => array(
+                [
+                    'languages' => [
                         'eng-GB',
                         'ger-DE',
-                    ),
+                    ],
                     'useAlwaysAvailable' => false,
-                ),
-                array(
+                ],
+                [
                     'endpoint_en_GB',
                     'endpoint_de_DE',
-                ),
-            ),
+                ],
+            ],
             // Will return mapped endpoints matched by languages
-            10 => array(
-                array(
+            10 => [
+                [
                     'eng-GB' => 'endpoint_en_GB',
                     'ger-DE' => 'endpoint_de_DE',
-                ),
+                ],
                 null,
                 null,
-                array(
-                    'languages' => array(
+                [
+                    'languages' => [
                         'eng-GB',
-                    ),
+                    ],
                     'useAlwaysAvailable' => false,
-                ),
-                array(
+                ],
+                [
                     'endpoint_en_GB',
-                ),
-            ),
+                ],
+            ],
             // Will return mapped endpoints matched by languages
-            11 => array(
-                array(
+            11 => [
+                [
                     'eng-GB' => 'endpoint_en_GB',
                     'ger-DE' => 'endpoint_de_DE',
-                ),
+                ],
                 'default_endpoint',
                 null,
-                array(
-                    'languages' => array(
+                [
+                    'languages' => [
                         'eng-GB',
                         'ger-DE',
-                    ),
+                    ],
                     'useAlwaysAvailable' => false,
-                ),
-                array(
+                ],
+                [
                     'endpoint_en_GB',
                     'endpoint_de_DE',
-                ),
-            ),
+                ],
+            ],
             // Will return mapped endpoints matched by languages
-            12 => array(
-                array(
+            12 => [
+                [
                     'eng-GB' => 'endpoint_en_GB',
                     'ger-DE' => 'endpoint_de_DE',
-                ),
+                ],
                 'default_endpoint',
                 null,
-                array(
-                    'languages' => array(
+                [
+                    'languages' => [
                         'eng-GB',
-                    ),
+                    ],
                     'useAlwaysAvailable' => false,
-                ),
-                array(
+                ],
+                [
                     'endpoint_en_GB',
-                ),
-            ),
+                ],
+            ],
             // Will return mapped endpoints matched by languages
-            13 => array(
-                array(
+            13 => [
+                [
                     'eng-GB' => 'endpoint_en_GB',
                     'ger-DE' => 'endpoint_de_DE',
-                ),
+                ],
                 'default_endpoint',
                 'main_languages_endpoint',
-                array(
-                    'languages' => array(
+                [
+                    'languages' => [
                         'eng-GB',
                         'ger-DE',
-                    ),
+                    ],
                     'useAlwaysAvailable' => false,
-                ),
-                array(
+                ],
+                [
                     'endpoint_en_GB',
                     'endpoint_de_DE',
-                ),
-            ),
+                ],
+            ],
             // Will return mapped endpoints matched by languages
-            14 => array(
-                array(
+            14 => [
+                [
                     'eng-GB' => 'endpoint_en_GB',
                     'ger-DE' => 'endpoint_de_DE',
-                ),
+                ],
                 'default_endpoint',
                 'main_languages_endpoint',
-                array(
-                    'languages' => array(
+                [
+                    'languages' => [
                         'ger-DE',
-                    ),
+                    ],
                     'useAlwaysAvailable' => false,
-                ),
-                array(
+                ],
+                [
                     'endpoint_de_DE',
-                ),
-            ),
+                ],
+            ],
             // Will return mapped endpoints matched by languages
-            15 => array(
-                array(
+            15 => [
+                [
                     'eng-GB' => 'endpoint_en_GB',
                     'ger-DE' => 'endpoint_de_DE',
-                ),
+                ],
                 null,
                 'main_languages_endpoint',
-                array(
-                    'languages' => array(
+                [
+                    'languages' => [
                         'ger-DE',
-                    ),
+                    ],
                     'useAlwaysAvailable' => false,
-                ),
-                array(
+                ],
+                [
                     'endpoint_de_DE',
-                ),
-            ),
+                ],
+            ],
             // Will return mapped endpoints matched by languages
-            16 => array(
-                array(
+            16 => [
+                [
                     'eng-GB' => 'endpoint_en_GB',
                     'ger-DE' => 'endpoint_de_DE',
-                ),
+                ],
                 null,
                 'main_languages_endpoint',
-                array(
-                    'languages' => array(
+                [
+                    'languages' => [
                         'eng-GB',
                         'ger-DE',
-                    ),
+                    ],
                     'useAlwaysAvailable' => false,
-                ),
-                array(
+                ],
+                [
                     'endpoint_en_GB',
                     'endpoint_de_DE',
-                ),
-            ),
+                ],
+            ],
             // Will return all endpoints (for always available fallback without main languages endpoint)
-            17 => array(
-                array(
+            17 => [
+                [
                     'eng-GB' => 'endpoint_en_GB',
                     'ger-DE' => 'endpoint_de_DE',
-                ),
+                ],
                 null,
                 null,
-                array(
-                    'languages' => array(),
+                [
+                    'languages' => [],
                     'useAlwaysAvailable' => true,
-                ),
-                array(
+                ],
+                [
                     'endpoint_en_GB',
                     'endpoint_de_DE',
-                ),
-            ),
+                ],
+            ],
             // Will return all endpoints (for always available fallback without main languages endpoint)
-            18 => array(
-                array(
+            18 => [
+                [
                     'eng-GB' => 'endpoint_en_GB',
                     'ger-DE' => 'endpoint_de_DE',
-                ),
+                ],
                 null,
                 null,
-                array(),
-                array(
+                [],
+                [
                     'endpoint_en_GB',
                     'endpoint_de_DE',
-                ),
-            ),
+                ],
+            ],
             // Will return all endpoints (for always available fallback without main languages endpoint)
-            19 => array(
-                array(
+            19 => [
+                [
                     'eng-GB' => 'endpoint_en_GB',
                     'ger-DE' => 'endpoint_de_DE',
-                ),
+                ],
                 'default_endpoint',
                 null,
-                array(
-                    'languages' => array(),
+                [
+                    'languages' => [],
                     'useAlwaysAvailable' => true,
-                ),
-                array(
+                ],
+                [
                     'endpoint_en_GB',
                     'endpoint_de_DE',
                     'default_endpoint',
-                ),
-            ),
+                ],
+            ],
             // Will return all endpoints (for always available fallback without main languages endpoint)
-            20 => array(
-                array(
+            20 => [
+                [
                     'eng-GB' => 'endpoint_en_GB',
                     'ger-DE' => 'endpoint_de_DE',
-                ),
+                ],
                 'default_endpoint',
                 null,
-                array(),
-                array(
+                [],
+                [
                     'endpoint_en_GB',
                     'endpoint_de_DE',
                     'default_endpoint',
-                ),
-            ),
+                ],
+            ],
             // Will return main languages endpoint (search on main languages only)
-            21 => array(
-                array(
+            21 => [
+                [
                     'eng-GB' => 'endpoint_en_GB',
                     'ger-DE' => 'endpoint_de_DE',
-                ),
+                ],
                 'default_endpoint',
                 'main_languages_endpoint',
-                array(
-                    'languages' => array(),
+                [
+                    'languages' => [],
                     'useAlwaysAvailable' => true,
-                ),
-                array(
+                ],
+                [
                     'main_languages_endpoint',
-                ),
-            ),
+                ],
+            ],
             // Will return main languages endpoint (search on main languages only)
-            22 => array(
-                array(
+            22 => [
+                [
                     'eng-GB' => 'endpoint_en_GB',
                     'ger-DE' => 'endpoint_de_DE',
-                ),
+                ],
                 'default_endpoint',
                 'main_languages_endpoint',
-                array(),
-                array(
+                [],
+                [
                     'main_languages_endpoint',
-                ),
-            ),
+                ],
+            ],
             // Will return main languages endpoint (search on main languages only)
-            23 => array(
-                array(
+            23 => [
+                [
                     'eng-GB' => 'endpoint_en_GB',
                     'ger-DE' => 'endpoint_de_DE',
-                ),
+                ],
                 null,
                 'main_languages_endpoint',
-                array(
-                    'languages' => array(),
+                [
+                    'languages' => [],
                     'useAlwaysAvailable' => true,
-                ),
-                array(
+                ],
+                [
                     'main_languages_endpoint',
-                ),
-            ),
+                ],
+            ],
             // Will return main languages endpoint (search on main languages only)
-            24 => array(
-                array(
+            24 => [
+                [
                     'eng-GB' => 'endpoint_en_GB',
                     'ger-DE' => 'endpoint_de_DE',
-                ),
+                ],
                 null,
                 'main_languages_endpoint',
-                array(),
-                array(
+                [],
+                [
                     'main_languages_endpoint',
-                ),
-            ),
+                ],
+            ],
             // Will return all endpoints (search on main languages without main languages endpoint)
-            25 => array(
-                array(
+            25 => [
+                [
                     'eng-GB' => 'endpoint_en_GB',
                     'ger-DE' => 'endpoint_de_DE',
-                ),
+                ],
                 null,
                 null,
-                array(
-                    'languages' => array(),
+                [
+                    'languages' => [],
                     'useAlwaysAvailable' => false,
-                ),
-                array(
+                ],
+                [
                     'endpoint_en_GB',
                     'endpoint_de_DE',
-                ),
-            ),
+                ],
+            ],
             // Will return all endpoints (search on main languages without main languages endpoint)
-            26 => array(
-                array(
+            26 => [
+                [
                     'eng-GB' => 'endpoint_en_GB',
                     'ger-DE' => 'endpoint_de_DE',
-                ),
+                ],
                 null,
                 null,
-                array(),
-                array(
+                [],
+                [
                     'endpoint_en_GB',
                     'endpoint_de_DE',
-                ),
-            ),
+                ],
+            ],
             // Will return all endpoints (search on main languages without main languages endpoint)
-            27 => array(
-                array(
+            27 => [
+                [
                     'eng-GB' => 'endpoint_en_GB',
                     'ger-DE' => 'endpoint_de_DE',
-                ),
+                ],
                 'default_endpoint',
                 null,
-                array(
-                    'languages' => array(),
+                [
+                    'languages' => [],
                     'useAlwaysAvailable' => false,
-                ),
-                array(
+                ],
+                [
                     'endpoint_en_GB',
                     'endpoint_de_DE',
                     'default_endpoint',
-                ),
-            ),
+                ],
+            ],
             // Will return all endpoints (search on main languages without main languages endpoint)
-            28 => array(
-                array(
+            28 => [
+                [
                     'eng-GB' => 'endpoint_en_GB',
                     'ger-DE' => 'endpoint_de_DE',
-                ),
+                ],
                 'default_endpoint',
                 null,
-                array(),
-                array(
+                [],
+                [
                     'endpoint_en_GB',
                     'endpoint_de_DE',
                     'default_endpoint',
-                ),
-            ),
+                ],
+            ],
             // Will return main languages endpoint (search on main languages with main languages endpoint)
-            29 => array(
-                array(
+            29 => [
+                [
                     'eng-GB' => 'endpoint_en_GB',
                     'ger-DE' => 'endpoint_de_DE',
-                ),
+                ],
                 'default_endpoint',
                 'main_languages_endpoint',
-                array(
-                    'languages' => array(),
+                [
+                    'languages' => [],
                     'useAlwaysAvailable' => false,
-                ),
+                ],
                 // Not providing languages, but with main languages endpoint searches
                 // on main languages, which needs to include only main languages endpoint
-                array(
+                [
                     'main_languages_endpoint',
-                ),
-            ),
+                ],
+            ],
             // Will return main languages endpoint (search on main languages with main languages endpoint)
-            30 => array(
-                array(
+            30 => [
+                [
                     'eng-GB' => 'endpoint_en_GB',
                     'ger-DE' => 'endpoint_de_DE',
-                ),
+                ],
                 'default_endpoint',
                 'main_languages_endpoint',
-                array(),
-                array(
+                [],
+                [
                     'main_languages_endpoint',
-                ),
-            ),
+                ],
+            ],
             // Will return main languages endpoint (search on main languages with main languages endpoint)
-            31 => array(
-                array(
+            31 => [
+                [
                     'eng-GB' => 'endpoint_en_GB',
                     'ger-DE' => 'endpoint_de_DE',
-                ),
+                ],
                 null,
                 'main_languages_endpoint',
-                array(
-                    'languages' => array(),
+                [
+                    'languages' => [],
                     'useAlwaysAvailable' => false,
-                ),
-                array(
+                ],
+                [
                     'main_languages_endpoint',
-                ),
-            ),
+                ],
+            ],
             // Will return main languages endpoint (search on main languages with main languages endpoint)
-            32 => array(
-                array(
+            32 => [
+                [
                     'eng-GB' => 'endpoint_en_GB',
                     'ger-DE' => 'endpoint_de_DE',
-                ),
+                ],
                 null,
                 'main_languages_endpoint',
-                array(),
-                array(
+                [],
+                [
                     'main_languages_endpoint',
-                ),
-            ),
+                ],
+            ],
             // Will return all endpoints (search on main languages without main languages endpoint)
-            33 => array(
-                array(),
+            33 => [
+                [],
                 'default_endpoint',
                 null,
-                array(),
+                [],
                 // Not providing languages, but with main languages endpoint searches
                 // on main languages, which needs to include only main languages endpoint
-                array(
+                [
                     'default_endpoint',
-                ),
+                ],
                 false,
-            ),
+            ],
             // Will return main languages endpoint (search on main languages with main languages endpoint)
-            34 => array(
-                array(),
+            34 => [
+                [],
                 null,
                 'main_languages_endpoint',
-                array(),
-                array(
+                [],
+                [
                     'main_languages_endpoint',
-                ),
+                ],
                 false,
-            ),
+            ],
             // Will return main languages endpoint (search on main languages with main languages endpoint)
-            35 => array(
-                array(),
+            35 => [
+                [],
                 'default_endpoint',
                 'main_languages_endpoint',
-                array(),
-                array(
+                [],
+                [
                     'main_languages_endpoint',
-                ),
-            ),
+                ],
+            ],
             // Will return all endpoints (search on main languages without main languages endpoint)
-            36 => array(
-                array(),
+            36 => [
+                [],
                 'default_endpoint',
                 null,
-                array(
-                    'languages' => array(),
+                [
+                    'languages' => [],
                     'useAlwaysAvailable' => true,
-                ),
-                array(
+                ],
+                [
                     'default_endpoint',
-                ),
+                ],
                 false,
-            ),
+            ],
             // Will return main languages endpoint (search on main languages with main languages endpoint)
-            37 => array(
-                array(),
+            37 => [
+                [],
                 'default_endpoint',
                 'main_languages_endpoint',
-                array(
-                    'languages' => array(),
+                [
+                    'languages' => [],
                     'useAlwaysAvailable' => true,
-                ),
-                array(
+                ],
+                [
                     'main_languages_endpoint',
-                ),
-            ),
+                ],
+            ],
             // Will return main languages endpoint (search on main languages with main languages endpoint)
-            38 => array(
-                array(),
+            38 => [
+                [],
                 null,
                 'main_languages_endpoint',
-                array(
-                    'languages' => array(),
+                [
+                    'languages' => [],
                     'useAlwaysAvailable' => true,
-                ),
-                array(
+                ],
+                [
                     'main_languages_endpoint',
-                ),
+                ],
                 false,
-            ),
+            ],
             // Will return all endpoints (search on main languages without main languages endpoint)
-            39 => array(
-                array(),
+            39 => [
+                [],
                 'default_endpoint',
                 null,
-                array(
-                    'languages' => array(),
+                [
+                    'languages' => [],
                     'useAlwaysAvailable' => false,
-                ),
+                ],
                 // Not providing languages, but with main languages endpoint searches
                 // on main languages, which needs to include only main languages endpoint
-                array(
+                [
                     'default_endpoint',
-                ),
+                ],
                 false,
-            ),
+            ],
             // Will return main languages endpoint (search on main languages with main languages endpoint)
-            40 => array(
-                array(),
+            40 => [
+                [],
                 'default_endpoint',
                 'main_languages_endpoint',
-                array(
-                    'languages' => array(),
+                [
+                    'languages' => [],
                     'useAlwaysAvailable' => false,
-                ),
-                array(
+                ],
+                [
                     'main_languages_endpoint',
-                ),
-            ),
+                ],
+            ],
             // Will return main languages endpoint (search on main languages with main languages endpoint)
-            41 => array(
-                array(),
+            41 => [
+                [],
                 null,
                 'main_languages_endpoint',
-                array(
-                    'languages' => array(),
+                [
+                    'languages' => [],
                     'useAlwaysAvailable' => false,
-                ),
-                array(
+                ],
+                [
                     'main_languages_endpoint',
-                ),
+                ],
                 false,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
      * @dataProvider providerForTestGetSearchTargets
      *
      * @param string[] $endpointMap
-     * @param null|string $defaultEndpoint
-     * @param null|string $mainLanguagesEndpoint
+     * @param string|null $defaultEndpoint
+     * @param string|null $mainLanguagesEndpoint
      * @param array $languageSettings
      * @param string[] $expected
      * @param bool $expectedIsMultiple
@@ -818,7 +818,7 @@ class NativeEndpointResolverTest extends TestCase
         $expectedIsMultiple = true
     ) {
         $endpointResolver = $this->getEndpointResolver(
-            array(),
+            [],
             $endpointMap,
             $defaultEndpoint,
             $mainLanguagesEndpoint
@@ -835,93 +835,93 @@ class NativeEndpointResolverTest extends TestCase
 
     public function providerForTestGetSearchTargetsThrowsRuntimeException()
     {
-        return array(
+        return [
             // Will try to return all endpoints
-            0 => array(
-                array(),
+            0 => [
+                [],
                 null,
                 null,
-                array(),
+                [],
                 'No endpoints defined',
-            ),
-            1 => array(
-                array(),
+            ],
+            1 => [
+                [],
                 null,
                 null,
-                array(
-                    'languages' => array(),
+                [
+                    'languages' => [],
                     'useAlwaysAvailable' => true,
-                ),
+                ],
                 'No endpoints defined',
-            ),
-            2 => array(
-                array(),
+            ],
+            2 => [
+                [],
                 null,
                 null,
-                array(
-                    'languages' => array(),
+                [
+                    'languages' => [],
                     'useAlwaysAvailable' => false,
-                ),
+                ],
                 'No endpoints defined',
-            ),
-            3 => array(
-                array(),
+            ],
+            3 => [
+                [],
                 null,
                 null,
-                array(
-                    'languages' => array(
+                [
+                    'languages' => [
                         'eng-GB',
-                    ),
+                    ],
                     'useAlwaysAvailable' => true,
-                ),
+                ],
                 'No endpoints defined',
-            ),
+            ],
             // Will try to map translation
-            4 => array(
-                array(),
+            4 => [
+                [],
                 null,
                 null,
-                array(
-                    'languages' => array(
+                [
+                    'languages' => [
                         'eng-GB',
-                    ),
+                    ],
                     'useAlwaysAvailable' => false,
-                ),
+                ],
                 "Language 'eng-GB' is not mapped to Solr endpoint",
-            ),
-            5 => array(
-                array(),
+            ],
+            5 => [
+                [],
                 null,
                 'main_languages_endpoint',
-                array(
-                    'languages' => array(
+                [
+                    'languages' => [
                         'eng-GB',
-                    ),
+                    ],
                     'useAlwaysAvailable' => true,
-                ),
+                ],
                 "Language 'eng-GB' is not mapped to Solr endpoint",
-            ),
-            6 => array(
-                array(),
+            ],
+            6 => [
+                [],
                 null,
                 'main_languages_endpoint',
-                array(
-                    'languages' => array(
+                [
+                    'languages' => [
                         'eng-GB',
-                    ),
+                    ],
                     'useAlwaysAvailable' => false,
-                ),
+                ],
                 "Language 'eng-GB' is not mapped to Solr endpoint",
-            ),
-        );
+            ],
+        ];
     }
 
     /**
      * @dataProvider providerForTestGetSearchTargetsThrowsRuntimeException
      *
      * @param string[] $endpointMap
-     * @param null|string $defaultEndpoint
-     * @param null|string $mainLanguagesEndpoint
+     * @param string|null $defaultEndpoint
+     * @param string|null $mainLanguagesEndpoint
      * @param array $languageSettings
      * @param string $message
      */
@@ -935,7 +935,7 @@ class NativeEndpointResolverTest extends TestCase
         $this->expectException(RuntimeException::class);
 
         $endpointResolver = $this->getEndpointResolver(
-            array(),
+            [],
             $endpointMap,
             $defaultEndpoint,
             $mainLanguagesEndpoint
@@ -952,74 +952,74 @@ class NativeEndpointResolverTest extends TestCase
 
     public function providerForTestGetEndpoints()
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     'eng-GB' => 'endpoint_en_GB',
-                ),
+                ],
                 null,
                 null,
-                array(
+                [
                     'endpoint_en_GB',
-                ),
-            ),
-            array(
-                array(
+                ],
+            ],
+            [
+                [
                     'eng-GB' => 'endpoint_en_GB',
-                ),
+                ],
                 'default_endpoint',
                 null,
-                array(
+                [
                     'endpoint_en_GB',
                     'default_endpoint',
-                ),
-            ),
-            array(
-                array(
+                ],
+            ],
+            [
+                [
                     'eng-GB' => 'endpoint_en_GB',
-                ),
+                ],
                 'default_endpoint',
                 'main_languages_endpoint',
-                array(
+                [
                     'endpoint_en_GB',
                     'default_endpoint',
                     'main_languages_endpoint',
-                ),
-            ),
-            array(
-                array(),
+                ],
+            ],
+            [
+                [],
                 'default_endpoint',
                 null,
-                array(
+                [
                     'default_endpoint',
-                ),
-            ),
-            array(
-                array(),
+                ],
+            ],
+            [
+                [],
                 null,
                 'main_languages_endpoint',
-                array(
+                [
                     'main_languages_endpoint',
-                ),
-            ),
-            array(
-                array(),
+                ],
+            ],
+            [
+                [],
                 'default_endpoint',
                 'main_languages_endpoint',
-                array(
+                [
                     'default_endpoint',
                     'main_languages_endpoint',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
      * @dataProvider providerForTestGetEndpoints
      *
      * @param string[] $endpointMap
-     * @param null|string $defaultEndpoint
-     * @param null|string $mainLanguagesEndpoint
+     * @param string|null $defaultEndpoint
+     * @param string|null $mainLanguagesEndpoint
      * @param string[] $expected
      */
     public function testGetEndpoints(
@@ -1029,7 +1029,7 @@ class NativeEndpointResolverTest extends TestCase
         $expected
     ) {
         $endpointResolver = $this->getEndpointResolver(
-            array(),
+            [],
             $endpointMap,
             $defaultEndpoint,
             $mainLanguagesEndpoint
@@ -1044,8 +1044,8 @@ class NativeEndpointResolverTest extends TestCase
     {
         $this->expectException(RuntimeException::class);
         $endpointResolver = $this->getEndpointResolver(
-            array(),
-            array(),
+            [],
+            [],
             null,
             null
         );
@@ -1054,8 +1054,8 @@ class NativeEndpointResolverTest extends TestCase
     }
 
     protected function getEndpointResolver(
-        array $entryEndpoints = array(),
-        array $endpointMap = array(),
+        array $entryEndpoints = [],
+        array $endpointMap = [],
         $defaultEndpoint = null,
         $mainLanguagesEndpoint = null
     ) {

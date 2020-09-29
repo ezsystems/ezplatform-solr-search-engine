@@ -9,17 +9,17 @@
 namespace EzSystems\EzPlatformSolrSearchEngine;
 
 use eZ\Publish\API\Repository\SearchService;
+use eZ\Publish\API\Repository\Values\Content\LocationQuery;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\SPI\Persistence\Content;
-use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
+use eZ\Publish\SPI\Persistence\Content\Location;
+use eZ\Publish\SPI\Search\Capable;
 use eZ\Publish\SPI\Search\ContentTranslationHandler;
 use eZ\Publish\SPI\Search\Handler as SearchHandlerInterface;
-use eZ\Publish\SPI\Search\Capable;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\API\Repository\Values\Content\LocationQuery;
-use eZ\Publish\Core\Base\Exceptions\NotFoundException;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * The Content Search handler retrieves sets of of Content objects, based on a
@@ -89,7 +89,6 @@ class Handler implements SearchHandlerInterface, Capable, ContentTranslationHand
      * Creates a new content handler.
      *
      * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway $gateway
-     * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
      * @param \EzSystems\EzPlatformSolrSearchEngine\DocumentMapper $mapper
      * @param \EzSystems\EzPlatformSolrSearchEngine\ResultExtractor $resultExtractor
      * @param \EzSystems\EzPlatformSolrSearchEngine\CoreFilter $coreFilter
@@ -113,7 +112,6 @@ class Handler implements SearchHandlerInterface, Capable, ContentTranslationHand
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if Query criterion is not applicable to its target
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
      * @param array $languageFilter - a map of language related filters specifying languages query will be performed on.
      *        Also used to define which field languages are loaded for the returned content.
      *        Currently supports: <code>array("languages" => array(<language1>,..), "useAlwaysAvailable" => bool)</code>
@@ -121,7 +119,7 @@ class Handler implements SearchHandlerInterface, Capable, ContentTranslationHand
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function findContent(Query $query, array $languageFilter = array())
+    public function findContent(Query $query, array $languageFilter = [])
     {
         $query = clone $query;
         $query->filter = $query->filter ?: new Criterion\MatchAll();
@@ -146,7 +144,6 @@ class Handler implements SearchHandlerInterface, Capable, ContentTranslationHand
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if Criterion is not applicable to its target
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is more than than one result matching the criterions
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
      * @param array $languageFilter - a map of language related filters specifying languages query will be performed on.
      *        Also used to define which field languages are loaded for the returned content.
      *        Currently supports: <code>array("languages" => array(<language1>,..), "useAlwaysAvailable" => bool)</code>
@@ -154,7 +151,7 @@ class Handler implements SearchHandlerInterface, Capable, ContentTranslationHand
      *
      * @return \eZ\Publish\SPI\Persistence\Content
      */
-    public function findSingle(Criterion $filter, array $languageFilter = array())
+    public function findSingle(Criterion $filter, array $languageFilter = [])
     {
         $query = new Query();
         $query->filter = $filter;
@@ -186,7 +183,6 @@ class Handler implements SearchHandlerInterface, Capable, ContentTranslationHand
     /**
      * Finds Locations for the given $query.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\LocationQuery $query
      * @param array $languageFilter - a map of language related filters specifying languages query will be performed on.
      *        Also used to define which field languages are loaded for the returned content.
      *        Currently supports: <code>array("languages" => array(<language1>,..), "useAlwaysAvailable" => bool)</code>
@@ -194,7 +190,7 @@ class Handler implements SearchHandlerInterface, Capable, ContentTranslationHand
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function findLocations(LocationQuery $query, array $languageFilter = array())
+    public function findLocations(LocationQuery $query, array $languageFilter = [])
     {
         $query = clone $query;
         $query->query = $query->query ?: new Criterion\MatchAll();
@@ -219,19 +215,17 @@ class Handler implements SearchHandlerInterface, Capable, ContentTranslationHand
      * @param int $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
      */
-    public function suggest($prefix, $fieldPaths = array(), $limit = 10, Criterion $filter = null)
+    public function suggest($prefix, $fieldPaths = [], $limit = 10, Criterion $filter = null)
     {
         throw new \Exception('@todo: Not implemented yet.');
     }
 
     /**
      * Indexes a content object.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content $content
      */
     public function indexContent(Content $content)
     {
-        $this->gateway->bulkIndexDocuments(array($this->mapper->mapContentBlock($content)));
+        $this->gateway->bulkIndexDocuments([$this->mapper->mapContentBlock($content)]);
     }
 
     /**
@@ -253,7 +247,7 @@ class Handler implements SearchHandlerInterface, Capable, ContentTranslationHand
      */
     public function bulkIndexContent(array $contentObjects)
     {
-        $documents = array();
+        $documents = [];
 
         foreach ($contentObjects as $content) {
             try {
@@ -270,8 +264,6 @@ class Handler implements SearchHandlerInterface, Capable, ContentTranslationHand
 
     /**
      * Indexes a Location in the index storage.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Location $location
      */
     public function indexLocation(Location $location)
     {
@@ -351,7 +343,7 @@ class Handler implements SearchHandlerInterface, Capable, ContentTranslationHand
             $contentDocumentIds[] = $this->mapper->generateContentDocumentId($hit->valueObject->id) . '*';
         }
 
-        foreach (\array_chunk(\array_unique($contentDocumentIds), self::SOLR_BULK_REMOVE_LIMIT) as $ids) {
+        foreach (array_chunk(array_unique($contentDocumentIds), self::SOLR_BULK_REMOVE_LIMIT) as $ids) {
             $query = '_root_:(' . implode(' OR ', $ids) . ')';
             $this->gateway->deleteByQuery($query);
         }
@@ -433,8 +425,6 @@ class Handler implements SearchHandlerInterface, Capable, ContentTranslationHand
 
     /**
      * Generate search document for Content object to be indexed by a search engine.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content $content
      *
      * @return \eZ\Publish\SPI\Search\Document
      */

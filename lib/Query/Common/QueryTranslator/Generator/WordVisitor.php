@@ -32,7 +32,7 @@ class WordVisitor extends WordBase
     /**
      * {@inheritdoc}
      *
-     * @link http://lucene.apache.org/core/5_0_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#Escaping_Special_Characters
+     * @see http://lucene.apache.org/core/5_0_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#Escaping_Special_Characters
      *
      * Note: additionally to what is defined above we also escape blank space,
      * and we don't escape an asterisk.

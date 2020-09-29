@@ -79,7 +79,7 @@ class MapLocationDistanceRange extends MapLocation
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Value\MapLocationValue $location */
         $location = $criterion->valueData;
 
-        $queries = array();
+        $queries = [];
         foreach ($searchFields as $name => $fieldType) {
             // @todo in future it should become possible to specify ranges directly on the filter (donut shape)
             $query = sprintf('{!geofilt sfield=%s pt=%F,%F d=%s}', $name, $location->latitude, $location->longitude, $end);

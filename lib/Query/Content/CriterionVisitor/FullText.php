@@ -10,10 +10,10 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor;
 
-use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
-use eZ\Publish\Core\Search\Common\FieldNameResolver;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\FullText as FullTextCriterion;
+use eZ\Publish\Core\Search\Common\FieldNameResolver;
+use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 use QueryTranslator\Languages\Galach\Generators\ExtendedDisMax;
 use QueryTranslator\Languages\Galach\Parser;
 use QueryTranslator\Languages\Galach\Tokenizer;
@@ -53,10 +53,6 @@ class FullText extends CriterionVisitor
     /**
      * Create from content type handler and field registry.
      *
-     * @param \eZ\Publish\Core\Search\Common\FieldNameResolver $fieldNameResolver
-     * @param \QueryTranslator\Languages\Galach\Tokenizer $tokenizer
-     * @param \QueryTranslator\Languages\Galach\Parser $parser
-     * @param \QueryTranslator\Languages\Galach\Generators\ExtendedDisMax $generator
      * @param int $maxDepth
      */
     public function __construct(
@@ -76,7 +72,6 @@ class FullText extends CriterionVisitor
     /**
      * Get field type information.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param string $fieldDefinitionIdentifier
      *
      * @return array
@@ -89,8 +84,6 @@ class FullText extends CriterionVisitor
     /**
      * Check if visitor is applicable to current criterion.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     *
      * @return bool
      */
     public function canVisit(Criterion $criterion)
@@ -101,7 +94,6 @@ class FullText extends CriterionVisitor
     /**
      * Map field value to a proper Solr representation.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor $subVisitor
      *
      * @return string
@@ -146,10 +138,6 @@ class FullText extends CriterionVisitor
 
     /**
      * Returns boost factor for the related content.
-     *
-     * @param int $depth
-     *
-     * @return float
      */
     private function getBoostFactorForRelatedContent(int $depth): float
     {

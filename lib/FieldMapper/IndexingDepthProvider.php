@@ -23,7 +23,6 @@ class IndexingDepthProvider
     private $defaultIndexingDepth;
 
     /**
-     * @param array $contentTypeMap
      * @param int $defaultIndexingDepth
      */
     public function __construct(array $contentTypeMap = [], $defaultIndexingDepth = 1)
@@ -34,10 +33,6 @@ class IndexingDepthProvider
 
     /**
      * Returns max depth of indexing for given content type.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Type $contentType
-     *
-     * @return int
      */
     public function getMaxDepthForContent(ContentType $contentType): int
     {
@@ -48,9 +43,6 @@ class IndexingDepthProvider
         return $this->defaultIndexingDepth;
     }
 
-    /**
-     * @return int
-     */
     public function getMaxDepth(): int
     {
         if (!empty($this->contentTypeMap)) {

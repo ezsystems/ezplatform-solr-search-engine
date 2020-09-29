@@ -34,7 +34,7 @@ class CloudDistributionStrategyTest extends TestCase
             ->method('getEndpoint')
             ->willReturnCallback(function ($name) {
                 return new Endpoint([
-                    'core' => 'collection_' . $name
+                    'core' => 'collection_' . $name,
                 ]);
             });
 
@@ -59,14 +59,14 @@ class CloudDistributionStrategyTest extends TestCase
         $this->assertEquals([
             'wt' => 'json',
             'indent' => true,
-            'collection' => 'collection_en,collection_de,collection_fr,collection_pl'
+            'collection' => 'collection_en,collection_de,collection_fr,collection_pl',
         ], $this->distributionStrategy->getSearchParameters($parameters));
     }
 
     public function testGetSearchParametersWithLanguageSettings(): void
     {
         $languagesSettings = [
-            'languages' => ['eng-GB', 'pol-PL']
+            'languages' => ['eng-GB', 'pol-PL'],
         ];
 
         $this->endpointResolver
@@ -83,7 +83,7 @@ class CloudDistributionStrategyTest extends TestCase
         $this->assertEquals([
             'wt' => 'json',
             'indent' => true,
-            'collection' => 'collection_en,collection_pl'
+            'collection' => 'collection_en,collection_pl',
         ], $this->distributionStrategy->getSearchParameters($parameters, $languagesSettings));
     }
 }

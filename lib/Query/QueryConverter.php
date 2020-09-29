@@ -20,8 +20,6 @@ abstract class QueryConverter
     /**
      * Map query to a proper Solr representation.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     *
      * @return array
      */
     abstract public function convert(Query $query);

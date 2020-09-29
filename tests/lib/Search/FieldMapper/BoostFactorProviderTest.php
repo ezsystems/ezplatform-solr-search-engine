@@ -111,7 +111,6 @@ class BoostFactorProviderTest extends TestCase
     /**
      * @dataProvider providerForTestGetContentFieldBoostFactor
      *
-     * @param array $map
      * @param string $contentTypeIdentifier
      * @param string $fieldDefinitionIdentifier
      * @param float $expectedBoostFactor
@@ -238,7 +237,6 @@ class BoostFactorProviderTest extends TestCase
     /**
      * @dataProvider providerForTestGetContentMetaFieldBoostFactor
      *
-     * @param array $map
      * @param string $contentTypeIdentifier
      * @param string $fieldName
      * @param float $expectedBoostFactor

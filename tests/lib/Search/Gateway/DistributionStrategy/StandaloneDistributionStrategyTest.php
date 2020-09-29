@@ -52,14 +52,14 @@ class StandaloneDistributionStrategyTest extends TestCase
         $this->assertEquals([
             'wt' => 'json',
             'indent' => true,
-            'shards' => '127.0.0.65:8983/solr/collection1,127.0.0.66:8983/solr/collection1,127.0.0.67:8983/solr/collection1'
+            'shards' => '127.0.0.65:8983/solr/collection1,127.0.0.66:8983/solr/collection1,127.0.0.67:8983/solr/collection1',
         ], $actual);
     }
 
     public function testGetSearchParametersWithLanguageSettings(): void
     {
         $languagesSettings = [
-            'languages' => ['eng-GB', 'pol-PL']
+            'languages' => ['eng-GB', 'pol-PL'],
         ];
 
         $this->endpointResolver
@@ -76,7 +76,7 @@ class StandaloneDistributionStrategyTest extends TestCase
         $this->assertEquals([
             'wt' => 'json',
             'indent' => true,
-            'shards' => '127.0.0.65:8983/solr/collection1,127.0.0.66:8983/solr/collection1'
+            'shards' => '127.0.0.65:8983/solr/collection1,127.0.0.66:8983/solr/collection1',
         ], $this->distributionStrategy->getSearchParameters($parameters, $languagesSettings));
     }
 
@@ -87,7 +87,7 @@ class StandaloneDistributionStrategyTest extends TestCase
             ->method('getEndpoint')
             ->willReturnCallback(function ($name) {
                 $endpoint = $this->createMock(Endpoint::class);
-                $endpoint->method('getIdentifier')->willReturn('127.0.0.' . ord($name) . ':8983/solr/collection1');
+                $endpoint->method('getIdentifier')->willReturn('127.0.0.' . \ord($name) . ':8983/solr/collection1');
 
                 return $endpoint;
             });
