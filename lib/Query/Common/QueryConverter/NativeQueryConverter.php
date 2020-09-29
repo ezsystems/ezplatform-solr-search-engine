@@ -57,12 +57,8 @@ class NativeQueryConverter extends QueryConverter
 
     public function convert(Query $query)
     {
-<<<<<<< HEAD
-        $params = array(
-=======
         $params = [
             'defType' => 'edismax',
->>>>>>> 1.7
             'q' => '{!lucene}' . $this->criterionVisitor->visit($query->query),
             'fq' => '{!lucene}' . $this->criterionVisitor->visit($query->filter),
             'sort' => $this->getSortClauses($query->sortClauses),
