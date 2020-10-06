@@ -11,10 +11,11 @@
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\QueryConverter;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
-use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
-use EzSystems\EzPlatformSolrSearchEngine\Query\FacetFieldVisitor;
+use EzSystems\EzPlatformSolrSearchEngine\Query\AggregationVisitor;
 use EzSystems\EzPlatformSolrSearchEngine\Query\QueryConverter;
+use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 use EzSystems\EzPlatformSolrSearchEngine\Query\SortClauseVisitor;
+use EzSystems\EzPlatformSolrSearchEngine\Query\FacetFieldVisitor;
 
 /**
  * Native implementation of Query Converter.
@@ -43,19 +44,30 @@ class NativeQueryConverter extends QueryConverter
     protected $facetBuilderVisitor;
 
     /**
+     * @var \EzSystems\EzPlatformSolrSearchEngine\Query\AggregationVisitor
+     */
+    private $aggregationVisitor;
+
+    /**
      * Construct from visitors.
+     *
+     * @param \EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor $criterionVisitor
+     * @param \EzSystems\EzPlatformSolrSearchEngine\Query\SortClauseVisitor $sortClauseVisitor
+     * @param \EzSystems\EzPlatformSolrSearchEngine\Query\FacetFieldVisitor $facetBuilderVisitor
      */
     public function __construct(
         CriterionVisitor $criterionVisitor,
         SortClauseVisitor $sortClauseVisitor,
-        FacetFieldVisitor $facetBuilderVisitor
+        FacetFieldVisitor $facetBuilderVisitor,
+        AggregationVisitor $aggregationVisitor
     ) {
         $this->criterionVisitor = $criterionVisitor;
         $this->sortClauseVisitor = $sortClauseVisitor;
         $this->facetBuilderVisitor = $facetBuilderVisitor;
+        $this->aggregationVisitor = $aggregationVisitor;
     }
 
-    public function convert(Query $query)
+    public function convert(Query $query, array $languageSettings = [])
     {
         $params = [
             'q' => '{!lucene}' . $this->criterionVisitor->visit($query->query),
@@ -72,6 +84,24 @@ class NativeQueryConverter extends QueryConverter
             $params['facet'] = 'true';
             $params['facet.sort'] = 'count';
             $params = array_merge($facetParams, $params);
+        }
+
+        if (!empty($query->aggregations)) {
+            $aggregations = [];
+
+            foreach ($query->aggregations as $aggregation) {
+                if ($this->aggregationVisitor->canVisit($aggregation, $languageSettings)) {
+                    $aggregations[$aggregation->getName()] = $this->aggregationVisitor->visit(
+                        $this->aggregationVisitor,
+                        $aggregation,
+                        $languageSettings
+                    );
+                }
+            }
+
+            if (!empty($aggregations)) {
+                $params['json.facet'] = json_encode($aggregations);
+            }
         }
 
         return $params;
@@ -120,7 +150,7 @@ class NativeQueryConverter extends QueryConverter
         foreach ($facetSets as $facetSet) {
             foreach ($facetSet as $key => $value) {
                 if (isset($facetParams[$key])) {
-                    if (!\is_array($facetParams[$key])) {
+                    if (!is_array($facetParams[$key])) {
                         $facetParams[$key] = [$facetParams[$key]];
                     }
                     $facetParams[$key][] = $value;

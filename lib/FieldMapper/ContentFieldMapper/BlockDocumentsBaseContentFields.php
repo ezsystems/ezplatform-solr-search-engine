@@ -143,6 +143,11 @@ class BlockDocumentsBaseContentFields extends ContentFieldMapper
                 new FieldType\MultipleStringField()
             ),
             new Field(
+                'content_language_codes_raw',
+                array_keys($versionInfo->names),
+                new FieldType\MultipleIdentifierField(['raw' => true])
+            ),
+            new Field(
                 'content_main_language_code',
                 $contentInfo->mainLanguageCode,
                 new FieldType\StringField()

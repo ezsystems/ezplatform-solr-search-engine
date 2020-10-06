@@ -41,7 +41,10 @@ class SolrEngineFactory
     private $documentMapper;
 
     /** @var \EzSystems\EzPlatformSolrSearchEngine\ResultExtractor */
-    private $resultExtractor;
+    private $contentResultExtractor;
+
+    /** @var \EzSystems\EzPlatformSolrSearchEngine\ResultExtractor */
+    private $locationResultExtractor;
 
     public function __construct(
         RepositoryConfigurationProvider $repositoryConfigurationProvider,
@@ -51,7 +54,8 @@ class SolrEngineFactory
         CoreFilterRegistry $coreFilterRegistry,
         Handler $contentHandler,
         DocumentMapper $documentMapper,
-        ResultExtractor $resultExtractor
+        ResultExtractor $contentResultExtractor,
+        ResultExtractor $locationResultExtractor
     ) {
         $this->repositoryConfigurationProvider = $repositoryConfigurationProvider;
         $this->defaultConnection = $defaultConnection;
@@ -60,7 +64,8 @@ class SolrEngineFactory
         $this->coreFilterRegistry = $coreFilterRegistry;
         $this->contentHandler = $contentHandler;
         $this->documentMapper = $documentMapper;
-        $this->resultExtractor = $resultExtractor;
+        $this->contentResultExtractor = $contentResultExtractor;
+        $this->locationResultExtractor = $locationResultExtractor;
     }
 
     public function buildEngine()
@@ -76,7 +81,8 @@ class SolrEngineFactory
             $gateway,
             $this->contentHandler,
             $this->documentMapper,
-            $this->resultExtractor,
+            $this->contentResultExtractor,
+            $this->locationResultExtractor,
             $coreFilter
         );
     }

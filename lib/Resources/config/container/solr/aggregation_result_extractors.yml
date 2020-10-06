@@ -1,0 +1,250 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  ezpublish.search.solr.query.content.aggregation_result_extractor.dispatcher:
+    class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\DispatcherAggregationResultExtractor
+    arguments:
+      $extractors: !tagged ezplatform.search.solr.query.content.aggregation_result_extractor
+
+  ezpublish.search.solr.query.location.aggregation_result_extractor.dispatcher:
+    class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\DispatcherAggregationResultExtractor
+    arguments:
+      $extractors: !tagged ezplatform.search.solr.query.location.aggregation_result_extractor
+
+  ### Key mappers
+
+  EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\BooleanAggregationKeyMapper: ~
+
+  EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\CountryAggregationKeyMapper:
+    arguments:
+      $countriesInfo: '%ezpublish.fieldType.ezcountry.data%'
+
+  EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\ContentTypeAggregationKeyMapper: ~
+
+  EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\ContentTypeGroupAggregationKeyMapper: ~
+
+  EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\InvertedBooleanAggregationKeyMapper: ~
+
+  EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\LanguageAggregationKeyMapper: ~
+
+  EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\ObjectStateAggregationKeyMapper: ~
+
+  EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\SectionAggregationKeyMapper: ~
+
+  EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\UserMetadataAggregationKeyMapper: ~
+
+  EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\RangeAggregationKeyMapper\DateTimeRangeAggregationKeyMapper: ~
+
+  EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\RangeAggregationKeyMapper\FloatRangeAggregationKeyMapper: ~
+
+  EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\RangeAggregationKeyMapper\IntRangeAggregationKeyMapper: ~
+
+  EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\RangeAggregationKeyMapper\NullRangeAggregationKeyMapper: ~
+
+  ### Extractors
+
+  ezplatform.search.solr.query.common.aggregation_result_extractor.content_type_term:
+    class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationResultExtractor
+    arguments:
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\ContentTypeTermAggregation'
+      $keyMapper: '@EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\ContentTypeAggregationKeyMapper'
+    tags:
+      - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
+      - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
+
+  ezplatform.search.solr.query.common.aggregation_result_extractor.content_type_group_term:
+    class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationResultExtractor
+    arguments:
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\ContentTypeGroupTermAggregation'
+      $keyMapper: '@EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\ContentTypeGroupAggregationKeyMapper'
+    tags:
+      - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
+      - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
+
+  ezplatform.search.solr.query.common.aggregation_result_extractor.data_metadata_range:
+    class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\RangeAggregationResultExtractor
+    arguments:
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\DateMetadataRangeAggregation'
+      $keyMapper: '@EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\RangeAggregationKeyMapper\DateTimeRangeAggregationKeyMapper'
+    tags:
+      - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
+      - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
+
+  ezplatform.search.solr.query.common.aggregation_result_extractor.langauge_term:
+    class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationResultExtractor
+    arguments:
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\LanguageTermAggregation'
+      $keyMapper: '@EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\LanguageAggregationKeyMapper'
+    tags:
+      - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
+      - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
+
+  ezplatform.search.solr.query.common.aggregation_result_extractor.raw_range:
+    class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\RangeAggregationResultExtractor
+    arguments:
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\RawRangeAggregation'
+      $keyMapper: '@EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\RangeAggregationKeyMapper\NullRangeAggregationKeyMapper'
+    tags:
+      - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
+      - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
+
+  ezplatform.search.solr.query.common.aggregation_result_extractor.raw_stats:
+    class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\StatsAggregationResultExtractor
+    arguments:
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\RawStatsAggregation'
+    tags:
+      - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
+      - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
+
+  ezplatform.search.solr.query.common.aggregation_result_extractor.raw_term:
+    class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationResultExtractor
+    arguments:
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\RawTermAggregation'
+    tags:
+      - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
+      - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
+
+  ezplatform.search.solr.query.common.aggregation_result_extractor.object_state_term:
+    class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationResultExtractor
+    arguments:
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\ObjectStateTermAggregation'
+      $keyMapper: '@EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\ObjectStateAggregationKeyMapper'
+    tags:
+      - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
+      - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
+
+  ezplatform.search.solr.query.common.aggregation_result_extractor.section_term:
+    class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationResultExtractor
+    arguments:
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\SectionTermAggregation'
+      $keyMapper: '@EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\SectionAggregationKeyMapper'
+    tags:
+      - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
+      - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
+
+  ezplatform.search.solr.query.common.aggregation_result_extractor.user_metadata_term:
+    class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationResultExtractor
+    arguments:
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\UserMetadataTermAggregation'
+      $keyMapper: '@EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\UserMetadataAggregationKeyMapper'
+    tags:
+      - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
+      - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
+
+  ezplatform.search.solr.query.common.aggregation_result_extractor.field.checkbox_term:
+    class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationResultExtractor
+    arguments:
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\Field\CheckboxTermAggregation'
+      $keyMapper: '@EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\BooleanAggregationKeyMapper'
+    tags:
+      - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
+      - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
+
+  ezplatform.search.solr.query.common.aggregation_result_extractor.field.country:
+    class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationResultExtractor
+    arguments:
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\Field\CountryTermAggregation'
+      $keyMapper: '@EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\CountryAggregationKeyMapper'
+    tags:
+      - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
+      - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
+
+  ezplatform.search.solr.query.common.aggregation_result_extractor.field.date_range:
+    class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\RangeAggregationResultExtractor
+    arguments:
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\Field\DateRangeAggregation'
+      $keyMapper: '@EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\RangeAggregationKeyMapper\DateTimeRangeAggregationKeyMapper'
+    tags:
+      - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
+      - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
+
+  ezplatform.search.solr.query.common.aggregation_result_extractor.field.datetime_range:
+    class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\RangeAggregationResultExtractor
+    arguments:
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\Field\DateTimeRangeAggregation'
+      $keyMapper: '@EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\RangeAggregationKeyMapper\DateTimeRangeAggregationKeyMapper'
+    tags:
+      - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
+      - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
+
+  ezplatform.search.solr.query.common.aggregation_result_extractor.field.float_range:
+    class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\RangeAggregationResultExtractor
+    arguments:
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\Field\FloatRangeAggregation'
+      $keyMapper: '@EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\RangeAggregationKeyMapper\FloatRangeAggregationKeyMapper'
+    tags:
+      - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
+      - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
+
+  ezplatform.search.solr.query.common.aggregation_result_extractor.field.float_stats:
+    class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\StatsAggregationResultExtractor
+    arguments:
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\Field\FloatStatsAggregation'
+    tags:
+      - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
+      - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
+
+  ezplatform.search.solr.query.common.aggregation_result_extractor.field.integer_range:
+    class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\RangeAggregationResultExtractor
+    arguments:
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\Field\IntegerRangeAggregation'
+      $keyMapper: '@EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\RangeAggregationKeyMapper\IntRangeAggregationKeyMapper'
+    tags:
+      - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
+      - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
+
+  ezplatform.search.solr.query.common.aggregation_result_extractor.field.integer_stats:
+    class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\StatsAggregationResultExtractor
+    arguments:
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\Field\IntegerStatsAggregation'
+    tags:
+      - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
+      - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
+
+  ezplatform.search.solr.query.common.aggregation_result_extractor.field.keyword_term:
+    class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationResultExtractor
+    arguments:
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\Field\KeywordTermAggregation'
+    tags:
+      - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
+      - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
+
+  ezplatform.search.solr.query.common.aggregation_result_extractor.field.selection_term:
+    class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationResultExtractor
+    arguments:
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\Field\SelectionTermAggregation'
+    tags:
+      - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
+      - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
+
+  ezplatform.search.solr.query.common.aggregation_result_extractor.field.time_range:
+    class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\RangeAggregationResultExtractor
+    arguments:
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\Field\TimeRangeAggregation'
+      $keyMapper: '@EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\RangeAggregationKeyMapper\IntRangeAggregationKeyMapper'
+    tags:
+      - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
+      - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
+
+  ### Content specific
+
+  ezplatform.search.solr.query.content.aggregation_result_extractor.visibility:
+    class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationResultExtractor
+    arguments:
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\VisibilityTermAggregation'
+      $keyMapper: '@EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\BooleanAggregationKeyMapper'
+    tags:
+      - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
+
+  ### Location specific
+
+  ezplatform.search.solr.query.location.aggregation_result_extractor.visibility:
+    class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationResultExtractor
+    arguments:
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\VisibilityTermAggregation'
+      $keyMapper: '@EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\InvertedBooleanAggregationKeyMapper'
+    tags:
+      - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
