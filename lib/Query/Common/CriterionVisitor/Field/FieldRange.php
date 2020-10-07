@@ -61,7 +61,7 @@ class FieldRange extends Field
         }
 
         $value = (array)$criterion->value;
-        $queries = array();
+        $queries = [];
         foreach ($searchFields as $name => $fieldType) {
             $start = $this->mapSearchFieldValue($value[0], $fieldType);
             $end = isset($value[1]) ? $this->mapSearchFieldvalue($value[1], $fieldType) : null;

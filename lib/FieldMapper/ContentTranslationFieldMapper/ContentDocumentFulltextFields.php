@@ -8,16 +8,16 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
 
-use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider;
-use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
 use eZ\Publish\Core\Search\Common\FieldNameGenerator;
 use eZ\Publish\Core\Search\Common\FieldRegistry;
 use eZ\Publish\SPI\Persistence\Content;
-use eZ\Publish\SPI\Persistence\Content\Type as ContentType;
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
+use eZ\Publish\SPI\Persistence\Content\Type as ContentType;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\FieldType;
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider;
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
 use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\IndexingDepthProvider;
 
 /**
@@ -69,14 +69,6 @@ class ContentDocumentFulltextFields extends ContentTranslationFieldMapper
      */
     protected $indexingDepthProvider;
 
-    /**
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
-     * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
-     * @param \eZ\Publish\Core\Search\Common\FieldRegistry $fieldRegistry
-     * @param \eZ\Publish\Core\Search\Common\FieldNameGenerator $fieldNameGenerator
-     * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider $boostFactorProvider
-     * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\IndexingDepthProvider $indexingDepthProvider
-     */
     public function __construct(
         ContentTypeHandler $contentTypeHandler,
         ContentHandler $contentHandler,
@@ -118,8 +110,6 @@ class ContentDocumentFulltextFields extends ContentTranslationFieldMapper
     }
 
     /**
-     * @param \eZ\Publish\SPI\Persistence\Content $content
-     * @param \eZ\Publish\SPI\Persistence\Content\Type $contentType
      * @param string $languageCode
      * @param int $maxDepth
      * @param int $depth
@@ -176,7 +166,6 @@ class ContentDocumentFulltextFields extends ContentTranslationFieldMapper
     /**
      * Maps given $content relations to an array of search fields.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content $sourceContent
      * @param string $languageCode
      * @param int $maxDepth
      * @param int $depth
@@ -216,10 +205,6 @@ class ContentDocumentFulltextFields extends ContentTranslationFieldMapper
 
     /**
      * Returns field name base on given depth.
-     *
-     * @param int $depth
-     *
-     * @return string
      */
     private function getIndexFieldName(int $depth): string
     {
@@ -232,8 +217,6 @@ class ContentDocumentFulltextFields extends ContentTranslationFieldMapper
 
     /**
      * Return index field type for the given $contentType.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Type $contentType
      *
      * @return \eZ\Publish\SPI\Search\FieldType
      */

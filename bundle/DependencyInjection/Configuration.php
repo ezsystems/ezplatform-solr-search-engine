@@ -21,14 +21,14 @@ class Configuration implements ConfigurationInterface
      *
      * @var array
      */
-    protected $defaultEndpointValues = array(
+    protected $defaultEndpointValues = [
         'scheme' => 'http',
         'host' => '127.0.0.1',
         'port' => 8983,
         'user' => null,
         'pass' => null,
         'path' => '/solr',
-    );
+    ];
 
     protected $metaFieldNames = [
         'name',
@@ -54,8 +54,6 @@ class Configuration implements ConfigurationInterface
 
     /**
      * Adds endpoints definition.
-     *
-     * @param \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition $node
      */
     protected function addEndpointsSection(ArrayNodeDefinition $node)
     {
@@ -101,8 +99,6 @@ class Configuration implements ConfigurationInterface
      * Adds connections definition.
      *
      * @throws \RuntimeException
-     *
-     * @param \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition $node
      */
     protected function addConnectionsSection(ArrayNodeDefinition $node)
     {
@@ -119,7 +115,7 @@ class Configuration implements ConfigurationInterface
                     ->ifTrue(
                         function ($v) {
                             return
-                                !empty($v['mapping']) && !is_array($v['mapping'])
+                                !empty($v['mapping']) && !\is_array($v['mapping'])
                             ;
                         }
                     )
@@ -127,9 +123,9 @@ class Configuration implements ConfigurationInterface
                         function ($v) {
                             // If single endpoint is set for Content mapping, use it as default
                             // mapping for Content index
-                            $v['mapping'] = array(
+                            $v['mapping'] = [
                                 'default' => $v['mapping'],
-                            );
+                            ];
 
                             return $v;
                         }
@@ -151,7 +147,7 @@ class Configuration implements ConfigurationInterface
                     ->then(
                         // If entry endpoints are not provided use mapping endpoints
                         function ($v) {
-                            $endpointSet = array();
+                            $endpointSet = [];
 
                             if (!empty($v['mapping']['translations'])) {
                                 $endpointSet = array_flip($v['mapping']['translations']);
@@ -182,10 +178,10 @@ class Configuration implements ConfigurationInterface
                             'If not set, mapping endpoints will be used.'
                         )
                         ->example(
-                            array(
+                            [
                                 'endpoint1',
                                 'endpoint2',
-                            )
+                            ]
                         )
                         ->prototype('scalar')
                         ->end()
@@ -203,16 +199,16 @@ class Configuration implements ConfigurationInterface
                         )
                         ->addDefaultsIfNotSet()
                         ->example(
-                            array(
-                                array(
-                                    'translations' => array(
+                            [
+                                [
+                                    'translations' => [
                                         'cro-HR' => 'endpoint1',
                                         'eng-GB' => 'endpoint2',
-                                    ),
+                                    ],
                                     'default' => 'endpoint3',
                                     'main_translations' => 'endpoint4',
-                                ),
-                            )
+                                ],
+                            ]
                         )
                         ->children()
                             ->arrayNode('translations')
@@ -223,10 +219,10 @@ class Configuration implements ConfigurationInterface
                                         'endpoint names for Content index.'
                                     )
                                     ->example(
-                                        array(
+                                        [
                                             'cro-HR' => 'endpoint1',
                                             'eng-GB' => 'endpoint2',
-                                        )
+                                        ]
                                     )
                                 ->prototype('scalar')
                                 ->end()
@@ -322,7 +318,7 @@ class Configuration implements ConfigurationInterface
                                         function (array $v) {
                                             $valuesMapped = [];
                                             foreach ($v as $key => $value) {
-                                                if (is_array($value)) {
+                                                if (\is_array($value)) {
                                                     $valuesMapped[$key] = $value;
                                                 } else {
                                                     $valuesMapped['*'][$key] = $value;
@@ -358,7 +354,7 @@ class Configuration implements ConfigurationInterface
                                         function (array $v) {
                                             $valuesMapped = [];
                                             foreach ($v as $key => $value) {
-                                                if (is_array($value)) {
+                                                if (\is_array($value)) {
                                                     $valuesMapped[$key] = $value;
                                                 } else {
                                                     $valuesMapped['*'][$key] = $value;
@@ -376,7 +372,7 @@ class Configuration implements ConfigurationInterface
                                         ->ifTrue(
                                             function (array $v) {
                                                 foreach (array_keys($v) as $key) {
-                                                    if (!in_array($key, $this->metaFieldNames, true)) {
+                                                    if (!\in_array($key, $this->metaFieldNames, true)) {
                                                         return true;
                                                     }
                                                 }

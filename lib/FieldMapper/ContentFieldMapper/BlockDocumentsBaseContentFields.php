@@ -8,7 +8,7 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper;
 
-use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandler;
@@ -16,6 +16,7 @@ use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\FieldType;
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper;
 
 /**
  * Maps base Content related fields to block document (Content and Location).
@@ -42,12 +43,6 @@ class BlockDocumentsBaseContentFields extends ContentFieldMapper
      */
     protected $sectionHandler;
 
-    /**
-     * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
-     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler $objectStateHandler
-     * @param \eZ\Publish\SPI\Persistence\Content\Section\Handler $sectionHandler
-     */
     public function __construct(
         LocationHandler $locationHandler,
         ContentTypeHandler $contentTypeHandler,
@@ -200,13 +195,17 @@ class BlockDocumentsBaseContentFields extends ContentFieldMapper
      */
     protected function getObjectStateIds($contentId)
     {
-        $objectStateIds = array();
+        $objectStateIds = [];
 
         foreach ($this->objectStateHandler->loadAllGroups() as $objectStateGroup) {
-            $objectStateIds[] = $this->objectStateHandler->getContentState(
-                $contentId,
-                $objectStateGroup->id
-            )->id;
+            try {
+                $objectStateIds[] = $this->objectStateHandler->getContentState(
+                    $contentId,
+                    $objectStateGroup->id
+                )->id;
+            } catch (NotFoundException $e) {
+                // // Ignore empty object state groups
+            }
         }
 
         return $objectStateIds;
@@ -246,8 +245,8 @@ class BlockDocumentsBaseContentFields extends ContentFieldMapper
     protected function getAncestorLocationsContentIds($contentId)
     {
         $locations = $this->locationHandler->loadLocationsByContent($contentId);
-        $ancestorLocationContentIds = array();
-        $ancestorLocationIds = array();
+        $ancestorLocationContentIds = [];
+        $ancestorLocationIds = [];
 
         foreach ($locations as $location) {
             $locationIds = explode('/', trim($location->pathString, '/'));

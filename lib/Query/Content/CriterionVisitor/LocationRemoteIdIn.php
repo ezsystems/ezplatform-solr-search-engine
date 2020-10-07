@@ -10,9 +10,9 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor;
 
-use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
+use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 
 /**
  * Visits the LocationRemoteId criterion.
@@ -21,8 +21,6 @@ class LocationRemoteIdIn extends CriterionVisitor
 {
     /**
      * CHeck if visitor is applicable to current criterion.
-     *
-     * @param Criterion $criterion
      *
      * @return bool
      */
@@ -37,7 +35,6 @@ class LocationRemoteIdIn extends CriterionVisitor
     /**
      * Map field value to a proper Solr representation.
      *
-     * @param Criterion $criterion
      * @param CriterionVisitor $subVisitor
      *
      * @return string

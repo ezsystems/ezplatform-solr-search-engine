@@ -10,8 +10,8 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\SortClauseVisitor;
 
-use EzSystems\EzPlatformSolrSearchEngine\Query\SortClauseVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
+use EzSystems\EzPlatformSolrSearchEngine\Query\SortClauseVisitor;
 
 /**
  * Visits the sortClause tree into a Solr query.
@@ -20,8 +20,6 @@ class DateModified extends SortClauseVisitor
 {
     /**
      * Check if visitor is applicable to current sortClause.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      *
      * @return bool
      */
@@ -32,8 +30,6 @@ class DateModified extends SortClauseVisitor
 
     /**
      * Map field value to a proper Solr representation.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      *
      * @return string
      */

@@ -66,7 +66,7 @@ class MapLocationDistanceIn extends MapLocation
             );
         }
 
-        $queries = array();
+        $queries = [];
         foreach ($criterion->value as $value) {
             foreach ($searchFields as $name => $fieldType) {
                 $queries[] = sprintf('geodist(%s,%F,%F):%s', $name, $location->latitude, $location->longitude, $value);

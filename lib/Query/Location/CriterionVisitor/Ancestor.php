@@ -10,9 +10,9 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Location\CriterionVisitor;
 
-use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Ancestor as AncestorCriterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Ancestor as AncestorCriterion;
+use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 
 /**
  * Visits the Ancestor criterion.
@@ -21,8 +21,6 @@ class Ancestor extends CriterionVisitor
 {
     /**
      * Check if visitor is applicable to current criterion.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *
      * @return bool
      */
@@ -34,14 +32,13 @@ class Ancestor extends CriterionVisitor
     /**
      * Map field value to a proper Solr representation.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor $subVisitor
      *
      * @return string
      */
     public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null)
     {
-        $idSet = array();
+        $idSet = [];
         foreach ($criterion->value as $value) {
             foreach (explode('/', trim($value, '/')) as $id) {
                 $idSet[$id] = true;

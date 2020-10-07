@@ -23,7 +23,8 @@
     "require-dev": {
         "ezsystems/doctrine-dbal-schema": "^1.0@dev",
         "phpunit/phpunit": "^8.2",
-        "matthiasnoback/symfony-dependency-injection-test": "^4.1"
+        "matthiasnoback/symfony-dependency-injection-test": "^4.1",
+        "ezsystems/ezplatform-code-style": "^0.1.0"
     },
     "autoload": {
         "psr-4": {
@@ -37,6 +38,10 @@
             "EzSystems\\EzPlatformSolrSearchEngine\\Tests\\": "tests/lib",
             "EzSystems\\EzPlatformSolrSearchEngineBundle\\Tests\\": "tests/bundle"
         }
+    },
+    "scripts": {
+        "fix-cs": "php-cs-fixer fix -v --show-progress=estimating",
+        "check-cs": "php-cs-fixer fix --dry-run -v --show-progress=estimating"
     },
     "extra": {
         "branch-alias": {

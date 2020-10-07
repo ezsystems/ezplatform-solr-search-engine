@@ -21,8 +21,6 @@ abstract class CoreFilter
     /**
      * Applies conditions on the $query using given $languageSettings.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     * @param array $languageSettings
      * @param string $documentTypeIdentifier
      */
     abstract public function apply(Query $query, array $languageSettings, $documentTypeIdentifier);

@@ -50,7 +50,7 @@ class AggregateCriterionVisitorPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.search.solr.query.content.criterion_visitor.aggregate',
             'addVisitor',
-            array(new Reference($serviceId))
+            [new Reference($serviceId)]
         );
     }
 }

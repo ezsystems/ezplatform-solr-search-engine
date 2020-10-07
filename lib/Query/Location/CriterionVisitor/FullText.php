@@ -10,9 +10,9 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Location\CriterionVisitor;
 
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use EzSystems\EzPlatformSolrSearchEngine\Query\Content\CriterionVisitor\FullText as ContentFullText;
 use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
  * Visits the FullText criterion.
@@ -22,7 +22,6 @@ class FullText extends ContentFullText
     /**
      * Map field value to a proper Solr representation.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor $subVisitor
      *
      * @return string

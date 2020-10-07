@@ -8,9 +8,9 @@ declare(strict_types=1);
 
 namespace EzSystems\EzPlatformSolrSearchEngine\Tests\Search\FieldMapper;
 
+use eZ\Publish\SPI\Persistence\Content\Type as SPIContentType;
 use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\IndexingDepthProvider;
 use PHPUnit\Framework\TestCase;
-use eZ\Publish\SPI\Persistence\Content\Type as SPIContentType;
 
 class IndexingDepthProviderTest extends TestCase
 {

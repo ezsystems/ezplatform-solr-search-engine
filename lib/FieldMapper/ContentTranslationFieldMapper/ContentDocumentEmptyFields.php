@@ -38,11 +38,6 @@ class ContentDocumentEmptyFields extends ContentTranslationFieldMapper
      */
     private $fieldTypeRegistry;
 
-    /**
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
-     * @param \eZ\Publish\Core\Search\Common\FieldNameGenerator $fieldNameGenerator
-     * @param \eZ\Publish\Core\Persistence\FieldTypeRegistry $fieldTypeRegistry
-     */
     public function __construct(
         ContentTypeHandler $contentTypeHandler,
         FieldNameGenerator $fieldNameGenerator,
@@ -54,7 +49,6 @@ class ContentDocumentEmptyFields extends ContentTranslationFieldMapper
     }
 
     /**
-     * @param \eZ\Publish\SPI\Persistence\Content $content
      * @param string $languageCode
      *
      * @return bool
@@ -65,7 +59,6 @@ class ContentDocumentEmptyFields extends ContentTranslationFieldMapper
     }
 
     /**
-     * @param \eZ\Publish\SPI\Persistence\Content $content
      * @param string $languageCode
      *
      * @return \eZ\Publish\SPI\Search\Field[]

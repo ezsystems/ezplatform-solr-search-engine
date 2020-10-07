@@ -10,8 +10,8 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor;
 
-use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 use Exception;
+use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 
 /**
  * Visits the DateMetadata criterion.

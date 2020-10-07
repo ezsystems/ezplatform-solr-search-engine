@@ -8,8 +8,8 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper;
 
-use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper;
 use eZ\Publish\SPI\Persistence\Content;
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper;
 
 /**
  * Aggregate implementation of Content document field mapper.
@@ -36,8 +36,6 @@ class Aggregate extends ContentFieldMapper
 
     /**
      * Adds given $mapper to the internal array as the next one in priority.
-     *
-     * @param \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper $mapper
      */
     public function addMapper(ContentFieldMapper $mapper)
     {

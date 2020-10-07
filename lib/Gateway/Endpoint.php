@@ -74,10 +74,8 @@ class Endpoint extends ValueObject
 
     /**
      * Parse DSN settings if present, otherwise take parameters as is.
-     *
-     * @param array $properties
      */
-    public function __construct(array $properties = array())
+    public function __construct(array $properties = [])
     {
         // If dns is defined parse it to individual parts
         if (!empty($properties['dsn'])) {
