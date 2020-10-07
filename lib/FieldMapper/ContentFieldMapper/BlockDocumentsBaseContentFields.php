@@ -8,6 +8,7 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandler;
@@ -192,10 +193,14 @@ class BlockDocumentsBaseContentFields extends ContentFieldMapper
         $objectStateIds = [];
 
         foreach ($this->objectStateHandler->loadAllGroups() as $objectStateGroup) {
-            $objectStateIds[] = $this->objectStateHandler->getContentState(
-                $contentId,
-                $objectStateGroup->id
-            )->id;
+            try {
+                $objectStateIds[] = $this->objectStateHandler->getContentState(
+                    $contentId,
+                    $objectStateGroup->id
+                )->id;
+            } catch (NotFoundException $e) {
+                // // Ignore empty object state groups
+            }
         }
 
         return $objectStateIds;
