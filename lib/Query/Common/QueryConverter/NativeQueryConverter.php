@@ -83,7 +83,7 @@ class NativeQueryConverter extends QueryConverter
         if (!empty($facetParams)) {
             $params['facet'] = 'true';
             $params['facet.sort'] = 'count';
-            $params = array_merge($facetParams, $params);
+            $params = array_merge_recursive($facetParams, $params);
         }
 
         if (!empty($query->aggregations)) {
