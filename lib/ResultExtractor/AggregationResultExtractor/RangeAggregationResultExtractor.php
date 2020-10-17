@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor;
 
+use eZ\Publish\API\Repository\Values\Content\Query\Aggregation\AbstractRangeAggregation;
 use eZ\Publish\API\Repository\Values\Content\Query\Aggregation\Range;
 use eZ\Publish\API\Repository\Values\Content\Query\Aggregation;
 use eZ\Publish\API\Repository\Values\Content\Search\AggregationResult;
@@ -35,6 +36,9 @@ final class RangeAggregationResultExtractor implements AggregationResultExtracto
         return $aggregation instanceof $this->aggregationClass;
     }
 
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Aggregation\AbstractRangeAggregation $aggregation
+     */
     public function extract(Aggregation $aggregation, array $languageFilter, stdClass $data): AggregationResult
     {
         $entries = [];
@@ -59,6 +63,28 @@ final class RangeAggregationResultExtractor implements AggregationResultExtracto
             );
         }
 
+        $this->sort($aggregation, $entries);
+
         return new RangeAggregationResult($aggregation->getName(), $entries);
+    }
+
+    /**
+     * Ensures that results entries are in the exact same order as they ware defined in aggregation.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Aggregation\AbstractRangeAggregation $aggregation
+     * @param \eZ\Publish\API\Repository\Values\Content\Search\AggregationResult\RangeAggregationResultEntry[] $entries
+     */
+    private function sort(AbstractRangeAggregation $aggregation, array &$entries): void
+    {
+        $order = $aggregation->getRanges();
+
+        $comparator = static function (
+            RangeAggregationResultEntry $a,
+            RangeAggregationResultEntry $b
+        ) use ($order): int {
+            return array_search($a->getKey(), $order) <=> array_search($b->getKey(), $order);
+        };
+
+        usort($entries, $comparator);
     }
 }
