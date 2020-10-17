@@ -480,6 +480,7 @@ class Handler implements VersatileHandler
             //case SearchService::CAPABILITY_HIGHLIGHT:
             //case SearchService::CAPABILITY_SUGGEST:
             case SearchService::CAPABILITY_ADVANCED_FULLTEXT:
+            case SearchService::CAPABILITY_AGGREGATIONS:
                 return true;
             default:
                 return false;
