@@ -37,7 +37,7 @@ final class RangeAggregationResultExtractor implements AggregationResultExtracto
     }
 
     /**
-     * @param AbstractRangeAggregation $aggregation
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Aggregation\AbstractRangeAggregation $aggregation
      */
     public function extract(Aggregation $aggregation, array $languageFilter, stdClass $data): AggregationResult
     {
