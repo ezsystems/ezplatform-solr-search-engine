@@ -229,6 +229,14 @@ services:
     tags:
       - { name: ezplatform.search.solr.query.content.aggregation_visitor }
 
+  ezpublish.search.solr.query.content.aggregation_visitor.subtree:
+    class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\SubtreeTermAggregationVisitor
+    arguments:
+      $pathStringFieldName: 'location_path_string_mid'
+      $locationIdFieldName: 'location_id_mid'
+    tags:
+      - { name: ezplatform.search.solr.query.content.aggregation_visitor }
+
   ### Location specific visitors
 
   ezpublish.search.solr.query.location.aggregation_visitor.visibility:
@@ -237,5 +245,13 @@ services:
     arguments:
       $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\VisibilityTermAggregation'
       $searchIndexFieldName: 'invisible_b'
+    tags:
+      - { name: ezplatform.search.solr.query.location.aggregation_visitor }
+
+  ezpublish.search.solr.query.location.aggregation_visitor.subtree:
+    class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\SubtreeTermAggregationVisitor
+    arguments:
+      $pathStringFieldName: 'path_string_id'
+      $locationIdFieldName: 'location_id'
     tags:
       - { name: ezplatform.search.solr.query.location.aggregation_visitor }
