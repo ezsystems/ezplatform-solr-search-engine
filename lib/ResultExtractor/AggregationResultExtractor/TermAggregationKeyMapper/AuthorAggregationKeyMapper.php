@@ -14,6 +14,9 @@ use EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtrac
 
 final class AuthorAggregationKeyMapper implements TermAggregationKeyMapper
 {
+    /**
+     * @return \eZ\Publish\Core\FieldType\Author\Author[]
+     */
     public function map(Aggregation $aggregation, array $languageFilter, array $keys): array
     {
         $results = [];
