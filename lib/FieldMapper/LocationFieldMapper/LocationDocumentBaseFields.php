@@ -86,7 +86,7 @@ class LocationDocumentBaseFields extends LocationFieldMapper
                 $location->pathString,
                 new FieldType\IdentifierField()
             ),
-            $fields[] = new Field(
+            new Field(
                 'location_ancestors',
                 $this->getAncestors($location),
                 new FieldType\MultipleIdentifierField()
