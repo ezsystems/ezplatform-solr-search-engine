@@ -9,6 +9,7 @@
 namespace EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper;
 
 use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\FieldType;
@@ -48,6 +49,13 @@ class ContentDocumentLocationFields extends ContentFieldMapper
             $locationData['remote_ids'][] = $location->remoteId;
             $locationData['path_strings'][] = $location->pathString;
 
+            $ancestorsIds = $this->getAncestors($location);
+            foreach ($ancestorsIds as $ancestorId) {
+                if (!in_array($ancestorId, $locationData['ancestors'] ?? [])) {
+                    $locationData['ancestors'][] = $ancestorId;
+                }
+            }
+
             if ($location->id == $content->versionInfo->contentInfo->mainLocationId) {
                 $mainLocation = $location;
             }
@@ -76,6 +84,11 @@ class ContentDocumentLocationFields extends ContentFieldMapper
             $fields[] = new Field(
                 'location_path_string',
                 $locationData['path_strings'],
+                new FieldType\MultipleIdentifierField()
+            );
+            $fields[] = new Field(
+                'location_ancestors',
+                $locationData['ancestors'],
                 new FieldType\MultipleIdentifierField()
             );
         }
@@ -125,5 +138,14 @@ class ContentDocumentLocationFields extends ContentFieldMapper
         );
 
         return $fields;
+    }
+
+    private function getAncestors(Location $location): array
+    {
+        $ancestorsIds = explode('/', trim($location->pathString, '/'));
+        // Remove $location->id from ancestors
+        array_pop($ancestorsIds);
+
+        return $ancestorsIds;
     }
 }

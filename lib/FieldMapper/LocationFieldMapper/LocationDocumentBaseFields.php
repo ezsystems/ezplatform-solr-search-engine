@@ -87,6 +87,11 @@ class LocationDocumentBaseFields extends LocationFieldMapper
                 new FieldType\IdentifierField()
             ),
             new Field(
+                'location_ancestors',
+                $this->getAncestors($location),
+                new FieldType\MultipleIdentifierField()
+            ),
+            new Field(
                 'depth',
                 $location->depth,
                 new FieldType\IntegerField()
@@ -107,5 +112,14 @@ class LocationDocumentBaseFields extends LocationFieldMapper
                 new FieldType\BooleanField()
             ),
         ];
+    }
+
+    private function getAncestors(Location $location): array
+    {
+        $ancestorsIds = explode('/', trim($location->pathString, '/'));
+        // Remove $location->id from ancestors
+        array_pop($ancestorsIds);
+
+        return $ancestorsIds;
     }
 }

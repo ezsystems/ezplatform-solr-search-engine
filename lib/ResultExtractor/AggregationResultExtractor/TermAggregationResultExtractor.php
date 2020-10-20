@@ -43,20 +43,22 @@ final class TermAggregationResultExtractor implements AggregationResultExtractor
     {
         $entries = [];
 
-        $mappedKeys = $this->keyMapper->map(
-            $aggregation,
-            $languageFilter,
-            $this->getKeys($data)
-        );
+        if (isset($data->buckets)) {
+            $mappedKeys = $this->keyMapper->map(
+                $aggregation,
+                $languageFilter,
+                $this->getKeys($data)
+            );
 
-        foreach ($data->buckets as $bucket) {
-            $key = $bucket->val;
+            foreach ($data->buckets as $bucket) {
+                $key = $bucket->val;
 
-            if (isset($mappedKeys[$key])) {
-                $entries[] = new TermAggregationResultEntry(
-                    $mappedKeys[$key],
-                    $bucket->count
-                );
+                if (isset($mappedKeys[$key])) {
+                    $entries[] = new TermAggregationResultEntry(
+                        $mappedKeys[$key],
+                        $bucket->count
+                    );
+                }
             }
         }
 
