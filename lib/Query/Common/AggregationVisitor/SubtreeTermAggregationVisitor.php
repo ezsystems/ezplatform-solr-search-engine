@@ -39,14 +39,16 @@ final class SubtreeTermAggregationVisitor implements AggregationVisitor
         Aggregation $aggregation,
         array $languageFilter
     ): array {
+        $pathString = $aggregation->getPathString();
+
         return [
             'type' => 'query',
-            'q' => $this->pathStringFieldName . ':' . $this->getSubtreeWildcard($aggregation->getPathString()),
+            'q' => $this->pathStringFieldName . ':' . $this->getSubtreeWildcard($pathString),
             'facet' => [
                 'nested' => [
                     'type' => 'terms',
                     'field' => $this->locationIdFieldName,
-                    'limit' => $aggregation->getLimit(),
+                    'limit' => $aggregation->getLimit() + $this->getPathLevel($pathString),
                     'mincount' => $aggregation->getMinCount(),
                 ],
             ],
@@ -56,5 +58,10 @@ final class SubtreeTermAggregationVisitor implements AggregationVisitor
     private function getSubtreeWildcard(string $pathString): string
     {
         return str_replace('/', '\\/', $pathString) . '?*';
+    }
+
+    private function getPathLevel(string $pathString): int
+    {
+        return count(explode('/', trim($pathString, '/')));
     }
 }

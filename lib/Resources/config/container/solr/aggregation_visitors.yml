@@ -233,7 +233,7 @@ services:
     class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\SubtreeTermAggregationVisitor
     arguments:
       $pathStringFieldName: 'location_path_string_mid'
-      $locationIdFieldName: 'location_id_mid'
+      $locationIdFieldName: 'location_ancestors_mid'
     tags:
       - { name: ezplatform.search.solr.query.content.aggregation_visitor }
 
@@ -252,6 +252,6 @@ services:
     class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\SubtreeTermAggregationVisitor
     arguments:
       $pathStringFieldName: 'path_string_id'
-      $locationIdFieldName: 'location_id'
+      $locationIdFieldName: 'location_ancestors_mid'
     tags:
       - { name: ezplatform.search.solr.query.location.aggregation_visitor }

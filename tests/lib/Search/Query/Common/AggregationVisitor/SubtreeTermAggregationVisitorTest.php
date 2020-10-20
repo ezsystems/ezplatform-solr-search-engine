@@ -54,7 +54,7 @@ final class SubtreeTermAggregationVisitorTest extends AbstractAggregationVisitor
                     'nested' => [
                         'type' => 'terms',
                         'field' => 'location_id_id',
-                        'limit' => 10,
+                        'limit' => 12,
                         'mincount' => 1,
                     ],
                 ],

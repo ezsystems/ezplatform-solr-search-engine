@@ -37,7 +37,7 @@ final class NestedAggregationResultExtractor implements AggregationResultExtract
         return $this->innerResultExtractor->extract(
             $aggregation,
             $languageFilter,
-            $data->{$this->nestedResultKey}
+            $data->{$this->nestedResultKey} ?? new stdClass()
         );
     }
 }
