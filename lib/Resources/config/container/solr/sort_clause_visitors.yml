@@ -78,6 +78,12 @@ services:
             - {name: ezpublish.search.solr.query.content.sort_clause_visitor}
             - {name: ezpublish.search.solr.query.location.sort_clause_visitor}
 
+    ezpublish.search.solr.query.common.sort_clause_visitor.score:
+        class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\SortClauseVisitor\Score
+        tags:
+            - {name: ezpublish.search.solr.query.content.sort_clause_visitor}
+            - {name: ezpublish.search.solr.query.location.sort_clause_visitor}
+
     # Location search
     ezpublish.search.solr.query.location.sort_clause_visitor.depth:
         class: "%ezpublish.search.solr.query.location.sort_clause_visitor.depth.class%"
