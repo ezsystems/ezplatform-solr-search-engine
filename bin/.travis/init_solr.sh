@@ -44,8 +44,8 @@ fi
 
 download() {
     case ${SOLR_VERSION} in
-        # PS!!: Append versions and don't remove old once, kernel uses this script!
-        7.7.3|8.5.2 )
+        # PS!!: Append versions and don't remove old once (except in major versions), used in integration tests from other packages!
+        7.7.* | 8.[5-8].* )
             url="http://archive.apache.org/dist/lucene/solr/${SOLR_VERSION}/solr-${SOLR_VERSION}.tgz"
             ;;
         *)
