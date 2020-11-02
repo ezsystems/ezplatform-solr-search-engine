@@ -57,7 +57,7 @@ final class StatsAggregationVisitorTest extends AbstractAggregationVisitorTest
             self::EXAMPLE_LANGUAGE_FILTER,
             [
                 'type' => 'query',
-                'q' => '*:*',
+                'q' => 'custom_field_id:[* TO *]',
                 'facet' => [
                     'sum' => 'sum(custom_field_id)',
                     'min' => 'min(custom_field_id)',

@@ -26,7 +26,7 @@ abstract class AbstractStatsAggregationVisitor implements AggregationVisitor
 
         return [
             'type' => 'query',
-            'q' => '*:*',
+            'q' => $field . ':[* TO *]',
             'facet' => [
                 'sum' => "sum($field)",
                 'min' => "min($field)",
