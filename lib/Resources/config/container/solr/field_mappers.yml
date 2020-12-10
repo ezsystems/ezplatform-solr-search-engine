@@ -34,6 +34,14 @@ services:
         tags:
             - {name: ezpublish.search.solr.field_mapper.block_translation}
 
+    ezpublish.search.solr.field_mapper.content_translation.content_document_translated_content_name_field:
+        class: '%ezpublish.search.solr.field_mapper.content_translation.content_document_translated_content_name_field.class%'
+        arguments:
+            - '@ezpublish.spi.persistence.content_type_handler'
+            - '@ezpublish.search.solr.field_mapper.boost_factor_provider'
+        tags:
+            - {name: ezpublish.search.solr.field_mapper.block_translation}
+
     ezpublish.search.solr.field_mapper.content.content_document_base_fields:
         class: '%ezpublish.search.solr.field_mapper.content.content_document_base_fields.class%'
         tags:
@@ -55,14 +63,6 @@ services:
             - '@ezpublish.search.common.field_name_generator'
             - '@ezpublish.search.solr.field_mapper.boost_factor_provider'
             - '@ezpublish.search.solr.field_mapper.indexing_depth_provider'
-        tags:
-            - {name: ezpublish.search.solr.field_mapper.content_translation}
-
-    ezpublish.search.solr.field_mapper.content_translation.content_document_translated_content_name_field:
-        class: '%ezpublish.search.solr.field_mapper.content_translation.content_document_translated_content_name_field.class%'
-        arguments:
-            - '@ezpublish.spi.persistence.content_type_handler'
-            - '@ezpublish.search.solr.field_mapper.boost_factor_provider'
         tags:
             - {name: ezpublish.search.solr.field_mapper.content_translation}
 
