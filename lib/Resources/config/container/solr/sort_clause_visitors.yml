@@ -78,6 +78,11 @@ services:
             - {name: ezpublish.search.solr.query.content.sort_clause_visitor}
             - {name: ezpublish.search.solr.query.location.sort_clause_visitor}
 
+    EzSystems\EzPlatformSolrSearchEngine\Query\Common\SortClauseVisitor\CustomField:
+        tags:
+            - {name: ezpublish.search.solr.query.content.sort_clause_visitor}
+            - {name: ezpublish.search.solr.query.location.sort_clause_visitor}
+
     EzSystems\EzPlatformSolrSearchEngine\Query\Common\SortClauseVisitor\Score:
         tags:
             - {name: ezpublish.search.solr.query.content.sort_clause_visitor}
