@@ -1,4 +1,4 @@
-# Solr Search Engine Bundle for eZ Platform
+# Solr Search Engine Bundle for Ibexa DXP and Ibexa Open Source
 
 [![Build Status](https://img.shields.io/travis/ezsystems/ezplatform-solr-search-engine.svg?style=flat-square)](https://travis-ci.org/ezsystems/ezplatform-solr-search-engine)
 [![Downloads](https://img.shields.io/packagist/dt/ezsystems/ezplatform-solr-search-engine.svg?style=flat-square)](https://packagist.org/packages/ezsystems/ezplatform-solr-search-engine)
@@ -47,7 +47,21 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
     php -d memory_limit=-1 vendor/bin/phpunit --bootstrap tests/bootstrap.php -vc vendor/ezsystems/ezplatform-kernel/phpunit-integration-legacy-solr.xml
     ```
 
-## Copyright & license
+## COPYRIGHT
+Copyright (C) 1999-2021 Ibexa AS (formerly eZ Systems AS). All rights reserved.
 
-Copyright eZ Systems AS, for copyright and license details see provided LICENSE file.
+## LICENSE
+This source code is available separately under the following licenses:
 
+A - Ibexa Business Use License Agreement (Ibexa BUL),
+version 2.3 or later versions (as license terms may be updated from time to time)
+Ibexa BUL is granted by having a valid Ibexa DXP (formerly eZ Platform Enterprise) subscription,
+as described at: https://www.ibexa.co/product
+For the full Ibexa BUL license text, please see:
+https://www.ibexa.co/software-information/licenses-and-agreements (latest version applies)
+
+AND
+
+B - GNU General Public License, version 2
+Grants an copyleft open source license with ABSOLUTELY NO WARRANTY. For the full GPL license text, please see:
+https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
