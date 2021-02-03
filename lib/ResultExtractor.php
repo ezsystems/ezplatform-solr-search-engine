@@ -169,7 +169,7 @@ abstract class ResultExtractor
                     $facets[] = $this->facetBuilderVisitor->mapField(
                         $field,
                         (array)$facet,
-                        isset($facetBuildersById[$field]) ? $facetBuildersById[$field] : null
+                        $facetBuildersById[$field] ?? null
                     );
                 }
             }
