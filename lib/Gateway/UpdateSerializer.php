@@ -98,7 +98,7 @@ class UpdateSerializer
             $xmlWriter->startElement('field');
             $xmlWriter->writeAttribute('name', $name);
             $xmlWriter->writeAttribute('boost', $field->type->boost);
-            $xmlWriter->text($value);
+            $xmlWriter->text(($value === true) ? '1' : (($value === false) ? '0' : $value));
             $xmlWriter->endElement();
         }
     }
