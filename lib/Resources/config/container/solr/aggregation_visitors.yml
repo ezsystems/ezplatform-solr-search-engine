@@ -146,6 +146,26 @@ services:
       - { name: ezplatform.search.solr.query.content.aggregation_visitor }
       - { name: ezplatform.search.solr.query.location.aggregation_visitor }
 
+  ezpublish.search.solr.query.common.aggregation_visitor.field.relation_term:
+    class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\TermAggregationVisitor
+    factory: ['@EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\Factory\ContentFieldAggregationVisitorFactory', 'createTermAggregationVisitor']
+    arguments:
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\Field\RelationTermAggregation'
+      $searchIndexFieldName: 'value'
+    tags:
+      - { name: ezplatform.search.solr.query.content.aggregation_visitor }
+      - { name: ezplatform.search.solr.query.location.aggregation_visitor }
+
+  ezpublish.search.solr.query.common.aggregation_visitor.field.relation_list_term:
+    class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\TermAggregationVisitor
+    factory: ['@EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\Factory\ContentFieldAggregationVisitorFactory', 'createTermAggregationVisitor']
+    arguments:
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\Field\RelationListTermAggregation'
+      $searchIndexFieldName: 'value'
+    tags:
+      - { name: ezplatform.search.solr.query.content.aggregation_visitor }
+      - { name: ezplatform.search.solr.query.location.aggregation_visitor }
+
   ezpublish.search.solr.query.common.aggregation_visitor.field.selection_term:
     class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\TermAggregationVisitor
     factory: ['@EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\Factory\ContentFieldAggregationVisitorFactory', 'createTermAggregationVisitor']
