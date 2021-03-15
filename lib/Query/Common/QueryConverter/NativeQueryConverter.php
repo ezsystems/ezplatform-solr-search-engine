@@ -15,7 +15,6 @@ use EzSystems\EzPlatformSolrSearchEngine\Query\AggregationVisitor;
 use EzSystems\EzPlatformSolrSearchEngine\Query\QueryConverter;
 use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 use EzSystems\EzPlatformSolrSearchEngine\Query\SortClauseVisitor;
-use EzSystems\EzPlatformSolrSearchEngine\Query\FacetFieldVisitor;
 
 /**
  * Native implementation of Query Converter.
@@ -37,13 +36,6 @@ class NativeQueryConverter extends QueryConverter
     protected $sortClauseVisitor;
 
     /**
-     * Facet builder visitor.
-     *
-     * @var \EzSystems\EzPlatformSolrSearchEngine\Query\FacetFieldVisitor
-     */
-    protected $facetBuilderVisitor;
-
-    /**
      * @var \EzSystems\EzPlatformSolrSearchEngine\Query\AggregationVisitor
      */
     private $aggregationVisitor;
@@ -53,17 +45,14 @@ class NativeQueryConverter extends QueryConverter
      *
      * @param \EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor $criterionVisitor
      * @param \EzSystems\EzPlatformSolrSearchEngine\Query\SortClauseVisitor $sortClauseVisitor
-     * @param \EzSystems\EzPlatformSolrSearchEngine\Query\FacetFieldVisitor $facetBuilderVisitor
      */
     public function __construct(
         CriterionVisitor $criterionVisitor,
         SortClauseVisitor $sortClauseVisitor,
-        FacetFieldVisitor $facetBuilderVisitor,
         AggregationVisitor $aggregationVisitor
     ) {
         $this->criterionVisitor = $criterionVisitor;
         $this->sortClauseVisitor = $sortClauseVisitor;
-        $this->facetBuilderVisitor = $facetBuilderVisitor;
         $this->aggregationVisitor = $aggregationVisitor;
     }
 
@@ -78,13 +67,6 @@ class NativeQueryConverter extends QueryConverter
             'fl' => '*,score,[shard]',
             'wt' => 'json',
         ];
-
-        $facetParams = $this->getFacetParams($query->facetBuilders);
-        if (!empty($facetParams)) {
-            $params['facet'] = 'true';
-            $params['facet.sort'] = 'count';
-            $params = array_merge_recursive($facetParams, $params);
-        }
 
         if (!empty($query->aggregations)) {
             $aggregations = [];
@@ -123,43 +105,5 @@ class NativeQueryConverter extends QueryConverter
                 $sortClauses
             )
         );
-    }
-
-    /**
-     * Converts an array of facet builder objects to a Solr query parameters representation.
-     *
-     * This method uses spl_object_hash() to get id of each and every facet builder, as this
-     * is expected by {@link \EzSystems\EzPlatformSolrSearchEngine\ResultExtractor}.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder[] $facetBuilders
-     *
-     * @return array
-     */
-    private function getFacetParams(array $facetBuilders)
-    {
-        $facetSets = array_map(
-            function ($facetBuilder) {
-                return $this->facetBuilderVisitor->visitBuilder($facetBuilder, spl_object_hash($facetBuilder));
-            },
-            $facetBuilders
-        );
-
-        $facetParams = [];
-
-        // In case when facet sets contain same keys, merge them in an array
-        foreach ($facetSets as $facetSet) {
-            foreach ($facetSet as $key => $value) {
-                if (isset($facetParams[$key])) {
-                    if (!is_array($facetParams[$key])) {
-                        $facetParams[$key] = [$facetParams[$key]];
-                    }
-                    $facetParams[$key][] = $value;
-                } else {
-                    $facetParams[$key] = $value;
-                }
-            }
-        }
-
-        return $facetParams;
     }
 }

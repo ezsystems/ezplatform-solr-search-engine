@@ -2,7 +2,6 @@ parameters:
     ezpublish.search.solr.gateway.client.http.stream.class: EzSystems\EzPlatformSolrSearchEngine\Gateway\HttpClient\Stream
     ezpublish.search.solr.query.common.criterion_visitor.aggregate.class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\Aggregate
     ezpublish.search.solr.query.common.sort_clause_visitor.aggregate.class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\SortClauseVisitor\Aggregate
-    ezpublish.search.solr.query.common.facet_builder_visitor.aggregate.class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\FacetBuilderVisitor\Aggregate
     ezpublish.search.solr.field_mapper.block.class: EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper\Aggregate
     ezpublish.search.solr.field_mapper.block_translation.class: EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper\Aggregate
     ezpublish.search.solr.field_mapper.content.class: EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper\Aggregate
@@ -29,11 +28,6 @@ services:
     ezpublish.search.solr.query.content.sort_clause_visitor.aggregate:
         class: "%ezpublish.search.solr.query.common.sort_clause_visitor.aggregate.class%"
 
-    # Note: services tagged with 'ezpublish.search.solr.query.content.facet_builder_visitor'
-    # are registered to this one using compilation pass
-    ezpublish.search.solr.query.content.facet_builder_visitor.aggregate:
-        class: "%ezpublish.search.solr.query.common.facet_builder_visitor.aggregate.class%"
-
     # Note: services tagged with 'ezpublish.search.solr.query.location.criterion_visitor'
     # are registered to this one using compilation pass
     ezpublish.search.solr.query.location.criterion_visitor.aggregate:
@@ -43,11 +37,6 @@ services:
     # are registered to this one using compilation pass
     ezpublish.search.solr.query.location.sort_clause_visitor.aggregate:
         class: "%ezpublish.search.solr.query.common.sort_clause_visitor.aggregate.class%"
-
-    # Note: services tagged with 'ezpublish.search.solr.query.location.facet_builder_visitor'
-    # are registered to this one using compilation pass
-    ezpublish.search.solr.query.location.facet_builder_visitor.aggregate:
-        class: "%ezpublish.search.solr.query.common.facet_builder_visitor.aggregate.class%"
 
     # Note: services tagged with 'ezpublish.search.solr.field_mapper.block'
     # are registered to this one using compilation pass
