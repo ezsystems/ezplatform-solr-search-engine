@@ -15,7 +15,6 @@ use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler\GatewayRegistryPass;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler\AggregateCriterionVisitorPass;
-use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler\AggregateFacetBuilderVisitorPass;
 use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler\AggregateSortClauseVisitorPass;
 use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler\FieldMapperPass;
 use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler\EndpointRegistryPass;
@@ -34,7 +33,6 @@ class EzSystemsEzPlatformSolrSearchEngineBundle extends Bundle
         $container->addCompilerPass(new FieldMapperPass\ContentTranslationFieldMapperPass());
         $container->addCompilerPass(new FieldMapperPass\LocationFieldMapperPass());
         $container->addCompilerPass(new AggregateCriterionVisitorPass());
-        $container->addCompilerPass(new AggregateFacetBuilderVisitorPass());
         $container->addCompilerPass(new AggregateSortClauseVisitorPass());
         $container->addCompilerPass(new EndpointRegistryPass());
         $container->addCompilerPass(new GatewayRegistryPass());

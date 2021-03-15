@@ -152,7 +152,6 @@ class Handler implements VersatileHandler
 
         return $this->contentResultExtractor->extract(
             $this->gateway->findContent($query, $languageFilter),
-            $query->facetBuilders,
             $query->aggregations,
             $languageFilter
         );
@@ -224,7 +223,6 @@ class Handler implements VersatileHandler
 
         return $this->locationResultExtractor->extract(
             $this->gateway->findLocations($query, $languageFilter),
-            $query->facetBuilders,
             $query->aggregations
         );
     }
@@ -474,7 +472,6 @@ class Handler implements VersatileHandler
     {
         switch ($capabilityFlag) {
             case SearchService::CAPABILITY_SCORING:
-            case SearchService::CAPABILITY_FACETS:
             case SearchService::CAPABILITY_CUSTOM_FIELDS:
             //case SearchService::CAPABILITY_SPELLCHECK:
             //case SearchService::CAPABILITY_HIGHLIGHT:
