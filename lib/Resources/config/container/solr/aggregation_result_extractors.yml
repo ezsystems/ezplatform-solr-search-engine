@@ -24,6 +24,8 @@ services:
     arguments:
       $countriesInfo: '%ezpublish.fieldType.ezcountry.data%'
 
+  EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\ContentAggregationKeyMapper: ~
+
   EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\ContentTypeAggregationKeyMapper: ~
 
   EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\ContentTypeGroupAggregationKeyMapper: ~
@@ -242,6 +244,15 @@ services:
     class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationResultExtractor
     arguments:
       $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\Field\KeywordTermAggregation'
+    tags:
+      - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
+      - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
+
+  ezplatform.search.solr.query.common.aggregation_result_extractor.field.relation_term:
+    class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationResultExtractor
+    arguments:
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\Field\RelationTermAggregation'
+      $keyMapper: '@EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\ContentAggregationKeyMapper'
     tags:
       - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
       - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
