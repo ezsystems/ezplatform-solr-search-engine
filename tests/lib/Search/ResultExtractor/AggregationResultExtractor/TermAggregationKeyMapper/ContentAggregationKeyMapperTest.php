@@ -40,7 +40,7 @@ final class ContentAggregationKeyMapperTest extends TestCase
             ->with(self::EXAMPLE_CONTENT_IDS)
             ->willReturn($expectedContentInfos);
 
-        $this->assertEquals(
+        self::assertEquals(
             array_combine(
                 self::EXAMPLE_CONTENT_IDS,
                 $expectedContentInfos
