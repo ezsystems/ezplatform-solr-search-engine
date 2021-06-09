@@ -9,4 +9,5 @@ RUN sed --in-place 's/${solr.autoSoftCommit.maxTime:-1}/${solr.autoSoftCommit.ma
 
 USER solr
 
+HEALTHCHECK --interval=10s --timeout=5s --retries=10 --start-period=15s CMD solr status
 CMD ["solr-precreate", "collection1"]
