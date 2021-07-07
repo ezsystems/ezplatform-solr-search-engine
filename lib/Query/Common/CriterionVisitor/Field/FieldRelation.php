@@ -51,18 +51,7 @@ class FieldRelation extends Field
             throw new InvalidArgumentException('$criterion->target', "No searchable fields found for the given criterion target '{$criterion->target}'.");
         }
 
-        $criterion->value = (array)$criterion->value;
-
-        $queries = [];
-        foreach ($searchFields as $name => $fieldType) {
-            foreach ($criterion->value as $value) {
-                $preparedValues = (array)$this->mapSearchFieldvalue($value, $fieldType);
-                foreach ($preparedValues as $prepValue) {
-                    $queries[] = $name . ':"' . $this->escapeQuote($this->toString($prepValue), true) . '"';
-                }
-            }
-        }
-
+        $criterionValue = (array)$criterion->value;
         switch ($criterion->operator) {
             case Operator::CONTAINS:
                 $op = ' AND ';
@@ -72,6 +61,33 @@ class FieldRelation extends Field
                 $op = ' OR ';
         }
 
-        return '(' . implode($op, $queries) . ')';
+        $queries = [];
+        foreach ($searchFields as $name => $fieldType) {
+            $perFieldQueries = [];
+            foreach ($criterionValue as $value) {
+                $perValueQueries = [];
+                $preparedValues = (array)$this->mapSearchFieldvalue($value, $fieldType);
+                foreach ($preparedValues as $prepValue) {
+                    $perValueQueries[] = $name . ':"'
+                        . $this->escapeQuote($this->toString($prepValue), true)
+                        . '"';
+                }
+                // in core, count will always === 1 but can potentially be extended by user code?
+                $perFieldQueries[] = count($perValueQueries) === 1
+                    ? $perValueQueries[0]
+                    : '(' . implode(' AND ', $perValueQueries) . ')';
+            }
+
+            // actual operator used here, on per-field basis
+            $queries[] = count($perFieldQueries) === 1
+                ? $perFieldQueries[0]
+                : '(' . implode($op, $perFieldQueries) . ')';
+        }
+
+        // note that " OR " is always here to make sure no "class1_attr AND class2_attr" request generated,
+        // as it will lead to 100% no results
+        return count($queries) === 1
+            ? $queries[0]
+            : '(' . implode(' OR ', $queries) . ')';
     }
 }
