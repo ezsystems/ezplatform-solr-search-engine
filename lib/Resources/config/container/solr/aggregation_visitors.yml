@@ -228,6 +228,11 @@ services:
       - { name: ezplatform.search.solr.query.content.aggregation_visitor }
       - { name: ezplatform.search.solr.query.location.aggregation_visitor }
 
+  EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\LocationChildrenTermAggregationVisitor:
+    tags:
+      - { name: ezplatform.search.solr.query.content.aggregation_visitor }
+      - { name: ezplatform.search.solr.query.location.aggregation_visitor }
+
   ### Content specific visitors
 
   ezpublish.search.solr.query.content.aggregation_visitor.visibility:
