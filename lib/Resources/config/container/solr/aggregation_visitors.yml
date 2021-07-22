@@ -228,11 +228,6 @@ services:
       - { name: ezplatform.search.solr.query.content.aggregation_visitor }
       - { name: ezplatform.search.solr.query.location.aggregation_visitor }
 
-  EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\LocationChildrenTermAggregationVisitor:
-    tags:
-      - { name: ezplatform.search.solr.query.content.aggregation_visitor }
-      - { name: ezplatform.search.solr.query.location.aggregation_visitor }
-
   ### Content specific visitors
 
   ezpublish.search.solr.query.content.aggregation_visitor.visibility:
@@ -260,6 +255,15 @@ services:
     arguments:
       $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\VisibilityTermAggregation'
       $searchIndexFieldName: 'invisible_b'
+    tags:
+      - { name: ezplatform.search.solr.query.location.aggregation_visitor }
+
+  ezpublish.search.solr.query.location.aggregation_visitor.location_children:
+    class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\LocationChildrenTermAggregationVisitor
+    factory: [ '@EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\Factory\SearchFieldAggregationVisitorFactory', 'createTermAggregationVisitor' ]
+    arguments:
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\LocationChildrenTermAggregation'
+      $searchIndexFieldName: 'parent_id_id'
     tags:
       - { name: ezplatform.search.solr.query.location.aggregation_visitor }
 
