@@ -262,7 +262,7 @@ services:
     class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\LocationChildrenTermAggregationVisitor
     factory: [ '@EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\Factory\SearchFieldAggregationVisitorFactory', 'createTermAggregationVisitor' ]
     arguments:
-      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\LocationChildrenTermAggregation'
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\Location\LocationChildrenTermAggregation'
       $searchIndexFieldName: 'parent_id_id'
     tags:
       - { name: ezplatform.search.solr.query.location.aggregation_visitor }

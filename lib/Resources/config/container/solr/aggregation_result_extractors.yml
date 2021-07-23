@@ -149,7 +149,7 @@ services:
   ezplatform.search.solr.query.common.aggregation_result_extractor.location_children_term:
     class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationResultExtractor
     arguments:
-      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\LocationChildrenTermAggregation'
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\Location\LocationChildrenTermAggregation'
       $keyMapper: '@EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\LocationAggregationKeyMapper'
     tags:
       - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
