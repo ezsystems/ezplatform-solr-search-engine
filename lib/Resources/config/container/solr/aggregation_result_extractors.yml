@@ -40,6 +40,8 @@ services:
 
   EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\RangeAggregationKeyMapper\DateTimeRangeAggregationKeyMapper: ~
 
+  EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\LocationChildrenAggregationKeyMapper: ~
+
   EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\RangeAggregationKeyMapper\FloatRangeAggregationKeyMapper: ~
 
   EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\RangeAggregationKeyMapper\IntRangeAggregationKeyMapper: ~
@@ -142,6 +144,14 @@ services:
       $keyMapper: '@EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\SubtreeAggregationKeyMapper'
     tags:
       - { name: ezplatform.search.solr.query.content.aggregation_result_extractor }
+      - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
+
+  ezplatform.search.solr.query.common.aggregation_result_extractor.location_children_term:
+    class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationResultExtractor
+    arguments:
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\Location\LocationChildrenTermAggregation'
+      $keyMapper: '@EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\TermAggregationKeyMapper\LocationAggregationKeyMapper'
+    tags:
       - { name: ezplatform.search.solr.query.location.aggregation_result_extractor }
 
   ezplatform.search.solr.query.common.aggregation_result_extractor.subtree_term.nested:

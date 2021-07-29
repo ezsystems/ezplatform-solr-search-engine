@@ -258,6 +258,15 @@ services:
     tags:
       - { name: ezplatform.search.solr.query.location.aggregation_visitor }
 
+  ezpublish.search.solr.query.location.aggregation_visitor.location_children:
+    class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\LocationChildrenTermAggregationVisitor
+    factory: [ '@EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\Factory\SearchFieldAggregationVisitorFactory', 'createTermAggregationVisitor' ]
+    arguments:
+      $aggregationClass: 'eZ\Publish\API\Repository\Values\Content\Query\Aggregation\Location\LocationChildrenTermAggregation'
+      $searchIndexFieldName: 'parent_id_id'
+    tags:
+      - { name: ezplatform.search.solr.query.location.aggregation_visitor }
+
   ezpublish.search.solr.query.location.aggregation_visitor.subtree:
     class: EzSystems\EzPlatformSolrSearchEngine\Query\Common\AggregationVisitor\SubtreeTermAggregationVisitor
     arguments:
