@@ -158,6 +158,7 @@ services:
     class: EzSystems\EzPlatformSolrSearchEngine\ResultExtractor\AggregationResultExtractor\NestedAggregationResultExtractor
     decorates: ezplatform.search.solr.query.common.aggregation_result_extractor.subtree_term
     arguments:
+      $innerResultExtractor: '@.inner'
       $nestedResultKey: 'nested'
 
   ezplatform.search.solr.query.common.aggregation_result_extractor.user_metadata_term:
