@@ -21,7 +21,7 @@ matrix:
           env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="6.6.5"  CORES_SETUP="single" SOLR_CORES="collection1"
         - php: 7.2
           env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_VERSION="6.6.5"  CORES_SETUP="cloud" SOLR_CLOUD="yes"
-# test only master and stable branches (+ Pull requests against those)
+#A test only master and stable branches (+ Pull requests against those)
 branches:
     only:
         - master
@@ -29,11 +29,11 @@ branches:
 
 before_script:
     - phpenv config-rm xdebug.ini
-    # Disable expired certificate
+    #A Disable expired certificate
     - sed -i '/mozilla\/DST_Root_CA_X3.crt/ s/./!&/' /etc/ca-certificates.conf \ && update-ca-certificates --verbose
-    # Setup GitHub key to avoid api rate limit (pure auth read only key, no rights, for use by ezsystems repos only!)
+    #A Setup GitHub key to avoid api rate limit (pure auth read only key, no rights, for use by ezsystems repos only!)
     - composer config -g github-oauth.github.com "d0285ed5c8644f30547572ead2ed897431c1fc09"
-    # Avoid memory issues on composer install
+    #A Avoid memory issues on composer install
     - echo "memory_limit=-1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
     - ./bin/.travis/enable_swap.sh
     - if [ "$COMPOSER_REQUIRE" != "" ] ; then composer require --no-update $COMPOSER_REQUIRE ; fi
