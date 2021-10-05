@@ -1,4 +1,7 @@
-dist: bionic
+## Run on trusty environment as solr dies all the time on containers after travis move to gce
+sudo: required
+dist: trusty
+
 language: php
 
 cache:
