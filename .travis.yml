@@ -32,8 +32,8 @@ branches:
 
 before_script:
     - phpenv config-rm xdebug.ini
-  # Disable expired certificate
-. - sed -i '/mozilla\/DST_Root_CA_X3.crt/ s/./!&/' /etc/ca-certificates.conf \ && update-ca-certificates --verbose
+    # Disable expired certificate
+    - sed -i '/mozilla\/DST_Root_CA_X3.crt/ s/./!&/' /etc/ca-certificates.conf \ && update-ca-certificates --verbose
     # Setup GitHub key to avoid api rate limit (pure auth read only key, no rights, for use by ezsystems repos only!)
     - composer config -g github-oauth.github.com "d0285ed5c8644f30547572ead2ed897431c1fc09"
     # Avoid memory issues on composer install
