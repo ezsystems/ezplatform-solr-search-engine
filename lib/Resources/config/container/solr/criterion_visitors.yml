@@ -241,6 +241,16 @@ services:
             - {name: ezpublish.search.solr.query.content.criterion_visitor}
             - {name: ezpublish.search.solr.query.location.criterion_visitor}
 
+    EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\UserLoginIn:
+        tags:
+            - { name: ezpublish.search.solr.query.content.criterion_visitor }
+            - { name: ezpublish.search.solr.query.location.criterion_visitor }
+
+    EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\UserIdIn:
+        tags:
+            - { name: ezpublish.search.solr.query.content.criterion_visitor }
+            - { name: ezpublish.search.solr.query.location.criterion_visitor }
+
     EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor\SectionIdentifierIn:
         tags:
             - {name: ezpublish.search.solr.query.content.criterion_visitor}
