@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper;
+namespace Ibexa\Solr\FieldMapper\ContentFieldMapper;
 
 use eZ\Publish\SPI\Persistence\Content as SPIContent;
 use eZ\Publish\SPI\Search\Field;

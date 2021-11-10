@@ -47,7 +47,7 @@ services:
         tags:
             - {name: ezpublish.search.solr.field_mapper.content}
 
-    EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper\UserDocumentFields:
+    Ibexa\Solr\FieldMapper\ContentFieldMapper\UserDocumentFields:
         tags:
             - { name: ezpublish.search.solr.field_mapper.content }
 
