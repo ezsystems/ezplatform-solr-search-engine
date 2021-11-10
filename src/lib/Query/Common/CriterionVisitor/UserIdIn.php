@@ -16,12 +16,9 @@ final class UserIdIn extends CriterionVisitor
 {
     public function canVisit(Criterion $criterion): bool
     {
-        $operator = $criterion->operator ?? Operator::IN;
-        $supportedOperators = [Operator::IN, Operator::EQ];
-
         return
             $criterion instanceof Criterion\UserId
-            && in_array($operator, $supportedOperators, true);
+            && in_array($criterion->operator ?? Operator::IN, [Operator::IN, Operator::EQ], true);
     }
 
     public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null): string
