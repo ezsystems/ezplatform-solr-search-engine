@@ -30,7 +30,7 @@ final class UserEmailIn extends CriterionVisitor
                 ' OR ',
                 array_map(
                     static function (string $value): string {
-                        return 'user_email_s:"' . hash(UserDocumentFields::HASHING_ALGORITHM, $value) . '"';
+                        return 'user_email_id:"' . hash(UserDocumentFields::HASHING_ALGORITHM, $value) . '"';
                     },
                     (array) $criterion->value
                 )

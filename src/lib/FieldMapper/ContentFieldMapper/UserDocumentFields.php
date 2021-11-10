@@ -36,7 +36,7 @@ final class UserDocumentFields extends ContentFieldMapper
             $fields[] = new Field(
                 'user_login',
                 hash(self::HASHING_ALGORITHM, $userField->value->externalData['login']),
-                new FieldType\StringField()
+                new FieldType\IdentifierField()
             );
         }
 
@@ -44,7 +44,7 @@ final class UserDocumentFields extends ContentFieldMapper
             $fields[] = new Field(
                 'user_email',
                 hash(self::HASHING_ALGORITHM, $userField->value->externalData['email']),
-                new FieldType\StringField()
+                new FieldType\IdentifierField()
             );
         }
 

@@ -30,7 +30,7 @@ final class UserLoginIn extends CriterionVisitor
                 ' OR ',
                 array_map(
                     static function (string $value): string {
-                        return 'user_login_s:"' . hash(UserDocumentFields::HASHING_ALGORITHM, $value) . '"';
+                        return 'user_login_id:"' . hash(UserDocumentFields::HASHING_ALGORITHM, $value) . '"';
                     },
                     (array) $criterion->value
                 )
