@@ -30,10 +30,8 @@
     "autoload": {
         "psr-4": {
             "Ibexa\\Solr\\": "src/lib/",
-            "Ibexa\\Bundle\\Solr\\": "src/bundle/",
-            "Ibexa\\Contracts\\Solr\\": "src/contracts/",
-            "EzSystems\\EzPlatformSolrSearchEngine\\": "src/lib/",
-            "EzSystems\\EzPlatformSolrSearchEngineBundle\\": "src/bundle/",
+            "EzSystems\\EzPlatformSolrSearchEngine\\": "lib/",
+            "EzSystems\\EzPlatformSolrSearchEngineBundle\\": "bundle/",
             "EzSystems\\EzPlatformSolrSearchEngine\\Tests\\SetupFactory\\": "tests/lib/SetupFactory/",
             "Ibexa\\Tests\\Solr\\SetupFactory\\": "tests/lib/SetupFactory/"
         }
