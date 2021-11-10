@@ -27,7 +27,7 @@ final class UserEmailIn extends CriterionVisitor
                 ' OR ',
                 array_map(
                     static function (string $value): string {
-                        return 'user_user_account_user_email_s:"' . $value . '"';
+                        return 'user_email_s:"' . hash('sha256', $value) . '"';
                     },
                     (array) $criterion->value
                 )

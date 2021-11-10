@@ -27,7 +27,7 @@ final class UserLoginIn extends CriterionVisitor
                 ' OR ',
                 array_map(
                     static function (string $value): string {
-                        return 'user_user_account_user_login_s:"' . $value . '"';
+                        return 'user_login_s:"' . hash('sha256', $value) . '"';
                     },
                     (array) $criterion->value
                 )
