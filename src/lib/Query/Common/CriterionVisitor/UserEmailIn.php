@@ -17,9 +17,11 @@ final class UserEmailIn extends CriterionVisitor
 {
     public function canVisit(Criterion $criterion): bool
     {
-        return
-            $criterion instanceof Criterion\UserEmail
-            && in_array($criterion->operator ?? Operator::IN, [Operator::IN, Operator::EQ], true);
+        if (!$criterion instanceof Criterion\UserEmail) {
+            return false;
+        }
+
+        return in_array($criterion->operator ?? Operator::IN, [Operator::IN, Operator::EQ], true);
     }
 
     public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null): string

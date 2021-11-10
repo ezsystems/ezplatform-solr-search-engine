@@ -17,9 +17,11 @@ final class UserLoginIn extends CriterionVisitor
 {
     public function canVisit(Criterion $criterion): bool
     {
-        return
-            $criterion instanceof Criterion\UserLogin
-            && in_array($criterion->operator ?? Operator::IN, [Operator::IN, Operator::EQ], true);
+        if (!$criterion instanceof Criterion\UserLogin) {
+            return false;
+        }
+
+        return in_array($criterion->operator ?? Operator::IN, [Operator::IN, Operator::EQ], true);
     }
 
     public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null): string
