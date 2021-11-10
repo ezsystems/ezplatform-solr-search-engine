@@ -19,6 +19,7 @@ final class UserIdIn extends CriterionVisitor
         if (!$criterion instanceof Criterion\UserId) {
             return false;
         }
+
         return in_array($criterion->operator ?? Operator::IN, [Operator::IN, Operator::EQ], true);
     }
 
