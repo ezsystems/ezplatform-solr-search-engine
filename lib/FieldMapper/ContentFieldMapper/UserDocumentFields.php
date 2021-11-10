@@ -10,6 +10,9 @@ use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper;
 
 final class UserDocumentFields extends ContentFieldMapper
 {
+    /** @internal */
+    public const HASHING_ALGORITHM = 'sha256';
+
     public function accept(SPIContent $content): bool
     {
         return $this->getUserField($content) !== null;
@@ -27,7 +30,7 @@ final class UserDocumentFields extends ContentFieldMapper
         if (isset($userField->value->externalData['login'])) {
             $fields[] = new Field(
                 'user_login',
-                hash('sha256', $userField->value->externalData['login']),
+                hash(self::HASHING_ALGORITHM, $userField->value->externalData['login']),
                 new FieldType\StringField()
             );
         }
@@ -35,7 +38,7 @@ final class UserDocumentFields extends ContentFieldMapper
         if (isset($userField->value->externalData['email'])) {
             $fields[] = new Field(
                 'user_email',
-                hash('sha256', $userField->value->externalData['email']),
+                hash(self::HASHING_ALGORITHM, $userField->value->externalData['email']),
                 new FieldType\StringField()
             );
         }

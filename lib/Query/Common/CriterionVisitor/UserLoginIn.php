@@ -5,6 +5,7 @@ namespace EzSystems\EzPlatformSolrSearchEngine\Query\Common\CriterionVisitor;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
+use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper\UserDocumentFields;
 use EzSystems\EzPlatformSolrSearchEngine\Query\CriterionVisitor;
 
 final class UserLoginIn extends CriterionVisitor
@@ -27,7 +28,7 @@ final class UserLoginIn extends CriterionVisitor
                 ' OR ',
                 array_map(
                     static function (string $value): string {
-                        return 'user_login_s:"' . hash('sha256', $value) . '"';
+                        return 'user_login_s:"' . hash(UserDocumentFields::HASHING_ALGORITHM, $value) . '"';
                     },
                     (array) $criterion->value
                 )
