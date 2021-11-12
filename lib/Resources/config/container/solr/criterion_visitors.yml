@@ -246,6 +246,21 @@ services:
             - {name: ezpublish.search.solr.query.content.criterion_visitor}
             - {name: ezpublish.search.solr.query.location.criterion_visitor}
 
+    Ibexa\Solr\Query\Common\CriterionVisitor\UserEmailIn:
+        tags:
+            - { name: ezpublish.search.solr.query.content.criterion_visitor }
+            - { name: ezpublish.search.solr.query.location.criterion_visitor }
+
+    Ibexa\Solr\Query\Common\CriterionVisitor\UserIdIn:
+        tags:
+            - { name: ezpublish.search.solr.query.content.criterion_visitor }
+            - { name: ezpublish.search.solr.query.location.criterion_visitor }
+
+    Ibexa\Solr\Query\Common\CriterionVisitor\UserLoginIn:
+        tags:
+            - { name: ezpublish.search.solr.query.content.criterion_visitor }
+            - { name: ezpublish.search.solr.query.location.criterion_visitor }
+
     ezpublish.search.solr.query.common.criterion_visitor.user_metadata_in:
         class: "%ezpublish.search.solr.query.common.criterion_visitor.user_metadata_in.class%"
         tags:

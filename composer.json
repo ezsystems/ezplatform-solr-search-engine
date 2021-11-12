@@ -29,9 +29,11 @@
     },
     "autoload": {
         "psr-4": {
-            "EzSystems\\EzPlatformSolrSearchEngine\\": "lib",
-            "EzSystems\\EzPlatformSolrSearchEngineBundle\\": "bundle",
-            "EzSystems\\EzPlatformSolrSearchEngine\\Tests\\SetupFactory\\": "tests/lib/SetupFactory"
+            "Ibexa\\Solr\\": "src/lib/",
+            "Ibexa\\Tests\\Solr\\SetupFactory\\": "tests/lib/SetupFactory/",
+            "EzSystems\\EzPlatformSolrSearchEngine\\": "lib/",
+            "EzSystems\\EzPlatformSolrSearchEngineBundle\\": "bundle/",
+            "EzSystems\\EzPlatformSolrSearchEngine\\Tests\\SetupFactory\\": "tests/lib/SetupFactory/"
         }
     },
     "autoload-dev": {
