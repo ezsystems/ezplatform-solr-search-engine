@@ -193,3 +193,13 @@ services:
         parent: ezpublish.search.solr.slot
         tags:
             - {name: ezpublish.search.solr.slot, signal: SectionService\AssignSectionToSubtreeSignal}
+
+    eZ\Publish\Core\Search\Common\Slot\AssignUserToUserGroup:
+        parent: ezpublish.search.solr.slot
+        tags:
+            - {name: ezpublish.search.solr.slot, signal: UserService\AssignUserToUserGroupSignal}
+
+    eZ\Publish\Core\Search\Common\Slot\UnAssignUserFromUserGroup:
+        parent: ezpublish.search.solr.slot
+        tags:
+            - {name: ezpublish.search.solr.slot, signal: UserService\UnAssignUserFromUserGroupSignal}
