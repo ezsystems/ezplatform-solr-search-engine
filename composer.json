@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "php": "^7.3",
+        "php": "^7.3 || ^8.0",
         "ext-json": "*",
         "ezsystems/ezplatform-kernel": "^1.3@dev",
         "netgen/query-translator": "^1.0.2",
