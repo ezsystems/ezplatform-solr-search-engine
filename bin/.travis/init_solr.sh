@@ -16,7 +16,7 @@ default_shards=('shard0')
 
 SOLR_PORT=${SOLR_PORT:-8983}
 SOLR_DIR=${SOLR_DIR:-'__solr'}
-SOLR_VERSION=${SOLR_VERSION:-'6.6.5'}
+SOLR_VERSION=${SOLR_VERSION:-'8.11.1'}
 SOLR_INSTALL_DIR="${SOLR_DIR}/${SOLR_VERSION}"
 SOLR_DEBUG=${SOLR_DEBUG:-false}
 SOLR_HOME=${SOLR_HOME:-'ezcloud'}
@@ -45,7 +45,7 @@ fi
 download() {
     case ${SOLR_VERSION} in
         # PS!!: Append versions and don't remove old once, kernel uses this script!
-        6.3.0|6.4.1|6.4.2|6.5.1|6.6.0|6.6.5 )
+        6.3.0|6.4.1|6.4.2|6.5.1|6.6.0|6.6.5|8.11.1 )
             url="http://archive.apache.org/dist/lucene/solr/${SOLR_VERSION}/solr-${SOLR_VERSION}.tgz"
             ;;
         *)
@@ -132,7 +132,7 @@ wait_for_solr(){
     done
 }
 
-# Run for Solr 6
+# Run for Solr 6+
 solr_run() {
     echo "Running with version ${SOLR_VERSION} in standalone mode"
     echo "Starting solr on port ${SOLR_PORT}..."
@@ -144,7 +144,7 @@ solr_run() {
     solr_create_cores
 }
 
-# Create cores for Solr 6
+# Create cores for Solr 6+
 solr_create_cores() {
     home_dir="${SOLR_INSTALL_DIR}/server/${SOLR_HOME}"
     template_dir="${home_dir}/template"

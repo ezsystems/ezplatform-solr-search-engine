@@ -3,8 +3,8 @@
 set -e
 
 # Default paramters, if not overloaded by user arguments
-DESTINATION_DIR=.platform/configsets/solr6/conf
-SOLR_VERSION=6.6.5
+DESTINATION_DIR=.platform/configsets/solr8/conf
+SOLR_VERSION=8.11.1
 FORCE=false
 SOLR_INSTALL_DIR=""
 
@@ -19,8 +19,8 @@ Help (this text):
 
 Usage with eZ Platform Cloud (arguments here can be skipped as they have default values):
 ./vendor/ezsystems/ezplatform-solr-search-engine/bin/generate-solr-config.sh \\
-  --destination-dir=.platform/configsets/solr6/conf \\
-  --solr-version=6.6.5
+  --destination-dir=.platform/configsets/solr8/conf \\
+  --solr-version=8.11.1
 
 Usage with on-premise version of Solr:
 ./vendor/ezsystems/ezplatform-solr-search-engine/bin/generate-solr-config.sh \\
@@ -33,7 +33,7 @@ Warning:
 
 Arguments:
   [--destination-dir=<dest.dir>]     : Location where solr config should be stored
-                                       Default value is .platform/configsets/solr6/conf
+                                       Default value is .platform/configsets/solr8/conf
   [-f|--force]                       : Overwrite destination-dir if it already exists
   [--solr-install-dir]               : Existing downloaded Solr install to copy base config from.
   [--solr-version]                   : Solr version to download & copy base config from, used only if --solr-install-dir is unset
@@ -94,7 +94,7 @@ if [ -e $DESTINATION_DIR ]; then
 fi
 
 if [ "$SOLR_INSTALL_DIR" == "" ]; then
-    # If we where not provided existing install directory we'll temporary download version of solr 6 to generate config.
+    # If we where not provided existing install directory we'll temporary download version of solr to generate config.
     GENERATE_SOLR_TMPDIR=`mktemp -d`
     echo "Downloading solr bundle:"
     curl http://archive.apache.org/dist/lucene/solr/${SOLR_VERSION}/solr-${SOLR_VERSION}.tgz > $GENERATE_SOLR_TMPDIR/solr-${SOLR_VERSION}.tgz
