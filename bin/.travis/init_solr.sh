@@ -219,13 +219,16 @@ solr_cloud_configure_collection() {
     create_dir ${TEMPLATE_DIR}
 
     local files=("${SOLR_CONFIG[@]}")
-    local config_dir="${INSTALL_DIR}/server/solr/configsets/basic_configs/conf"
+    local config_dir="${INSTALL_DIR}/server/solr/configsets/_default/conf"
 
-    files+=("${config_dir}/currency.xml")
     files+=("${config_dir}/stopwords.txt")
     files+=("${config_dir}/synonyms.txt")
-    files+=("${config_dir}/elevate.xml")
     files+=("${config_dir}/solrconfig.xml")
+
+    local config_dir_samples="${INSTALL_DIR}/server/solr/sample_techproducts_configs/_default/conf"
+
+    files+=("${config_dir_samples}/currency.xml")
+    files+=("${config_dir_samples}/elevate.xml")
 
     copy_files ${TEMPLATE_DIR} "${files[*]}"
 
