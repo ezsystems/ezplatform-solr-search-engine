@@ -227,7 +227,7 @@ solr_cloud_configure_collection() {
     files+=("${config_dir}/stopwords.txt")
     files+=("${config_dir}/synonyms.txt")
 
-    local config_dir_samples="${INSTALL_DIR}/server/solr/sample_techproducts_configs/_default/conf"
+    local config_dir_samples="${INSTALL_DIR}/server/solr/configsets/sample_techproducts_configs/conf"
 
     files+=("${config_dir_samples}/currency.xml")
     files+=("${config_dir_samples}/elevate.xml")
