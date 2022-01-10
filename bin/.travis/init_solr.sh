@@ -227,11 +227,6 @@ solr_cloud_configure_collection() {
     files+=("${config_dir}/stopwords.txt")
     files+=("${config_dir}/synonyms.txt")
 
-    local config_dir_samples="${INSTALL_DIR}/server/solr/configsets/sample_techproducts_configs/conf"
-
-    files+=("${config_dir_samples}/currency.xml")
-    files+=("${config_dir_samples}/elevate.xml")
-
     copy_files ${TEMPLATE_DIR} "${files[*]}"
 
     # modify solrconfig.xml to remove section that doesn't agree with our schema
