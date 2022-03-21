@@ -1,0 +1,53 @@
+name: Solr integration tests
+
+on:
+    push:
+        branches:
+            - main
+            - '[0-9]+.[0-9]+'
+    pull_request: ~
+
+jobs:
+    solr-integration:
+        name: "Integration tests"
+        runs-on: "ubuntu-20.04"
+        strategy:
+            fail-fast: false
+            matrix:
+                solr-version:
+                    - '7.7.3'
+                    - '8.11.1'
+                cores-setup:
+                    - 'dedicated'
+                    - 'shared'
+                    - 'single'
+                    - 'cloud'
+        env:
+            CORES_SETUP: ${{ matrix.cores-setup }}
+            SOLR_VERSION: ${{ matrix.solr-version }}
+        steps:
+            - if: matrix.cores-setup == 'cloud'
+              name: "Set up Solr Cloud"
+              run: echo "SOLR_CLOUD=yes" >> $GITHUB_ENV
+
+            - if: matrix.cores-setup == 'single'
+              name: "Set up single core"
+              run: echo "SOLR_CORES=collection1" >> $GITHUB_ENV
+
+            - uses: actions/checkout@v2
+
+            - name: Setup PHP Action
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: 7.4
+                  coverage: none
+
+            - uses: "ramsey/composer-install@v1"
+              with:
+                  dependency-versions: "highest"
+
+            - name: Init Solr
+              run: ./.github/init_solr.sh
+
+            - name: Run integration test suite
+              run: composer test-integration-solr

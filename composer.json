@@ -43,6 +43,8 @@
         }
     },
     "scripts": {
+        "test": "phpunit --bootstrap tests/bootstrap.php -c phpunit.xml",
+        "test-integration-solr": "phpunit --bootstrap tests/bootstrap.php -c vendor/ezsystems/ezplatform-kernel/phpunit-integration-legacy-solr.xml",
         "fix-cs": "php-cs-fixer fix -v --show-progress=estimating",
         "check-cs": "php-cs-fixer fix --dry-run -v --show-progress=estimating"
     },

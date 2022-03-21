@@ -280,7 +280,7 @@ solr_cloud_create_collection() {
 download
 
 if [ "$SOLR_CLOUD" = "no" ]; then
-    $SCRIPT_DIR/../generate-solr-config.sh \
+    $SCRIPT_DIR/../bin/generate-solr-config.sh \
             --solr-install-dir="${SOLR_INSTALL_DIR}" \
             --solr-version="${SOLR_VERSION}" \
             --destination-dir="${SOLR_INSTALL_DIR}/server/${SOLR_HOME}/template"
