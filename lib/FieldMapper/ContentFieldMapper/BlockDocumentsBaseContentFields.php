@@ -140,12 +140,12 @@ class BlockDocumentsBaseContentFields extends ContentFieldMapper
             ),
             new Field(
                 'content_language_codes',
-                array_keys($versionInfo->names),
+                $versionInfo->languageCodes,
                 new FieldType\MultipleStringField()
             ),
             new Field(
                 'content_language_codes_raw',
-                array_keys($versionInfo->names),
+                $versionInfo->languageCodes,
                 new FieldType\MultipleIdentifierField(['raw' => true])
             ),
             new Field(
