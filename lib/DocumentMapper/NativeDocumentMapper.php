@@ -1,12 +1,8 @@
 <?php
 
 /**
- * This file is part of the eZ Platform Solr Search Engine package.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\DocumentMapper;
 
@@ -18,6 +14,7 @@ use EzSystems\EzPlatformSolrSearchEngine\DocumentMapper;
 use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentFieldMapper;
 use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\ContentTranslationFieldMapper;
 use EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper;
+use Ibexa\Solr\Index\Document\PartialDocument;
 
 /**
  * NativeDocumentMapper maps Solr backend documents per Content translation.
@@ -80,67 +77,41 @@ class NativeDocumentMapper implements DocumentMapper
      *
      * @return \eZ\Publish\SPI\Search\Document[]
      */
-    public function mapContentBlock(Content $content)
+    public function mapContentBlock(Content $content): array
     {
         $contentInfo = $content->versionInfo->contentInfo;
         $locations = $this->locationHandler->loadLocationsByContent($contentInfo->id);
         $blockFields = $this->getBlockFields($content);
         $contentFields = $this->getContentFields($content);
-        $documents = [];
         $locationFieldsMap = [];
 
         foreach ($locations as $location) {
             $locationFieldsMap[$location->id] = $this->getLocationFields($location);
         }
 
-        foreach (array_keys($content->versionInfo->names) as $languageCode) {
-            $blockTranslationFields = $this->getBlockTranslationFields(
+        $translationsToUpdate = array_keys($content->versionInfo->names);
+        $commonFieldsToUpdateLanguageCodes = array_diff(
+            $content->versionInfo->languageCodes,
+            $translationsToUpdate
+        );
+
+        return array_merge(
+            $this->generateDocumentsForTranslationsToUpdate(
+                $translationsToUpdate,
                 $content,
-                $languageCode
-            );
-
-            $translationLocationDocuments = [];
-            foreach ($locations as $location) {
-                $translationLocationDocuments[] = new Document(
-                    [
-                        'id' => $this->generateLocationDocumentId($location->id, $languageCode),
-                        'fields' => array_merge(
-                            $blockFields,
-                            $locationFieldsMap[$location->id],
-                            $blockTranslationFields
-                        ),
-                    ]
-                );
-            }
-
-            $isMainTranslation = ($contentInfo->mainLanguageCode === $languageCode);
-            $alwaysAvailable = ($isMainTranslation && $contentInfo->alwaysAvailable);
-            $contentTranslationFields = $this->getContentTranslationFields(
-                $content,
-                $languageCode
-            );
-
-            $documents[] = new Document(
-                [
-                    'id' => $this->generateContentDocumentId(
-                        $contentInfo->id,
-                        $languageCode
-                    ),
-                    'languageCode' => $languageCode,
-                    'alwaysAvailable' => $alwaysAvailable,
-                    'isMainTranslation' => $isMainTranslation,
-                    'fields' => array_merge(
-                        $blockFields,
-                        $contentFields,
-                        $blockTranslationFields,
-                        $contentTranslationFields
-                    ),
-                    'documents' => $translationLocationDocuments,
-                ]
-            );
-        }
-
-        return $documents;
+                $locations,
+                $blockFields,
+                $locationFieldsMap,
+                $contentInfo,
+                $contentFields
+            ),
+            $this->generateDocumentsForCommonFields(
+                $commonFieldsToUpdateLanguageCodes,
+                $blockFields,
+                $contentInfo,
+                $contentFields
+            )
+        );
     }
 
     /**
@@ -270,5 +241,96 @@ class NativeDocumentMapper implements DocumentMapper
         }
 
         return $fields;
+    }
+
+    /**
+     * @return \eZ\Publish\SPI\Search\Document[]
+     */
+    private function generateDocumentsForTranslationsToUpdate(
+        array $translationsToUpdate,
+        Content $content,
+        array $locations,
+        array $blockFields,
+        array $locationFieldsMap,
+        Content\ContentInfo $contentInfo,
+        array $contentFields
+    ): array {
+        $documents = [];
+        foreach ($translationsToUpdate as $languageCode) {
+            $blockTranslationFields = $this->getBlockTranslationFields(
+                $content,
+                $languageCode
+            );
+
+            $translationLocationDocuments = [];
+            foreach ($locations as $location) {
+                $translationLocationDocuments[] = new Document(
+                    [
+                        'id' => $this->generateLocationDocumentId($location->id, $languageCode),
+                        'fields' => array_merge(
+                            $blockFields,
+                            $locationFieldsMap[$location->id],
+                            $blockTranslationFields
+                        ),
+                    ]
+                );
+            }
+
+            $isMainTranslation = ($contentInfo->mainLanguageCode === $languageCode);
+            $alwaysAvailable = ($isMainTranslation && $contentInfo->alwaysAvailable);
+            $contentTranslationFields = $this->getContentTranslationFields(
+                $content,
+                $languageCode
+            );
+
+            $documents[] = new Document(
+                [
+                    'id' => $this->generateContentDocumentId(
+                        $contentInfo->id,
+                        $languageCode
+                    ),
+                    'languageCode' => $languageCode,
+                    'alwaysAvailable' => $alwaysAvailable,
+                    'isMainTranslation' => $isMainTranslation,
+                    'fields' => array_merge(
+                        $blockFields,
+                        $contentFields,
+                        $blockTranslationFields,
+                        $contentTranslationFields
+                    ),
+                    'documents' => $translationLocationDocuments,
+                ]
+            );
+        }
+
+        return $documents;
+    }
+
+    /**
+     * @param string[] $translations
+     *
+     * @return \Ibexa\Solr\Index\Document\PartialDocument[]
+     */
+    private function generateDocumentsForCommonFields(
+        array $translations,
+        array $blockFields,
+        Content\ContentInfo $contentInfo,
+        array $contentFields
+    ): array {
+        $documents = [];
+        foreach ($translations as $languageCode) {
+            $documents[] = new PartialDocument(
+                $this->generateContentDocumentId(
+                    $contentInfo->id,
+                    $languageCode
+                ),
+                array_merge(
+                    $blockFields,
+                    $contentFields,
+                )
+            );
+        }
+
+        return $documents;
     }
 }

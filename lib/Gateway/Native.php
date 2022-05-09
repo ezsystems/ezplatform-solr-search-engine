@@ -305,7 +305,7 @@ class Native extends Gateway
      * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\Endpoint $endpoint
      * @param \eZ\Publish\SPI\Search\Document[] $documents
      */
-    protected function doBulkIndexDocuments(Endpoint $endpoint, array $documents)
+    protected function doBulkIndexDocuments(Endpoint $endpoint, array $documents): void
     {
         $updates = $this->updateSerializer->serialize($documents);
         $result = $this->client->request(

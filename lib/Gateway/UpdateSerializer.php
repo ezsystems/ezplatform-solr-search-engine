@@ -13,6 +13,7 @@ use eZ\Publish\Core\Search\Common\FieldValueMapper;
 use eZ\Publish\SPI\Search\Document;
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\FieldType;
+use Ibexa\Solr\Index\Document\PartialDocument;
 use XMLWriter;
 
 /**
@@ -53,7 +54,7 @@ class UpdateSerializer
         $xmlWriter->startElement('add');
 
         foreach ($documents as $document) {
-            if (empty($document->documents)) {
+            if (empty($document->documents) && !$document instanceof PartialDocument) {
                 $document->documents[] = $this->getNestedDummyDocument($document->id);
             }
 
@@ -79,7 +80,7 @@ class UpdateSerializer
         );
 
         foreach ($document->fields as $field) {
-            $this->writeField($xmlWriter, $field);
+            $this->writeField($xmlWriter, $field, $document instanceof PartialDocument);
         }
 
         foreach ($document->documents as $subDocument) {
@@ -89,7 +90,7 @@ class UpdateSerializer
         $xmlWriter->endElement();
     }
 
-    private function writeField(XMLWriter $xmlWriter, Field $field)
+    private function writeField(XMLWriter $xmlWriter, Field $field, bool $isPartial = false)
     {
         $values = (array)$this->fieldValueMapper->map($field);
         $name = $this->nameGenerator->getTypedName($field->name, $field->type);
@@ -98,6 +99,10 @@ class UpdateSerializer
             $xmlWriter->startElement('field');
             $xmlWriter->writeAttribute('name', $name);
             $xmlWriter->writeAttribute('boost', $field->type->boost);
+            // see https://solr.apache.org/guide/8_8/updating-parts-of-documents.html
+            if ($isPartial) {
+                $xmlWriter->writeAttribute('update', 'set');
+            }
             $xmlWriter->text($value);
             $xmlWriter->endElement();
         }
