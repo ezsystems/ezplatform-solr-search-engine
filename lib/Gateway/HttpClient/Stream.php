@@ -1,29 +1,26 @@
 <?php
 
 /**
- * This file is part of the eZ Platform Solr Search Engine package.
- *
- * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @copyright Copyright (C) Ibexa AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace EzSystems\EzPlatformSolrSearchEngine\Gateway\HttpClient;
 
 use EzSystems\EzPlatformSolrSearchEngine\Gateway\Endpoint;
 use EzSystems\EzPlatformSolrSearchEngine\Gateway\HttpClient;
 use EzSystems\EzPlatformSolrSearchEngine\Gateway\Message;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\NullLogger;
 
 /**
  * Simple PHP stream based HTTP client.
+ *
+ * @internal type-hint {@see \EzSystems\EzPlatformSolrSearchEngine\Gateway\HttpClient} instead.
  */
-class Stream implements HttpClient
+class Stream implements HttpClient, LoggerAwareInterface
 {
-    /**
-     * @var \Psr\Log\LoggerInterface|null
-     */
-    private $logger;
+    use LoggerAwareTrait;
 
     /**
      * @var int
@@ -45,11 +42,14 @@ class Stream implements HttpClient
      *
      * @param int $timeout Timeout for connection in seconds.
      * @param int $retry Number of times to re-try connection.
-     * @param int $retryWaitMs Time in milli seconds.
+     * @param int $retryWaitMs Time in milliseconds.
      */
-    public function __construct(LoggerInterface $logger = null, $timeout = 10, $retry = 5, $retryWaitMs = 100)
-    {
-        $this->logger = $logger;
+    public function __construct(
+        int $timeout = 10,
+        int $retry = 5,
+        int $retryWaitMs = 100
+    ) {
+        $this->setLogger(new NullLogger());
         $this->connectionTimeout = $timeout;
         $this->connectionRetry = $retry;
         $this->retryWaitMs = $retryWaitMs;
@@ -62,7 +62,6 @@ class Stream implements HttpClient
      *
      * @param string $method
      * @param string $path
-     * @param Message $message
      *
      * @return Message
      */
@@ -79,13 +78,24 @@ class Stream implements HttpClient
             }
 
             usleep($this->retryWaitMs * 1000);
+
+            $this->logger->warning(
+                sprintf(
+                    'Connection attempt #%d to %s failed, retrying after %d ms',
+                    $i,
+                    $endpoint->getURL(),
+                    $this->retryWaitMs
+                )
+            );
         } while ($i < $this->connectionRetry);
 
-        if ($this->logger instanceof LoggerInterface) {
-            $this->logger->error(
-                sprintf('Connection to %s failed, attempted %d times', $endpoint->getURL(), $this->connectionRetry)
-            );
-        }
+        $this->logger->error(
+            sprintf(
+                'Connection to %s failed, attempted %d times',
+                $endpoint->getURL(),
+                $this->connectionRetry
+            )
+        );
 
         throw new ConnectionException($endpoint->getURL(), $path, $method);
     }
