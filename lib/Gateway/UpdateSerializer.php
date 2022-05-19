@@ -65,7 +65,7 @@ class UpdateSerializer
         return $xmlWriter->outputMemory(true);
     }
 
-    private function writeDocument(XMLWriter $xmlWriter, Document $document)
+    private function writeDocument(XMLWriter $xmlWriter, Document $document): void
     {
         $xmlWriter->startElement('doc');
 
@@ -89,15 +89,16 @@ class UpdateSerializer
         $xmlWriter->endElement();
     }
 
-    private function writeField(XMLWriter $xmlWriter, Field $field)
+    private function writeField(XMLWriter $xmlWriter, Field $field): void
     {
         $values = (array)$this->fieldValueMapper->map($field);
-        $name = $this->nameGenerator->getTypedName($field->name, $field->type);
+        $name = $this->nameGenerator->getTypedName($field->getName(), $field->getType());
 
+        $isBoosted = $field->getType()->boost;
         foreach ($values as $value) {
             $xmlWriter->startElement('field');
             $xmlWriter->writeAttribute('name', $name);
-            $xmlWriter->writeAttribute('boost', $field->type->boost);
+            $xmlWriter->writeAttribute('boost', $isBoosted);
             $xmlWriter->text($value);
             $xmlWriter->endElement();
         }
