@@ -86,15 +86,15 @@ jobs:
             - name: Setup PHP Action
               uses: shivammathur/setup-php@v2
               with:
-                  php-version: 7.1
+                  php-version: 7.2
                   coverage: none
                   extensions: pdo_sqlite, gd
                   tools: cs2pr
 
-            - uses: actions/setup-java@v3
-              with:
-                distribution: 'temurin'
-                java-version: '8'
+            # - uses: actions/setup-java@v3
+            #   with:
+            #     distribution: 'temurin'
+            #     java-version: '8'
 
             - uses: "ramsey/composer-install@v1"
               with:
