@@ -79,22 +79,18 @@ jobs:
                 cores-setup: ["dedicated", "shared", "single", "cloud"]
         env:
           CORES_SETUP: ${{ matrix.cores-setup }}
+          SOLR_VERSION: ${{ matrix.solr-version }}
 
         steps:
             - uses: actions/checkout@v2
 
-            - name: Setup PHP Action
+            - name: Setup PHP Actionc
               uses: shivammathur/setup-php@v2
               with:
                   php-version: 7.2
                   coverage: none
                   extensions: pdo_sqlite, gd
                   tools: cs2pr
-
-            # - uses: actions/setup-java@v3
-            #   with:
-            #     distribution: 'temurin'
-            #     java-version: '8'
 
             - uses: "ramsey/composer-install@v1"
               with:
