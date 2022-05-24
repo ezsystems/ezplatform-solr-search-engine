@@ -35,7 +35,9 @@
     },
     "scripts": {
         "fix-cs": "php-cs-fixer fix -v --show-progress=estimating",
-        "check-cs": "php-cs-fixer fix --dry-run -v --show-progress=estimating"
+        "check-cs": "php-cs-fixer fix --dry-run -v --show-progress=estimating",
+        "test-integration-solr": "phpunit --bootstrap tests/bootstrap.php -c vendor/ezsystems/ezpublish-kernel/phpunit-integration-legacy-solr.xml",
+        "test": "phpunit --bootstrap tests/bootstrap.php -c phpunit.xml"
     },
     "extra": {
         "branch-alias": {

@@ -1,0 +1,128 @@
+name: CI
+
+on:
+    push:
+        branches:
+            - main
+            - '[0-9]+.[0-9]+'
+    pull_request: ~
+
+jobs:
+    cs-fix:
+        name: Run code style check
+        runs-on: "ubuntu-20.04"
+        strategy:
+            matrix:
+                php:
+                    - '7.4'
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Setup PHP Action
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php }}
+                  coverage: none
+                  extensions: 'pdo_sqlite, gd'
+                  tools: cs2pr
+
+            - uses: "ramsey/composer-install@v1"
+              with:
+                  dependency-versions: "highest"
+
+            - name: Run code style check
+              run: composer run-script check-cs -- --format=checkstyle | cs2pr
+
+    tests:
+        name: Unit tests
+        runs-on: "ubuntu-20.04"
+        timeout-minutes: 15
+
+        strategy:
+            fail-fast: false
+            matrix:
+                php:
+                    - '7.1'
+                    - '7.3'
+                    - '7.4'
+
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Setup PHP Action
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php }}
+                  coverage: none
+                  extensions: pdo_sqlite, gd
+                  tools: cs2pr
+
+            - uses: "ramsey/composer-install@v1"
+              with:
+                  dependency-versions: "highest"
+
+            - name: Setup problem matchers for PHPUnit
+              run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+            - name: Run unit test suite
+              run: composer test
+
+    integration-tests:
+        name: Unit tests
+        runs-on: "ubuntu-20.04"
+        timeout-minutes: 15
+
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                  - solr-version: "6.4.2"
+                    cores-setup: "dedicated"
+                  - solr-version: "6.5.1"
+                    cores-setup: "shared"
+                  - solr-version: "6.6.5"
+                    cores-setup: "single"
+                  - solr-version: "6.6.5"
+                    cores-setup: "cloud"
+        env:
+          CORES_SETUP: ${{ matrix.cores-setup }}
+
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Setup PHP Action
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: 7.1
+                  coverage: none
+                  extensions: pdo_sqlite, gd
+                  tools: cs2pr
+
+            - uses: actions/setup-java@v3
+              with:
+                distribution: 'temurin'
+                java-version: '8'
+
+            - uses: "ramsey/composer-install@v1"
+              with:
+                  dependency-versions: "highest"
+
+            - if: matrix.cores-setup == 'cloud'
+              name: "Set up Solr Cloud"
+              run: echo "SOLR_CLOUD=yes" >> $GITHUB_ENV
+
+            - if: matrix.cores-setup == 'single'
+              name: "Set up Solr single collection tests"
+              run: echo "SOLR_CORES=collection1" >> $GITHUB_ENV
+
+            - name: Setup problem matchers for PHPUnit
+              run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+            - name: Setup Solr
+              run: ./bin/.travis/init_solr.sh
+              env: 
+                SOLR_VERSION: ${{ matrix.solr-version }}
+                CORES_SETUP: ${{ matrix.cores-setup }}
+
+            - name: Run unit test suite
+              run: composer test-integration-solr
