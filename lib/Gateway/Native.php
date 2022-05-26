@@ -16,6 +16,7 @@ use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\FieldType;
 use EzSystems\EzPlatformSolrSearchEngine\Gateway;
 use EzSystems\EzPlatformSolrSearchEngine\Query\QueryConverter;
+use Ibexa\Solr\Gateway\UpdateSerializerInterface;
 use RuntimeException;
 
 /**
@@ -58,7 +59,7 @@ class Native extends Gateway
     protected $locationQueryConverter;
 
     /**
-     * @var \EzSystems\EzPlatformSolrSearchEngine\Gateway\UpdateSerializer
+     * @var \Ibexa\Solr\Gateway\UpdateSerializerInterface
      */
     protected $updateSerializer;
 
@@ -67,20 +68,13 @@ class Native extends Gateway
      */
     protected $distributionStrategy;
 
-    /**
-     * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\HttpClient $client
-     * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointResolver $endpointResolver
-     * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\EndpointRegistry $endpointRegistry
-     * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\UpdateSerializer $updateSerializer
-     * @param \EzSystems\EzPlatformSolrSearchEngine\Gateway\DistributionStrategy $distributionStrategy
-     */
     public function __construct(
         HttpClient $client,
         EndpointResolver $endpointResolver,
         EndpointRegistry $endpointRegistry,
         QueryConverter $contentQueryConverter,
         QueryConverter $locationQueryConverter,
-        UpdateSerializer $updateSerializer,
+        UpdateSerializerInterface $updateSerializer,
         DistributionStrategy $distributionStrategy
     ) {
         $this->client = $client;
@@ -315,7 +309,7 @@ class Native extends Gateway
             '/update?wt=json',
             new Message(
                 [
-                    'Content-Type' => 'text/xml',
+                    'Content-Type' => 'text/' . $this->updateSerializer->getSupportedFormat(),
                 ],
                 $updates
             )

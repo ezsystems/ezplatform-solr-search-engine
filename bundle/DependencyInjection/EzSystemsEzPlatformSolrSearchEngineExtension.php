@@ -10,6 +10,7 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngineBundle\DependencyInjection;
 
+use Ibexa\Solr\Gateway\UpdateSerializerInterface;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
@@ -83,6 +84,8 @@ class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
      */
     const CLOUD_DISTRIBUTION_STRATEGY_ID = 'ezpublish.search.solr.gateway.distribution_strategy.abstract_cloud';
 
+    public const GATEWAY_UPDATE_SERIALIZER_TAG = 'ibexa.solr.gateway.serializer.update';
+
     public function getAlias()
     {
         return 'ez_search_engine_solr';
@@ -117,6 +120,10 @@ class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
         $loader->load('services.yml');
 
         $this->processConnectionConfiguration($container, $config);
+
+        $container
+            ->registerForAutoconfiguration(UpdateSerializerInterface::class)
+            ->addTag(self::GATEWAY_UPDATE_SERIALIZER_TAG);
     }
 
     /**
@@ -211,8 +218,8 @@ class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
 
         // Gateway
         $gatewayDefinition = new ChildDefinition(self::GATEWAY_ID);
-        $gatewayDefinition->replaceArgument(1, new Reference($endpointResolverId));
-        $gatewayDefinition->replaceArgument(6, new Reference($distributionStrategyId));
+        $gatewayDefinition->replaceArgument('$endpointResolver', new Reference($endpointResolverId));
+        $gatewayDefinition->replaceArgument('$distributionStrategy', new Reference($distributionStrategyId));
         $gatewayDefinition->addTag('ezpublish.search.solr.gateway', ['connection' => $connectionName]);
 
         $gatewayId = "$alias.connection.$connectionName.gateway_id";

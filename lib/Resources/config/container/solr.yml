@@ -7,6 +7,7 @@ imports:
     - {resource: solr/sort_clause_visitors.yml}
     - {resource: solr/aggregation_result_extractors.yml}
     - {resource: solr/aggregation_visitors.yml}
+    - {resource: solr/gateway_update_serializers.yaml}
 
 parameters:
     ezpublish.search.solr.connection.server: http://localhost:8983/solr/core0
@@ -130,13 +131,13 @@ services:
     ezpublish.search.solr.gateway.native:
         class: "%ezpublish.search.solr.gateway.native.class%"
         arguments:
-            - "@ezpublish.search.solr.gateway.client.http.stream"
-            - "@ezpublish.search.solr.gateway.endpoint_resolver"
-            - "@ezpublish.search.solr.gateway.endpoint_registry"
-            - "@ezpublish.search.solr.query_converter.content"
-            - "@ezpublish.search.solr.query_converter.location"
-            - "@ezpublish.search.solr.gateway.update_serializer"
-            - "@ezpublish.search.solr.gateway.distribution_strategy.standalone"
+            $client: '@ezpublish.search.solr.gateway.client.http.stream'
+            $endpointResolver: '@ezpublish.search.solr.gateway.endpoint_resolver'
+            $endpointRegistry: '@ezpublish.search.solr.gateway.endpoint_registry'
+            $contentQueryConverter: '@ezpublish.search.solr.query_converter.content'
+            $locationQueryConverter: '@ezpublish.search.solr.query_converter.location'
+            $updateSerializer: '@Ibexa\Solr\Gateway\UpdateSerializerInterface'
+            $distributionStrategy: '@ezpublish.search.solr.gateway.distribution_strategy.standalone'
 
     ezpublish.search.solr.gateway:
         alias: ezpublish.search.solr.gateway.native

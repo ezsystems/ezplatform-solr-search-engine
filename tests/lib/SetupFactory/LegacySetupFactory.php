@@ -16,6 +16,8 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
 use eZ\Publish\SPI\Persistence;
 use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler;
 use EzSystems\EzPlatformSolrSearchEngine\Handler as SolrSearchHandler;
+use EzSystems\EzPlatformSolrSearchEngineBundle\DependencyInjection\EzSystemsEzPlatformSolrSearchEngineExtension;
+use Ibexa\Solr\Gateway\UpdateSerializerInterface;
 use RuntimeException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -53,7 +55,10 @@ class LegacySetupFactory extends CoreLegacySetupFactory
         return $repository;
     }
 
-    protected function externalBuildContainer(ContainerBuilder $containerBuilder)
+    /**
+     * @throws \Exception
+     */
+    protected function externalBuildContainer(ContainerBuilder $containerBuilder): void
     {
         $settingsPath = __DIR__ . '/../../../lib/Resources/config/container/';
         $testSettingsPath = __DIR__ . '/../Resources/config/';
@@ -75,6 +80,10 @@ class LegacySetupFactory extends CoreLegacySetupFactory
         $containerBuilder->addCompilerPass(new Compiler\EndpointRegistryPass());
         $containerBuilder->addCompilerPass(new BaseCompiler\Search\AggregateFieldValueMapperPass());
         $containerBuilder->addCompilerPass(new BaseCompiler\Search\FieldRegistryPass());
+
+        $containerBuilder
+            ->registerForAutoconfiguration(UpdateSerializerInterface::class)
+            ->addTag(EzSystemsEzPlatformSolrSearchEngineExtension::GATEWAY_UPDATE_SERIALIZER_TAG);
     }
 
     private function getPersistenceContentHandler(
