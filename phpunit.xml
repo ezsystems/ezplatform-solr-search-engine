@@ -3,8 +3,7 @@
          colors="true"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         syntaxCheck="true">
+         convertWarningsToExceptions="true">
     <php>
         <ini name="error_reporting" value="-1" />
     </php>
