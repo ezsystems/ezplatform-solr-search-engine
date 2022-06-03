@@ -309,7 +309,7 @@ class Native extends Gateway
             '/update?wt=json',
             new Message(
                 [
-                    'Content-Type' => 'text/' . $this->updateSerializer->getSupportedFormat(),
+                    'Content-Type' => 'application/' . $this->updateSerializer->getSupportedFormat(),
                 ],
                 $updates
             )
@@ -402,7 +402,7 @@ class Native extends Gateway
                 '/update',
                 new Message(
                     [
-                        'Content-Type' => 'text/xml',
+                        'Content-Type' => 'application/xml',
                     ],
                     $payload
                 )

@@ -15,9 +15,15 @@ parameters:
     ezpublish.search.solr.field_mapper.indexing_depth_provider.default: 0
 
 services:
+    ibexa.solr.http_client:
+        class: Symfony\Contracts\HttpClient\HttpClientInterface
+        factory: [\Symfony\Component\HttpClient\HttpClient, 'create']
+
     ezpublish.search.solr.gateway.client.http.stream:
         class: '%ezpublish.search.solr.gateway.client.http.stream.class%'
         autoconfigure: true
+        arguments:
+            $client: '@ibexa.solr.http_client'
 
     # Note: services tagged with 'ezpublish.search.solr.query.content.criterion_visitor'
     # are registered to this one using compilation pass

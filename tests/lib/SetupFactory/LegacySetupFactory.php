@@ -21,7 +21,10 @@ use Ibexa\Solr\Gateway\UpdateSerializerInterface;
 use RuntimeException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
  * Used to setup the infrastructure for Repository Public API integration tests,
@@ -84,6 +87,8 @@ class LegacySetupFactory extends CoreLegacySetupFactory
         $containerBuilder
             ->registerForAutoconfiguration(UpdateSerializerInterface::class)
             ->addTag(EzSystemsEzPlatformSolrSearchEngineExtension::GATEWAY_UPDATE_SERIALIZER_TAG);
+
+        $this->configureSymfonyHttpClient($containerBuilder);
     }
 
     private function getPersistenceContentHandler(
@@ -147,5 +152,13 @@ class LegacySetupFactory extends CoreLegacySetupFactory
         }
 
         return self::CONFIGURATION_FILES_MAP[$coresSetup];
+    }
+
+    private function configureSymfonyHttpClient(ContainerBuilder $containerBuilder): void
+    {
+        $containerBuilder->setDefinition(
+            'http_client',
+            (new Definition(HttpClientInterface::class))->setFactory([HttpClient::class, 'create'])
+        );
     }
 }

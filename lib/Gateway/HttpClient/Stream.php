@@ -12,6 +12,8 @@ use EzSystems\EzPlatformSolrSearchEngine\Gateway\Message;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\NullLogger;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
  * Simple PHP stream based HTTP client.
@@ -22,20 +24,17 @@ class Stream implements HttpClient, LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $connectionTimeout;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $connectionRetry;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $retryWaitMs;
+
+    /** @var \Symfony\Contracts\HttpClient\HttpClientInterface */
+    private $client;
 
     /**
      * Stream constructor.
@@ -45,48 +44,60 @@ class Stream implements HttpClient, LoggerAwareInterface
      * @param int $retryWaitMs Time in milliseconds.
      */
     public function __construct(
+        HttpClientInterface $client,
         int $timeout = 10,
         int $retry = 5,
         int $retryWaitMs = 100
     ) {
-        $this->setLogger(new NullLogger());
+        $this->client = $client;
         $this->connectionTimeout = $timeout;
         $this->connectionRetry = $retry;
         $this->retryWaitMs = $retryWaitMs;
+        $this->setLogger(new NullLogger());
     }
 
     /**
-     * Execute a HTTP request to the remote server.
+     * Execute an HTTP request to the remote server.
      *
      * Returns the result from the remote server.
      *
      * @param string $method
      * @param string $path
      *
-     * @return Message
+     * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
      */
-    public function request($method, Endpoint $endpoint, $path, Message $message = null)
+    public function request($method, Endpoint $endpoint, $path, Message $message = null): Message
     {
-        $message = $message ?: new Message();
+        $message = $message ?? new Message();
 
         // We'll try to reach backend several times before throwing exception.
         $i = 0;
         do {
             ++$i;
-            if ($responseMessage = $this->requestStream($method, $endpoint, $path, $message)) {
-                return $responseMessage;
+            try {
+                if (
+                    $responseMessage = $this->getResponseMessage(
+                        $method,
+                        $endpoint,
+                        $path,
+                        $message
+                    )
+                ) {
+                    return $responseMessage;
+                }
+            } catch (TransportExceptionInterface $e) {
+                $this->logger->warning(
+                    sprintf(
+                        'Connection attempt #%d to %s failed, retrying after %d ms',
+                        $i,
+                        $endpoint->getURL(),
+                        $this->retryWaitMs
+                    )
+                );
             }
-
             usleep($this->retryWaitMs * 1000);
-
-            $this->logger->warning(
-                sprintf(
-                    'Connection attempt #%d to %s failed, retrying after %d ms',
-                    $i,
-                    $endpoint->getURL(),
-                    $this->retryWaitMs
-                )
-            );
         } while ($i < $this->connectionRetry);
 
         $this->logger->error(
@@ -100,89 +111,44 @@ class Stream implements HttpClient, LoggerAwareInterface
         throw new ConnectionException($endpoint->getURL(), $path, $method);
     }
 
-    private function requestStream($method, Endpoint $endpoint, $path, Message $message)
-    {
-        $requestHeaders = $this->getRequestHeaders($message, $endpoint);
-        $contextOptions = [
-            'http' => [
-                'method' => $method,
-                'content' => $message->body,
-                'ignore_errors' => true,
-                'timeout' => $this->connectionTimeout,
-                'header' => $requestHeaders,
-            ],
-        ];
-
-        $httpFilePointer = @fopen(
-            $endpoint->getURL() . $path,
-            'r',
-            false,
-            stream_context_create($contextOptions)
-        );
-
-        // Check if connection has been established successfully
-        if ($httpFilePointer === false) {
-            return null;
-        }
-
-        // Read request body
-        $body = '';
-        while (!feof($httpFilePointer)) {
-            $body .= fgets($httpFilePointer);
-        }
-
-        $metaData = stream_get_meta_data($httpFilePointer);
-        // This depends on PHP compiled with or without --curl-enable-streamwrappers
-        $rawHeaders = isset($metaData['wrapper_data']['headers']) ?
-            $metaData['wrapper_data']['headers'] :
-            $metaData['wrapper_data'];
-        $headers = [];
-
-        foreach ($rawHeaders as $lineContent) {
-            // Extract header values
-            if (preg_match('(^HTTP/(?P<version>\d+\.\d+)\s+(?P<status>\d+))S', $lineContent, $match)) {
-                $headers['version'] = $match['version'];
-                $headers['status'] = (int)$match['status'];
-            } else {
-                list($key, $value) = explode(':', $lineContent, 2);
-                $headers[$key] = ltrim($value);
-            }
-        }
-
-        return new Message(
-            $headers,
-            $body
-        );
-    }
-
     /**
-     * Get formatted request headers.
-     *
-     * Merged with the default values.
-     *
-     * @return string
+     * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      */
-    protected function getRequestHeaders(Message $message, Endpoint $endpoint)
-    {
-        // Use message headers as default
-        $headers = $message->headers;
-
-        // Set headers from $endpoint
+    private function getResponseMessage(
+        $method,
+        Endpoint $endpoint,
+        $path,
+        Message $message
+    ): Message {
         if ($endpoint->user !== null) {
             $headers['Authorization'] = 'Basic ' . base64_encode("{$endpoint->user}:{$endpoint->pass}");
         }
 
-        // Render headers
-        $requestHeaders = '';
+        $response = $this->client->request(
+            $method,
+            $endpoint->getURL() . $path,
+            [
+                'headers' => $message->headers,
+                'timeout' => $this->connectionTimeout,
+                'body' => $message->body,
+            ]
+        );
 
-        foreach ($headers as $name => $value) {
-            if (is_numeric($name)) {
-                throw new \RuntimeException("Invalid HTTP header name $name");
-            }
+        $headers = array_merge(
+            [
+                // hardcoded for BC, not provided by symfony/http-client, nor needed
+                'version' => '1.1',
+                'status' => $response->getStatusCode(),
+            ],
+            $response->getHeaders()
+        );
 
-            $requestHeaders .= "$name: $value\r\n";
-        }
-
-        return $requestHeaders;
+        return new Message(
+            $headers,
+            $response->getContent(),
+        );
     }
 }
