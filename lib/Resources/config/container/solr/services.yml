@@ -15,9 +15,24 @@ parameters:
     ezpublish.search.solr.field_mapper.indexing_depth_provider.default: 0
 
 services:
+    ibexa.solr.http_client.retryable:
+        class: Symfony\Component\HttpClient\RetryableHttpClient
+        decorates: ibexa.solr.http_client
+        arguments:
+            $client: '@.inner'
+            $strategy: null
+            $maxRetries: 5
+            $logger: '@?logger'
+        tags:
+            - { name: monolog.logger, channel: solr }
+
     ibexa.solr.http_client:
         class: Symfony\Contracts\HttpClient\HttpClientInterface
         factory: [\Symfony\Component\HttpClient\HttpClient, 'create']
+        calls:
+            - setLogger: ['@logger']
+        tags:
+            - { name: monolog.logger, channel: solr }
 
     ezpublish.search.solr.gateway.client.http.stream:
         class: '%ezpublish.search.solr.gateway.client.http.stream.class%'

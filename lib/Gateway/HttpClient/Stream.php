@@ -12,7 +12,7 @@ use EzSystems\EzPlatformSolrSearchEngine\Gateway\Message;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\NullLogger;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
@@ -27,32 +27,16 @@ class Stream implements HttpClient, LoggerAwareInterface
     /** @var int */
     private $connectionTimeout;
 
-    /** @var int */
-    private $connectionRetry;
-
-    /** @var int */
-    private $retryWaitMs;
-
     /** @var \Symfony\Contracts\HttpClient\HttpClientInterface */
     private $client;
 
     /**
-     * Stream constructor.
-     *
      * @param int $timeout Timeout for connection in seconds.
-     * @param int $retry Number of times to re-try connection.
-     * @param int $retryWaitMs Time in milliseconds.
      */
-    public function __construct(
-        HttpClientInterface $client,
-        int $timeout = 10,
-        int $retry = 5,
-        int $retryWaitMs = 100
-    ) {
+    public function __construct(HttpClientInterface $client, int $timeout = 10)
+    {
         $this->client = $client;
         $this->connectionTimeout = $timeout;
-        $this->connectionRetry = $retry;
-        $this->retryWaitMs = $retryWaitMs;
         $this->setLogger(new NullLogger());
     }
 
@@ -64,51 +48,22 @@ class Stream implements HttpClient, LoggerAwareInterface
      * @param string $method
      * @param string $path
      *
-     * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
+     * @throws \EzSystems\EzPlatformSolrSearchEngine\Gateway\HttpClient\ConnectionException
      */
     public function request($method, Endpoint $endpoint, $path, Message $message = null): Message
     {
         $message = $message ?? new Message();
 
-        // We'll try to reach backend several times before throwing exception.
-        $i = 0;
-        do {
-            ++$i;
-            try {
-                if (
-                    $responseMessage = $this->getResponseMessage(
-                        $method,
-                        $endpoint,
-                        $path,
-                        $message
-                    )
-                ) {
-                    return $responseMessage;
-                }
-            } catch (TransportExceptionInterface $e) {
-                $this->logger->warning(
-                    sprintf(
-                        'Connection attempt #%d to %s failed, retrying after %d ms',
-                        $i,
-                        $endpoint->getURL(),
-                        $this->retryWaitMs
-                    )
-                );
-            }
-            usleep($this->retryWaitMs * 1000);
-        } while ($i < $this->connectionRetry);
-
-        $this->logger->error(
-            sprintf(
-                'Connection to %s failed, attempted %d times',
-                $endpoint->getURL(),
-                $this->connectionRetry
-            )
-        );
-
-        throw new ConnectionException($endpoint->getURL(), $path, $method);
+        try {
+            return $this->getResponseMessage(
+                $method,
+                $endpoint,
+                $path,
+                $message
+            );
+        } catch (ExceptionInterface $e) {
+            throw new ConnectionException($endpoint->getURL(), $path, $method, $e);
+        }
     }
 
     /**
