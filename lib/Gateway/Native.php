@@ -224,7 +224,7 @@ class Native extends Gateway
      *
      * @param \eZ\Publish\SPI\Search\Document[][] $documents
      */
-    public function bulkIndexDocuments(array $documents): void
+    public function bulkIndexDocuments(array $documents)
     {
         $documentMap = [];
 
@@ -233,10 +233,7 @@ class Native extends Gateway
 
         foreach ($documents as $translationDocuments) {
             foreach ($translationDocuments as $document) {
-                $indexingTarget = $this->endpointResolver->getIndexingTarget(
-                    $document->languageCode
-                );
-                $documentMap[$indexingTarget][] = $document;
+                $documentMap[$document->languageCode][] = $document;
 
                 if ($mainTranslationsEndpoint !== null && $document->isMainTranslation) {
                     $mainTranslationsDocuments[] = $this->getMainTranslationDocument($document);
@@ -244,10 +241,12 @@ class Native extends Gateway
             }
         }
 
-        foreach ($documentMap as $indexingTarget => $targetDocuments) {
+        foreach ($documentMap as $languageCode => $translationDocuments) {
             $this->doBulkIndexDocuments(
-                $this->endpointRegistry->getEndpoint($indexingTarget),
-                $targetDocuments
+                $this->endpointRegistry->getEndpoint(
+                    $this->endpointResolver->getIndexingTarget($languageCode)
+                ),
+                $translationDocuments
             );
         }
 
