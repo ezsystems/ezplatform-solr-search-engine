@@ -41,6 +41,7 @@ class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtension
     public function testEmpty()
     {
         $this->load();
+        $this->expectNotToPerformAssertions();
     }
 
     public function dataProviderForTestEndpoint()
@@ -208,9 +209,17 @@ class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtension
      *
      * @dataProvider dataProviderForTestConnection
      */
-    public function testConnectionLoad($configurationValues)
+    public function testConnectionLoad(array $configurationValues): void
     {
         $this->load($configurationValues);
+        $alias = $this->extension->getAlias();
+        $connectionNames = array_keys($configurationValues['connections']);
+        foreach ($connectionNames as $connectionName) {
+            $this->assertContainerBuilderHasService("$alias.connection.$connectionName.gateway_id");
+        }
+        if (empty($connectionNames)) {
+            $this->expectNotToPerformAssertions();
+        }
     }
 
     public function testConnection()

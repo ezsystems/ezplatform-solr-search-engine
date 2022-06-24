@@ -16,10 +16,15 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
 use eZ\Publish\SPI\Persistence;
 use EzSystems\EzPlatformSolrSearchEngine\Container\Compiler;
 use EzSystems\EzPlatformSolrSearchEngine\Handler as SolrSearchHandler;
+use EzSystems\EzPlatformSolrSearchEngineBundle\DependencyInjection\EzSystemsEzPlatformSolrSearchEngineExtension;
+use Ibexa\Solr\Gateway\UpdateSerializerInterface;
 use RuntimeException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
  * Used to setup the infrastructure for Repository Public API integration tests,
@@ -53,7 +58,10 @@ class LegacySetupFactory extends CoreLegacySetupFactory
         return $repository;
     }
 
-    protected function externalBuildContainer(ContainerBuilder $containerBuilder)
+    /**
+     * @throws \Exception
+     */
+    protected function externalBuildContainer(ContainerBuilder $containerBuilder): void
     {
         $settingsPath = __DIR__ . '/../../../lib/Resources/config/container/';
         $testSettingsPath = __DIR__ . '/../Resources/config/';
@@ -75,6 +83,12 @@ class LegacySetupFactory extends CoreLegacySetupFactory
         $containerBuilder->addCompilerPass(new Compiler\EndpointRegistryPass());
         $containerBuilder->addCompilerPass(new BaseCompiler\Search\AggregateFieldValueMapperPass());
         $containerBuilder->addCompilerPass(new BaseCompiler\Search\FieldRegistryPass());
+
+        $containerBuilder
+            ->registerForAutoconfiguration(UpdateSerializerInterface::class)
+            ->addTag(EzSystemsEzPlatformSolrSearchEngineExtension::GATEWAY_UPDATE_SERIALIZER_TAG);
+
+        $this->configureSymfonyHttpClient($containerBuilder);
     }
 
     private function getPersistenceContentHandler(
@@ -138,5 +152,13 @@ class LegacySetupFactory extends CoreLegacySetupFactory
         }
 
         return self::CONFIGURATION_FILES_MAP[$coresSetup];
+    }
+
+    private function configureSymfonyHttpClient(ContainerBuilder $containerBuilder): void
+    {
+        $containerBuilder->setDefinition(
+            'http_client',
+            (new Definition(HttpClientInterface::class))->setFactory([HttpClient::class, 'create'])
+        );
     }
 }

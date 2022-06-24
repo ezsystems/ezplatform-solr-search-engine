@@ -1,0 +1,28 @@
+parameters:
+    ibexa.solr.gateway.data_format: 'json'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    Ibexa\Solr\Gateway\UpdateSerializerFactory:
+        arguments:
+            $serializers: !tagged_iterator ibexa.solr.gateway.serializer.update
+
+    Ibexa\Solr\Gateway\UpdateSerializer\UpdateSerializer:
+        arguments:
+            $fieldValueMapper: '@ezpublish.search.common.field_value_mapper.aggregate'
+            $nameGenerator: '@ezpublish.search.common.field_name_generator'
+
+    Ibexa\Solr\Gateway\UpdateSerializer\XmlUpdateSerializer:
+        parent: Ibexa\Solr\Gateway\UpdateSerializer\UpdateSerializer
+
+    Ibexa\Solr\Gateway\UpdateSerializer\JsonUpdateSerializer:
+        parent: Ibexa\Solr\Gateway\UpdateSerializer\UpdateSerializer
+
+    Ibexa\Solr\Gateway\UpdateSerializerInterface:
+        factory: ['@Ibexa\Solr\Gateway\UpdateSerializerFactory', 'getSerializer']
+        arguments:
+            $format: '%ibexa.solr.gateway.data_format%'
