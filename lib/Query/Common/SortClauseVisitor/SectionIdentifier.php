@@ -35,6 +35,6 @@ class SectionIdentifier extends SortClauseVisitor
      */
     public function visit(SortClause $sortClause)
     {
-        return 'content_section_identifier_s' . $this->getDirection($sortClause);
+        return 'content_section_identifier_id' . $this->getDirection($sortClause);
     }
 }
