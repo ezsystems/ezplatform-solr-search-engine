@@ -166,7 +166,7 @@ class BlockDocumentsBaseContentFields extends ContentFieldMapper
             new Field(
                 'content_section_identifier',
                 $section->identifier,
-                new FieldType\IdentifierField()
+                new FieldType\IdentifierField(['raw' => true])
             ),
             new Field(
                 'content_section_name',
