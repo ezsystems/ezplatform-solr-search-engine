@@ -13,6 +13,8 @@ parameters:
     ezpublish.search.solr.field_mapper.indexing_depth_provider.class: \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\IndexingDepthProvider
     ezpublish.search.solr.field_mapper.indexing_depth_provider.map: []
     ezpublish.search.solr.field_mapper.indexing_depth_provider.default: 0
+    ibexa.solr.http_client.timeout: 10
+    ibexa.solr.http_client.max_retries: 5
 
 services:
     ibexa.solr.http_client.retryable:
@@ -21,7 +23,7 @@ services:
         arguments:
             $client: '@.inner'
             $strategy: null
-            $maxRetries: 5
+            $maxRetries: '%ibexa.solr.http_client.max_retries%'
             $logger: '@?logger'
         tags:
             - { name: monolog.logger, channel: solr }
@@ -39,6 +41,7 @@ services:
         autoconfigure: true
         arguments:
             $client: '@ibexa.solr.http_client'
+            $timeout: '%ibexa.solr.http_client.timeout%'
 
     # Note: services tagged with 'ezpublish.search.solr.query.content.criterion_visitor'
     # are registered to this one using compilation pass
