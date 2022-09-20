@@ -14,6 +14,9 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface
 {
+    public const SOLR_HTTP_CLIENT_DEFAULT_TIMEOUT = 10;
+    public const SOLR_HTTP_CLIENT_DEFAULT_MAX_RETRIES = 3;
+
     protected $rootNodeName;
 
     /**
@@ -48,6 +51,7 @@ class Configuration implements ConfigurationInterface
 
         $this->addEndpointsSection($rootNode);
         $this->addConnectionsSection($rootNode);
+        $this->addHttpClientConfigurationSection($rootNode);
 
         return $treeBuilder;
     }
@@ -389,6 +393,27 @@ class Configuration implements ConfigurationInterface
                                 ->end()
                             ->end()
                         ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ->end();
+    }
+
+    private function addHttpClientConfigurationSection(ArrayNodeDefinition $node): void
+    {
+        $node->children()
+            ->arrayNode('http_client')
+                ->info('Configuration settings for HTTP Client used to communicate with Solr instance')
+                ->children()
+                    ->integerNode('timeout')
+                        ->info('HTTP Client timeout')
+                        ->min(0)
+                        ->defaultValue(self::SOLR_HTTP_CLIENT_DEFAULT_TIMEOUT)
+                    ->end()
+                    ->integerNode('max_retries')
+                        ->info('HTTP Client max retries after failure')
+                        ->min(0)
+                        ->defaultValue(self::SOLR_HTTP_CLIENT_DEFAULT_MAX_RETRIES)
                     ->end()
                 ->end()
             ->end()

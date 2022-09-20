@@ -13,8 +13,8 @@ parameters:
     ezpublish.search.solr.field_mapper.indexing_depth_provider.class: \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\IndexingDepthProvider
     ezpublish.search.solr.field_mapper.indexing_depth_provider.map: []
     ezpublish.search.solr.field_mapper.indexing_depth_provider.default: 0
-    ibexa.solr.http_client.timeout: 10
-    ibexa.solr.http_client.max_retries: 5
+    ibexa.solr.http_client.timeout: !php/const \EzSystems\EzPlatformSolrSearchEngineBundle\DependencyInjection\Configuration::SOLR_HTTP_CLIENT_DEFAULT_TIMEOUT
+    ibexa.solr.http_client.max_retries: !php/const \EzSystems\EzPlatformSolrSearchEngineBundle\DependencyInjection\Configuration::SOLR_HTTP_CLIENT_DEFAULT_MAX_RETRIES
 
 services:
     ibexa.solr.http_client.retryable:
