@@ -10,7 +10,7 @@ parameters:
     ezpublish.search.solr.field_mapper.location.class: EzSystems\EzPlatformSolrSearchEngine\FieldMapper\LocationFieldMapper\Aggregate
     ezpublish.search.solr.field_mapper.boost_factor_provider.class: EzSystems\EzPlatformSolrSearchEngine\FieldMapper\BoostFactorProvider
     ezpublish.search.solr.field_mapper.boost_factor_provider.map: []
-    ezpublish.search.solr.field_mapper.indexing_depth_provider.class: \EzSystems\EzPlatformSolrSearchEngine\FieldMapper\IndexingDepthProvider
+    ezpublish.search.solr.field_mapper.indexing_depth_provider.class: EzSystems\EzPlatformSolrSearchEngine\FieldMapper\IndexingDepthProvider
     ezpublish.search.solr.field_mapper.indexing_depth_provider.map: []
     ezpublish.search.solr.field_mapper.indexing_depth_provider.default: 0
     ibexa.solr.http_client.timeout: !php/const \EzSystems\EzPlatformSolrSearchEngineBundle\DependencyInjection\Configuration::SOLR_HTTP_CLIENT_DEFAULT_TIMEOUT
