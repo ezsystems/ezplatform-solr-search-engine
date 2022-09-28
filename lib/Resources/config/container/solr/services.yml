@@ -26,7 +26,7 @@ services:
             $maxRetries: '%ibexa.solr.http_client.max_retries%'
             $logger: '@?logger'
         tags:
-            - { name: monolog.logger, channel: solr }
+            - { name: monolog.logger, channel: ibexa.solr }
 
     ibexa.solr.http_client:
         class: Symfony\Contracts\HttpClient\HttpClientInterface
@@ -34,7 +34,7 @@ services:
         calls:
             - setLogger: ['@logger']
         tags:
-            - { name: monolog.logger, channel: solr }
+            - { name: monolog.logger, channel: ibexa.solr }
 
     ezpublish.search.solr.gateway.client.http.stream:
         class: '%ezpublish.search.solr.gateway.client.http.stream.class%'
