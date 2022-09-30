@@ -1,0 +1,856 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Method Ibexa\\\\Solr\\\\Gateway\\\\UpdateSerializer\\\\JsonUpdateSerializer\\:\\:buildValue\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/lib/Gateway/UpdateSerializer/JsonUpdateSerializer.php
+
+		-
+			message: "#^Method Ibexa\\\\Solr\\\\Gateway\\\\UpdateSerializer\\\\JsonUpdateSerializer\\:\\:mapDocumentToData\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/lib/Gateway/UpdateSerializer/JsonUpdateSerializer.php
+
+		-
+			message: "#^Parameter \\#2 \\$value of method XMLWriter\\:\\:writeAttribute\\(\\) expects string, int given\\.$#"
+			count: 1
+			path: src/lib/Gateway/UpdateSerializer/XmlUpdateSerializer.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of function array_map expects \\(callable\\(bool\\|int\\|string\\)\\: mixed\\)\\|null, Closure\\(string\\)\\: non\\-falsy\\-string given\\.$#"
+			count: 1
+			path: src/lib/Query/Common/CriterionVisitor/UserEmailIn.php
+
+		-
+			message: "#^Property eZ\\\\Publish\\\\API\\\\Repository\\\\Values\\\\Content\\\\Query\\\\Criterion\\:\\:\\$operator \\(string\\) on left side of \\?\\? is not nullable\\.$#"
+			count: 1
+			path: src/lib/Query/Common/CriterionVisitor/UserEmailIn.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of function array_map expects \\(callable\\(bool\\|int\\|string\\)\\: mixed\\)\\|null, Closure\\(string\\)\\: non\\-falsy\\-string given\\.$#"
+			count: 1
+			path: src/lib/Query/Common/CriterionVisitor/UserIdIn.php
+
+		-
+			message: "#^Property eZ\\\\Publish\\\\API\\\\Repository\\\\Values\\\\Content\\\\Query\\\\Criterion\\:\\:\\$operator \\(string\\) on left side of \\?\\? is not nullable\\.$#"
+			count: 1
+			path: src/lib/Query/Common/CriterionVisitor/UserIdIn.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of function array_map expects \\(callable\\(bool\\|int\\|string\\)\\: mixed\\)\\|null, Closure\\(string\\)\\: non\\-falsy\\-string given\\.$#"
+			count: 1
+			path: src/lib/Query/Common/CriterionVisitor/UserLoginIn.php
+
+		-
+			message: "#^Property eZ\\\\Publish\\\\API\\\\Repository\\\\Values\\\\Content\\\\Query\\\\Criterion\\:\\:\\$operator \\(string\\) on left side of \\?\\? is not nullable\\.$#"
+			count: 1
+			path: src/lib/Query/Common/CriterionVisitor/UserLoginIn.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngineBundle\\\\Tests\\\\DependencyInjection\\\\EzPublishEzPlatformSolrSearchEngineExtensionTest\\:\\:dataProvideForTestBoostFactorMap\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/bundle/DependencyInjection/EzPublishEzPlatformSolrSearchEngineExtensionTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngineBundle\\\\Tests\\\\DependencyInjection\\\\EzPublishEzPlatformSolrSearchEngineExtensionTest\\:\\:dataProviderForTestConnection\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/bundle/DependencyInjection/EzPublishEzPlatformSolrSearchEngineExtensionTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngineBundle\\\\Tests\\\\DependencyInjection\\\\EzPublishEzPlatformSolrSearchEngineExtensionTest\\:\\:dataProviderForTestEndpoint\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/bundle/DependencyInjection/EzPublishEzPlatformSolrSearchEngineExtensionTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngineBundle\\\\Tests\\\\DependencyInjection\\\\EzPublishEzPlatformSolrSearchEngineExtensionTest\\:\\:getMinimalConfiguration\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/bundle/DependencyInjection/EzPublishEzPlatformSolrSearchEngineExtensionTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngineBundle\\\\Tests\\\\DependencyInjection\\\\EzPublishEzPlatformSolrSearchEngineExtensionTest\\:\\:testBoostFactorMap\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/bundle/DependencyInjection/EzPublishEzPlatformSolrSearchEngineExtensionTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngineBundle\\\\Tests\\\\DependencyInjection\\\\EzPublishEzPlatformSolrSearchEngineExtensionTest\\:\\:testBoostFactorMap\\(\\) has parameter \\$configuration with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/bundle/DependencyInjection/EzPublishEzPlatformSolrSearchEngineExtensionTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngineBundle\\\\Tests\\\\DependencyInjection\\\\EzPublishEzPlatformSolrSearchEngineExtensionTest\\:\\:testBoostFactorMap\\(\\) has parameter \\$map with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/bundle/DependencyInjection/EzPublishEzPlatformSolrSearchEngineExtensionTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngineBundle\\\\Tests\\\\DependencyInjection\\\\EzPublishEzPlatformSolrSearchEngineExtensionTest\\:\\:testConnection\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/bundle/DependencyInjection/EzPublishEzPlatformSolrSearchEngineExtensionTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngineBundle\\\\Tests\\\\DependencyInjection\\\\EzPublishEzPlatformSolrSearchEngineExtensionTest\\:\\:testConnectionEndpointDefaults\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/bundle/DependencyInjection/EzPublishEzPlatformSolrSearchEngineExtensionTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngineBundle\\\\Tests\\\\DependencyInjection\\\\EzPublishEzPlatformSolrSearchEngineExtensionTest\\:\\:testConnectionEndpointUniqueDefaults\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/bundle/DependencyInjection/EzPublishEzPlatformSolrSearchEngineExtensionTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngineBundle\\\\Tests\\\\DependencyInjection\\\\EzPublishEzPlatformSolrSearchEngineExtensionTest\\:\\:testConnectionLoad\\(\\) has parameter \\$configurationValues with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/bundle/DependencyInjection/EzPublishEzPlatformSolrSearchEngineExtensionTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngineBundle\\\\Tests\\\\DependencyInjection\\\\EzPublishEzPlatformSolrSearchEngineExtensionTest\\:\\:testConnectionMappingDefaults\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/bundle/DependencyInjection/EzPublishEzPlatformSolrSearchEngineExtensionTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngineBundle\\\\Tests\\\\DependencyInjection\\\\EzPublishEzPlatformSolrSearchEngineExtensionTest\\:\\:testEmpty\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/bundle/DependencyInjection/EzPublishEzPlatformSolrSearchEngineExtensionTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngineBundle\\\\Tests\\\\DependencyInjection\\\\EzPublishEzPlatformSolrSearchEngineExtensionTest\\:\\:testEndpoint\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/bundle/DependencyInjection/EzPublishEzPlatformSolrSearchEngineExtensionTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngineBundle\\\\Tests\\\\DependencyInjection\\\\EzPublishEzPlatformSolrSearchEngineExtensionTest\\:\\:testEndpoint\\(\\) has parameter \\$endpointValues with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/bundle/DependencyInjection/EzPublishEzPlatformSolrSearchEngineExtensionTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngineBundle\\\\Tests\\\\DependencyInjection\\\\EzPublishEzPlatformSolrSearchEngineExtensionTest\\:\\:testEndpoint\\(\\) has parameter \\$expectedArgument with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/bundle/DependencyInjection/EzPublishEzPlatformSolrSearchEngineExtensionTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngineBundle\\\\Tests\\\\DependencyInjection\\\\EzPublishEzPlatformSolrSearchEngineExtensionTest\\:\\:testEndpointCoreRequired\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/bundle/DependencyInjection/EzPublishEzPlatformSolrSearchEngineExtensionTest.php
+
+		-
+			message: "#^Method Ibexa\\\\Tests\\\\Bundle\\\\Solr\\\\Gateway\\\\UpdateSerializer\\\\JsonUpdateSerializerTest\\:\\:getDataForTestSerialize\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/bundle/Gateway/UpdateSerializer/JsonUpdateSerializerTest.php
+
+		-
+			message: "#^Method Ibexa\\\\Tests\\\\Bundle\\\\Solr\\\\Gateway\\\\UpdateSerializer\\\\JsonUpdateSerializerTest\\:\\:testSerialize\\(\\) has parameter \\$expectedData with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/bundle/Gateway/UpdateSerializer/JsonUpdateSerializerTest.php
+
+		-
+			message: "#^Method Ibexa\\\\Tests\\\\Bundle\\\\Solr\\\\Gateway\\\\UpdateSerializer\\\\JsonUpdateSerializerTest\\:\\:testSerialize\\(\\) has parameter \\$inputDocuments with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/bundle/Gateway/UpdateSerializer/JsonUpdateSerializerTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Container\\\\Compiler\\\\AggregateCriterionVisitorPassTest\\:\\:testAddVisitor\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Container/Compiler/AggregateCriterionVisitorPassTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Container\\\\Compiler\\\\AggregateFacetBuilderVisitorPassTest\\:\\:testAddVisitor\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Container/Compiler/AggregateFacetBuilderVisitorPassTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Container\\\\Compiler\\\\AggregateSortClauseVisitorPassTest\\:\\:testAddVisitor\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Container/Compiler/AggregateSortClauseVisitorPassTest.php
+
+		-
+			message: "#^Method Ibexa\\\\Tests\\\\Solr\\\\Gateway\\\\UpdateSerializerFactoryTest\\:\\:getDataForTestGetSerializer\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Gateway/UpdateSerializerFactoryTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\FieldMapper\\\\BoostFactorProviderTest\\:\\:getContentTypeStub\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/FieldMapper/BoostFactorProviderTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\FieldMapper\\\\BoostFactorProviderTest\\:\\:getContentTypeStub\\(\\) has parameter \\$identifier with no type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/FieldMapper/BoostFactorProviderTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\FieldMapper\\\\BoostFactorProviderTest\\:\\:getFieldBoostProvider\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/FieldMapper/BoostFactorProviderTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\FieldMapper\\\\BoostFactorProviderTest\\:\\:getFieldBoostProvider\\(\\) has parameter \\$map with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/lib/Search/FieldMapper/BoostFactorProviderTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\FieldMapper\\\\BoostFactorProviderTest\\:\\:getFieldDefinitionStub\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/FieldMapper/BoostFactorProviderTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\FieldMapper\\\\BoostFactorProviderTest\\:\\:getFieldDefinitionStub\\(\\) has parameter \\$identifier with no type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/FieldMapper/BoostFactorProviderTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\FieldMapper\\\\BoostFactorProviderTest\\:\\:providerForTestGetContentFieldBoostFactor\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/FieldMapper/BoostFactorProviderTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\FieldMapper\\\\BoostFactorProviderTest\\:\\:providerForTestGetContentMetaFieldBoostFactor\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/FieldMapper/BoostFactorProviderTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\FieldMapper\\\\BoostFactorProviderTest\\:\\:testGetContentFieldBoostFactor\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/FieldMapper/BoostFactorProviderTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\FieldMapper\\\\BoostFactorProviderTest\\:\\:testGetContentFieldBoostFactor\\(\\) has parameter \\$map with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/lib/Search/FieldMapper/BoostFactorProviderTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\FieldMapper\\\\BoostFactorProviderTest\\:\\:testGetContentMetaFieldBoostFactor\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/FieldMapper/BoostFactorProviderTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\FieldMapper\\\\BoostFactorProviderTest\\:\\:testGetContentMetaFieldBoostFactor\\(\\) has parameter \\$map with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/lib/Search/FieldMapper/BoostFactorProviderTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\FieldMapper\\\\IndexingDepthProviderTest\\:\\:getContentTypeStub\\(\\) has parameter \\$identifier with no type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/FieldMapper/IndexingDepthProviderTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\FieldMapper\\\\IndexingDepthProviderTest\\:\\:testGetMaxDepth\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/FieldMapper/IndexingDepthProviderTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\FieldMapper\\\\IndexingDepthProviderTest\\:\\:testGetMaxDepthForContentType\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/FieldMapper/IndexingDepthProviderTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\FieldMapper\\\\IndexingDepthProviderTest\\:\\:testGetMaxDepthForContentTypeReturnsDefaultValue\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/FieldMapper/IndexingDepthProviderTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$endpointRegistry of class EzSystems\\\\EzPlatformSolrSearchEngine\\\\Gateway\\\\DistributionStrategy\\\\StandaloneDistributionStrategy constructor expects EzSystems\\\\EzPlatformSolrSearchEngine\\\\Gateway\\\\EndpointRegistry, PHPUnit\\\\Framework\\\\MockObject\\\\MockObject given\\.$#"
+			count: 1
+			path: tests/lib/Search/Gateway/DistributionStrategy/StandaloneDistributionStrategyTest.php
+
+		-
+			message: "#^Property EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Gateway\\\\DistributionStrategy\\\\StandaloneDistributionStrategyTest\\:\\:\\$endpointRegistry \\(EzSystems\\\\EzPlatformSolrSearchEngine\\\\Gateway\\\\EndpointRegistry&PHPUnit\\\\Framework\\\\MockObject\\\\MockObject\\) does not accept PHPUnit\\\\Framework\\\\MockObject\\\\MockObject\\.$#"
+			count: 1
+			path: tests/lib/Search/Gateway/DistributionStrategy/StandaloneDistributionStrategyTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Gateway\\\\EndpointResolver\\\\NativeEndpointResolverTest\\:\\:getEndpointResolver\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/Gateway/EndpointResolver/NativeEndpointResolverTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Gateway\\\\EndpointResolver\\\\NativeEndpointResolverTest\\:\\:getEndpointResolver\\(\\) has parameter \\$defaultEndpoint with no type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/Gateway/EndpointResolver/NativeEndpointResolverTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Gateway\\\\EndpointResolver\\\\NativeEndpointResolverTest\\:\\:getEndpointResolver\\(\\) has parameter \\$endpointMap with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/lib/Search/Gateway/EndpointResolver/NativeEndpointResolverTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Gateway\\\\EndpointResolver\\\\NativeEndpointResolverTest\\:\\:getEndpointResolver\\(\\) has parameter \\$entryEndpoints with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/lib/Search/Gateway/EndpointResolver/NativeEndpointResolverTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Gateway\\\\EndpointResolver\\\\NativeEndpointResolverTest\\:\\:getEndpointResolver\\(\\) has parameter \\$mainLanguagesEndpoint with no type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/Gateway/EndpointResolver/NativeEndpointResolverTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Gateway\\\\EndpointResolver\\\\NativeEndpointResolverTest\\:\\:getIndexingTargetThrowsRuntimeException\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/Gateway/EndpointResolver/NativeEndpointResolverTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Gateway\\\\EndpointResolver\\\\NativeEndpointResolverTest\\:\\:providerForTestGetEndpoints\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/Gateway/EndpointResolver/NativeEndpointResolverTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Gateway\\\\EndpointResolver\\\\NativeEndpointResolverTest\\:\\:providerForTestGetSearchTargets\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/Gateway/EndpointResolver/NativeEndpointResolverTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Gateway\\\\EndpointResolver\\\\NativeEndpointResolverTest\\:\\:providerForTestGetSearchTargetsThrowsRuntimeException\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/Gateway/EndpointResolver/NativeEndpointResolverTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Gateway\\\\EndpointResolver\\\\NativeEndpointResolverTest\\:\\:testGetEndpoints\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/Gateway/EndpointResolver/NativeEndpointResolverTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Gateway\\\\EndpointResolver\\\\NativeEndpointResolverTest\\:\\:testGetEndpointsThrowsRuntimeException\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/Gateway/EndpointResolver/NativeEndpointResolverTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Gateway\\\\EndpointResolver\\\\NativeEndpointResolverTest\\:\\:testGetEntryEndpoint\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/Gateway/EndpointResolver/NativeEndpointResolverTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Gateway\\\\EndpointResolver\\\\NativeEndpointResolverTest\\:\\:testGetEntryEndpointThrowsRuntimeException\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/Gateway/EndpointResolver/NativeEndpointResolverTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Gateway\\\\EndpointResolver\\\\NativeEndpointResolverTest\\:\\:testGetIndexingTarget\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/Gateway/EndpointResolver/NativeEndpointResolverTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Gateway\\\\EndpointResolver\\\\NativeEndpointResolverTest\\:\\:testGetIndexingTargetReturnsDefaultEndpoint\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/Gateway/EndpointResolver/NativeEndpointResolverTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Gateway\\\\EndpointResolver\\\\NativeEndpointResolverTest\\:\\:testGetMainLanguagesEndpoint\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/Gateway/EndpointResolver/NativeEndpointResolverTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Gateway\\\\EndpointResolver\\\\NativeEndpointResolverTest\\:\\:testGetMainLanguagesEndpointReturnsNull\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/Gateway/EndpointResolver/NativeEndpointResolverTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Gateway\\\\EndpointResolver\\\\NativeEndpointResolverTest\\:\\:testGetSearchTargets\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/Gateway/EndpointResolver/NativeEndpointResolverTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Gateway\\\\EndpointResolver\\\\NativeEndpointResolverTest\\:\\:testGetSearchTargets\\(\\) has parameter \\$languageSettings with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/lib/Search/Gateway/EndpointResolver/NativeEndpointResolverTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Gateway\\\\EndpointResolver\\\\NativeEndpointResolverTest\\:\\:testGetSearchTargetsThrowsRuntimeException\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/Gateway/EndpointResolver/NativeEndpointResolverTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Gateway\\\\EndpointResolver\\\\NativeEndpointResolverTest\\:\\:testGetSearchTargetsThrowsRuntimeException\\(\\) has parameter \\$languageSettings with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/lib/Search/Gateway/EndpointResolver/NativeEndpointResolverTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Gateway\\\\EndpointTest\\:\\:testEndpointDsnParsingOverridesAllIfSet\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/Gateway/EndpointTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Gateway\\\\EndpointTest\\:\\:testEndpointDsnParsingWithAll\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/Gateway/EndpointTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Gateway\\\\EndpointTest\\:\\:testEndpointDsnParsingWithFragment\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/Gateway/EndpointTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Gateway\\\\EndpointTest\\:\\:testEndpointDsnParsingWithQuery\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/Gateway/EndpointTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Gateway\\\\EndpointTest\\:\\:testEndpointDsnParsingWithoutUser\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/Gateway/EndpointTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Common\\\\AggregationVisitor\\\\AbstractAggregationVisitorTest\\:\\:configureMocksForTestVisit\\(\\) has parameter \\$expectedResult with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Common/AggregationVisitor/AbstractAggregationVisitorTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Common\\\\AggregationVisitor\\\\AbstractAggregationVisitorTest\\:\\:configureMocksForTestVisit\\(\\) has parameter \\$languageFilter with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Common/AggregationVisitor/AbstractAggregationVisitorTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Common\\\\AggregationVisitor\\\\AbstractAggregationVisitorTest\\:\\:dataProviderForCanVisit\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Common/AggregationVisitor/AbstractAggregationVisitorTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Common\\\\AggregationVisitor\\\\AbstractAggregationVisitorTest\\:\\:dataProviderForVisit\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Common/AggregationVisitor/AbstractAggregationVisitorTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Common\\\\AggregationVisitor\\\\AbstractAggregationVisitorTest\\:\\:testCanVisit\\(\\) has parameter \\$languageFilter with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Common/AggregationVisitor/AbstractAggregationVisitorTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Common\\\\AggregationVisitor\\\\AbstractAggregationVisitorTest\\:\\:testVisit\\(\\) has parameter \\$expectedResult with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Common/AggregationVisitor/AbstractAggregationVisitorTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Common\\\\AggregationVisitor\\\\AbstractAggregationVisitorTest\\:\\:testVisit\\(\\) has parameter \\$languageFilter with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Common/AggregationVisitor/AbstractAggregationVisitorTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Common\\\\AggregationVisitor\\\\DateMetadataRangeAggregationVisitorTest\\:\\:dataProviderForCanVisit\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Common/AggregationVisitor/DateMetadataRangeAggregationVisitorTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Common\\\\AggregationVisitor\\\\DateMetadataRangeAggregationVisitorTest\\:\\:dataProviderForVisit\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Common/AggregationVisitor/DateMetadataRangeAggregationVisitorTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Common\\\\AggregationVisitor\\\\DispatcherAggregationVisitorTest\\:\\:createVisitorMock\\(\\) has parameter \\$languageFilter with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Common/AggregationVisitor/DispatcherAggregationVisitorTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Common\\\\AggregationVisitor\\\\ObjectStateGroupAggregationVisitorTest\\:\\:dataProviderForCanVisit\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Common/AggregationVisitor/ObjectStateGroupAggregationVisitorTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Common\\\\AggregationVisitor\\\\ObjectStateGroupAggregationVisitorTest\\:\\:dataProviderForVisit\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Common/AggregationVisitor/ObjectStateGroupAggregationVisitorTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Common\\\\AggregationVisitor\\\\RangeAggregationVisitorTest\\:\\:dataProviderForCanVisit\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Common/AggregationVisitor/RangeAggregationVisitorTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Common\\\\AggregationVisitor\\\\RangeAggregationVisitorTest\\:\\:dataProviderForVisit\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Common/AggregationVisitor/RangeAggregationVisitorTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Common\\\\AggregationVisitor\\\\StatsAggregationVisitorTest\\:\\:dataProviderForCanVisit\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Common/AggregationVisitor/StatsAggregationVisitorTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Common\\\\AggregationVisitor\\\\StatsAggregationVisitorTest\\:\\:dataProviderForVisit\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Common/AggregationVisitor/StatsAggregationVisitorTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Common\\\\AggregationVisitor\\\\SubtreeTermAggregationVisitorTest\\:\\:dataProviderForCanVisit\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Common/AggregationVisitor/SubtreeTermAggregationVisitorTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Common\\\\AggregationVisitor\\\\SubtreeTermAggregationVisitorTest\\:\\:dataProviderForVisit\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Common/AggregationVisitor/SubtreeTermAggregationVisitorTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Common\\\\AggregationVisitor\\\\TermAggregationVisitorTest\\:\\:dataProviderForCanVisit\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Common/AggregationVisitor/TermAggregationVisitorTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Common\\\\AggregationVisitor\\\\TermAggregationVisitorTest\\:\\:dataProviderForVisit\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Common/AggregationVisitor/TermAggregationVisitorTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Common\\\\AggregationVisitor\\\\UserMetadataTermAggregationVisitorTest\\:\\:dataProviderForCanVisit\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Common/AggregationVisitor/UserMetadataTermAggregationVisitorTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Common\\\\AggregationVisitor\\\\UserMetadataTermAggregationVisitorTest\\:\\:dataProviderForVisit\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Common/AggregationVisitor/UserMetadataTermAggregationVisitorTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Content\\\\CriterionVisitor\\\\FullTextTest\\:\\:getFullTextCriterionVisitor\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Content/CriterionVisitor/FullTextTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Content\\\\CriterionVisitor\\\\FullTextTest\\:\\:getFullTextCriterionVisitor\\(\\) has parameter \\$fieldTypes with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Content/CriterionVisitor/FullTextTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Content\\\\CriterionVisitor\\\\FullTextTest\\:\\:testVisitBoost\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Content/CriterionVisitor/FullTextTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Content\\\\CriterionVisitor\\\\FullTextTest\\:\\:testVisitBoostMultipleWords\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Content/CriterionVisitor/FullTextTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Content\\\\CriterionVisitor\\\\FullTextTest\\:\\:testVisitBoostUnknownField\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Content/CriterionVisitor/FullTextTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Content\\\\CriterionVisitor\\\\FullTextTest\\:\\:testVisitBoostUnknownFieldMultipleWords\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Content/CriterionVisitor/FullTextTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Content\\\\CriterionVisitor\\\\FullTextTest\\:\\:testVisitErrorCorrection\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Content/CriterionVisitor/FullTextTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Content\\\\CriterionVisitor\\\\FullTextTest\\:\\:testVisitFuzzy\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Content/CriterionVisitor/FullTextTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Content\\\\CriterionVisitor\\\\FullTextTest\\:\\:testVisitFuzzyBoost\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Content/CriterionVisitor/FullTextTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Content\\\\CriterionVisitor\\\\FullTextTest\\:\\:testVisitFuzzyBoostMultipleWords\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Content/CriterionVisitor/FullTextTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Content\\\\CriterionVisitor\\\\FullTextTest\\:\\:testVisitFuzzyMultipleWords\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Content/CriterionVisitor/FullTextTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Content\\\\CriterionVisitor\\\\FullTextTest\\:\\:testVisitSimple\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Content/CriterionVisitor/FullTextTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Content\\\\CriterionVisitor\\\\FullTextTest\\:\\:testVisitSimpleMultipleWords\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Content/CriterionVisitor/FullTextTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\Query\\\\Content\\\\CriterionVisitor\\\\FullTextTest\\:\\:testVisitWithRelated\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/Query/Content/CriterionVisitor/FullTextTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\AbstractAggregationResultExtractorTest\\:\\:dataProviderForTestCanVisit\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/AbstractAggregationResultExtractorTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\AbstractAggregationResultExtractorTest\\:\\:dataProviderForTestExtract\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/AbstractAggregationResultExtractorTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\AbstractAggregationResultExtractorTest\\:\\:testCanVisit\\(\\) has parameter \\$languageFilter with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/AbstractAggregationResultExtractorTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\AbstractAggregationResultExtractorTest\\:\\:testExtract\\(\\) has parameter \\$languageFilter with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/AbstractAggregationResultExtractorTest.php
+
+		-
+			message: "#^Call to an undefined method EzSystems\\\\EzPlatformSolrSearchEngine\\\\ResultExtractor\\\\AggregationResultExtractor\\:\\:method\\(\\)\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/DispatcherAggregationResultExtractorTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\DispatcherAggregationResultExtractorTest\\:\\:createExtractorMockWithCanVisit\\(\\) has parameter \\$languageFilter with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/DispatcherAggregationResultExtractorTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\RangeAggregationKeyMapper\\\\AbstractRangeAggregationKeyMapperTest\\:\\:dataProviderForTestMap\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/RangeAggregationKeyMapper/AbstractRangeAggregationKeyMapperTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\RangeAggregationKeyMapper\\\\AbstractRangeAggregationKeyMapperTest\\:\\:testMap\\(\\) has parameter \\$expectedResult with no type specified\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/RangeAggregationKeyMapper/AbstractRangeAggregationKeyMapperTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\RangeAggregationKeyMapper\\\\AbstractRangeAggregationKeyMapperTest\\:\\:testMap\\(\\) has parameter \\$languageFilter with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/RangeAggregationKeyMapper/AbstractRangeAggregationKeyMapperTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\RangeAggregationKeyMapper\\\\DateTimeRangeAggregationKeyMapperTest\\:\\:dataProviderForTestMap\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/RangeAggregationKeyMapper/DateTimeRangeAggregationKeyMapperTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\RangeAggregationKeyMapper\\\\FloatRangeAggregationKeyMapperTest\\:\\:dataProviderForTestMap\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/RangeAggregationKeyMapper/FloatRangeAggregationKeyMapperTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\RangeAggregationKeyMapper\\\\IntRangeAggregationKeyMapperTest\\:\\:dataProviderForTestMap\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/RangeAggregationKeyMapper/IntRangeAggregationKeyMapperTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\RangeAggregationKeyMapper\\\\NullRangeAggregationKeyMapperTest\\:\\:dataProviderForTestMap\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/RangeAggregationKeyMapper/NullRangeAggregationKeyMapperTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\RangeAggregationResultExtractorTest\\:\\:dataProviderForTestCanVisit\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/RangeAggregationResultExtractorTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\RangeAggregationResultExtractorTest\\:\\:dataProviderForTestExtract\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/RangeAggregationResultExtractorTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\StatsAggregationResultExtractorTest\\:\\:dataProviderForTestCanVisit\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/StatsAggregationResultExtractorTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\StatsAggregationResultExtractorTest\\:\\:dataProviderForTestExtract\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/StatsAggregationResultExtractorTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\AuthorAggregationKeyMapperTest\\:\\:dataProviderForTestMap\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/AuthorAggregationKeyMapperTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\AuthorAggregationKeyMapperTest\\:\\:testMap\\(\\) has parameter \\$expectedResult with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/AuthorAggregationKeyMapperTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\AuthorAggregationKeyMapperTest\\:\\:testMap\\(\\) has parameter \\$keys with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/AuthorAggregationKeyMapperTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\AuthorAggregationKeyMapperTest\\:\\:testMap\\(\\) has parameter \\$languageFilter with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/AuthorAggregationKeyMapperTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\ContentTypeAggregationKeyMapperTest\\:\\:createContentTypesList\\(\\) has parameter \\$ids with no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/ContentTypeAggregationKeyMapperTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\ContentTypeAggregationKeyMapperTest\\:\\:createContentTypesList\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/ContentTypeAggregationKeyMapperTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$aggregation of method EzSystems\\\\EzPlatformSolrSearchEngine\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\ContentTypeAggregationKeyMapper\\:\\:map\\(\\) expects eZ\\\\Publish\\\\API\\\\Repository\\\\Values\\\\Content\\\\Query\\\\Aggregation\\\\ContentTypeTermAggregation, eZ\\\\Publish\\\\API\\\\Repository\\\\Values\\\\Content\\\\Query\\\\Aggregation&PHPUnit\\\\Framework\\\\MockObject\\\\MockObject given\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/ContentTypeAggregationKeyMapperTest.php
+
+		-
+			message: "#^Parameter \\#3 \\$keys of method EzSystems\\\\EzPlatformSolrSearchEngine\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\ContentTypeAggregationKeyMapper\\:\\:map\\(\\) expects array\\<string\\>, array\\<int, int\\> given\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/ContentTypeAggregationKeyMapperTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\ContentTypeGroupAggregationKeyMapperTest\\:\\:createExpectedLanguages\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/ContentTypeGroupAggregationKeyMapperTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$aggregation of method EzSystems\\\\EzPlatformSolrSearchEngine\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\ContentTypeGroupAggregationKeyMapper\\:\\:map\\(\\) expects eZ\\\\Publish\\\\API\\\\Repository\\\\Values\\\\Content\\\\Query\\\\Aggregation\\\\ContentTypeGroupTermAggregation, eZ\\\\Publish\\\\API\\\\Repository\\\\Values\\\\Content\\\\Query\\\\Aggregation&PHPUnit\\\\Framework\\\\MockObject\\\\MockObject given\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/ContentTypeGroupAggregationKeyMapperTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$contentTypeService of class EzSystems\\\\EzPlatformSolrSearchEngine\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\ContentTypeGroupAggregationKeyMapper constructor expects eZ\\\\Publish\\\\API\\\\Repository\\\\ContentTypeService, PHPUnit\\\\Framework\\\\MockObject\\\\MockObject given\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/ContentTypeGroupAggregationKeyMapperTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\CountryAggregationKeyMapperTest\\:\\:dataProviderForTestMap\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/CountryAggregationKeyMapperTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\CountryAggregationKeyMapperTest\\:\\:testMap\\(\\) has parameter \\$expectedResult with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/CountryAggregationKeyMapperTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\CountryAggregationKeyMapperTest\\:\\:testMap\\(\\) has parameter \\$keys with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/CountryAggregationKeyMapperTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\CountryAggregationKeyMapperTest\\:\\:testMap\\(\\) has parameter \\$languageFilter with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/CountryAggregationKeyMapperTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$aggregation of method EzSystems\\\\EzPlatformSolrSearchEngine\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\CountryAggregationKeyMapper\\:\\:map\\(\\) expects eZ\\\\Publish\\\\API\\\\Repository\\\\Values\\\\Content\\\\Query\\\\Aggregation\\\\Field\\\\CountryTermAggregation, eZ\\\\Publish\\\\API\\\\Repository\\\\Values\\\\Content\\\\Query\\\\Aggregation given\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/CountryAggregationKeyMapperTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\LanguageAggregationKeyMapperTest\\:\\:configureLanguageServiceMock\\(\\) has parameter \\$languageCodes with no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/LanguageAggregationKeyMapperTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\LanguageAggregationKeyMapperTest\\:\\:configureLanguageServiceMock\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/LanguageAggregationKeyMapperTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$aggregation of method EzSystems\\\\EzPlatformSolrSearchEngine\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\CountryAggregationKeyMapper\\:\\:map\\(\\) expects eZ\\\\Publish\\\\API\\\\Repository\\\\Values\\\\Content\\\\Query\\\\Aggregation\\\\Field\\\\CountryTermAggregation, eZ\\\\Publish\\\\API\\\\Repository\\\\Values\\\\Content\\\\Query\\\\Aggregation&PHPUnit\\\\Framework\\\\MockObject\\\\MockObject given\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/LanguageAggregationKeyMapperTest.php
+
+		-
+			message: "#^Property EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\LanguageAggregationKeyMapperTest\\:\\:\\$mapper \\(EzSystems\\\\EzPlatformSolrSearchEngine\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\CountryAggregationKeyMapper\\) does not accept EzSystems\\\\EzPlatformSolrSearchEngine\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\LanguageAggregationKeyMapper\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/LanguageAggregationKeyMapperTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\LocationAggregationKeyMapperTest\\:\\:createExpectedLocations\\(\\) has parameter \\$locationIds with no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/LocationAggregationKeyMapperTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\LocationAggregationKeyMapperTest\\:\\:createExpectedLocations\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/LocationAggregationKeyMapperTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\ObjectStateAggregationKeyMapperTest\\:\\:configureObjectStateService\\(\\) has parameter \\$objectStateIdentifiers with no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/ObjectStateAggregationKeyMapperTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\ObjectStateAggregationKeyMapperTest\\:\\:configureObjectStateService\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/ObjectStateAggregationKeyMapperTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\SectionAggregationKeyMapperTest\\:\\:configureSectionServiceMock\\(\\) has parameter \\$sectionIds with no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/SectionAggregationKeyMapperTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\SectionAggregationKeyMapperTest\\:\\:configureSectionServiceMock\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/SectionAggregationKeyMapperTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$aggregation of method EzSystems\\\\EzPlatformSolrSearchEngine\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\SectionAggregationKeyMapper\\:\\:map\\(\\) expects eZ\\\\Publish\\\\API\\\\Repository\\\\Values\\\\Content\\\\Query\\\\Aggregation\\\\SectionTermAggregation, eZ\\\\Publish\\\\API\\\\Repository\\\\Values\\\\Content\\\\Query\\\\Aggregation&PHPUnit\\\\Framework\\\\MockObject\\\\MockObject given\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/SectionAggregationKeyMapperTest.php
+
+		-
+			message: "#^Parameter \\#3 \\$keys of method EzSystems\\\\EzPlatformSolrSearchEngine\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\SectionAggregationKeyMapper\\:\\:map\\(\\) expects array\\<string\\>, array\\<int, int\\> given\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/SectionAggregationKeyMapperTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\SubtreeAggregationKeyMapperTest\\:\\:createExpectedLocations\\(\\) has parameter \\$locationIds with no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/SubtreeAggregationKeyMapperTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\SubtreeAggregationKeyMapperTest\\:\\:createExpectedLocations\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/SubtreeAggregationKeyMapperTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\UserMetadataAggregationKeyMapperTest\\:\\:createExpectedResultForUserGroupKey\\(\\) has parameter \\$userGroupsIds with no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/UserMetadataAggregationKeyMapperTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\UserMetadataAggregationKeyMapperTest\\:\\:createExpectedResultForUserGroupKey\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/UserMetadataAggregationKeyMapperTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\UserMetadataAggregationKeyMapperTest\\:\\:createExpectedResultForUserKey\\(\\) has parameter \\$userIds with no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/UserMetadataAggregationKeyMapperTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\UserMetadataAggregationKeyMapperTest\\:\\:createExpectedResultForUserKey\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/UserMetadataAggregationKeyMapperTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\UserMetadataAggregationKeyMapperTest\\:\\:dataProviderForTestMapUser\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/UserMetadataAggregationKeyMapperTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$aggregation of method EzSystems\\\\EzPlatformSolrSearchEngine\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\UserMetadataAggregationKeyMapper\\:\\:map\\(\\) expects eZ\\\\Publish\\\\API\\\\Repository\\\\Values\\\\Content\\\\Query\\\\Aggregation\\\\UserMetadataTermAggregation, eZ\\\\Publish\\\\API\\\\Repository\\\\Values\\\\Content\\\\Query\\\\Aggregation given\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/UserMetadataAggregationKeyMapperTest.php
+
+		-
+			message: "#^Parameter \\#3 \\$keys of method EzSystems\\\\EzPlatformSolrSearchEngine\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationKeyMapper\\\\UserMetadataAggregationKeyMapper\\:\\:map\\(\\) expects array\\<string\\>, array\\<int, int\\> given\\.$#"
+			count: 2
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/UserMetadataAggregationKeyMapperTest.php
+
+		-
+			message: "#^Anonymous function should return array but returns array\\<string\\>\\|false\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationResultExtractorTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationResultExtractorTest\\:\\:dataProviderForTestCanVisit\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationResultExtractorTest.php
+
+		-
+			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationResultExtractorTest\\:\\:dataProviderForTestExtract\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationResultExtractorTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$contentObjects of method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Handler\\:\\:bulkIndexContent\\(\\) expects array\\<eZ\\\\Publish\\\\SPI\\\\Persistence\\\\Content\\>, iterable\\<eZ\\\\Publish\\\\SPI\\\\Persistence\\\\Content\\> given\\.$#"
+			count: 1
+			path: tests/lib/SetupFactory/LegacySetupFactory.php
