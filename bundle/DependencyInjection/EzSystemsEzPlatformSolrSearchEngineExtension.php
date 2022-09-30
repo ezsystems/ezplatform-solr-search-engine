@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Config\FileLocator;
 
 /**
- * @psalm-type SolrHttpClientConfigArray = array{timeout: int, max_retries: int}
+ * @phpstan-type SolrHttpClientConfigArray = array{timeout: int, max_retries: int}
  */
 class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
 {
@@ -324,7 +324,7 @@ class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
     }
 
     /**
-     * @psalm-param SolrHttpClientConfigArray $httpClientConfig
+     * @phpstan-param SolrHttpClientConfigArray $httpClientConfig
      */
     private function configureHttpClient(ContainerBuilder $container, array $httpClientConfig): void
     {

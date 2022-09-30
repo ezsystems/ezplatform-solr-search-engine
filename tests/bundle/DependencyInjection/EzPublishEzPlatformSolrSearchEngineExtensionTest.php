@@ -16,7 +16,7 @@ use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 /**
- * @psalm-import-type SolrHttpClientConfigArray from EzSystemsEzPlatformSolrSearchEngineExtension
+ * @phpstan-import-type SolrHttpClientConfigArray from EzSystemsEzPlatformSolrSearchEngineExtension
  */
 class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtensionTestCase
 {
@@ -658,7 +658,7 @@ class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtension
     /**
      * @dataProvider getDataForTestHttpClientConfiguration
      *
-     * @psalm-param SolrHttpClientConfigArray $httpClientConfig
+     * @phpstan-param SolrHttpClientConfigArray $httpClientConfig
      */
     public function testHttpClientConfiguration(array $config): void
     {
