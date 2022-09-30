@@ -836,11 +836,6 @@ parameters:
 			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationKeyMapper/UserMetadataAggregationKeyMapperTest.php
 
 		-
-			message: "#^Anonymous function should return array but returns array\\<string\\>\\|false\\.$#"
-			count: 1
-			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationResultExtractorTest.php
-
-		-
 			message: "#^Method EzSystems\\\\EzPlatformSolrSearchEngine\\\\Tests\\\\Search\\\\ResultExtractor\\\\AggregationResultExtractor\\\\TermAggregationResultExtractorTest\\:\\:dataProviderForTestCanVisit\\(\\) return type has no value type specified in iterable type iterable\\.$#"
 			count: 1
 			path: tests/lib/Search/ResultExtractor/AggregationResultExtractor/TermAggregationResultExtractorTest.php
