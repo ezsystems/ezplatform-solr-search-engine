@@ -10,10 +10,14 @@
  */
 namespace EzSystems\EzPlatformSolrSearchEngineBundle\Tests\DependencyInjection;
 
+use EzSystems\EzPlatformSolrSearchEngineBundle\DependencyInjection\Configuration;
 use EzSystems\EzPlatformSolrSearchEngineBundle\DependencyInjection\EzSystemsEzPlatformSolrSearchEngineExtension;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
+/**
+ * @phpstan-import-type SolrHttpClientConfigArray from EzSystemsEzPlatformSolrSearchEngineExtension
+ */
 class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtensionTestCase
 {
     /**
@@ -649,5 +653,46 @@ class EzPublishEzPlatformSolrSearchEngineExtensionTest extends AbstractExtension
             'ez_search_engine_solr.connection.connection1.boost_factor_map_id',
             $map
         );
+    }
+
+    /**
+     * @dataProvider getDataForTestHttpClientConfiguration
+     *
+     * @phpstan-param SolrHttpClientConfigArray $httpClientConfig
+     */
+    public function testHttpClientConfiguration(array $config): void
+    {
+        $this->load(
+            [
+                'http_client' => $config,
+            ]
+        );
+
+        $this->assertContainerBuilderHasParameter(
+            'ibexa.solr.http_client.timeout',
+            $config['timeout'],
+        );
+
+        $this->assertContainerBuilderHasParameter(
+            'ibexa.solr.http_client.max_retries',
+            $config['max_retries'],
+        );
+    }
+
+    public function getDataForTestHttpClientConfiguration(): iterable
+    {
+        yield 'default values' => [
+            [
+                'timeout' => Configuration::SOLR_HTTP_CLIENT_DEFAULT_TIMEOUT,
+                'max_retries' => Configuration::SOLR_HTTP_CLIENT_DEFAULT_MAX_RETRIES,
+            ],
+        ];
+
+        yield 'custom values' => [
+            [
+                'timeout' => 16,
+                'max_retries' => 2,
+            ],
+        ];
     }
 }

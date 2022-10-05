@@ -19,6 +19,9 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Config\FileLocator;
 
+/**
+ * @phpstan-type SolrHttpClientConfigArray = array{timeout: int, max_retries: int}
+ */
 class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
 {
     /**
@@ -169,6 +172,10 @@ class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
         // Factory for BoostFactorProvider uses mapping configured for the connection in use
         $boostFactorProviderDef = $container->findDefinition(self::BOOST_FACTOR_PROVIDER_ID);
         $boostFactorProviderDef->setFactory([new Reference('ezpublish.solr.boost_factor_provider_factory'), 'buildService']);
+
+        if (isset($config['http_client'])) {
+            $this->configureHttpClient($container, $config['http_client']);
+        }
     }
 
     /**
@@ -314,5 +321,17 @@ class EzSystemsEzPlatformSolrSearchEngineExtension extends Extension
         }
 
         return $boostFactorMap;
+    }
+
+    /**
+     * @phpstan-param SolrHttpClientConfigArray $httpClientConfig
+     */
+    private function configureHttpClient(ContainerBuilder $container, array $httpClientConfig): void
+    {
+        $container->setParameter('ibexa.solr.http_client.timeout', $httpClientConfig['timeout']);
+        $container->setParameter(
+            'ibexa.solr.http_client.max_retries',
+            $httpClientConfig['max_retries']
+        );
     }
 }
