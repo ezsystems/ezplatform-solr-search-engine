@@ -26,7 +26,7 @@ services:
         arguments:
             -
                 scheme: http
-                host: localhost
+                host: "%test.ibexa.solr.host%"
                 port: 8983
                 path: /solr
                 core: collection1
