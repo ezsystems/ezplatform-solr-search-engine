@@ -4,13 +4,14 @@ on:
     push:
         branches:
             - main
+            - run-test
             - '[0-9]+.[0-9]+'
     pull_request: ~
 
 jobs:
     solr-integration:
         name: "Integration tests"
-        runs-on: "ubuntu-20.04"
+        runs-on: "ubuntu-22.04"
         strategy:
             fail-fast: false
             matrix:
@@ -34,7 +35,7 @@ jobs:
               name: "Set up single core"
               run: echo "SOLR_CORES=collection1" >> $GITHUB_ENV
 
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v3
 
             - name: Setup PHP Action
               uses: shivammathur/setup-php@v2
@@ -42,9 +43,9 @@ jobs:
                   php-version: 7.4
                   coverage: none
 
-            - uses: "ramsey/composer-install@v1"
+            - uses: ramsey/composer-install@v2
               with:
-                  dependency-versions: "highest"
+                  dependency-versions: highest
 
             - name: Init Solr
               run: ./.github/init_solr.sh
