@@ -32,7 +32,7 @@ services:
         arguments:
             -
                 scheme: http
-                host: "%test.ibexa.solr.host%"
+                host: '%test.ibexa.solr.host%'
                 port: 8983
                 path: /solr
                 core: core0
@@ -44,7 +44,7 @@ services:
         arguments:
             -
                 scheme: http
-                host: "%test.ibexa.solr.host%"
+                host: '%test.ibexa.solr.host%'
                 port: 8983
                 path: /solr
                 core: core1
@@ -56,7 +56,7 @@ services:
         arguments:
             -
                 scheme: http
-                host: "%test.ibexa.solr.host%"
+                host: '%test.ibexa.solr.host%'
                 port: 8983
                 path: /solr
                 core: core2
@@ -68,7 +68,7 @@ services:
         arguments:
             -
                 scheme: http
-                host: "%test.ibexa.solr.host%"
+                host: '%test.ibexa.solr.host%'
                 port: 8983
                 path: /solr
                 core: core3
@@ -80,7 +80,7 @@ services:
         arguments:
             -
                 scheme: http
-                host: "%test.ibexa.solr.host%"
+                host: '%test.ibexa.solr.host%'
                 port: 8983
                 path: /solr
                 core: core4
@@ -92,7 +92,7 @@ services:
         arguments:
             -
                 scheme: http
-                host: "%test.ibexa.solr.host%"
+                host: '%test.ibexa.solr.host%'
                 port: 8983
                 path: /solr
                 core: core5
