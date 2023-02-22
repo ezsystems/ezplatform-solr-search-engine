@@ -10,13 +10,13 @@ on:
 jobs:
     cs-fix:
         name: Run code style check
-        runs-on: "ubuntu-20.04"
+        runs-on: "ubuntu-22.04"
         strategy:
             matrix:
                 php:
                     - '8.0'
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v3
 
             - name: Setup PHP Action
               uses: shivammathur/setup-php@v2
@@ -26,16 +26,16 @@ jobs:
                   extensions: 'pdo_sqlite, gd'
                   tools: cs2pr
 
-            - uses: "ramsey/composer-install@v1"
+            - uses: ramsey/composer-install@v2
               with:
-                  dependency-versions: "highest"
+                  dependency-versions: highest
 
             - name: Run code style check
               run: composer run-script check-cs -- --format=checkstyle | cs2pr
 
     tests:
         name: Unit tests
-        runs-on: "ubuntu-20.04"
+        runs-on: "ubuntu-22.04"
         timeout-minutes: 15
 
         strategy:
@@ -48,7 +48,7 @@ jobs:
                     - '8.1'
 
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v3
 
             - name: Setup PHP Action
               uses: shivammathur/setup-php@v2
@@ -58,9 +58,9 @@ jobs:
                   extensions: pdo_sqlite, gd
                   tools: cs2pr
 
-            - uses: "ramsey/composer-install@v1"
+            - uses: ramsey/composer-install@v2
               with:
-                  dependency-versions: "highest"
+                  dependency-versions: highest
 
             - name: Setup problem matchers for PHPUnit
               run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"

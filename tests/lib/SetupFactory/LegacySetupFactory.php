@@ -63,6 +63,8 @@ class LegacySetupFactory extends CoreLegacySetupFactory
      */
     protected function externalBuildContainer(ContainerBuilder $containerBuilder): void
     {
+        $containerBuilder->setParameter('test.ibexa.solr.host', getenv('SOLR_HOST') ?: 'localhost');
+
         $settingsPath = __DIR__ . '/../../../lib/Resources/config/container/';
         $testSettingsPath = __DIR__ . '/../Resources/config/';
 
