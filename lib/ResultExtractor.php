@@ -162,7 +162,7 @@ abstract class ResultExtractor
                             'Not setting id of field using FacetFieldVisitor::visitBuilder will not be supported in 4.0'
                             . ', as it makes it impossible to exactly identify which facets belongs to which builder.'
                             . "\nMake sure to adapt your visitor for the following field: {$field}"
-                            . "\nExample: 'facet.field' => \"{!ex=dt key=\{$id}}{$field}\",",
+                            . "\nExample: 'facet.field' => \"{!ex=dt key={\$id}}{$field}\",",
                             E_USER_DEPRECATED);
                     }
 
