@@ -27,15 +27,15 @@ class AggregateFacetBuilderVisitorPass implements CompilerPassInterface
 
     private function processVisitors(ContainerBuilder $container, $name = 'content')
     {
-        if (!$container->hasDefinition("ezpublish.search.solr.query.${name}.facet_builder_visitor.aggregate")) {
+        if (!$container->hasDefinition("ezpublish.search.solr.query.{$name}.facet_builder_visitor.aggregate")) {
             return;
         }
 
         $aggregateFacetBuilderVisitorDefinition = $container->getDefinition(
-            "ezpublish.search.solr.query.${name}.facet_builder_visitor.aggregate"
+            "ezpublish.search.solr.query.{$name}.facet_builder_visitor.aggregate"
         );
 
-        foreach ($container->findTaggedServiceIds("ezpublish.search.solr.query.${name}.facet_builder_visitor") as $id => $attributes) {
+        foreach ($container->findTaggedServiceIds("ezpublish.search.solr.query.{$name}.facet_builder_visitor") as $id => $attributes) {
             $aggregateFacetBuilderVisitorDefinition->addMethodCall(
                 'addVisitor',
                 [

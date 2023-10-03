@@ -30,7 +30,7 @@ abstract class AbstractRangeAggregationVisitor implements AggregationVisitor
             $from = $this->formatRangeValue($range->getFrom());
             $to = $this->formatRangeValue($range->getTo());
 
-            $rangeFacets["${from}_${to}"] = [
+            $rangeFacets["{$from}_{$to}"] = [
                 'type' => 'query',
                 'q' => sprintf('%s:[%s TO %s}', $field, $from, $to),
             ];
