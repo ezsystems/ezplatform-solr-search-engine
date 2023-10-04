@@ -31,7 +31,8 @@
         "phpstan/phpstan": "^1.8",
         "phpstan/phpstan-phpunit": "^1.1",
         "phpstan/phpstan-symfony": "^1.2",
-        "phpunit/phpunit": "^8.2"
+        "phpunit/phpunit": "^8.2",
+        "symfony/proxy-manager-bridge": "^5.4"
     },
     "autoload": {
         "psr-4": {
