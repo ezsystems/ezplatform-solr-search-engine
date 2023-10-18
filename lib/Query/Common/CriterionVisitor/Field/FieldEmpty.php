@@ -77,6 +77,6 @@ final class FieldEmpty extends Field
             }
         }
 
-        return '(' . implode(' OR ', $queries) . ')';
+        return '(' . implode(' OR ', array_unique($queries)) . ')';
     }
 }
