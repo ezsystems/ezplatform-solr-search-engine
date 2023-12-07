@@ -49,7 +49,7 @@ class ContentType extends FacetBuilderVisitor implements FacetFieldVisitor
     public function visitBuilder(FacetBuilder $facetBuilder, $fieldId)
     {
         return [
-            'facet.field' => "{!ex=dt key=${fieldId}}content_type_id_id",
+            'facet.field' => "{!ex=dt key={$fieldId}}content_type_id_id",
             'f.content_type_id_id.facet.limit' => $facetBuilder->limit,
             'f.content_type_id_id.facet.mincount' => $facetBuilder->minCount,
         ];

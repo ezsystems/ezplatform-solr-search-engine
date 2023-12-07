@@ -62,9 +62,9 @@ class User extends FacetBuilderVisitor implements FacetFieldVisitor
         $field = self::DOC_FIELD_MAP[$facetBuilder->type];
 
         return [
-            'facet.field' => "{!ex=dt key=${fieldId}}$field",
-            "f.${field}.facet.limit" => $facetBuilder->limit,
-            "f.${field}.facet.mincount" => $facetBuilder->minCount,
+            'facet.field' => "{!ex=dt key={$fieldId}}$field",
+            "f.{$field}.facet.limit" => $facetBuilder->limit,
+            "f.{$field}.facet.mincount" => $facetBuilder->minCount,
         ];
     }
 }
