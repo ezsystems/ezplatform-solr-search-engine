@@ -97,7 +97,7 @@ if [ "$SOLR_INSTALL_DIR" == "" ]; then
     # If we were not provided an existing install directory we'll temporarily download a version of solr to generate config.
     GENERATE_SOLR_TMPDIR=`mktemp -d`
     echo "Downloading solr bundle:"
-    curl http://archive.apache.org/dist/lucene/solr/${SOLR_VERSION}/solr-${SOLR_VERSION}.tgz > $GENERATE_SOLR_TMPDIR/solr-${SOLR_VERSION}.tgz
+    curl https://archive.apache.org/dist/lucene/solr/${SOLR_VERSION}/solr-${SOLR_VERSION}.tgz > $GENERATE_SOLR_TMPDIR/solr-${SOLR_VERSION}.tgz
 
     echo "Untaring"
     cd $GENERATE_SOLR_TMPDIR
