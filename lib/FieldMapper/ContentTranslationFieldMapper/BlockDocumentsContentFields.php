@@ -74,7 +74,7 @@ class BlockDocumentsContentFields extends ContentTranslationFieldMapper
             }
 
             foreach ($contentType->fieldDefinitions as $fieldDefinition) {
-                if ($fieldDefinition->id !== $field->fieldDefinitionId) {
+                if ($fieldDefinition->id !== $field->fieldDefinitionId || !$fieldDefinition->isSearchable) {
                     continue;
                 }
 
